@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.misc.doMenu
+
+on doMenu (appID, obj) { «Do the action associated with a menu item
+	return (appleEvent (appID, 'misc', 'menu', '----', objspec (obj)))}
+
+

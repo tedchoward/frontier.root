@@ -1,0 +1,32 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.server.archiveOutline
+
+on archiveOutline (username, opmltext) {
+	«Changes
+		«8/21/12; 8:59:34 PM by DW
+			«If the archiveDomain pref hasn't been set, refuse to archive. We won't be able to generate a good URL.
+		«8/28/10; 1:41:28 PM by DW
+			«Created. 
+	local (adrdata = io.init (), adruser = io.server.initUser (username), now = clock.now (), startticks = clock.ticks ());
+	
+	if sizeof (adrdata^.server.prefs.archiveDomain) == 0 { //8/21/12 by DW
+		scripterror ("Can't archive the outline because of a configuration error on the server. The archiveDomain pref hasn't been set.")};
+	
+	«scratchpad.ausername = username; scratchpad.aopmltext = opmltext
+	local (htmltext = "Archived an outline for user \"" + username + ".\"");
+	local (adrday = mainresponder.calendar.getdayaddress (@adruser^.calendar, now));
+	local (nametable = string.padwithzeros (++adruser^.stats.archiveSerialnum, 3));
+	local (adrtable = @adrday^.[nametable]);
+	new (tabletype, adrtable);
+	adrtable^.opmltext = opmltext;
+	adrtable^.ctAccesses = 0;
+	adrtable^.whenLastAccess = date (0);
+	adrtable^.whenCreated = now;
+	local (url = "http://" + adrdata^.server.prefs.archiveDomain + "/" + username + "/" + file.getdatepath ("/", now) + nametable + ".opml");
+	bundle { //logging
+		log2.add (realtime.server.data.log.source, "Archive", htmltext, startticks);
+		realtime.server.writeLog ()};
+	return (url)};
+bundle { //test code
+	archiveOutline (scratchpad.ausername, scratchpad.aopmltext)}
+
+

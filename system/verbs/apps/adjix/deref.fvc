@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.adjix.deref
+
+on deref (url) {
+	«Changes
+		«8/29/09; 8:35:58 AM by DW
+			«If Adjix switches to using a 301 return code, handle it gracefully.
+		«8/25/09; 12:44:12 PM by DW
+			«Ooops, what if we get a URL that isn't from Adjix? Handle it with grace.
+		«8/25/09; 11:06:51 AM by DW
+			«If you know it's an Adjix URL, send it through adjix.deref and we'll tell you what it points to.
+	try {
+		local (urllist = string.urlsplit (url), headers);
+		local (s = tcp.httpClient ("HEAD", server:urllist [2], path:urllist [3], ctFollowRedirects:0, flMessages:false));
+		string.httpResultSplit (s, @headers);
+		«scratchpad.headers = headers
+		if defined (headers.location) { //8/29/09 by DW
+			return (headers.location)}
+		else {
+			return (headers.["x-adjix-location"])}}
+	else {
+		return (url)}};
+bundle { //test code
+	dialog.alert (deref ("http://c.oy.ly/ka23"))}
+
+

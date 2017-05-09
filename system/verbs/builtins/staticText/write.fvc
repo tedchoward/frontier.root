@@ -1,0 +1,63 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.staticText.write
+
+on write (adrdata, path, data) {
+	«Changes
+		«9/13/11; 10:28:36 AM by DW
+			«Support adrdata^.prefs.flFileNaturalFilesystemPaths.
+		«3/16/11; 11:03:12 AM by DW
+			«Call with adrdata == nil if you want to use the global prefs, otherwise pass in the address of the place where you're storing your prefs.
+	local (adrloc, urlToReturn="", pc = file.getpathchar (), now = clock.now ());
+	adrdata = statictext.init (adrdata);
+	data = string (data);
+	if path beginswith "/" {
+		path = string.delete (path, 1, 1)};
+	for adrloc in @adrdata^.locations {
+		staticText.initLocation (adrdata, nameof (adrloc^));
+		if adrloc^.prefs.enabled {
+			«local (thispath)
+			«bundle //set up thispath
+				«thispath = adrloc^.prefs.path
+				«if adrdata^.prefs.flFileNaturalFilesystemPaths and (xxx == xxx) //9/13/11 by DW
+					«if not (thispath endswith pc)
+						«thispath = thispath + pc
+				«else
+					«if not (thispath endswith "/")
+						«thispath = thispath + "/"
+				«thispath = thispath + path
+			try {
+				case string.lower (adrloc^.prefs.driver) {
+					"s3" {
+						local (p = adrloc^.prefs.path);
+						if not (p endswith "/") {
+							p = p + "/"};
+						s3.newobject (p + path, data)};
+					"ftp" {
+						local (p = adrloc^.prefs.path);
+						if not (p endswith "/") {
+							p = p + "/"};
+						local (connection = tcp.ftp.openConnection (adrloc^.prefs.server, adrloc^.prefs.username, adrloc^.prefs.password));
+						tcp.ftp.writefile (connection, data, p + path);
+						tcp.ftp.closeConnection (connection)};
+					"filesystem" {
+						local (f = adrloc^.prefs.path);
+						if not adrdata^.prefs.flFileNaturalFilesystemPaths { //9/13/11 by DW
+							f = string.replaceall (f, "/", pc)};
+						if not (f endswith pc) {
+							f = f + pc};
+						f = f + string.replaceall (path, "/", pc);
+						f = string.replaceall (f, pc + pc, pc);
+						file.surefilepath (f);
+						file.writewholefile (f, data)}}}
+			else {
+				adrloc^.stats.ctErrors++;
+				adrloc^.stats.whenLastError = now;
+				adrloc^.stats.lastError = tryerror};
+			if adrloc^.prefs.flDefault {
+				urlToReturn = adrloc^.prefs.url + path};
+			adrloc^.stats.ctWrites++;
+			adrloc^.stats.whenLastWrite = now}};
+	return (urlToReturn)};
+bundle { //test code
+	dialog.alert (write (@config.statictext, "test.txt", clock.now ()))}
+
+

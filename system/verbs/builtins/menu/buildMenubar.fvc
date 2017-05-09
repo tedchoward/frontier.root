@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.menu.buildMenubar
+
+on buildMenubar () {
+	kernel (menu.buildmenubar)}
+
+

@@ -1,0 +1,40 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.scheduler2.showAttsInAboutWindow
+
+on showAttsInAboutWindow (adrstring) {
+	«Changes
+		«4/8/12; 11:36:04 AM by DW
+			«If the headline has no atts, don't return a string.
+		«1/30/12; 6:24:14 PM by DW
+			«If we're not in an outline window, then don't set the string, allowing the normal status string to display.
+		«1/25/12; 5:46:57 PM by DW
+			«A callback script that shows the attributes of the cursor headline in the About window. I've had this on my machine since July and it's a necessity if you're doing anything with the World Outline. To install the script, just open it and run it. 
+	local (s = date.timestring ());
+	bundle { //add atts, if available
+		try {
+			local (adrwindow = address (window.frontmost ()));
+			if typeof (adrwindow^) == outlinetype {
+				local (atts, adratt, name, lowername, ct = 0);
+				op.attributes.getall (@atts);
+				if sizeof (atts) > 0 {
+					for adratt in @atts {
+						name = nameof (adratt^);
+						lowername = string.lower (name);
+						if (lowername != "created") and (lowername != "pubDate") {
+							s = s + ", " + name + "=" + adratt^;
+							ct++}}};
+				if ct > 0 { //4/8/12 by DW
+					adrstring^ = s}}}}}
+«bundle //test code
+	«local (s)
+	«showAttsInAboutWindow (@s)
+	«dialog.alert (s)
+	«
+	«local (adrcallback = @user.scheduler2.callbacks.statusMessage.showAtts)
+	«if defined (adrcallback^)
+		«dialog.alert ("The callback is already installed my friend.")
+	«else
+		«if dialog.confirm ("Install this script as a callback for the scheduler?")
+			«adrcallback^ = this
+			«dialog.notify ("It's installed!")
+
+

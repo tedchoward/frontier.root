@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.globals.record
+
+on record (val) {
+	kernel (lang.record)}
+
+

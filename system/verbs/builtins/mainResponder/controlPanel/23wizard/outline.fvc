@@ -1,0 +1,233 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.mainResponder.controlPanel.["#wizard"].outline
+
+<wizard>
+	<panel title="Hosting">
+		<description>You can specify who can create new sites and where they are created.</description>
+		
+		<item title="Who can create sites?" type="popup" adr="controlPanel.manila.hostingWhoCreatesSites">
+			<option title="Anybody" value="anybody"/>
+			<option title="Editors Only" value="editors"/>
+			<popuptext>If anybody can create sites, then anybody who goes to your Create a Manila Site page can create a new site. Otherwise, only editors of that site may create new sites.&lt;p>In addition, you can always create new sites via the Control Panel.</popuptext>
+			</item>
+		<item title="Create top-level sites or sub-sites?" type="popup" adr="controlPanel.manila.hostingFlSubSites">
+			<option title="Sub-sites" value="subSites"/>
+			<option title="Top-level sites" value="topLevelSites"/>
+			<popuptext>Top-level sites are sites of the form siteName.server.com. For top-level sites, it's necessary to have a * DNS mapping for this domain pointing to this server.&lt;p>Sub-sites are created underneath a top-level site, as at www.server.com/siteName/.&lt;p>If you switch from one type to the other, you must change the base domain for new sites.</popuptext>
+			</item>
+		<item title="Base domain for new sites" type="string" adr="controlPanel.manila.hostingBaseDomain">
+			<popuptext>Set the base domain that new sites are created under when using the New Site command.&lt;p>If sub-sites, type a domain of the form www.server.com. Sites are then created at www.server.com/siteName/.&lt;p>If top-level sites are preferred, type a domain of the form .server.com. Sites are then created at siteName.server.com.&lt;p>Note: for top-level sites, it's necessary to have a * DNS mapping for this domain pointing to this server.</popuptext>
+			</item>
+		<item title="Share a membership group with the hosting site?" type="boolean" adr="controlPanel.flHostingShareMembershipGroup">
+			<popuptext>If you click Yes, then new sites will share a membership group with the hosting site, which allows people to be members of new sites without having to sign up for each one.</popuptext>
+			</item>
+		</panel>
+	<panel title="Mail">
+		<description>These settings determine the default values for all mail messages sent from this server.</description>
+		<item title="Mail address" type="string" adr="user.prefs.mailaddress"/>
+		<item title="Name" type="string" adr="user.prefs.name"/>
+		<item title="Organization" type="string" adr="user.prefs.organization"/>
+		<item title="Mail host" type="string" adr="user.prefs.mailHost"/>
+		</panel>
+	<panel title="Backups">
+		<description>Frontier can be configured to make backup copies of all databases that changed every night, and to archive, in XML, all changes to discussion group messages.</description>
+		
+		<item title="Backups" type="separator"/>
+		<item title="Back up all changed files in the Guest Databases folder every night?" type="boolean" adr="config.mainResponder.prefs.flBackupNightly"/>
+		<item title="Backup folder" type="string" adr="config.mainResponder.prefs.backupFolder"/>
+		
+		<item title="Discussion group archives" type="separator"/>
+		<item title="Archive changes to discussion group messages in XML?" type="boolean" adr="config.mainResponder.prefs.flArchiveDiscuss"/>
+		<item title="Archive folder" type="string" adr="config.mainResponder.prefs.discussArchiveFolder"/>
+		
+		</panel>
+	<panel title="Logging">
+		<description>Frontier maintains logs detailing what happens on your system. Statistics provide a cumulative view. You can choose which logs and stats Frontier should maintain, and where to store the logs.</description>
+		
+		<item title="Logs" type="separator"/>
+		<item title="Log every HTTP request?" type="boolean" adr="config.mainResponder.prefs.flLog"/>
+		<item title="Log HTTP requests in common log format?" type="boolean" adr="controlPanel.flCommonLog"/>
+		<item title="Log every XML-RPC request?" type="boolean" adr="user.betty.prefs.flKeepServerLog"/>
+		<item title="Log root updates?" type="boolean" adr="controlPanel.flRootUpdatesLogging"/>
+		<item title="Log scheduled tasks?" type="boolean" adr="user.scheduler.prefs.logInGuestDatabase"/>
+		<item title="Log available memory?" type="boolean" adr="config.mainResponder.prefs.flLogMemavail"/>
+		<item title="Close and re-open the log every hour?" type="boolean" adr="config.mainResponder.prefs.flLogReopenHourly"/>
+		<item title="Log folder" type="string" adr="config.mainResponder.prefs.logFolder"/>
+		
+		<item title="Common Log Format" type="separator"/>
+		<item title="Use common log date format?" type="boolean" adr="user.webserver.prefs.commonLog.flUseCommonLogDateFormat"/>
+		<item title="Include virtual hosts?" type="boolean" adr="user.webserver.prefs.commonLog.flIncludeVirtualHosts"/>
+		<item title="Include referers?" type="boolean" adr="user.webserver.prefs.commonLog.flIncludeReferers"/>
+		<item title="Include User-agents?" type="boolean" adr="user.webserver.prefs.commonLog.flIncludeUserAgents"/>
+		
+		<item title="Statistics" type="separator"/>
+		<item title="Count total hits for each domain?" type="boolean" adr="user.webserver.prefs.flDomainStats"/>
+		<item title="Compile discussion group stats?" type="boolean" adr="config.mainResponder.prefs.flDiscussStatsNightly"/>
+		<item title="Write nightly XML reports listing most-read sites?" type="boolean" adr="controlPanel.manila.flXmlSitesReport"/>
+		
+		</panel>
+	<panel title="Security">
+		<description>You can set security access controls on all content that the server renders. The values on this page control the global settings. The directory and script settings can be over-ridden at the site level, while IP address security is global.</description>
+		<item title="Security" type="separator"/>
+		<item title="Allow directory listings?" type="boolean" adr="config.mainResponder.globals.allowDirectoryListings"/>
+		<item title="Allow script listings?" type="boolean" adr="config.mainResponder.globals.allowScriptListings"/>
+		<item title="Allow scripts to run?" type="boolean" adr="config.mainResponder.globals.allowScriptsToRun"/>
+		
+		<item title="Blocking HTTP requests by IP address" type="separator"/>
+		<item title="Turn on HTTP request blocking?" type="boolean" adr="config.mainResponder.prefs.flAllowByIpOnly"/>
+		<item title="IP addresses that are allowed to access your HTTP server" type="text" rows="5" cols="45" adr="config.mainResponder.prefs.allowedIpAddresses"/>
+		
+		<item title="Blocking XML-RPC requests by IP address" type="separator"/>
+		<item title="Turn on XML-RPC request blocking?" type="boolean" adr="user.betty.prefs.flAllowByIpOnly"/>
+		<item title="IP addresses that are allowed to access your XML-RPC server" type="text" rows="5" cols="45" adr="user.betty.prefs.allowedIpAddresses"/>
+		
+		<item title="Membership" type="separator"/>
+		<item title="Do you want to use the more secure encrypted cookie format?" type="boolean" adr="config.mainResponder.prefs.flMembershipHashedCookies">
+			<popuptext>The encrypted format does not store passwords in membership cookies. Instead it hashes the password, plus additional information, to make membership more secure.</popuptext>
+			</item>
+		</panel>
+	<panel title="Updates">
+		<description>You can choose to get the latest Frontier updates every night, and choose which databases to update.</description>
+		
+		<item title="Update nightly" type="separator"/>
+		<item title="Do you want to update your databases every night?" type="boolean" adr="config.mainResponder.prefs.flUpdateNightly"/>
+		
+		<item title="Databases to update" type="separator"/>
+		<item title="Update Frontier.root?" type="boolean" adr="controlPanel.flUpdateFrontier"/>
+		<item title="Update mainResponder.root?" type="boolean" adr="controlPanel.flUpdateMainResponder"/>
+		<item title="Update manila.root?" type="boolean" adr="controlPanel.flUpdateManila"/>
+		<item title="Update prefs.root?" type="boolean" adr="controlPanel.flUpdatePrefs"/>
+		</panel>
+	<panel title="General">
+		<description>Some of Frontier's advanced server features include database subscriptions, a search engine, background HTML rendering, and debugging.</description>
+		
+		<item title="General settings" type="separator"/>
+		<item title="Save all open databases that have changed every minute?" type="boolean" adr="config.mainResponder.prefs.flSaveDatabasesEveryMinute"/>
+		<item title="Record automatic database opens in system.temp?" type="boolean" adr="config.mainResponder.prefs.flLogDatabaseOpens"/>
+		<item title="Enable subscriptions from this server to other copies of Frontier?" type="boolean" adr="config.mainResponder.prefs.flSubscriptions"/>
+		<item title="On demand, build pages in the background, once a minute?" type="boolean" adr="config.mainResponder.prefs.flBuildPagesInBackground"/>
+		<item title="Is this machine serving as a search engine?" type="boolean" adr="config.mainResponder.prefs.flSearchEngine"/>
+		
+		<item title="Debugging" type="separator"/>
+		<item title="Turn on debugging features?" type="boolean" adr="config.mainResponder.prefs.flDebug"/>
+		<item title="Copy paramtable to scratchpad.paramtable after every request?" type="boolean" adr="config.mainResponder.prefs.flKeepParamTable"/>
+		<item title="Enable script profiling?" type="boolean" adr="config.mainResponder.prefs.flProfiling"/>
+		
+		</panel>
+	<panel title="Manila">
+		<description>You can can enable and disable Manila's XML-RPC interface; set up static pictures, static rendering, and gems; and allow email subscriptions to discussion groups.</description>
+		
+		<item title="Manila RPC" type="separator"/>
+		<item title="Do you want the Manila RPC interface enabled?" type="boolean" adr="controlPanel.manila.flEnableRpc">
+			<popuptext>Manila's XML-RPC interface supports remote scripting of Manila sites.</popuptext>
+			</item>
+		<item title="Do you want the Manila SOAP interface enabled?" type="boolean" adr="controlPanel.manila.flEnableSoap">
+			<popuptext>Manila's SOAP interface supports remote scripting of Manila sites.</popuptext>
+			</item>
+		<item title="Do you want Manila plug-ins RPC interfaces enabled?" type="boolean" adr="controlPanel.manila.flEnablePluginsRpc">
+			<popuptext>Manila plug-ins may also have RPC interfaces. Click Yes to enable the RPC interfaces for all installed plug-ins; click No to disable.</popuptext>
+			</item>
+		<item title="Do you want Manila's Blogger API RPC interfaces enabled?" type="boolean" adr="controlPanel.manila.flEnableBloggerApi">
+			<popuptext>Manila can support the Blogger API so people can post with any tool that supports the authoring sideof that API.&lt;p>Click Yes to enable the Blogger API XML-RPC interface; click No to disable.</popuptext>
+			</item>
+		<item title="Do you want Manila's Meta-Weblog API RPC interfaces enabled?" type="boolean" adr="controlPanel.manila.flEnableMetaWeblogApi">
+			<popuptext>Manila can support the Meta-Weblog API so people can post with any tool that supports the authoring side of that API.&lt;p>Click Yes to enable the Meta-Weblog API XML-RPC and SOAP interfaces; click No to disable.</popuptext>
+			</item>
+		<item title="" type="custom" adr="controlPanel.manila.bloggerToolCheck"/>
+		
+		<item title="RSS" type="separator"/>
+		<item title="Do you want to enable publish-and-subscribe for Manila RSS feeds?" type="boolean" default="false" adr="controlPanel.manila.flRssPubSub">
+			<popuptext>News readers which support this feature can request notification when a given RSS feed changes, and Manila will send notification.&lt;p>It means a little more work for your server, since Manila sends a short XML-RPC message to each subscriber to a given RSS feed when it changes.</popuptext>
+			</item>
+		
+		<item title="Home Page Updates" type="separator"/>
+		<item title="Do you want to send notices of home page updates to UserLand?" type="boolean" default="false" adr="controlPanel.manila.flSendUpdateNoticesToUserLand">
+			<popuptext>Sites on your server can appear on UserLand's Updates page whenever a home page is updated. &lt;p&gt;Note: editors only sites are not listed on the Updates page.</popuptext>
+			</item>
+		
+		<item title="Static Pictures" type="separator"/>
+		<item title="Do you want to write pictures to disk?" type="boolean" adr="controlPanel.manila.flWritePicturesToStaticServer">
+			<popuptext>You can choose to write uploaded pictures to disk or a shared volume, where they can be served by a server that's optimized for serving image files.</popuptext>
+			</item>
+		<item title="Folder for static pictures" type="string" adr="controlPanel.manila.staticFilesFolder">
+			<popuptext>Set the folder in which pictures should be stored. Manila will create, in this folder, a sub-folder for each site.</popuptext>
+			</item>
+		<item title="URL for static pictures" type="string" adr="controlPanel.manila.staticFilesUrl">
+			<popuptext>Set the URL to the folder above. The URL should start with http:\// and end with a /.</popuptext>
+			</item>
+		
+		<item title="Static Rendering" type="separator"/>
+		<item title="Do you want to allow Manila managing editors to render pages to disk?" type="boolean" adr="controlPanel.manila.flStaticRenderingEnabled">
+			<popuptext>
+				You can choose to allow Manila sites to be rendered to disk, where they can be served by a static server.
+				</popuptext>
+			</item>
+		<item title="Folder for static rendering" type="string" adr="controlPanel.manila.staticRenderingFolder">
+			<popuptext>Set the folder where rendered sites should be written to disk. Manila will create, in this folder, a sub-folder for each site.</popuptext>
+			</item>
+		<item title="URL for static rendering" type="string" adr="controlPanel.manila.staticRenderingUrl">
+			<popuptext>Set the URL to the folder above. The URL should start with http:\// and end with a /.</popuptext>
+			</item>
+		<item title="Default file name" type="string" adr="controlPanel.manila.staticRenderingDefaultFilename">
+			<popuptext>Specify the default file name -- the default file for directories on your static server, usually index.html or default.html.</popuptext>
+			</item>
+		
+		<item title="Gems" type="separator"/>
+		<item title="Do you want to allow Manila editors to upload files of any type?" type="boolean" adr="controlPanel.manila.flGemsEnabled">
+			<popuptext>You can choose to allow Manila editors to upload files of any kind that are written to disk to be served by a static server.</popuptext>
+			</item>
+		<item title="Folder size limit per site (in megabytes)" type="string" adr="controlPanel.manila.gemsLimit" size="5">
+			<popuptext>The limit specifies how much space on disk an individual site may use.</popuptext>
+			</item>
+		<item title="Folder for gems" type="string" adr="controlPanel.manila.gemsFolder">
+			<popuptext>Set the folder in which files should be stored. Manila will create, in this folder, a sub-folder for each site.</popuptext>
+			</item>
+		<item title="URL for gems" type="string" adr="controlPanel.manila.gemsUrl">
+			<popuptext>Set the URL to the folder above. The URL should start with http:\// and end with a /.</popuptext>
+			</item>
+		
+		<item title="Site Downloads" type="separator"/>
+		<item title="Do you want to allow Manila editors to download their sites?" type="boolean" adr="controlPanel.manila.flSiteDownloadsEnabled">
+			<popuptext>You can choose to allow Manila editors to download their website as a database to be served by a static server.</popuptext>
+			</item>
+		<item title="Folder for exported site databases" type="string" adr="controlPanel.manila.siteDownloadFolder">
+			<popuptext>Set the folder in which site database files should be stored. Manila will create, in this folder, a sub-folder for each site.</popuptext>
+			</item>
+		<item title="URL for site databases" type="string" adr="controlPanel.manila.siteDownloadUrl">
+			<popuptext>Set the URL to the folder above. The URL should start with http:\// and end with a /.</popuptext>
+			</item>
+		<item title="Will Frontier be serving downloaded sites?" type="boolean" adr="controlPanel.manila.flFrontierServesDownloadedSites">
+			<popuptext>If Frontier will be serving downloaded sites, choose Yes. If downloaded sites will be served using another server, choose No.</popuptext>
+			</item>
+		
+		<item title="Email" type="separator"/>
+		<item title="Do you want to allow members to receive discussion group responses via email?" type="boolean" adr="controlPanel.manila.flDiscussAllowEmailSubscriptions">
+			<popuptext>
+				You can choose to allow members to specify that they want to receive discussion group responses via email.
+				</popuptext>
+			</item>
+		</panel>
+	<panel title="WebEdit">
+		<description>WebEdit allows remote access to your databases, from one copy of Frontier to another. Here you can enable and disable WebEdit Server, add users, edit user info, and grant and deny access.</description>
+		<item title="Enable or disable" type="separator"/>
+		<item title="Enable WebEdit Server?" type="boolean" adr="controlPanel.webEditServer.flEnabled">
+			</item>
+		
+		<item title="Add User" type="separator"/>
+		<item title="Name" type="string" adr="controlPanel.webEditServer.newUserName"/>
+		<item title="Email address" type="string" adr="controlPanel.webEditServer.newUserEmailAddress"/>
+		<item title="Password" type="string" adr="controlPanel.webEditServer.newUserEmailPassword"/>
+		
+		<item title="Change User Info" type="separator"/>
+		<item title="Choose User" type="custom" adr="controlPanel.webEditServer.userToEdit"/>
+		<item title="New email address" type="string" adr="controlPanel.webEditServer.editUserEmailAddress"/>
+		<item title="New password" type="string" adr="controlPanel.webEditServer.editUserEmailPassword"/>
+		
+		<item title="Access permission" type="separator"/>
+		<item title="Grant WebEdit Server access to" type="custom" adr="controlPanel.webEditServer.grantAccessTo"/>
+		<item title="Deny WebEdit Server access to" type="custom" adr="controlPanel.webEditServer.denyAccessTo"/>
+		
+		</panel>
+	</wizard>
+
+
+

@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.window.getType
+
+on getType (adr) { //5.0 -- this code is widely replicated
+	local (type = unknownType);
+	if adr != "" { «a window is open
+		if window.isMenuScript (adr) {
+			type = scripttype}
+		else {
+			if defined (adr^) {
+				type = typeOf (adr^)}
+			else {
+				adr = string.replaceAll (adr, "\\", "\\\\");
+				if defined (adr^) {
+					type = typeof (adr^)}}}};
+	return (type)}
+
+

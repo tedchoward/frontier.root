@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.updateTools
+
+«Changes
+	«4/27/09; 10:42:42 AM by DW
+		«Don't bother updating if the tool isn't open. (That's one way to uninstall, just drag the tool out of the Apps folder.)
+	«8/2/08; 7:55:59 PM by DW
+		«Created. Update all the tools who have registered themselves in the toolsToUpdate table. The first tool to do so is newsJunk.root, look in its init script for an example of how to do it. (It's fairly simple.) 
+local (adr);
+for adr in @user.opmlEditor.prefs.toolsToUpdate {
+	local (adrintool = adr^);
+	if defined (adrintool^) {
+		frontier.tools.updateme (adrintool)}}
+
+

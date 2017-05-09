@@ -1,0 +1,22 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.updateOpenTools
+
+on updateOpenTools () {
+	«Changes
+		«4/7/11; 8:14:42 AM by DW
+			«Created.
+	local (adrfile, fname, toolname, suitename, s = "", startticks = clock.ticks ());
+	for adrfile in @system.compiler.files {
+		fname = file.filefrompath (nameof (adrfile^));
+		toolname = fname - ".root";
+		suitename = toolname + "Suite";
+		if defined (adrfile^.[suitename]) { //it's a tool
+			frontier.tools.updateme (address (suitename));
+			s = s + fname + ", "}};
+	if sizeof (s) > 0 {
+		s = "Updated " + string.mid (s, 1, sizeof (s) - 2) + ".";
+		«scratchpad.updatefilenames = s
+		log2.add ("OPML Editor", "Tool Update", s, startticks)}};
+bundle { //test code
+	updateOpenTools ()}
+
+

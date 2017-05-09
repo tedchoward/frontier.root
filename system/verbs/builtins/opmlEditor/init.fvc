@@ -1,0 +1,441 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.init
+
+on init () {
+	«Changes
+		«10/4/12; 10:41:32 AM by DW
+			«Initialize watchedfolder feature.
+				«http://worknotes.scripting.com/october2012/10412ByDw/pictureUploader
+		«8/28/12; 10:19:39 AM by DW
+			«There was another place we had to patch the fileSystemUrl. That change was made too late in the day for my bleary eyes. :-(
+		«8/27/12; 7:37:42 PM by DW
+			«When we set user.opmlEditor.prefs.server.externalDomainName call opmlEditor.utilities.patchFileSystemUrl.
+		«8/27/12; 4:08:34 PM by DW
+			«When we set user.opmlEditor.prefs.server.externalDomainName call opmlEditor.utilities.setCookieDomain.
+		«6/24/12; 4:05:53 PM by DW
+			«Initialize opmlEditor.menuCommands.exportObject in opmlEditor.menuCommands.exportObject. Prevent it failing on some OS X Lion installations.
+				«http://worknotes.scripting.com/june2012/62412ByDw/problemInOpmleditorinit
+		«6/21/12; 5:33:55 PM by DW
+			«Init new membership prefs.
+		«5/27/12; 1:02:11 PM by DW
+			«Init the part backup serialnum.
+		«4/24/12; 5:19:05 PM by DW
+			«Make it so that the opmlEditor website can also be accessed through opmlServer address.
+		«Before 4/24/12
+			«4/14/12; 8:27:32 AM by DW
+				«Flip-flop back to using the reverse-lookup on DNS for the name of the machine. Support issues are the reason.
+			«4/10/12; 9:46:24 AM by DW
+				«Switch back to allocating a mediahackers.org CNAME. The Amazon-supplied ones are impossible to type or remember.
+			«4/10/12; 9:28:20 AM by DW
+				«Instead of allocating a mediahackers.org CNAME for the server, just use a CNAME determined by doing a reverse-lookup on DNS.
+					«http://worknotes.scripting.com/april2012/41012ByDw/allocingCnamesChange/
+			«4/9/12; 5:31:44 AM by DW
+				«Install a hostNotFound handler to redirect to the opmlEditor site from the server's external name.
+			«4/7/12; 7:35:50 PM by DW
+				«Another try at getting the domain name booted up on EC2. Look for ip-0A551B48.ec2.internal as the externalDomainName. This is the value that's in the 15th build of EC2 for Poets AMI. If we see that, smash it. It certainly isn't this machine. 
+			«4/7/12; 7:01:08 PM by DW
+				«When we're launching a new EC2 instance, we want to alloc a domain name from mediahackers.org. Problem is there already is a name in the externalDomainName pref. So we set a boolean in ec2SupportSuite.shipping.setDefaults that says basically "One-time only smash the external name and allocate a new one. We know this is not the user's choice because it's coming from a virgin install. 
+			«4/7/12; 11:51:17 AM by DW
+				«Check externalName pref setting. It could still be 127.0.0.1 or the empty string.
+			«2/23/12; 10:53:48 AM by DW
+				«Init packagesPath pref.
+			«11/26/11; 10:58:05 PM by DW
+				«Init new HTTP server stats for serverMonitor.
+			«11/25/11; 9:29:55 AM by DW
+				«First time we're called in an invocation of the OPML Editor, we call opmleditor.startup in a separate thread.
+			«11/25/11; 8:52:34 AM by DW
+				«No longer init worldOutlineHeaderFont, its value is now stored in the worldOutline prefs table. Same with wordOutlineServer.
+			«11/14/11; 2:37:09 PM by DW
+				«Init pref for logging HTTP requests.
+			«10/12/11; 11:07:50 AM by DW
+				«Init user.opmlEditor.prefs.server.externalDomainName to 127.0.0.1. Full discussion of this change here: http://worknotes.scripting.com/october2011/101211ByDw/buildOpmlriver2
+					«old code
+						«try
+							«user.opmlEditor.prefs.server.externalDomainName = tcp.dns.getmydomainname ()
+						«else
+							«user.opmlEditor.prefs.server.externalDomainName = ""
+			«9/28/11; 2:44:21 AM by DW
+				«Don't write out adminPassword.txt. We have a much better way of setting the admin password now.
+			«9/25/11; 6:49:20 PM by DW
+				«Init user.opmlEditor.prefs.serverMonitorIpAddress.
+		«Before 9/25/11
+			«9/21/11; 11:41:23 AM by DW
+				«New pref, adminUserList. A comma-separated list of names that have access to the dropdown menu in the menu bar, and eventually will have the ability to create new users.
+			«9/16/11; 8:38:22 AM by DW
+				«Replace call to opmlEditor.startup with call to opmlEditor.initStaticText. Add a stats table for debugging to show us how often this is being called.
+			«9/15/11; 7:18:45 PM by DW
+				«I had to break down and call opmleditor.startup from the misc section here. Otherwise the first-time user gets an error. There basically appears to be nothing that can only run at startup, unless you want to require a restart after updating. I guess it's almost mathematical.
+			«8/28/11; 10:47:28 AM by DW
+				«Create an "admin" user if one doesn't exist, and write the admin user's password to a file in the Extras sub-folder of the folder that contains the OPML app.
+			«8/23/11; 7:12:41 PM by DW
+				«Init user.opmlEditor.prefs.server.externalDomainName.
+			«8/21/11; 8:05:18 AM by DW
+				«Init user.opmlEditor.prefs.worldOutlineHeaderFont.
+			«7/26/11; 2:32:57 PM by DW
+				«Init system.temp.opmleditor.membercache.
+			«7/25/11; 8:46:58 AM by DW
+				«Init identity prefs.
+			«7/15/11; 7:19:05 PM by DW
+				«Init the atts window, and the opCursorMoved callback.
+			«7/15/11; 9:20:42 AM by DW
+				«Call opmlEditor.blorkmark.init.
+			«7/12/11; 6:00:56 PM by DW
+				«Call s3.init.
+			«7/8/11; 11:30:23 AM by DW
+				«Call opmlEditor.worldOutline.init.
+		«Before July 2011
+			«5/23/11; 1:24:23 AM by DW
+				«Init prefs for dnsapi calls.
+			«5/8/11; 7:44:01 PM by DW
+				«Init user.opmlEditor.prefs.worldOutlineServer.
+			«4/26/11; 9:06:42 AM by DW
+				«Init user.prefs.flDevMachine. I thought it was initialized on everyone's machine, but it turns out it's not. This should take care of it once and for all.
+			«4/20/11; 8:48:30 PM by DW
+				«Install the hourly script.
+			«4/7/11; 8:10:31 AM by DW
+				«Init user.opmlEditor.prefs.flUpdateOpenTools.
+			«4/3/11; 4:23:17 PM by DW
+				«Init user.opmlEditor.prefs.flLocalMemberIsAdmin. If true, when the user accesses the web server from the local machine, he is the admin user. Default true. The basic idea is that if you have access to the local machine, you have full access to the database anyway. 
+			«2/26/11; 11:01:21 PM by DW
+				«Reorg security settings. Return the address of user.opmlEditor.
+			«10/7/10; 4:45:39 AM by DW
+				«Init user.opmlEditor.prefs.flRespondToServerMonitor, which is used in user.betty.rpcHandlers.pingServerMonitor.
+			«10/6/10; 9:54:24 PM by DW
+				«Init user.opmlEditor.prefs.flNightlyBackupOpenDatabases, and install the overNight script for opmlEditor.
+			«9/18/10; 11:16:14 AM by DW
+				«Move the initialization of the parts folder to opmlEditor.loadPartsFromFolder.
+			«9/18/10; 8:10:32 AM by DW
+				«Init user.opmlEditor.prefs.flLoadPartsFromFolder and user.opmlEditor.prefs.partsFolder.
+			«1/18/10; 11:21:01 AM by DW
+				«Init user.opmlEditor.prefs.flSaveDatabases (defaults true) and user.opmlEditor.prefs.ctMinutesBetwSaves (default 3) and stats for database saving. 
+			«12/28/09; 10:05:35 AM by DW
+				«Init user.opmlEditor.prefs.flScriptsFolderEnabled.
+			«12/28/09; 9:11:46 AM by DW
+				«Init user.opmlEditor.stats.runScriptsFolder table.
+			«12/28/09; 8:22:21 AM by DW
+				«Init user.opmlEditor.stats.ctEveryMinutes.
+			«5/20/09; 1:08:19 PM by DW
+				«Init user.opmlEditor.prefs.exportFolder.
+			«8/15/08; 6:11:18 AM by DW
+				«Don't try to create the desktop shortcut, it seems to be causing an error the first time people launch the app on Windows.
+			«8/8/08; 3:15:58 PM by DW
+				«Init user.opmlEditor.prefs.toolsWithPrefs and related.
+			«8/4/08; 1:20:19 PM by DW
+				«The first time we run, offer to update. We know it's the first time because user.opmlEditor is being created. Seems pretty clear to me this is the first run.
+			«8/4/08; 9:49:06 AM by DW
+				«Various initializations for the server running on port 80.
+			«8/4/08; 6:10:01 AM by DW
+				«Fixed error -- we were setting lastUpdate in the top-level of user.opmlEditor instead of in the stats table.
+			«8/2/08; 7:52:38 PM by DW
+				«Initialize user.opmlEditor.prefs.toolsToUpdate. A table with information about tools that we update along with opml.root. The tools add their own names to this table, replacing their old one-off code for updating themselves. 
+			«8/2/08; 12:18:39 PM by DW
+				«Initialize nightly code updates.
+			«7/30/08; 9:59:34 AM by DW
+				«Call scheduler2.init.
+			«7/30/08; 9:52:28 AM by DW
+				«Install opmlEditor.everyMinute.
+			«7/30/08; 9:42:10 AM by DW
+				«If user.prefs.initials is empty and user.prefs.name is not, then calculate the initials from the name.
+			«7/30/08; 9:23:27 AM by DW
+				«Create a desktop icon for the OPML app on Windows, but only do it once, if the user deletes the icon, we won't recreate it.
+			«7/28/08; 10:00:17 AM by DW
+				«Created.
+	if not defined (user.opmlEditor) {
+		new (tabletype, @user.opmlEditor);
+		thread.callscript (@Frontier.tools.data.updateCommandScript, {true})}; //8/4/08 by DW
+	bundle { //prefs
+		if not defined (user.opmlEditor.prefs) {
+			new (tabletype, @user.opmlEditor.prefs)};
+		if not defined (user.opmlEditor.prefs.flNightlyUpdate) {
+			user.opmlEditor.prefs.flNightlyUpdate = true};
+		if not defined (user.opmlEditor.prefs.flUpdateOpenTools) { //4/7/11 by DW
+			user.opmlEditor.prefs.flUpdateOpenTools = true};
+		if not defined (user.opmlEditor.prefs.hourToUpdate) {
+			user.opmlEditor.prefs.hourToUpdate = 3};
+		if not defined (user.opmlEditor.prefs.toolsToUpdate) { //8/2/08 by DW
+			new (tabletype, @user.opmlEditor.prefs.toolsToUpdate)};
+		if not defined (user.opmlEditor.prefs.flServerOnPort80) { //8/4/08 by DW
+			user.opmlEditor.prefs.flServerOnPort80 = false};
+		if not defined (user.opmlEditor.prefs.ipAddressPort80) { //8/4/08 by DW
+			user.opmlEditor.prefs.ipAddressPort80 = ""};
+		if not defined (user.opmlEditor.prefs.toolsWithPrefs) { //8/8/08 by DW
+			new (tabletype, @user.opmlEditor.prefs.toolsWithPrefs)};
+		bundle { //remove any toolsWithPrefs addresses that don't exist, 8/8/08 by DW
+			local (i, adr);
+			for i = sizeof (user.opmlEditor.prefs.toolsWithPrefs) downto 1 {
+				adr = @user.opmlEditor.prefs.toolsWithPrefs [i];
+				if not defined (adr^^) {
+					delete (adr)}}};
+		if not defined (user.opmlEditor.prefs.serialNum) { //multi-purpose serialnum, 8/8/08 by DW
+			user.opmlEditor.prefs.serialNum = 1};
+		«if not defined (user.opmlEditor.prefs.exportFolder) //5/20/09 by DW
+			«See opmlEditor.menuCommands.exportObject
+			«user.opmlEditor.prefs.exportFolder = file.getSpecialFolderPath ("", "desktop folder", true) + "Exported Objects" + file.getpathchar ()
+		if not defined (user.opmlEditor.prefs.flScriptsFolderEnabled) {
+			user.opmlEditor.prefs.flScriptsFolderEnabled = true};
+		if not defined (user.opmlEditor.prefs.flSaveDatabases) { //1/18/10 by DW
+			user.opmlEditor.prefs.flSaveDatabases = true};
+		if not defined (user.opmlEditor.prefs.ctMinutesBetwSaves) { //1/18/10 by DW
+			user.opmlEditor.prefs.ctMinutesBetwSaves = 3};
+		if not defined (user.opmlEditor.prefs.flLoadPartsFromFolder) { //9/18/10 by DW
+			user.opmlEditor.prefs.flLoadPartsFromFolder = false};
+		if not defined (user.opmlEditor.prefs.flNightlyBackupOpenDatabases) { //10/6/10 by DW
+			user.opmlEditor.prefs.flNightlyBackupOpenDatabases = false};
+		if not defined (user.opmlEditor.prefs.nightlyBackupFolder) { //10/6/10 by DW
+			user.opmlEditor.prefs.nightlyBackupFolder = frontier.pathstring + "Nightly Backup" + file.getpathchar ()};
+		if not defined (user.opmlEditor.prefs.flRespondToServerMonitor) { //10/7/10 by DW
+			user.opmlEditor.prefs.flRespondToServerMonitor = false};
+		if not defined (user.opmlEditor.prefs.serverMonitorIpAddress) { //9/25/11 by DW
+			user.opmlEditor.prefs.serverMonitorIpAddress = ""};
+		if not defined (user.opmlEditor.prefs.flLocalMemberIsAdmin) { //4/3/11 by DW
+			user.opmlEditor.prefs.flLocalMemberIsAdmin = true};
+		if not defined (user.opmlEditor.prefs.dnsApiServer) { //5/23/11 by DW
+			user.opmlEditor.prefs.dnsApiServer = "xmlrpc://dnsapi.scripting.com:5337/RPC2"};
+		if not defined (user.opmlEditor.prefs.dnsApiCNAME) { //5/23/11 by DW
+			user.opmlEditor.prefs.dnsApiCNAME = ""};
+		«if not defined (user.opmlEditor.prefs.worldOutlineHeaderFont) //8/21/11 by DW
+			«user.opmlEditor.prefs.worldOutlineHeaderFont = "Alice"
+		if not defined (user.opmlEditor.prefs.adminUserList) { //9/21/11 by DW
+			user.opmlEditor.prefs.adminUserList = ""};
+		if not defined (user.opmlEditor.prefs.flLogHttpRequests) { //11/14/11 by DW
+			user.opmlEditor.prefs.flLogHttpRequests = true};
+		if not defined (user.opmlEditor.prefs.packagesPath) { //2/23/12 by DW
+			user.opmlEditor.prefs.packagesPath = "/static.opml.org/opmlEditor/packages/"};
+		
+		if not defined (user.opmlEditor.prefs.membershipKind) { //6/11/12 by DW
+			user.opmlEditor.prefs.membershipKind = "closed"};
+		if not defined (user.opmlEditor.prefs.inviteCode) { //6/11/12 by DW
+			on randomstate () {
+				return (states.nthstate (random (1, 50)))};
+			user.opmlEditor.prefs.inviteCode = randomstate () + "-" + randomstate () + "-" + random (1, 20)};
+		if not defined (user.opmlEditor.prefs.inviteCodeCount) { //6/11/12 by DW
+			user.opmlEditor.prefs.inviteCodeCount = 10};
+		if not defined (user.opmlEditor.prefs.signupPageIntroText) { //6/14/12 by DW
+			user.opmlEditor.prefs.signupPageIntroText = ""};
+		
+		if defined (user.opmlEditor.prefs.worldOutlineServer) { //11/25/11 by DW -- clean up loose end
+			delete (@user.opmlEditor.prefs.worldOutlineServer)};
+		bundle { //security, 2/26/11 by DW
+			if not defined (user.opmlEditor.prefs.security) {
+				new (tabletype, @user.opmlEditor.prefs.security)};
+			if not defined (user.opmlEditor.prefs.security.flAllowRemoteViewing) {
+				if defined (config.river2.prefs.security.flAllowRemoteViewing) {
+					user.opmlEditor.prefs.security.flAllowRemoteViewing = config.river2.prefs.security.flAllowRemoteViewing}
+				else {
+					user.opmlEditor.prefs.security.flAllowRemoteViewing = false}};
+			if not defined (user.opmlEditor.prefs.security.flAllowRemotePost) {
+				if defined (config.river2.prefs.security.flAllowRemotePost) {
+					user.opmlEditor.prefs.security.flAllowRemotePost = config.river2.prefs.security.flAllowRemotePost}
+				else {
+					user.opmlEditor.prefs.security.flAllowRemotePost = false}};
+			if not defined (user.opmlEditor.prefs.security.flRequireRemoteLogin) {
+				if defined (config.river2.prefs.security.flRequireRemoteLogin) {
+					user.opmlEditor.prefs.security.flRequireRemoteLogin = config.river2.prefs.security.flRequireRemoteLogin}
+				else {
+					user.opmlEditor.prefs.security.flRequireRemoteLogin = true}};
+			if not defined (user.opmlEditor.prefs.security.remoteUsername) {
+				if defined (config.river2.prefs.security.remoteUsername) {
+					user.opmlEditor.prefs.security.remoteUsername = config.river2.prefs.security.remoteUsername}
+				else {
+					user.opmlEditor.prefs.security.remoteUsername = ""}};
+			if not defined (user.opmlEditor.prefs.security.remotePassword) {
+				if defined (config.river2.prefs.security.remotePassword) {
+					user.opmlEditor.prefs.security.remotePassword = config.river2.prefs.security.remotePassword}
+				else {
+					user.opmlEditor.prefs.security.remotePassword = ""}};
+			bundle { //delete old settings, they were in the wrong place
+				if defined (user.opmlEditor.prefs.allowRemotePost) {
+					delete (@user.opmlEditor.prefs.allowRemotePost)};
+				if defined (user.opmlEditor.prefs.allowRemoteViewing) {
+					delete (@user.opmlEditor.prefs.allowRemoteViewing)};
+				if defined (user.opmlEditor.prefs.flAllowRemotePost) {
+					delete (@user.opmlEditor.prefs.flAllowRemotePost)};
+				if defined (user.opmlEditor.prefs.flAllowRemoteViewing) {
+					delete (@user.opmlEditor.prefs.flAllowRemoteViewing)};
+				if defined (user.opmlEditor.prefs.password) {
+					delete (@user.opmlEditor.prefs.password)};
+				if defined (user.opmlEditor.prefs.username) {
+					delete (@user.opmlEditor.prefs.username)}}};
+			«bundle //old code
+				«if not defined (user.opmlEditor.prefs.username)
+					«user.opmlEditor.prefs.username = ""
+				«if not defined (user.opmlEditor.prefs.password)
+					«user.opmlEditor.prefs.password = ""
+				«if not defined (user.opmlEditor.prefs.allowRemotePost)
+					«user.opmlEditor.prefs.allowRemotePost = false
+				«if not defined (user.opmlEditor.prefs.allowRemoteViewing)
+					«user.opmlEditor.prefs.allowRemoteViewing = false
+				«if not defined (user.opmlEditor.prefs.requireRemoteLogin)
+					«user.opmlEditor.prefs.requireRemoteLogin = false
+		bundle { //identity, 7/25/11 by DW
+			if not defined (user.opmlEditor.prefs.identity) {
+				new (tabletype, @user.opmlEditor.prefs.identity)};
+			if not defined (user.opmlEditor.prefs.identity.flUseRemoteServer) {
+				user.opmlEditor.prefs.identity.flUseRemoteServer = false};
+			if not defined (user.opmlEditor.prefs.identity.serverDomain) {
+				user.opmlEditor.prefs.identity.serverDomain = ""}};
+		bundle { //server prefs, 8/23/11 by DW
+			if not defined (user.opmlEditor.prefs.server) {
+				new (tabletype, @user.opmlEditor.prefs.server)};
+			if not defined (user.opmlEditor.prefs.server.externalDomainName) { //4/7/12 by DW
+				user.opmlEditor.prefs.server.externalDomainName = ""}};
+		bundle { //watchedFolder prefs, 10/3/12 by DW
+			if not defined (user.opmlEditor.prefs.watchedFolder) {
+				new (tabletype, @user.opmlEditor.prefs.watchedFolder)};
+			if not defined (user.opmlEditor.prefs.watchedFolder.enabled) {
+				user.opmlEditor.prefs.watchedFolder.enabled = true};
+			if not defined (user.opmlEditor.prefs.watchedFolder.folder) {
+				user.opmlEditor.prefs.watchedFolder.folder = frontier.getsubfolder ("/ops/images/")};
+			if not defined (user.opmlEditor.prefs.watchedFolder.backupFolder) {
+				user.opmlEditor.prefs.watchedFolder.backupFolder = frontier.getsubfolder ("/ops/imageBackups/")};
+			if not defined (user.opmlEditor.prefs.watchedFolder.clipboardTemplate) {
+				wp.newtextobject (string (opmlEditor.data.outlines.watchedFolderClipboard), @user.opmlEditor.prefs.watchedFolder.clipboardTemplate)}}};
+	bundle { //stats
+		if not defined (user.opmlEditor.stats) {
+			new (tabletype, @user.opmlEditor.stats)};
+		if defined (user.opmlEditor.whenLastUpdate) { //fix error, 8/4/08 AM by DW
+			user.opmlEditor.stats.whenLastUpdate = user.opmlEditor.whenLastUpdate;
+			delete (@user.opmlEditor.whenLastUpdate)};
+		if not defined (user.opmlEditor.stats.whenLastUpdate) {
+			user.opmlEditor.stats.whenLastUpdate = date (0)};
+		if not defined (user.opmlEditor.stats.ctEveryMinutes) { //12/28/09 by DW
+			user.opmlEditor.stats.ctEveryMinutes = 0};
+		if not defined (user.opmlEditor.stats.runScriptsFolder) { //12/28/09 by DW
+			new (tabletype, @user.opmlEditor.stats.runScriptsFolder)};
+		if not defined (user.opmlEditor.stats.runScriptsFolder.lastHourlyScriptHour) {
+			user.opmlEditor.stats.runScriptsFolder.lastHourlyScriptHour = date.hour ()};
+		if not defined (user.opmlEditor.stats.runScriptsFolder.whenLastOverNightScriptRun) {
+			user.opmlEditor.stats.runScriptsFolder.whenLastOverNightScriptRun = clock.now ()};
+		if not defined (user.opmlEditor.stats.whenLastDatabaseSave) { //1/18/10 by DW
+			user.opmlEditor.stats.whenLastDatabaseSave = date (0)};
+		if not defined (user.opmlEditor.stats.ctDatabaseSaves) { //1/18/10 by DW
+			user.opmlEditor.stats.ctDatabaseSaves = 0};
+		bundle { //http stats, 11/26/11 by DW
+			if not defined (user.opmlEditor.stats.http) {
+				new (tabletype, @user.opmlEditor.stats.http)};
+			if not defined (user.opmlEditor.stats.http.ctHitsAlltime) {
+				user.opmlEditor.stats.http.ctHitsAlltime = 0};
+			if not defined (user.opmlEditor.stats.http.ctHitsToday) {
+				user.opmlEditor.stats.http.ctHitsToday = 0};
+			if not defined (user.opmlEditor.stats.http.whenLastHit) {
+				user.opmlEditor.stats.http.whenLastHit = date (0)};
+			if not defined (user.opmlEditor.stats.http.ctDays) {
+				user.opmlEditor.stats.http.ctDays = 0}};
+		bundle { //watchedFolder stats, 10/3/12 by DW
+			if not defined (user.opmlEditor.stats.watchedFolder) {
+				new (tabletype, @user.opmlEditor.stats.watchedFolder)};
+			if not defined (user.opmlEditor.stats.watchedFolder.ctUploads) {
+				user.opmlEditor.stats.watchedFolder.ctUploads = 0};
+			if not defined (user.opmlEditor.stats.watchedFolder.ctChecks) {
+				user.opmlEditor.stats.watchedFolder.ctChecks = 0}};
+		if not defined (user.opmlEditor.stats.partBackupSerialnum) { //5/27/12 by DW
+			user.opmlEditor.stats.partBackupSerialnum = 0}};
+	bundle { //flags
+		if not defined (user.opmlEditor.flags) {
+			new (tabletype, @user.opmlEditor.flags)}};
+		«if not defined (user.opmlEditor.flags.winDesktopShortcutCreated) //7/30/08 by DW
+			«if system.environment.isWindows
+				«local (fdesktop = file.getSpecialFolderPath ("", "desktop", true) + "OPML.lnk")
+				«if not file.exists (fdesktop)
+					«winshell.createshortcut (fdesktop, frontier.getprogrampath ())
+			«user.opmlEditor.flags.winDesktopShortcutCreated = clock.now ()
+	bundle { //temp table
+		if not defined (system.temp.opmlEditor) {
+			new (tabletype, @system.temp.opmlEditor)};
+		if not defined (system.temp.newsRiver) { //this is used in the prefs system, weird
+			new (tabletype, @system.temp.newsRiver)};
+		if not defined (system.temp.opmlEditor.port80) { //8/4/08 by DW
+			new (tabletype, @system.temp.opmlEditor.port80)};
+		if not defined (system.temp.opmlEditor.port80.flStarted) { //8/4/08 by DW
+			system.temp.opmlEditor.port80.flStarted = false};
+		if not defined (system.temp.opmlEditor.attsWindow) { //7/15/11 by DW
+			new (tabletype, @system.temp.opmlEditor.attsWindow)};
+		if not defined (system.temp.opmleditor.membercache) { //7/26/11 by DW
+			new (tabletype, @system.temp.opmleditor.membercache)};
+		bundle { //stats
+			local (now = clock.now ());
+			if not defined (system.temp.opmlEditor.stats) {
+				new (tabletype, @system.temp.opmlEditor.stats)};
+			if not defined (system.temp.opmlEditor.stats.ctInits) {
+				system.temp.opmlEditor.stats.ctInits = 0};
+			if not defined (system.temp.opmlEditor.stats.whenLastInit) {
+				system.temp.opmlEditor.stats.whenLastInit = date (0)};
+			system.temp.opmlEditor.stats.ctInits++;
+			system.temp.opmlEditor.stats.ctSecsSinceLastInit = number (now - system.temp.opmlEditor.stats.whenLastInit);
+			system.temp.opmlEditor.stats.whenLastInit = now}};
+	bundle { //make opmlEditor website real
+		if not defined (user.webserver.responders.websiteFramework.data.docTree.opmlEditor) {
+			user.webserver.responders.websiteFramework.data.docTree.opmlEditor = @system.verbs.builtins.opmlEditor.website};
+		if not defined (user.webserver.responders.websiteFramework.data.docTree.opmlServer) { //4/24/12 by DW
+			user.webserver.responders.websiteFramework.data.docTree.opmlServer = @system.verbs.builtins.opmlEditor.website}};
+	bundle { //misc initializations
+		scheduler2.init (); //7/30/08 by DW
+		opmlEditor.worldOutline.init (); //7/8/11 by DW
+		opmlEditor.blorkmark.init (); //7/15/11 by DW
+		s3.init (); //7/12/11 by DW
+		opmleditor.initStaticText (); //9/16/11 by DW
+		bundle { //make sure admin user exists, 8/28/11 by DW
+			if not opmlEditor.member.exists ("admin") {
+				local (adrmember = opmlEditor.member.initMember ("admin", flcreate:true), pc = file.getpathchar ());
+				local (f = file.folderfrompath (frontier.getprogrampath ()) + pc + "Extras" + pc + "adminPassword.txt");
+				file.surefilepath (f)}};
+				«file.writewholefile (f, adrmember^.prefs.password) //9/28/11 by DW -- disabled
+		if user.prefs.initials == "" { //7/30/08 by DW
+			local (s = string.trimwhitespace (user.prefs.name));
+			if s != "" {
+				local (i, flprevwasblank = false, ch);
+				user.prefs.initials = string.upper (s [1]);
+				for i = 1 to sizeof (s) {
+					ch = s [i];
+					if flprevwasblank and (not string.ispunctuation (ch)) {
+						user.prefs.initials = user.prefs.initials + string.upper (s [i])};
+					flprevwasblank = (ch == ' ') or string.ispunctuation (ch)}}};
+		if not defined (user.scheduler2.everyMinute.opmlEditor) { //7/30/08 by DW
+			user.scheduler2.everyMinute.opmlEditor = @opmlEditor.everyMinute};
+		if not defined (user.scheduler2.everyMinute.saveOpenDatabases) { //1/18/10 by DW
+			user.scheduler2.everyMinute.saveOpenDatabases = @opmlEditor.saveOpenDatabases};
+		if not defined (user.scheduler2.overNight.opmlEditor) { //10/6/10 by DW
+			user.scheduler2.overNight.opmlEditor = @opmlEditor.everyNight};
+		if not defined (user.scheduler2.hourly.opmlEditor) { //4/20/11 by DW
+			user.scheduler2.hourly.opmlEditor = @opmlEditor.everyHour};
+		try {opmlEditor.initServerOnPort80 ()}; //8/4/08 by DW
+		if not defined (user.prefs.flDevMachine) { //4/26/11 by DW
+			user.prefs.flDevMachine = false};
+		if not defined (user.callbacks.opCursorMoved.opmlEditor) { //7/15/11 by DW
+			user.callbacks.opCursorMoved.opmlEditor = @opmleditor.opCursorMovedCallback};
+		if not defined (user.webserver.postfilters.opmlEditor) { //11/13/11 by DW
+			user.webserver.postfilters.opmlEditor = @opmlEditor.httpLog.postFilterCallback};
+		bundle { //look for signal from ec2Support, 4/7/12 by DW
+			if defined (user.opmlEditor.stats.flNewEC2Server) and user.opmlEditor.stats.flNewEC2Server { //set by ec2SupportSuite.shipping.setDefaults
+				user.opmlEditor.prefs.server.externalDomainName = "";
+				opmlEditor.utilities.patchFileSystemUrl (); //8/27/12 by DW
+				user.opmlEditor.stats.flNewEC2Server = false}};
+		bundle { //check externalDomainName pref, 4/14/12 by DW
+			local (s = user.opmlEditor.prefs.server.externalDomainName);
+			if (s == "127.0.0.1") or (s == "") or (s == "ip-0A551B48.ec2.internal") {
+				user.opmlEditor.prefs.server.externalDomainName = opmlEditor.utilities.getMyCname ();
+				opmlEditor.utilities.patchFileSystemUrl (); //8/28/12 by DW
+				opmlEditor.utilities.setCookieDomain (user.opmlEditor.prefs.server.externalDomainName)}}; //8/27/12 by DW
+		«bundle //check externalDomainName pref, 4/7/12 by DW
+			«local (s = user.opmlEditor.prefs.server.externalDomainName)
+			«if (s == "127.0.0.1") or (s == "") or (s == "ip-0A551B48.ec2.internal")
+				«user.opmlEditor.prefs.server.externalDomainName = ""
+				«thread.callscript (@opmlEditor.utilities.allocDomainName, {@user.opmlEditor.prefs.server.externalDomainName})
+		if not defined (config.mainResponder.callbacks.hostNotFound.opmlEditor) { //4/9/12 by DW
+			config.mainResponder.callbacks.hostNotFound.opmlEditor = @opmlEditor.hostNotFoundCallback};
+		if not defined (user.scheduler.threads.opmlEditor) { //10/3/12 by DW
+			user.scheduler.threads.opmlEditor = @opmleditor.thread}};
+	bundle { //startup code
+		if not defined (system.temp.opmlEditor.whenStartup) {
+			thread.callscript (@opmlEditor.startup, {});
+			system.temp.opmlEditor.whenStartup = clock.now ()}};
+	return (@user.opmlEditor)}; //2/26/11 by DW
+bundle { //test code
+	init ();
+	return;
+	
+	local (tc = clock.ticks (), i);
+	for i = 1 to 1000 {
+		init ()};
+	dialog.alert (clock.ticks () - tc)}
+
+

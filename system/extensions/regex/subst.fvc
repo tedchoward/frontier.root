@@ -1,0 +1,43 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.subst
+
+on subst (pattern, repl, adrObject, caseSensitive=false, maxSubs=infinity, abortOnNoSubst=true) {
+	local (nsubs = 0);
+	case (typeof (repl)) {
+		addressType {
+			bundle { « v.1.0 code for callbacks
+				local (patternRef, matchInfo, start = 1, replCallback = repl);
+				try {
+					patternRef = regex.compile (pattern, caseSensitive);
+					loop {
+						if (nsubs > maxSubs) {
+							break};
+						rollBeachBall ();
+						if (regex.search (patternRef, adrObject, @matchInfo, start, 0, true)) {
+							local (repl = "");
+							if (replCallback^ (@matchInfo, @repl)) {
+								adrObject^ = string.mid (adrObject^, 1, matchInfo.matchOffset - 1) + repl + string.mid (adrObject^, matchInfo.matchOffset + matchInfo.matchLength, infinity);
+								start = matchInfo.matchOffset + string.length (repl);
+								nsubs++}
+							else {
+								if abortOnNoSubst {
+									break}
+								else {
+									start = matchInfo.matchOffset + matchInfo.matchLength}}}
+						else {
+							break}};
+					regex.free (patternRef)}
+				else {
+					if (patternRef  != 0) {
+						regex.free (patternRef)};
+					scriptError (tryError)}}};
+		charType;
+		stringType {
+			local (substRec);
+			substRec = record (dll.call (regex.data.getPath (), "regsubstverb", string (pattern), boolean (caseSensitive), true,  long (regex.data.adrSyntaxOptions^), string(repl), string (adrObject^), long (maxSubs)));
+			adrObject^ = substRec ["str "];
+			nsubs = substRec ["nsbs"]}}
+	else {
+		scriptError ("Can't do regex.subst because \"" + repl + "\" is of an invalid type.")};
+	return (nsubs)}
+
+

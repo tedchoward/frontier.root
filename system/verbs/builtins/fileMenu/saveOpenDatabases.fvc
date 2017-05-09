@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fileMenu.saveOpenDatabases
+
+on saveOpenDatabases () {
+	«Changes
+		«1/18/10; 11:12:00 AM by DW
+			«Save all open databases that have been modified.
+	local (adrf);
+	for adrf in @system.compiler.files {
+		local (f = nameof (adrf^));
+		if window.isModified (f) {
+			«msg (f) 
+			fileMenu.save (f)}}}
+«bundle //test code
+	«saveOpenDatabases ()
+
+

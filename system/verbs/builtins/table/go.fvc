@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.table.go
+
+on go (dir, ct) {
+	kernel (table.go)}
+
+

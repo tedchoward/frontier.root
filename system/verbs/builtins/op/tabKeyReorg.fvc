@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.tabKeyReorg
+
+on tabKeyReorg (x) {
+	kernel (op.tabkeyreorg)}
+
+

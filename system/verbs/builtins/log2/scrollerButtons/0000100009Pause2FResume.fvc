@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.log2.scrollerButtons.["00001000\tPause/Resume"]
+
+«Changes
+	«2/14/12; 10:34:21 AM by DW
+		«Created. 
+local (flpaused = true);
+if window.attributes.getone ("paused", @flpaused) {
+	flpaused = not boolean (flpaused)};
+window.attributes.setone ("paused", flpaused)
+
+

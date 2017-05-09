@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.close
+
+on close (obj, saving = 'no  ', savingIn = nil) { «Close an object
+	return (core.close (Fetch.id, obj, saving, savingIn))}
+
+

@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.bringToFront
+
+on bringToFront () {
+	«Changes
+		«10/21/05; 8:34:50 AM by DW
+			«Improved reliability on the Mac.
+	local (path = Frontier.getProgramPath ());
+	local (f = file.fileFromPath (path));
+	if system.environment.isMac {
+		if f endswith file.getpathchar () {
+			f = string.delete (f, sizeof (f), 1)}};
+	return (sys.bringAppToFront (f))};
+bundle { //test code
+	bringToFront ()}
+
+

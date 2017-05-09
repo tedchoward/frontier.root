@@ -1,0 +1,22 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Manila.windowTypes.dialogs.wizard.javaScript
+
+<script>
+	function setReturnValue () {
+		window.returnValue = [[values]];
+		} //setReturnValue
+	function doCancel () {
+		window.close ();
+		} //doCancel
+	function doOkay () {
+		setReturnValue ();
+		window.close ();
+		} //doOkay
+	</script>
+
+<SCRIPT FOR=window EVENT=onload LANGUAGE="JScript">
+	try {email_text.focus ()} catch (e) {}
+	try {weblogPostText.focus ()} catch (e) {}
+	</SCRIPT>
+
+
+

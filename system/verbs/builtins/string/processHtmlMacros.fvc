@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.processHtmlMacros
+
+on processHtmlMacros (s, flaps, activeurls, claycompatibity, osacallback) {
+	kernel (string.processHtmlMacros)}
+
+

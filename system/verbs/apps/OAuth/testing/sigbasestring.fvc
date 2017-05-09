@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.apps.OAuth.testing.sigbasestring
+
+GET&http%3A%2F%2Ftwitter.com%2Fdirect_messages.xml&oauth_consumer_key%3DMoCD9snM6y99LJu2uMJBZA%26oauth_nonce%3DQcUJ8Mcnq1%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1234639183%26oauth_token%3D3839-qGGKCjWI17jlx00CWGDMWqxkiYNwhwNCB1JqeoocX4k%26oauth_version%3D1.0
+
+

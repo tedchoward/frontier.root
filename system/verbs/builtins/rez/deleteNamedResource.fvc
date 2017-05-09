@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.rez.deleteNamedResource
+
+on deleteNamedResource (path, resourcetype, name) {
+	kernel (rez.deletenamedresource)}
+
+

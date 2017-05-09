@@ -1,0 +1,5 @@
+FrontierVcsFile:3:wptx:system.verbs.apps.posterous.folderWatcher.data.virginTemplate
+
+<img src="<%url%>" height="<%height%>" width="<%width%>" alt="image named "<%filename%>" align="right" hspace="10" vspace="5" />
+
+

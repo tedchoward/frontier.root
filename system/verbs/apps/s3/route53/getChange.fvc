@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.getChange
+
+on getChange (idChange) {
+	«Changes
+		«6/21/11; 12:32:18 PM by DW
+			«Created.
+	local (xmltext, xstruct);
+	xmltext = s3.route53.httpClient ("/2011-05-05/change/" + idChange);
+	xml.compile (xmltext, @xstruct);
+	«s3.route53.xstruct = xstruct
+	
+	local (atts);
+	new (tabletype, @atts);
+	local (adrgetchangeresponse = xml.getaddress (@xstruct, "GetChangeResponse"));
+	local (adrchangeinfo = xml.getaddress (adrgetchangeresponse, "ChangeInfo"));
+	atts.id = xml.getvalue (adrchangeinfo, "Id");
+	atts.status = xml.getvalue (adrchangeinfo, "Status");
+	atts.whenSubmitted = date.iso8601StringToDate (xml.getvalue (adrchangeinfo, "SubmittedAt"));
+	atts.comment = xml.getvalue (adrchangeinfo, "Comment");
+	return (atts)};
+bundle { //test code
+	scratchpad.atts = getChange ("C249HB1YJ5XFS5")}
+
+

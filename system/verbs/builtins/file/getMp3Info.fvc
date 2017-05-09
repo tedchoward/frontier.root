@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.getMp3Info
+
+on getMp3Info (path) { //7.0b17 
+	kernel (file.getMp3Info)}
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.dialog.website.default
+
+local (pta = html.getPageTableAddress ());
+
+return (html.dialog.draw ())
+
+

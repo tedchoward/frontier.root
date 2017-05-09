@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:user.html.editors.BBEdit.getFile
+
+on getFile () {
+	local (s);
+	with objectModel, BBEdit, eventInfo {
+		try {
+			s = get (window [1].diskFile)}
+		else {
+			scripterror ("Couldn't get the 'diskFile' attribute from the frontmost BBEdit window.")}}}
+
+

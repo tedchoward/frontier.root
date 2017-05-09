@@ -1,0 +1,33 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Filemaker.NavigatorOutline
+
+Filemaker.beginTransaction;Filemaker.beginTransaction;Begin an exclusive transaction with Filemaker.
+Filemaker.bringToFront;Filemaker.bringToFront;Bring Filemaker to front.
+Filemaker.classInfo;Filemaker.classInfo;Get the information about a class.
+Filemaker.count;Filemaker.count;Count the elements of the specified object.
+Filemaker.create;Filemaker.create;Create a new object with data and properties at a location.
+Filemaker.dataSize;Filemaker.dataSize;Get the data size in bytes of an object.
+Filemaker.delete;Filemaker.delete;Delete an object.
+Filemaker.doMenu;Filemaker.doMenu;Ask Filemaker to perform a menu item.
+Filemaker.doScript;Filemaker.doScript;Ask Filemaker to perform a named script.
+Filemaker.duplicate;Filemaker.duplicate;Duplicate an item at a new location.
+Filemaker.endTransaction;Filemaker.endTransaction;End an exclusive transaction with Filemaker.
+Filemaker.exists;Filemaker.exists;Determine the existence of an object.
+Filemaker.find;Filemaker.find;Given current requests, perform a find.
+Filemaker.get;Filemaker.get;Retrieve the data for an object.
+Filemaker.getEventInfo;Filemaker.getEventInfo;Retrieve the event information for an event.
+Filemaker.getUrl;Filemaker.getUrl;Open a Filemaker database via the Internet.
+Filemaker.goto;Filemaker.goto;Go to an object.
+Filemaker.hideWindow;Filemaker.hideWindow;Hide the specified window.
+Filemaker.isRunning;FIlemaker.isRunning;Determine whether or not Filemaker is running.
+Filemaker.launch;Filemaker.launch;Launch Filemaker.
+Filemaker.open;Filemaker.open;Open a database.
+Filemaker.print;Filemaker.print;Print a window, document, or database.
+Filemaker.quit;Filemaker.quit;Quit Filemaker.
+Filemaker.sendToBack;Filemaker.sendToBack;Hide Filemaker in the background.
+Filemaker.set;Filemaker.set;Set the data for an object.
+Filemaker.show;Filemaker.show;Make an object visible.
+Filemaker.showWindow;Filemaker.showWindow;Make a hidden window visible.
+Filemaker.sort;Filemaker.sort;Sort the current found set by a field or fields in order.
+
+
+

@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.examples.capitalizeSelSentences
+
+on capitalizeSelSentences() {
+	«Revisions:
+		«08/19/95 ECT: ported from AppleScript to UserTalk
+	with objectModel, BBEdit, eventInfo {
+		changeCase(lowerCase, selectionOnly:true);
+		changeCase(capitalizeSentences, selectionOnly:true)}};
+capitalizeSelSentences()
+
+

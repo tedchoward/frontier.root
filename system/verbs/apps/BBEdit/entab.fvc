@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.entab
+
+on entab (n, selectionOnly = nil) { «Replace runs of spaces with tabs.
+	return (appleEvent (BBEdit.id, 'R*ch', 'Entb', '----', short (n), 'Osel', boolean (selectionOnly)))}
+
+

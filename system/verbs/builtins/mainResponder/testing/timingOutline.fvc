@@ -1,0 +1,107 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.mainResponder.testing.timingOutline
+
+7.02 ticks per call at 4:24:20 AM
+9.32 ticks per call at 4:23:53 AM
+8.7 ticks per call at 4:23:31 AM
+6.2 ticks per call at 4:09:53 AM (Friday 10/2)
+6.53 ticks per call at 4:09:36 AM
+5.75 ticks per call at 4:09:18 AM
+5.71 ticks per call at 4:09:06 AM
+5.7 ticks per call at 4:08:52 AM
+3.06 ticks per call at 5:58:20 AM
+4.21 ticks per call at 5:55:49 AM (Wednesday 9/30)
+	logging and stats turned on.
+2.05 ticks per call at 9:01:03 AM
+	Check if fldebug in the main loop.
+	This is a big hit, but the debugging code is worth it.
+1.76 ticks per call at 7:33:49 AM
+	#folderToHTML and #tableToHTML atts implemented
+1.82 ticks per call at 6:35:50 AM (Monday, 9/27/98)
+1.67 ticks per call at 5:56:32 PM
+	Do directory lists of the top level of guest dbs.
+1.64 ticks per call at 4:49:22 PM
+	#security feature finished
+1.66 ticks per call at 4:27:59 PM
+	Added check for #security script
+1.62 ticks per call at 4:18:27 PM
+	Added handling of default, default.html.
+1.62 ticks per call at 3:39:28 PM
+1.46 ticks per call at 3:05:43 PM
+	Initializing a non-empty responderAttributes table, three scalar attributes.
+1.23 ticks per call at 2:51:18 PM
+	Launching Eudora is good for six ticks per call.
+1.17 ticks per call at 2:50:00 PM
+	I can't explain why the increase. 
+	I moved the logos folder back where it was, thought things would get faster...
+	But they got slower! I guess this has to remain a mystery for now.
+1.09 ticks per call at 11:50:39 AM
+	restructured it as a suite
+0.91 ticks per call at 8:15:06 AM
+	added support for #prefs table
+0.87 ticks per call at 7:30:52 AM
+	this reflects the hit for gathering attributes, without supporting #prefs
+0.63 ticks per call at 6:50:13 AM (Sunday, 9/27/98)
+0.62 ticks per call at 10:00:29 PM
+0.8 ticks per call at 10:00:24 PM
+0.74 ticks per call at 9:32:36 PM
+0.77 ticks per call at 9:32:24 PM
+0.74 ticks per call at 9:32:22 PM
+0.71 ticks per call at 9:32:18 PM
+0.63 ticks per call at 8:08:56 PM
+	Amazing. I added a lot of features!
+0.64 ticks per call at 8:08:49 PM
+0.62 ticks per call at 8:08:45 PM
+0.65 ticks per call at 6:45:45 PM
+0.64 ticks per call at 6:45:43 PM
+0.64 ticks per call at 6:45:40 PM
+0.59 ticks per call at 6:16:36 PM
+0.58 ticks per call at 6:16:34 PM
+0.56 ticks per call at 6:16:31 PM
+0.62 ticks per call at 6:10:47 PM
+0.62 ticks per call at 6:10:45 PM
+0.61 ticks per call at 6:10:43 PM
+0.61 ticks per call at 6:09:04 PM
+0.61 ticks per call at 6:09:02 PM
+0.6 ticks per call at 6:08:59 PM
+0.55 ticks per call at 6:08:30 PM
+0.55 ticks per call at 6:08:28 PM
+0.54 ticks per call at 6:08:25 PM
+0.53 ticks per call at 6:06:15 PM
+0.54 ticks per call at 6:06:11 PM
+0.5 ticks per call at 6:06:08 PM
+0.52 ticks per call at 6:03:30 PM
+0.49 ticks per call at 6:03:27 PM
+0.52 ticks per call at 5:44:36 PM
+0.47 ticks per call at 5:26:51 PM
+0.47 ticks per call at 5:17:01 PM
+0.47 ticks per call at 5:16:58 PM
+0.46 ticks per call at 5:16:32 PM
+0.5 ticks per call at 5:16:26 PM
+0.44 ticks per call at 5:03:11 PM
+0.62 ticks per call at 1:35:55 PM
+	adrparamtable^.responseBody = string (nomad^)
+	nomad points to a binary object containing a gif
+	if nomad points to a wptext, it's 0.93 ticks per call
+	if nomad points to a string, it's 0.56 ticks per call
+	so you pay a performance penalty for using wptexts
+0.368 ticks per call at 1:29:27 PM
+	Check to see if the page table has any elements.
+0.36 ticks per call at 1:23:04 PM
+	Added case statement on type of nomad.
+0.356 ticks per call at 1:18:08 PM
+	Added code that builds the pageTable into a local.
+0.178 ticks per call at 11:28:07 AM
+	Added loop that parses the path, but does it very minimally.
+0.082 ticks per call at 11:17:57 AM
+	if path beginswith "/"
+		path = string.delete (path, 1, 1)
+0.053 ticks per call at 11:08:40 AM
+	Convert the path to lowercase.
+0.046 ticks per call at 11:06:43 AM
+	Added local (path = string.urlDecode (adrparamtable^.path)) to head of script.
+0.014 ticks per call at 10:59:53 AM
+	This is where we started, with an empty script as the responder.
+	The full core responder takes 5.6 ticks per call.
+
+
+

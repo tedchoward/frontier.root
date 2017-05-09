@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.misc.endTransaction
+
+on endTransaction (appID, transactionID) {
+	return (transactionEvent (appID, 'misc', 'endt', transactionID))}
+
+

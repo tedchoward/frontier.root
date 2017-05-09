@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.code.outgoing.addPermit
+
+on addPermit(adrSelf, buddies) {
+	tcp.im.builtinDrivers.aim.code.core.flap_to_toc(adrSelf, 2,"toc_add_permit "+ tcp.im.builtinDrivers.aim.code.util.normbuds(buddies));
+	
+	return(true)}
+
+

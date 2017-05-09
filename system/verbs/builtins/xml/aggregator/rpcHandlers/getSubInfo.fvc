@@ -1,0 +1,45 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.aggregator.rpcHandlers.getSubInfo
+
+on getSubInfo (url, username, password) {
+	«Changes
+		«11/3/02; 5:29:27 PM by JES
+			«Created. Return a struct of information about a subscribed RSS feed. The struct contains the following elements:
+				«title -- the title of the feed
+				«link -- the channel link, usually a link to the HTML version
+				«description -- the description of the feed
+				«url -- the XML-URL of the feed
+				«language -- the language code for the feed, or the empty string
+				«image -- a struct describing the image associated with the feed
+					«url -- the url of the image, or the empty string
+					«title -- the title of the image, or the empty string
+					«height -- the height of the image, or 0
+					«width -- the width of the image, or 0
+	xml.aggregator.securityForRpc (client, username, password);
+	local (adrdata = xml.aggregator.init ());
+	local (adrservices = @adrdata^.services);
+	local (adrservice = @adrservices^.[url]);
+	local (adrinfo = @adrservice^.compilation);
+	local (t); new (tableType, @t); //a struct to return with info about the feed
+	bundle { //basic info -- title, link, description, url
+		t.title = adrinfo^.channeltitle;
+		t.link = adrinfo^.channellink;
+		t.description = adrinfo^.channeldescription;
+		t.url = nameOf (adrservice^)};
+	bundle { //language
+		t.language = "";
+		if defined (adrinfo^.channellanguage) {
+			t.language = adrinfo^.channellanguage}};
+	bundle { //image info
+		if defined (adrinfo^.imageurl) {
+			new (tableType, @t.image);
+			t.image.url = "";
+			t.image.title = "";
+			t.image.height = 0;
+			t.image.width = 0;
+			try {t.image.url = adrinfo^.imageurl};
+			try {t.image.title = adrinfo^.imagetitle};
+			try {t.image.height = adrinfo^.imageheight};
+			try {t.image.width = adrinfo^.imagewidth}}};
+	return (t)}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.rez.getResource
+
+on getResource (path, resourcetype, id, adr) {
+	kernel (rez.getresource)}
+
+

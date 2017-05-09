@@ -1,0 +1,28 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fileSynch.deleteFile
+
+on deleteFile (adrfile) {
+	«Changes
+		«6/21/12; 9:53:55 AM by DW
+			«If flDeleteEnabled pref is false, don't delete.
+				«http://worknotes.scripting.com/june2012/62112ByDw/newFilesynchPref
+		«7/8/06; 11:35:59 AM by DW
+			«Created.
+	local (adrdata);
+	adrdata = parentof (adrfile^); //files
+	adrdata = parentof (adrdata^); //the synchpoint table
+	if adrdata^.prefs.flDeleteEnabled { //6/21/12 by DW
+		if defined (adrdata^.callbacks.deleteFile) {
+			try {
+				adrdata^.callbacks.deleteFile^ (adrdata, adrfile);
+				system.temp.fileSynch.trash.[nameof (adrfile^)] = adrfile^;
+				adrdata^.stats.lastDeletedFile = nameof (adrfile^);
+				adrdata^.stats.ctdeletes++;
+				delete (adrfile)}
+			else {
+				adrfile^.cterrors++;
+				adrfile^.whenLastError = clock.now ();
+				adrfile^.lastError = tryError}}}};
+bundle { //test code
+	deleteFile (@user.fileSynch.synchPoints.test.files.["oh.opml"])}
+
+

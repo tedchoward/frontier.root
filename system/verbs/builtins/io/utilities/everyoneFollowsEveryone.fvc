@@ -1,0 +1,18 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.utilities.everyoneFollowsEveryone
+
+on everyoneFollowsEveryone () {
+	«Changes
+		«6/2/11; 2:03:18 PM by DW
+			«When you've created a new I/O user and you want everyone to follow him, and him to follow everyone.
+	local (adrdata = io.init (), adruser, adrotheruser);
+	for adruser in @adrdata^.server.users {
+		msg (nameof (adruser^));
+		for adrotheruser in @adrdata^.server.users {
+			if adruser != adrotheruser {
+				if not defined (adruser^.follows.[nameof (adrotheruser^)]) {
+					«scratchpad.newfollow = string.popfilefromaddress (adruser^.follows.[nameof (adrotheruser^)])
+					adruser^.follows.[nameof (adrotheruser^)] = clock.now ()}}}}};
+bundle { //test code
+	everyoneFollowsEveryone ()}
+
+

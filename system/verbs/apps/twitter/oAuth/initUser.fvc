@@ -1,0 +1,40 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.oAuth.initUser
+
+on initUser (adruser, flPromptForPin=true, adrAppTable=@twitter.data.oAuth) {
+	«Changes
+		«3/26/11; 8:49:24 PM by DW
+			«New optional param adrAppTable, determines which "app" we're going to talk to. If it's a web-based app, each instance of each app requires its own setup on twitter.com. Defaults to the desktop OPML all configuration.
+		«3/26/11; 9:17:55 AM by DW
+			«New optional param, flPromptForPin, default true.
+		«1/1/10; 11:25:25 AM by DW
+			«Prompt for the PIN from Twitter.
+		«3/6/09; 10:26:40 AM by DW
+			«If the dance failed, leave behind a clean oAuth table.
+		«3/6/09; 8:45:12 AM by DW
+			«Created. A user wants to authorize the OPML Editor to access his or her Twitter account. Returns true if the we are authorized, false otherwise.
+	if not defined (adruser^) {
+		new (tabletype, adruser)};
+	bundle { //prefs
+		if not defined (adruser^.prefs) {
+			new (tabletype, @adruser^.prefs)}};
+	bundle { //stats
+		if not defined (adruser^.stats) {
+			new (tabletype, @adruser^.stats)}};
+	bundle { //oAuth init
+		if not defined (adruser^.oAuth) {
+			adruser^.oAuth = adrAppTable^}; //3/26/11 by DW
+		if not defined (adruser^.oAuth.accessToken) { //do the dance
+			oAuth.appDance (@adruser^.oAuth, flPromptForPin:flPromptForPin);
+			if defined (adruser^.oAuth.accessToken) {
+				adruser^.stats.whenOAuthorized = clock.now ();
+				return (true)}
+			else {
+				adruser^.oAuth = adrAppTable^; //leave behind a clean oAuth table
+				return (false)}}};
+	return (true)};
+bundle { //test code
+	try {delete (@scratchpad.twitterUser)};
+	initUser (@scratchpad.twitterUser);
+	edit (@scratchpad.twitterUser)}
+
+

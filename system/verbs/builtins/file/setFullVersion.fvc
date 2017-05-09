@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.setFullVersion
+
+on setFullVersion (path, version) {
+	kernel (file.setfullversion)}
+
+

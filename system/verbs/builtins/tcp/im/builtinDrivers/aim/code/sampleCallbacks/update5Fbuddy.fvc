@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.code.sampleCallbacks.update_buddy
+
+on UPDATE_BUDDY (adrSelf, screenName, flOnline, pctWarn, timeSignon, minIdle, flAolUser, oscarAdmin, flUnavailable) {
+	return(msg("on update buddy"))}
+
+

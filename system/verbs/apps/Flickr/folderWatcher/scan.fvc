@@ -1,0 +1,78 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.folderWatcher.scan
+
+on scan () {
+	«Changes
+		«1/8/08; 3:37:20 PM by DW
+			«Support for callbacks.
+		«1/6/08; 6:56:35 PM by DW
+			«Support default tags.
+		«12/4/07; 4:31:01 PM by DW
+			«Nested folders correspond to tags.
+			«If a picture is dropped in the top level of the folder it has no tags. If it's dropped in a sub-folder named Iowa it is uploaded with one tag -- Iowa. If it's dropped in a sub-sub-folder named Ames, it is uploaded with two tags, Iowa and Ames. You can nest to any level supported by the OS. Scanning is still very fast. 
+		«12/3/07; 11:12:27 AM by DW
+			«Respect user.flickr.folderWatcher.flBeepAfterUpload.
+		«6/15/07; 5:21:11 PM by DW
+			«Archive to S3.
+		«6/15/07; 4:58:54 PM by DW
+			«Add a flag to control local archiving, user.flickr.folderWatcher.flLocalArchive.
+		«6/15/07; 3:40:15 PM by DW
+			«Support for archive folder on local hard disk.
+			«Track the number of errors (but it isn't reported anywhere).
+		«6/13/07; 11:55:50 AM by DW
+			«Remove whitespace at end of HTML text.
+		«6/12/07; 2:06:52 PM by DW
+			«Respect the new user.flickr.folderWatcher.enabled and user.flickr.prefs.enableds boolean.
+		«6/11/07; 12:10:33 PM by DW
+			«Created.
+	local (ctcopied = 0, cterrors = 0, s = "");
+	loop { //loop until the folder is empty -- the user could be copying while we're copying
+		local (f, ctcopiedthisloop = 0);
+		fileloop (f in user.flickr.folderWatcher.folder, infinity) {
+			local (fname = string.lower (file.filefrompath (f)));
+			if (fname endswith ".gif") or (fname endswith ".jpg") or (fname endswith ".jpeg") {
+				try {
+					local (tags);
+					bundle { //set tags
+						tags = string.delete (file.folderfrompath (f), 1, sizeof (user.flickr.folderWatcher.folder));
+						if sizeof (tags) == 0 {
+							tags = user.flickr.folderWatcher.defaults.tags} //1/6/08 by DW
+						else {
+							«Louisiana:New Orleans:Uptown:
+							tags = string.delete (tags, sizeof (tags), 1);
+							«Louisiana:New Orleans:Uptown
+							tags = "\"" + string.replaceall (tags, file.getpathchar (), "\" \"") + "\"";
+							«"Louisiana" "New Orleans" "Uptown"
+							tags = user.flickr.folderWatcher.defaults.tags + " " + tags}}; //1/6/08 by DW
+					s = s + Flickr.getImgHtml (Flickr.uploadPhoto (f, tags:tags), flRightAlign:true) + "\r\r";
+					if user.flickr.folderWatcher.flBeepAfterUpload {
+						speaker.beep ()};
+					ctcopiedthisloop++;
+					ctcopied++}
+				else {
+					cterrors++};
+				bundle { //archive the image locally
+					if user.flickr.folderWatcher.flLocalArchive {
+						local (farchive = user.flickr.folderWatcher.archiveFolder + file.getDatePath () + file.filefrompath (f));
+						file.surefilepath (farchive);
+						file.copy (f, farchive)}};
+				bundle { //archive the image to S3
+					if user.flickr.folderWatcher.flS3Archive {
+						local (path = user.flickr.folderWatcher.s3Path + file.getDatePath ("/") + file.filefrompath (f));
+						s3.newObject (path, file.readwholefile (f))}}};
+			file.delete (f)};
+		if ctcopiedthisloop == 0 {
+			break}};
+	if sizeof (s) > 0 {
+		wp.newtextobject (string.trimwhitespace (s), @user.flickr.imageHtml);
+		edit (@user.flickr.imageHtml, "Copy/Paste into your web page");
+		bundle { //callbacks, 1/8/08 by DW
+			local (adrscript);
+			for adrscript in @user.flickr.folderWatcher.callbacks.afterUpload {
+				while typeof (adrscript^) == addresstype {
+					adrscript = adrscript^};
+				try {
+					adrscript^ ()}}}}}
+«bundle //test code
+	«scan ()
+
+

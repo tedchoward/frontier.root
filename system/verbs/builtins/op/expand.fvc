@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.expand
+
+on expand (levels) {
+	kernel (op.expand)}
+
+

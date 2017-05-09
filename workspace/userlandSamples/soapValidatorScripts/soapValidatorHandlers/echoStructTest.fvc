@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:workspace.userlandSamples.soapValidatorScripts.soapValidatorHandlers.echoStructTest
+
+on echoStructTest (myStruct) {
+	return (myStruct)}
+
+

@@ -1,0 +1,44 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.readFeed
+
+on readFeed (url, adrflchanged=nil) {
+	«Changes
+		«9/30/07; 9:51:00 AM by DW
+			«Created. 
+			«We respect the Last-Modified header, keeping a cache of the feed text, to conserve bandwidth. If the caller wants to know if there was a change, pass in the address of a boolean in flchanged,
+	local (urllist = string.urlsplit (url), startticks = clock.ticks ());
+	Flickr.init (); //sets up system.temp.flickrglue
+	local (adrcache = @system.temp.flickrglue.feedCache);
+	if not defined (adrcache^) {
+		new (tabletype, adrcache)};
+	adrcache = @adrcache^.[url];
+	if defined (adrcache^) {
+		try {
+			local (headers);
+			local (s = string.httpResultSplit (tcp.httpClient ("HEAD", server:urllist [2], path:urllist [3], flMessages:false, ctFollowRedirects:3), @headers));
+			«scratchpad.headers = headers
+			if date (headers.["Last-Modified"]) == adrcache^.lastModifiedHeader {
+				adrcache^.ctRefs++;
+				adrcache^.ctTicksLastRead = clock.ticks () - startticks;
+				if adrflchanged != nil {
+					adrflchanged^ = false};
+				return (adrcache^.xmltext)}}};
+	if not defined (adrcache^) {
+		local (headers);
+		new (tabletype, adrcache)};
+	adrcache^.ctRefs = 0;
+	adrcache^.xmltext = string.httpResultSplit (tcp.httpClient ("GET", server:urllist [2], path:urllist [3], flMessages:false, ctFollowRedirects:3), @headers);
+	adrcache^.lastModifiedHeader = date (headers.["Last-Modified"]);
+	adrcache^.ctTicksLastRead = clock.ticks () - startticks;
+	if adrflchanged != nil {
+		adrflchanged^ = true};
+	return (adrcache^.xmltext)};
+bundle { //test code
+	local (adruser);
+	for adruser in @twitterGramData.users {
+		if defined (adruser^.flickrToTwitter.rssUrl) {
+			msg (nameof (adruser^));
+			readFeed (adruser^.flickrToTwitter.rssUrl)}};
+	return;
+	readFeed (twitterGramData.users.davewiner.flickrToTwitter.rssUrl)}
+
+

@@ -1,0 +1,98 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.hotUpText
+
+on hotUpText (s) {
+	«Changes
+		«5/7/09; 11:07:32 AM by DW
+			«Actually numeric characters are allowed in screennames, it turns out. 
+			«Example: http://twitter.com/chrisbrewer62
+		«5/6/09; 6:52:05 AM by DW
+			«Hot-up http:// links too.
+		«5/5/09; 6:31:56 PM by DW
+			«Don't treat the #9835 in &#9835; as a hash tag.
+		«5/5/09; 6:21:22 PM by DW
+			«Hashes allow numeric characters where screen names do not. Example: it's this... #time100gala
+				«Update: My code update got into the hashtag used in its example:
+					«http://images.scripting.com/archiveScriptingCom/2009/05/05/coolness.gif
+					«Heh. ;-)
+		«5/5/09; 3:02:59 PM by DW
+			«Hot-up @ and # in tweet text.
+	bundle { //string replacements
+		s = string.replaceall (s, lf, " ")};
+	bundle { //hot-up http:// links
+		local (s1 = "");
+		loop {
+			local (ix = string.patternmatch ("http://", string.lower (s)));
+			if ix == 0 {
+				break};
+			local (url = "", ch);
+			for i = ix to sizeof (s) {
+				ch = s [i];
+				if ch == ' ' {
+					break};
+				url = url + ch};
+			linktext = "<a href=\"" + url + "\">" + url + "</a>";
+			s1 = s1 + string.mid (s, 1, ix-1) + linktext;
+			s = string.delete (s, 1, ix + sizeof (url) - 1)};
+		s = s1 + s};
+	bundle { //hot-up @ and #
+		local (i = 1, ch, chprev = ' ');
+		on hotword (chstart, url, flnumericallowed=false) {
+			«i points to the delimiter char, we advance i to the first character that's not part of the word, hot it up and return.
+			local (ixend = sizeof (s));
+			for ix = i+1 to sizeof (s) {
+				local (ch = s [ix], flstay = false);
+				if string.isalpha (ch) or (ch == "_") {
+					flstay = true};
+				if flnumericallowed {
+					if string.isnumeric (ch) {
+						flstay = true}};
+				if not flstay {
+					ixend = ix - 1;
+					break}};
+			local (word = string.mid (s, i+1, ixend-i));
+			if sizeof (word) == 0 {
+				i = i + 1;
+				return};
+			local (linktext = "<a href=\"" + url + word + "\">" + chstart + word + "</a>");
+			s = string.delete (s, i, sizeof (word) + 1);
+			s = string.insert (linktext, s, i);
+			i = i + sizeof (linktext)};
+		loop {
+			if i > sizeof (s) {
+				break};
+			ch = s [i];
+			if ch == "@" {
+				hotword (ch, "http://twitter.com/", true)}
+			else {
+				if ch == "#" {
+					if chprev != "&" { //don't treat &#9835; as a hash tag
+						hotword (ch, "http://search.twitter.com/search?q=%23", true)}
+					else {
+						i++}}
+				else {
+					i++}};
+			chprev = ch}};
+	return (s)}
+«bundle //test code
+	«local (s = config.godTweets.calendar.["2009"].["05"].["06"].["01038"].text)
+	«okchars = {"#", ":", "/", ".", " ", "?", "!"}
+	«for i = 1 to sizeof (s)
+		«ch = s [i]
+		«if (not string.isnumeric (ch)) and (not string.isalpha (ch)) and (not (okchars contains ch))
+			«dialog.alert (i + " " + number (ch) + " " + ch)
+			«break
+	«return
+	«
+	«
+	«
+	«Who&#8217;s your fave American Idol finalist who didn&#8217;t win? Here&#8217;s our Top 9 http
+	«ptext = hotUpText ("Overheard: \"There's no evil plan. If there *is* an evil plan, it's this...\" #time100gala")
+	«ptext = hotUpText ("Silversun Pickups \"Lazy Eye\" &#9835; http://twt.fm/95685 Excited to see them live at the @kroq weenie roast.")
+	«config.godTweets.calendar.["2009"].["05"].["06"].["01038"].text
+		«"Make #Money in May: By cleaning out your closet? Really? Check it out! http://tr.im/kDkS\n#money, #cleaning, #finances"
+	«ptext = hotUpText (config.godTweets.calendar.["2009"].["05"].["06"].["01038"].text)
+	«ptext = hotUpText ("hello http://scripting.com/ dolly @me and #family with your http://day.in/ xxx")
+	«wp.newtextobject (ptext, @scratchpad.processedtext)
+	«webbrowser.displaytext (ptext)
+
+

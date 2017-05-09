@@ -1,0 +1,15 @@
+FrontierVcsFile:3:optx:system.verbs.apps.winShell.data.scripts.createShortcut
+
+Sub Main (path, targetPath)
+	Dim shell
+	Dim shortcut
+	
+	Set shell = CreateObject ("Wscript.Shell")
+	Set shortcut = shell.CreateShortcut (path)
+	
+	shortcut.TargetPath = targetPath
+	shortcut.Save
+End Sub
+
+
+

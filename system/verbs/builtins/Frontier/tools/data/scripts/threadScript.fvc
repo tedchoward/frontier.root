@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.data.scripts.threadScript
+
+«Changes
+	«<%now%> by <%initials%>
+		«Created. 
+loop {
+	<%toolname%>Suite.init ();
+	thread.sleepFor (10)}
+
+

@@ -1,0 +1,53 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.archiveSubOutline
+
+on archiveSubOutline () {
+	«Changes
+		«2/12/12; 3:32:06 PM by DW
+			«Works with multiple worldoutline servers.
+		«12/31/11; 12:17:06 PM by DW
+			«Title the window "xxx" instead of "Archive of xxx."  It doesn't work in the new scheme to be adding text to the user's text.
+		«11/3/11; 9:46:37 AM by DW
+			«Save the outline in a local archive.
+		«11/2/11; 7:54:00 PM by DW
+			«Add a command to the Bookmarks menu that opens the outline for editing.
+		«7/10/11; 12:03:04 PM by DW
+			«Archive the bar cursor outline, with confirmation. Cribbed from io.client.menuCommands.archiveSubOutline.
+	local (adrdata = opmlEditor.worldOutline.init (), now = clock.now ());
+	local (adroutline = address (window.frontmost ()), linetext = op.getlinetext ());
+	if op.countsubs (1) == 0 {
+		scripterror ("Can't archive this sub-outline because it doesn't have any subheads.")};
+	if dialog.confirm ("Archive \"" + linetext + "\" sub-outline?") {
+		local (lo = adroutline^);
+		local (oldtarget = target.set (@lo));
+		op.reorg (left, infinity);
+		op.reorg (up, infinity);
+		if op.go (down, 1) {
+			op.demote ();
+			op.deleteline ()};
+		op.promote ();
+		op.deleteline ();
+		window.settitle (@lo, linetext); //12/31/11 by DW
+		«window.settitle (@lo, "Archive of \"" + linetext + "\"")
+		local (opmltext = op.outlinetoxml (@lo));
+		wp.newtextobject (opmltext, @scratchpad.lotext);
+		target.set (oldtarget);
+		local (server, username, password);
+		if not opmlEditor.worldOutline.getServerInfo (@server, @username, @password, adroutline) { //2/11/12 by DW
+			return};
+		local (url = [server].worldOutline.archiveOutline (username, password, opmltext));
+		op.deletesubs ();
+		new (tabletype, @atts);
+		atts.type = "include";
+		atts.url = url;
+		op.attributes.addgroup (@atts);
+		bundle { //add an item to the Bookmarks menu, 11/2/11 by DW
+			local (adrmenu = @user.bookmarksMenu.menu);
+			local (scriptcode = "opmlEditor.worldOutline.openArchivedOutline (\"" + url + "\", \"" + linetext + "\")");
+			menu.addMenuCommand (adrmenu, "Bookmarks", linetext, scriptcode)};
+		bundle { //archive the outline, 11/3/11 by DW
+			opmlEditor.worldOutline.saveOutlineInLocalArchive (url, opmltext)}; //11/3/11 by DW
+		return (url)}};
+bundle { //test code
+	archiveSubOutline ()}
+
+

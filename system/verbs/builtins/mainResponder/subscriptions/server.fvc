@@ -1,0 +1,94 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.subscriptions.server
+
+on server (dbname, ipaddress, lastupdate, username, mailaddress, serialnumber) {
+	«Return new and changed parts of a database since the last update.
+		«Changes:
+			«12/7/03; 11:52:32 PM by JES
+				«Add callback support. Callbacks are in config.mainResponder.callbacks.subscriptionsServer. They take the same parameters as this RPC handler. If any callback returns false, then an error is generated.
+			«11/04/00; 5:55:40 PM by PBS
+				«Return the time on the server of the last update, so clients don't miss updates.
+	bundle { //add a record to the subscription log
+		local (adrtable = log.addToGuestDatabase ("subscriptions"));
+		adrtable^.dbname = dbname;
+		adrtable^.ipaddress = ipaddress;
+		adrtable^.lastupdate = lastupdate;
+		adrtable^.username = username;
+		adrtable^.mailaddress = mailaddress;
+		adrtable^.serialnumber = serialnumber};
+	bundle { //call callbacks
+		local (adrcallbacks = @config.mainResponder.callbacks.subscriptionsServer);
+		if not defined (adrcallbacks^) {
+			new (tableType, adrcallbacks)};
+		local (adr, ct = sizeOf (adrcallbacks^), i, flSendUpdate = true);
+		for i = 1 to ct {
+			adr = @adrcallbacks^[i];
+			try {
+				while typeOf (adr^) == addressType {
+					adr = adr^};
+				if not adr^ (dbname, ipaddress, lastupdate, username, mailaddress, serialnumber) {
+					flSendUpdate = false}};
+			if not flSendUpdate {
+				scriptError ("Can't update because you are not authorized for updates to this database.")}}};
+	local (adrdb = @user.databases.[dbname]);
+	if not defined (adrdb^) {
+		scriptError ("Can't send you an update because the sysop hasn't registered a database named \"" + dbname + "\".")};
+	if not (adrdb^.supportsSubscribe) {
+		scriptError ("Can't send you an update because the database \"" + dbname + "\" doesn't support subscriptions.")};
+	
+	local (adrguestdatabase = @[adrdb^.f]);
+	table.sureDatabaseOpen (adrguestdatabase);
+	
+	lastupdate = date (lastupdate); //convert from a net-standard-string
+	
+	local (frontierVersion = Frontier.version ());
+	local (adrchanges = @adrguestdatabase^.["#changes"]);
+	local (sizechanges = sizeof (adrchanges^));
+	
+	local (parts);
+	new (tabletype, @parts);
+	parts.serialNum = sizechanges; //it's synthetic!
+	parts.lastUpdateTime = date.netStandardString (clock.now ()); //PBS 11/4/00: save server time on client, to avoid missing updates
+	new (tabletype, @parts.parts);
+	
+	local (i, addeditems = {});
+	for i = sizechanges downto 1 {
+		local (adritem = @adrchanges^ [i]);
+		if adritem^.when < lastupdate {
+			break};
+		if addeditems contains adritem^.what { //we've already included this
+			continue};
+		
+		local (name = "part" + string.padwithzeros (i, 4));
+		local (adrnewpart = @parts.parts.[name]);
+		new (tabletype, adrnewpart);
+		
+		bundle { //2/14/99; 9:01:26 AM by DW, customized error if object doesn't exist
+			if not defined (adritem^.what^) {
+				scriptError ("Can't do the update because the #changes table in \"" + dbname + "\" on the server says that \"" + adritem^.what + "\" has changed, but the object isn't in the database.")};
+			adrnewpart^.data = adritem^.what^};
+		adrnewpart^.timestamp = adritem^.when;
+		adrnewpart^.userName = adritem^.who;
+		bundle { //put the relative address into adr field
+			local (s = string (adritem^.what));
+			local (ix = string.patternMatch ("].", s));
+			s = string.delete (s, 1, ix + 1);
+			adrnewpart^.adr = s};
+		
+		wp.newtextobject ("", @adrnewpart^.changes);
+		adrnewpart^.platform = "both";
+		adrnewpart^.version = frontierVersion;
+		
+		local (bytes);
+		pack (adrnewpart^, @bytes);
+		bytes = base64.encode (bytes, infinity);
+		delete (adrnewpart);
+		adrnewpart^ = bytes;
+		
+		addeditems = addeditems + {adritem^.what};
+		
+		sys.systemTask ()};
+	return (parts)}
+«bundle //test code
+	«server ("prefs.root", tcp.dns.getMyDottedId (), clock.now (), "Jake", "jake@userland.com", 10)
+
+

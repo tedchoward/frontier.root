@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.table.delete
+
+on delete (adrTable) {
+	«Delete the Frontier table.
+	system.verbs.globals.delete (adrTable)}
+
+

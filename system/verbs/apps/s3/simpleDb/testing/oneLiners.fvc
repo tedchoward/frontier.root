@@ -1,0 +1,9 @@
+FrontierVcsFile:3:optx:system.verbs.apps.s3.simpleDb.testing.oneLiners
+
+s3.simpleDb.createDomain ("users")
+	// true
+s3.simpleDb.listDomains (@domains); domains
+	// {"users"}
+
+
+

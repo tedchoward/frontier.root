@@ -1,0 +1,41 @@
+FrontierVcsFile:3:optx:system.extensions.regex.docServer.visit
+
+#title "regex.visit"
+#renderOutlineWIth "docServerRenderer"
+Syntax
+	regex.visit (pattern, adrObject, callBack, caseSensitive, makeGroups, maxRuns)
+Params
+	pattern is a regular expression (string)
+	
+	adrString is the address of a string
+	
+	callBack is the address of a callback script
+	
+	caseSensitive is an optional boolean flag. Default is false.
+	
+	makeGroups is an optional boolean flag. Default is false.
+	
+	maxRuns an optional integer. Default is infinity.
+Action
+	Traverses all matches of the regular expression in string pointed to by adrString.
+Returns
+	True.
+Examples
+	local (test = " <A href='index.html'> <A href='index2.html'>")
+	on testCallback (adrTable)
+		dialog.notify (string(adrTable^));
+		return (true)
+	regex.visit ("<([^>]+)>", @test, @testCallback)
+		// true
+Notes
+	For each match, the callback script is called with the address of  the matchInfo table as a parameter. 
+	The callback script can only return true or false. If true is returned, searching for more matches continues. If false is returned, the search for further mathces halts.
+	
+	If makeGroups is true, information about the group matches (such as offset, length and the matching strings) will be included in matchInfo table. 
+	
+	maxRuns is the maximum number of searches that will be performed.
+	
+	The "Matchinfo Table" outlines the information optionally returned in the table pointed to by adrTable.
+
+
+

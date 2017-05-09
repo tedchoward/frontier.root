@@ -1,0 +1,99 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.execute
+
+on execute (dsn=user.prefs_odbc.dsn, uid=user.prefs_odbc.uid, pwd=user.prefs_odbc.pwd, sql, returnType=user.prefs_odbc.formatResults, adrTable="system.temp.SQL_result", colDel=user.prefs_odbc.columnDelim, rowDel=user.prefs_odbc.rowDelim, blobList = {}) {
+	«Saturday, August 08, 1998 at 11:21:08 PM by HA
+		«New general purpose SQL query execution script. Renders obsolete returnText, returnLists, returnRecords and returnTables
+	«Monday, January 25, 1999 at 11:09:47 PM by HA
+		«Fixed problems with returnType=tables. Some issues remain with the DLL when using tables.
+	«Tuesday, February 09, 1999 at 3:59:17 PM by HA
+		«Added the passing of the delimiter parameters (thx Brian Stalcup)
+	
+	local (thedata, allowedRetTypes = {"text", "lists", "records", "tables", "insertblobs"});
+	returnType  = string.lower(returnType);
+	if not(allowedRetTypes contains returnType) {
+		scriptError ("Wrong ODBC execution return type request in extensions.odbc.execute.\nAllowed types are \"text\", \"lists\", \"records\", \"tables\".")};
+	odbc.DSExists (dsn);
+	case returnType {
+		"text" {
+			thedata = dll.call (user.prefs_odbc.dllpath, "ReturnText", dsn, uid, pwd, sql, returnType, colDel, rowDel);
+			if thedata beginswith "{error}" {
+				if user.prefs_odbc.breakOnErrors {
+					scriptError (thedata)}
+				else {
+					return(thedata)}}
+			else {
+				return(thedata)}};
+		"lists" {
+			thedata = dll.call (user.prefs_odbc.dllpath, "Execute", dsn, uid, pwd, sql, returnType, colDel, rowDel);
+			if thedata == {} {
+				return (thedata)};
+			if typeOf(thedata[1]) == stringType {
+				if thedata[1] beginswith "{error}" {
+					if user.prefs_odbc.breakOnErrors {
+						scriptError (thedata[1])}
+					else {
+						return (thedata[1])}}
+				else {
+					return(thedata)}}
+			else {
+				return(thedata)}};
+		"records" {
+			thedata = dll.call (user.prefs_odbc.dllpath, "Execute", dsn, uid, pwd, sql, returnType, colDel, rowDel);
+			if thedata == {} {
+				return (thedata)};
+			if typeOf (thedata[1]) == stringType {
+				if thedata[1] beginswith "{error}" {
+					if user.prefs_odbc.breakOnErrors {
+						scriptError (thedata[1])}
+					else {
+						return(thedata[1])}}
+				else {
+					return(thedata)}}
+			else {
+				return(thedata)}};
+		"tables" {
+			thedata = dll.call (user.prefs_odbc.dllpath, "Execute", dsn, uid, pwd, sql, "records", colDel, rowDel);
+			if sizeOf (thedata) != 0 AND typeOf(thedata[1]) == stringType {
+				if thedata[1] beginswith "{error}" {
+					if user.prefs_odbc.breakOnErrors {
+						scriptError (thedata[1])}
+					else {
+						return (thedata[1])}}
+				else {
+					return(thedata)}}
+			else {
+				local {
+					x;
+					y};
+				adrTable = address (adrTable);
+				if not defined (adrTable^) {
+					new (tableType, adrTable)}
+				else {
+					try {
+						table.emptyTable (adrTable)}
+					else { «non table object
+						try {
+							delete (adrTable)};
+						new (tableType, adrTable)}};
+				for x = 1 to sizeof (thedata) {
+					local (rowTable = @adrTable^.["x"+string.padWithZeros (x, 5)]); «get the address to a row table
+					new (tableType, rowTable); «assign a table
+					for y = 1 to sizeOf (thedata [x]) {
+						if (nameOf(thedata[x][y]) == "") {
+							rowTable^.["unkown"+string.padWithZeros (x, 5)+string.padWithZeros (y, 5)] = thedata[x][y]}
+						else {
+							rowTable^.[nameOf(thedata[x][y])] = thedata[x][y]}}}}};
+		"insertblobs" {
+			thedata = dll.call (user.prefs_odbc.dllpath, "InsertBlob", dsn, uid, pwd, sql, blobList);
+			if thedata beginswith "{error}" {
+				if user.prefs_odbc.breakOnErrors {
+					scriptError (thedata)}
+				else {
+					return(thedata)}}
+			else {
+				return(thedata)}}}};
+
+bundle { //test code
+	odbc.execute(sql:"SELECT * FROM guest", returnType:"tables")}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.table.getSortOrder
+
+on getSortOrder () {
+	kernel (table.getSortOrder)}
+
+

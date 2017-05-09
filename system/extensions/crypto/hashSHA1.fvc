@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.extensions.crypto.hashSHA1
+
+on hashSHA1 (s, flTranslate = true) {
+	«Changes
+		«8/31/09; 5:08:37 PM by DW
+			«kernel glue won't compile if the verb isn't defined, so I had to move the glue into a sub-table.
+		«8/31/09; 2:57:53 PM by DW
+			«Allow for possibility that it has been kernelized.
+	if crypto.isKernelized () {
+		return (crypto.kernelGlue.SHA1 (s, flTranslate))}
+	else {
+		return (string (dll.call (crypto.data.getPath (), "SHA1_verb", string (s), boolean (flTranslate))))}}
+«bundle //test code
+	«dialog.alert (hashSHA1 ("oh the buzzing"))
+
+

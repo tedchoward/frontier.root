@@ -1,0 +1,35 @@
+FrontierVcsFile:3:optx:system.extensions.regex.docServer.grep
+
+#title "regex.grep"
+#renderOutlineWIth "docServerRenderer"
+Syntax
+	regex.grep (expr, adrObject, includeMatches)
+Params
+	expr is a regular expression (string) or the address of a script.
+	
+	adrObject is the address of either a list object or an object that can be coerced into a string.
+	
+	includeMatches is an optional boolean flag. Defaults to true.
+Action
+	Attempts to match expr on each line/element of the object pointed to by adrObject.
+Returns
+	A list from the lines/elements that passed (or failed) the test.
+Examples
+	local (s = {"a", "", "b", "", "c"});
+	regex.grep ("\\w", @s)
+		// {"a", "b", "c"}
+	
+	local (s = {"a", "", "b", "", "c"});
+	regex.grep ("\\w", @s, false)
+		// {"", ""}
+Notes
+	If adrObject is the address of a list object, the verb operates on each element of the string, otherwise the verb operates on each line of the object, providing it can be coerced to a string.
+	
+	If expr is a regular expression, it is tested against each line or element of the target object for a match.
+	
+	If expr is the address of a script, the script is called for each line or element in the target object. The script receives a string as a parameter (the line or element from the object being examined) and returns either true or false.
+	
+	If includeMatches is true,all matching lines or elements are included in the result list. If it is false, the result list is built from the non-matching lines/items.
+
+
+

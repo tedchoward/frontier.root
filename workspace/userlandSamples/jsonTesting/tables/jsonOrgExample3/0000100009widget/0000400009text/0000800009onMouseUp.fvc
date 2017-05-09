@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:workspace.userlandSamples.jsonTesting.tables.jsonOrgExample3.["00001000\twidget"].["00004000\ttext"].["00008000\tonMouseUp"]
+
+sun1.opacity = (sun1.opacity / 100) * 90;
+
+

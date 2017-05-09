@@ -1,0 +1,78 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.client.getUpdates
+
+on getUpdates (adrserver) {
+	«Changes
+		«7/11/12; 11:30:36 AM by DW
+			«If we get a realtime/disable update, return immediately.
+				«http://worknotes.scripting.com/july2012/71112ByDw/ioServerLooseend
+		«8/13/10; 9:38:07 AM by DW
+			«Process the updates in a separate thread so we can more quickly get back to getting updates.
+		«8/12/10; 6:31:05 AM by DW
+			«Add randomstring param to getupdates RPC call.
+		«8/7/10; 4:01:58 AM by DW
+			«New parameter adrserver.
+		«7/30/10; 9:31:19 AM by DW
+			«Move the counter outside the try, so we count loops when there are errors too.
+		«7/21/10; 11:48:03 AM by DW
+			«Maintain adrdata^.client.stats.ctConsecutiveErrors.
+		«7/15/10; 10:09:17 AM by DW
+			«Cribbed from instantOutline.root.
+		«2/3/09; 10:56:03 AM by DW
+			«Use the parameterized roomname, not the fixed one.
+		«1/1/09; 7:08:38 PM by DW
+			«Massive change -- we no longer poll. Instead we use FriendFeed's realtime updates capability. Much more responsive, and less of a resource hog. Total win-win.
+		«7/21/08; 5:58:03 AM by DW
+			«Add stats for tracking how long calls to FF take.
+		«7/19/08; 2:48:41 PM by DW
+			«Don't process updates from "davewiner" and "bullmancuso" -- these are just temporary limits, until we safe-up everything for users who don't exist anymore (they became dave and bull).
+		«7/19/08; 1:37:15 PM by DW
+			«When processing updates, just set the dirty bits on the users, read the outlines after the loop. This way if someone updates twice we only read once.
+		«7/16/08; 8:07:40 PM by DW
+			«Created.
+	local (adrdata = realtime.init (), fldebug = true, adrdebugtable, username, password, server, randomstring);
+	adrserver^.idthread = thread.getcurrentid ();
+	adrserver^.stats.whenThreadStarted = clock.now ();
+	adrserver^.stats.ctThreadStarts++;
+	username = adrserver^.username;
+	password = string (adrserver^.password);
+	server = string (adrserver^.server);
+	randomstring = adrdata^.client.prefs.randomString;
+	«bundle //set up debug table
+		«if fldebug
+			«adrdebugtable = @adrserver^.updates //primarily for debugging
+			«if not defined (adrdebugtable^)
+				«new (tabletype, adrdebugtable)
+	loop {
+		try {
+			local (updates = [server].realtime.getupdates (username, password, randomstring), adrupdate);
+			thread.callscript (@realtime.client.processIncomingUpdates, {adrserver, updates});
+			bundle { //look for a realtime/disable event -- 7/11/12 by DW
+				local (adrupdate);
+				for adrupdate in @updates {
+					if (adrupdate^.type == "realtime") and (adrupdate^.data == "disabled") {
+						«scratchpad.ctThreadDisables++
+						return}}};
+			«for adrupdate in @updates
+				«bundle //call the callbacks
+					«local (adrscript)
+					«for adrscript in @adrserver^.callbacks
+						«while typeof (adrscript^) == addresstype
+							«adrscript = adrscript^
+						«try {adrscript^ (adrupdate)}
+					«adrserver^.stats.ctUpdates++
+				«if fldebug
+					«adrdebugtable^.[nameof (adrupdate^)] = adrupdate^
+			adrserver^.stats.ctConsecutiveErrors = 0}
+		else {
+			if not (string.lower (tryerror) contains "timed out") {
+				adrserver^.stats.lastError = tryerror;
+				adrserver^.stats.ctConsecutiveErrors++;
+				adrserver^.stats.whenLastError = clock.now ();
+				adrserver^.stats.ctErrors++;
+				thread.sleepfor (adrdata^.server.prefs.ctSecsDelayOnError)}}; //8/8/10 by DW
+		adrserver^.stats.ctLoops++;
+		adrserver^.stats.whenLastRealtimeLoop = clock.now ()}};
+bundle { //test code
+	getUpdates (@system.temp.realtime.client.servers.io)}
+
+

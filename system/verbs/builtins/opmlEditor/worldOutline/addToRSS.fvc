@@ -1,0 +1,53 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.addToRSS
+
+on addToRSS () {
+	«Changes
+		«10/5/12; 2:48:51 PM by DW
+			«Automatically pop out to the parent of the headline with a type attribute.
+				«http://worknotes.scripting.com/october2012/10512ByDw/theRssButton
+		«2/11/12; 4:55:48 PM by DW
+			«Call opmlEditor.worldOutline.getServerInfo to get username, password.
+		«1/9/12; 11:39:55 AM by DW
+			«If you hold down the Shift key while clicking the RSS+ button, the feed opens in the browser.
+		«1/9/12; 11:20:00 AM by DW
+			«Add the URL of the feed as an attribute to the headline. That way we can easily see that it's already been added to the feed. 
+		«1/6/12; 6:33:09 AM by DW
+			«Created. 
+	local (adrdata = opmlEditor.worldOutline.init ());
+	if kb.shiftkey () {
+		if defined (adrdata^.stats.feedUrl) {
+			webbrowser.openurl (adrdata^.stats.feedUrl);
+			webbrowser.bringtofront ()}
+		else {
+			scripterror ("Can't view the feed because you haven't added anything to it from this machine.")}}
+	else {
+		local (adroutline = window.frontmost (), lo = adroutline^, oldtarget = target.set (@lo), atts);
+		loop {
+			op.attributes.getall (@atts);
+			if defined (atts.type) {
+				local (lt = op.getlinetext (), feedurl);
+				if dialog.confirm ("Add item \"" + lt + "\" to your feed?") {
+					local (url, firstline, server, username, password, now = clock.now (), startticks = clock.ticks ());
+					if not opmlEditor.worldOutline.getServerInfo (@server, @username, @password, adroutline) { //2/11/12 by DW
+						return};
+					bundle { //set firstline
+						if op.go (right, 1) {
+							firstline = op.getlinetext ()}
+						else {
+							firstline = ""}};
+					target.set (oldtarget);
+					bundle { //set url
+						url = opmlEditor.worldOutline.getHeadlineUrl ()};
+					target.set (adroutline);
+					feedurl = [server].worldOutline.addFeedItem (username, password, lt, url, firstline);
+					op.attributes.setone ("feedUrl", feedurl); //1/9/12 by DW
+					adrdata^.stats.feedUrl = feedurl;
+					speaker.beep ()};
+				break};
+			if not op.go (left, 1) {
+				dialog.alert ("Can't add to the feed because you're not within a typed node.");
+				break}}}};
+bundle { //test code
+	addToRSS ()}
+
+

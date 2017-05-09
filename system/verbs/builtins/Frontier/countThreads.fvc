@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.countThreads
+
+on countThreads () {
+	kernel (Frontier.countThreads)}
+
+

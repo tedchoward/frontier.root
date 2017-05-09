@@ -1,0 +1,39 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.openMyOutline
+
+on openMyOutline () {
+	«Changes
+		«8/29/10; 12:46:32 AM by DW
+			«Add a right-click menu for Instant Outline-related commands.
+		«8/8/10; 11:46:37 AM by DW
+			«If you try to open the outline before you've set the username or password, instead of calling the server and getting a cryptic error, open the Preferences page where you're asked for the username and password.
+		«7/15/10; 11:51:53 AM by DW
+			«Created. 
+	local (adrdata = io.init ());
+	local (adroutline = @system.temp.io.myOutline);
+	if not defined (adroutline^) { //need to get it from the server
+		local (username, password, server, opmltext);
+		username = adrdata^.client.prefs.username;
+		password = string (adrdata^.client.prefs.password);
+		if (username == "") or (password == "") {
+			io.client.menuCommands.openPrefs ();
+			return};
+		server = string (adrdata^.client.prefs.server);
+		opmltext = [server].io.getMyOutline (username, password);
+		if sizeof (opmltext) == 0 {
+			new (outlinetype, adroutline)}
+		else {
+			op.xmltooutline (opmltext, adroutline);
+			if window.isopen (adroutline) { //7/5/10 by DW
+				window.close (adroutline)}}};
+	if window.isopen (adroutline) {
+		window.bringtofront (adroutline)}
+	else {
+		local (adrbuttons = @io.client.buttons.instantOutline);
+		local (title = "Instant Outliner: " + adrdata^.client.prefs.username);
+		edit (adroutline, adrButtonTable:adrbuttons, windowtitle:title);
+		window.attributes.setone ("adrRightClickMenu", @io.client.rightClickMenu); //8/29/10 by DW
+		window.minimumSize (adroutline, 500, 400)}};
+bundle { //test code
+	openMyOutline ()}
+
+

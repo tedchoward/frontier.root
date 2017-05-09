@@ -1,0 +1,28 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.prefs2.checkboxPref
+
+on checkboxPref (prompt, adrboolean) {
+	«Changes
+		«3/15/12; 9:53:18 AM by DW
+			«Update for Bootstrap 2.0.
+		«1/3/12; 3:37:16 PM by DW
+			«URL-encode the item name. 
+		«8/30/11; 11:13:34 AM by DW
+			«Created.
+	local (pta = html.getpagetableaddress (), itemname = string.urlencode (string.popFileFromAddress (adrboolean)));
+	«scratchpad.checkboxparams = pta^
+	if pta^.method == "POST" {
+		if defined (pta^.postargs.[itemname]) {
+			adrboolean^ = true}
+		else {
+			adrboolean^ = false}};
+	local (checkbox = "<input type=\"checkbox\" name=\"" + itemname + "\" value=xxx");
+	if adrboolean^ {
+		checkbox = checkbox + " checked>"}
+	else {
+		checkbox = checkbox + ">"};
+	return ("<div class=\"divPrefsCheckbox\">" + checkbox + "&nbsp;" + prompt + "</div>")}
+«bundle //test code
+	«html.setpagetableaddress (@scratchpad.checkboxparams)
+	«checkboxPref ("Check this box to allow access to the web server over port 80", @user.opmlEditor.prefs.flServerOnPort80)
+
+

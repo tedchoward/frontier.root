@@ -1,0 +1,53 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.settings
+
+on settings () {
+	«Changes
+		«4/20/12; 11:31:55 AM by DW
+			«Provide a spot for entering the user's Bio url.
+		«4/11/12; 12:44:00 PM by DW
+			«Created.
+	local (pta = html.getpagetableaddress (), adrdata = opmleditor.init (), username, password);
+	if not opmlEditor.member.checkCookie ("signin", @username, adrpassword: @password) { //redirect people who aren't logged in to the signin page
+		return (false)};
+	pta^.title = "Settings";
+	local (adrmember = opmlEditor.member.initMember (username), t);
+	if pta^.method == "POST" {
+		local (args, adrarg);
+		new (tabletype, @args);
+		webserver.parseArgs (pta^.requestBody, @args);
+		«scratchpad.args = args; edit (@scratchpad.args)
+		for adrarg in @args {
+			adrmember^.prefs.[nameof (adrarg^)] = adrarg^};
+		if adrdata^.prefs.identity.flUseRemoteServer {
+			local (server = "xmlrpc://" + user.opmlEditor.prefs.identity.serverDomain + ":5337/RPC2");
+			[server].memberPrefs.set (args, username, password);
+			if string.lower (username) == "admin" { //special case
+				if defined (args.name) {
+					user.prefs.name = args.name};
+				if defined (args.mailAddress) {
+					user.prefs.mailAddress= args.mailAddress};
+				if defined (args.organization) {
+					user.prefs.organization= args.organization};
+				}}};
+	bundle { //fill t with the user's prefs
+		if adrdata^.prefs.identity.flUseRemoteServer {
+			local (server = "xmlrpc://" + user.opmlEditor.prefs.identity.serverDomain + ":5337/RPC2");
+			t = [server].memberPrefs.get (username, password)}
+			«t.name = string.upper (t.name)
+		else {
+			t = adrmember^.prefs};
+		if not defined (t.name) {
+			t.name = ""};
+		if not defined (t.mailAddress) {
+			t.mailAddress = ""};
+		if not defined (t.organization) {
+			t.organization = ""};
+		if not defined (t.bio) { //4/20/12 by DW
+			t.bio = ""}};
+	
+	local (s = string.multiplereplaceall (string (opmlEditor.data.outlines.memberInfoDialog), @t, false, "<%", "%>"));
+	return (s)};
+bundle { //test code
+	settings ()}
+
+

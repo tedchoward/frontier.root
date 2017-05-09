@@ -1,0 +1,40 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.viewNewUser
+
+on viewNewUser () {
+	«Changes
+		«11/19/11; 6:00:46 PM by DW
+			«Allow admin-like users to create new users, not just admin.
+		«9/9/11; 9:15:35 AM by DW
+			«Moved from radio2.root. This is where it belongs.
+		«3/23/11; 10:48:44 AM by DW
+			«Created. 
+	local (pta = html.getpagetableaddress (), t, fladmin = false);
+	new (tabletype, @t);
+	t.username = "";
+	t.message = "";
+	t.errormessage = "";
+	bundle { //only admin or the local user can create new users
+		if defined (pta^.flLocalAdminUser) and pta^.flLocalAdminUser {
+			fladmin = true}
+		else {
+			local (username);
+			if opmlEditor.member.checkCookie ("", @username, false) {
+				fladmin = opmlEditor.isUserAdminLike (username)}}; //11/19/11 by DW
+				«fladmin = string.lower (username) == "admin"
+		if not fladmin {
+			t.errormessage = "Sorry you're not authorized to create new users."}};
+	if pta^.method == "POST" {
+		if fladmin {
+			local (args);
+			new (tabletype, @args);
+			webserver.parseArgs (pta^.requestBody, @args);
+			if opmlEditor.member.exists (args.usernameNew) {
+				t.errormessage = "There already is a user named \"" + args.usernameNew + ".\""}
+			else {
+				local (adrmember = opmlEditor.member.initMember (args.usernameNew, flcreate:true));
+				adrmember^.prefs.password = args.passwordNew;
+				t.message = "New user \"" + args.usernameNew + "\" created."}}};
+	local (s = string.multiplereplaceall (string (opmlEditor.data.outlines.newUserTemplate), @t, false, "<%", "%>"));
+	return (s)}
+
+

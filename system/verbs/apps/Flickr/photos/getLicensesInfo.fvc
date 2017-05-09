@@ -1,0 +1,36 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.photos.getLicensesInfo
+
+on getLicensesInfo (adrtable) {
+	«Changes
+		«5/31/11; 2:55:30 PM by DW
+			«Created. Returns a table that maps codes to license types. We call Flickr just once per invocation, figuring the license info doesn't change that often. :-)
+	flickr.init ();
+	if defined (system.temp.flickrglue.licenseInfo) {
+		adrtable^ = system.temp.flickrglue.licenseInfo}
+	else {
+		local (xstruct);
+		new (tabletype, adrtable);
+		bundle { //make the call to Flickr, get xstruct
+			local (mystruct);
+			new (tabletype, @mystruct);
+			mystruct.api_key = user.flickr.prefs.apiKey;
+			if defined (user.flickr.prefs.token) {
+				mystruct.auth_token = user.flickr.prefs.token;
+				Flickr.signStruct (@mystruct)};
+			local (s = [user.flickr.prefs.server].flickr.photos.licenses.getInfo (mystruct));
+			s = string.replaceall (s, "&quot;", "\"");
+			xml.compile (s, @xstruct)};
+			«scratchpad.licencesstruct = xstruct
+		bundle { //parse xstruct into the table
+			local (adrlicenses = xml.getaddress (@xstruct, "licenses"));
+			for adrlicense in adrlicenses {
+				if nameof (adrlicense^) endswith "license" {
+					local (adratts = @adrlicense^.["/atts"]);
+					adrtable^.[string (adratts^.id)] = adratts^}}};
+		system.temp.flickrglue.licenseInfo = adrtable^}};
+bundle { //test code
+	local (ticks = clock.ticks ());
+	getLicensesInfo (@scratchpad.licenses);
+	dialog.alert (clock.ticks () - ticks)}
+
+

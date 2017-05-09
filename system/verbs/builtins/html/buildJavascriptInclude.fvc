@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.buildJavascriptInclude
+
+on buildJavascriptInclude (htmltext) {
+	«Changes
+		«1/7/09; 9:48:07 AM by DW
+			«Created. Return the Javascript code suitable for including in an HTML file that displays the HTML text in the page. 
+	local (s = "", ctlines = string.countfields (htmltext, "\r"), i);
+	for i = 1 to ctlines {
+		lt = string.nthfield (htmltext, "\r", i);
+		lt = string.replaceall (lt, "\"", "\\\"");
+		s = s + "document.write(\"" + lt + "\");"};
+	return (s)};
+bundle { //test code
+	webbrowser.displaytext (buildJavascriptInclude ("Oh the buzzing of the bees!\rAnd the sycamore trees!"))}
+
+

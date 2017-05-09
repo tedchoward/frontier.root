@@ -1,0 +1,45 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.viewOpenDatabases
+
+on viewOpenDatabases () {
+	«Changes
+		«3/19/12; 1:18:12 PM by DW
+			«Added classes so we could fix alignment errors in the template.
+		«11/14/11; 11:42:08 AM by DW
+			«Corrected some simple HTML errors.
+		«9/7/11; 11:19:20 AM by DW
+			«Created.
+	local (gdbfolder = frontier.pathstring + "Guest Databases", fname, pc = file.getpathchar ());
+	local (folder = gdbfolder + pc, htmltext = "", indentlevel = 0, adr, f);
+	on add (s) {
+		htmltext = htmltext + (string.filledstring ("\t", indentlevel) + s + "\r");};
+	add ("<h3>Databases</h3>");
+	add (string (opmlEditor.data.outlines.databasesIntro));
+	add ("<div class=\"divDatabaseListPage\">"); indentlevel++; //3/19/12 by DW
+	add ("<table  class=\"" + webApp.data.tableClass + "\" cellpadding=\"5\">"); indentlevel++;
+	bundle { //column headers
+		add ("<thead>"); indentlevel++;
+		add ("<tr>"); indentlevel++;
+		add ("<th class=\"dbFname\">Name</th>");
+		add ("<th class=\"dbSize\">Size</th>");
+		add ("<th class=\"dbCreated\">Created</th>");
+		add ("<th class=\"dbPath\">Path</th>");
+		add ("</tr>"); indentlevel--;
+		add ("</thead>"); indentlevel--};
+	add ("<tbody>"); indentlevel++;
+	for adr in @system.compiler.files {
+		f = nameof (adr^);
+		fname = file.filefrompath (f);
+		add ("<tr>"); indentlevel++;
+		add ("<td class=\"dbFname\">" + fname + "</td>");
+		add ("<td class=\"dbSize\">" + string.gigabytestring (file.size (f)) + "</td>");
+		add ("<td class=\"dbCreated\">" + date.shortstring (file.created (f)) + "</td>");
+		add ("<td class=\"dbPath\">" + string.replaceall ((f - gdbfolder - fname), pc, "/") + "</td>");
+		add ("</tr>"); indentlevel--};
+	add ("</tbody>"); indentlevel--;
+	add ("</table>"); indentlevel--;
+	add ("</div>"); indentlevel--;
+	return (htmltext)};
+bundle { //test code
+	viewOpenDatabases ()}
+
+

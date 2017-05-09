@@ -1,0 +1,36 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.staticText.initLocation
+
+on initLocation (adrdata, name) {
+	«Changes
+		«3/16/11; 2:46:18 PM by DW
+			«Return the address of the location table.
+		«3/16/11; 10:57:41 AM by DW
+			«Created. 
+	local (adrlocation = @adrdata^.locations.[name]);
+	if not defined (adrlocation^) {
+		new (tabletype, adrlocation)};
+	bundle { //prefs
+		if not defined (adrlocation^.prefs) {
+			new (tabletype, @adrlocation^.prefs)};
+		if not defined (adrlocation^.prefs.enabled) {
+			adrlocation^.prefs.enabled = false};
+		if not defined (adrlocation^.prefs.flDefault) {
+			adrlocation^.prefs.flDefault = false};
+		if not defined (adrlocation^.prefs.path) {
+			adrlocation^.prefs.path = ""};
+		if not defined (adrlocation^.prefs.url) {
+			adrlocation^.prefs.url = "http://"};
+		if not defined (adrlocation^.prefs.driver) {
+			adrlocation^.prefs.driver = "s3"}};
+	bundle { //stats
+		if not defined (adrlocation^.stats) {
+			new (tabletype, @adrlocation^.stats)};
+		if not defined (adrlocation^.stats.ctWrites) {
+			adrlocation^.stats.ctWrites = 0};
+		if not defined (adrlocation^.stats.ctErrors) {
+			adrlocation^.stats.ctErrors = 0}};
+	return (adrlocation)};
+bundle { //test code
+	edit (initLocation (@config.staticText, "ftp"))}
+
+

@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.table.synch
+
+on synch (adrsource, adrdest) {
+	«Changes
+		«6/27/08; 3:23:48 PM by DW
+			«Don't overwrite if the mod date on the source is less than or equal to the mod date on the dest.
+		«6/27/08; 11:41:45 AM by DW
+			«Created. Synchronize the dest with the source. We don't delete objects that exist in the dest that aren't in the source, so it's sort of an inclusive synch.
+	local (adrs, adrd);
+	for adrs in adrsource {
+		local (name = nameof (adrs^), adrd = @adrdest^.[name], flcopy = true);
+		if defined (adrd^) {
+			if timemodified (adrs) <= timemodified (adrd) {
+				flcopy = false}};
+		if flcopy {
+			adrd^ = adrs^}
+		else {
+			if typeof (adrs^) == tabletype { //recurse
+				table.synch (adrs, adrd)}}}}
+«bundle //test code
+	«synch (@newsJunkSuite.data.initialWebsite, @techJunkWebsite)
+
+

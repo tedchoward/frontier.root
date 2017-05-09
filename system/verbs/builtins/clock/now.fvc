@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.clock.now
+
+on now () {
+	kernel (clock.now)}
+
+

@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.getRecordInfo
+
+on getRecordInfo (name, adrtable) {
+	«Changes
+		«6/22/11; 9:13:09 AM by DW
+			«Created.
+	s3.route53.init ();
+	if not (name endswith ".") {
+		name = name + "."};
+	local (adrcache = @system.temp.route53.recordInfoCache.[name]);
+	if defined (adrcache^) {
+		adrtable^ = adrcache^;
+		return (true)};
+	
+	local (domainname = s3.route53.getDomainName (name), recordslist);
+	local (idHostedZone = s3.route53.getZoneId (domainname), adr);
+	s3.route53.listRecords (idHostedZone, @recordslist);
+	
+	for adr in @recordslist {
+		system.temp.route53.recordInfoCache.[nameof (adr^)] = adr^};
+	
+	if defined (adrcache^) {
+		adrtable^ = adrcache^;
+		return (true)};
+	return (false)};
+bundle { //test code
+	getRecordInfo ("0ywi.blorkmark.net", @scratchpad.recinfo)}
+
+

@@ -1,0 +1,37 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.history.buildMenu
+
+on buildMenu () {
+	«Changes
+		«12/14/12; 11:14:04 AM by DW
+			«Turn the history data structure into a menu.
+				«http://worknotes.scripting.com/december2012/121412ByDw/historyFunctionInEditor
+	local (adrdata = opmleditor.worldoutline.init (), adrmenubar = @adrdata^.historyMenu, menuname = "History", urls);
+	on decode (s) {
+		return (xml.entitydecode (s, flAlphaEntities:true))};
+	bundle { //init the new menubar object
+		new (menubartype, adrmenubar);
+		target.set (adrmenubar);
+		op.setlinetext (menuname)};
+	new (tabletype, @urls);
+	on visit (adritem) {
+		local (url = adritem^.root, title);
+		if not defined (urls.[url]) {
+			urls.[url] = true;
+			bundle { //get title
+				if defined (adritem^.title) {
+					title = adritem^.title}
+				else {
+					local (xstruct);
+					op.getNetXstruct (url, @xstruct);
+					local (adropml = xml.getaddress (@xstruct, "opml"));
+					local (adrhead = xml.getaddress (adropml, "head"));
+					title = decode (xml.getvalue (adrhead, "title"));
+					adritem^.title = title}}; //save for next time
+			local (logic = "opmlEditor.worldOutline.openArchivedOutline (\"" + url + "\", \"" + title + "\", worldoutlineserver:\"" + adritem^.editorialdomain + "\")");
+			menu.addMenuCommand (adrmenubar, menuname, title, logic)}};
+	mainresponder.calendar.visitReverseChronologic (@adrdata^.history, @visit);
+	edit (adrmenubar)};
+bundle { //test code
+	buildMenu ()}
+
+

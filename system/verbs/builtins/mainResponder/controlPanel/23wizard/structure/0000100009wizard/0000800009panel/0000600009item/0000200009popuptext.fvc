@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.controlPanel.["#wizard"].structure.["00001000\twizard"].["00008000\tpanel"].["00006000\titem"].["00002000\tpopuptext"]
+
+Manila plug-ins may also have RPC interfaces. Click Yes to enable the RPC interfaces for all installed plug-ins; click No to disable.
+
+

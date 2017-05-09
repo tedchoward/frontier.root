@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:user.html.macros.frontierLink
+
+on frontierLink (name) { «Thu, Feb 6, 1997 at 6:42:25 AM by DW
+	local (patch = user.websites.["#glossary"].[name]);
+	local (url = string.nthField (patch, '|', 2));
+	url = "http://www.scripting.com/" + url + ".html";
+	local (link = "<a href=\"" + url + "\">" + name + "</a>");
+	return (link)};
+bundle {
+	dialog.alert (frontierLink ("The Importance of Navigators"))}
+
+

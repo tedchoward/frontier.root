@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.connectionCleaner
+
+on connectionCleaner () {
+	if ! dll.isLoaded (user.prefs_odbc.dllpath) {
+		dll.load (user.prefs_odbc.dllpath)};
+	return (dll.call (user.prefs_odbc.dllpath, "ConnectionCleaner"))}
+
+

@@ -1,0 +1,64 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.urlEncode
+
+on urlEncode (s, flFullEncode=false) {
+	«Changes
+		«4/11/11; 8:22:10 AM by DW
+			«Encode ( ) ^ * { }. Move the replacement table to string.data.urlEncodeTable. More than twice as fast than building it with code.
+				«See the OAuth doc for explanation: http://tools.ietf.org/html/rfc5849#section-3.6
+		«11/15/10; 9:50:52 AM by DW
+			«Encode $ & + / : = and ?
+				«http://www.blooberry.com/indexdot/html/topics/urlencoding.htm
+		«10/15/09; 11:02:55 PM by DW
+			«Encode the pipe character.
+		«1/11/08; 8:51:22 PM by DW
+			«There were some characters we weren't encoding that we should have been encoding. 
+				«Refer to this document for guidance...
+					«http://www.blooberry.com/indexdot/html/topics/urlencoding.htm
+			«If flFullEncode is false, do the old encoding, so as not to break any apps. But if you need a more complete encoding, set it true. An example of an app that needs the fuller encoding is the glue code for Amazon SimpleDB, s3.simpledb.
+	on kernelcall (s) {
+		kernel (string.urlEncode)};
+	s = kernelcall (s);
+	«if flFullEncode
+		«local (t)
+		«new (tabletype, @t)
+		«t.[","] = "%2C"
+		«t.[";"] = "%3B"
+		«t.["@"] = "%40"
+		«t.["<"] = "%3C"
+		«t.[">"] = "%3E"
+		«t.["|"] = "%7C" //10/15/09 by DW
+		«
+		«t.["$"] = "%24" //11/15/10 by DW
+		«t.["&"] = "%26" //11/15/10 by DW
+		«t.["+"] = "%2B" //11/15/10 by DW
+		«t.["/"] = "%2F" //11/15/10 by DW
+		«t.[":"] = "%3A" //11/15/10 by DW
+		«t.["="] = "%3D" //11/15/10 by DW
+		«t.["?"] = "%3F" //11/15/10 by DW
+		«
+		«t.["("] = "%28" //4/10/11 by DW
+		«t.[")"] = "%29" //4/10/11 by DW
+		«
+		«string.data.urlEncodeTable = t
+		«
+		«s = string.multiplereplaceall (s, @t)
+	if flFullEncode {
+		s = string.multiplereplaceall (s, @string.data.urlEncodeTable)};
+	return (s)}
+«bundle //test code
+	«local (s = "dave.winer@gmail.com")
+	«s = "Quote For The Day II (from Andrew Sullivan's new home at TDB).  http://r2.ly/a9qm"
+	«
+	«local (startticks = clock.ticks (), i)
+	«for i = 1 to 10000 //110
+		«urlencode (s, true)
+	«dialog.alert (clock.ticks () - startticks)
+	«
+	«scratchpad.s = urlencode (s, true)
+	«
+	«string.urlencode ("`", true)
+		«"`"
+	«string.hex (number (char (']')))
+		«"0x005D"
+
+

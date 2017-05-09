@@ -1,0 +1,46 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.init
+
+on init () {
+	«Changes
+		«5/29/11; 3:44:42 PM by DW
+			«Reorganized and cleaned up code.
+		«6/13/07; 7:48:05 AM by DW
+			«Disable the automatic authentication code, replaced by a command in the Community menu.
+			«I felt that the interaction was way too complicated, going back and forth between the browser too many times. You'd miss the second dialog displayed by Flickr.authPage.
+				«bundle //authenticate, if enabled changed, disabled 6/13/07 by DW
+					«if defined (system.temp.flickrglue.enabledWasOff)
+						«if system.temp.flickrglue.enabledWasOff
+							«if user.flickr.prefs.enabled and (not defined (user.flickr.prefs.token))
+								«Flickr.authPage ()
+					«system.temp.flickrglue.enabledWasOff = not user.flickr.prefs.enabled
+		«6/12/07; 2:37:50 PM by DW
+			«If enabled was off last time init ran, and it's on now, and we don't have the auth token, try to authenticate.
+		«6/12/07; 2:17:46 PM by DW
+			«Initialize user.flickr.prefs.enabled to false.
+		«6/11/07; 12:50:59 PM by DW
+			«Initialize folderWatcher thread.
+	if not defined (user.flickr) {
+		new (tabletype, @user.flickr)};
+	bundle { //prefs
+		if not defined (user.flickr.prefs) {
+			new (tabletype, @user.flickr.prefs)};
+		if not defined (user.flickr.prefs.enabled) {
+			user.flickr.prefs.enabled = false};
+		if not defined (user.flickr.prefs.apiKey) {
+			«http://www.flickr.com/services/api/keys/
+			user.flickr.prefs.apiKey = "acfc87b919e483adb88a8cdd7a6688ac"};
+		if not defined (user.flickr.prefs.apiSecret) {
+			user.flickr.prefs.apiSecret = "6babe99fb4c423b9"};
+		if not defined (user.flickr.prefs.server) {
+			user.flickr.prefs.server = "xmlrpc://api.flickr.com/services/xmlrpc/"}};
+	bundle { //system.temp table
+		if not defined (system.temp.flickrglue) {
+			new (tabletype, @system.temp.flickrglue)}};
+	bundle { //thread
+		if not defined (user.scheduler.threads.flickrFolderWatcher) {
+			user.scheduler.threads.flickrFolderWatcher = @system.verbs.apps.Flickr.folderWatcher;
+			scheduler.monitorThreads ()}}};
+bundle { //test code
+	init ()}
+
+

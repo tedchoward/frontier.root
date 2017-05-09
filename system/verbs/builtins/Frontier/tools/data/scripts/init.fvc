@@ -1,0 +1,26 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.data.scripts.init
+
+on init () {
+	«Changes
+		«<%now%> by <%initials%>
+			«Created. 
+	local (adrdata = @config.<%toolname%>);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)}};
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)};
+		if not defined (adrdata^.stats.ctMinutes) {
+			adrdata^.stats.ctMinutes = 0};
+		if not defined (adrdata^.stats.ctHours) {
+			adrdata^.stats.ctHours = 0};
+		if not defined (adrdata^.stats.ctEveryNights) {
+			adrdata^.stats.ctEveryNights = 0}};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

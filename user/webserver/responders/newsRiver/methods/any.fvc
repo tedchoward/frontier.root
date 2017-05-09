@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:user.webserver.responders.newsRiver.methods.any
+
+on any (pta) {
+	return (newsRiverSuite.responder.handler (pta))}
+
+

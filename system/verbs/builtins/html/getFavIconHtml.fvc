@@ -1,0 +1,21 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.getFavIconHtml
+
+on getFavIconHtml (url) {
+	«Changes
+		«6/17/11; 9:08:14 PM by DW
+			«Pulled down from radio2.root so we can use it in other contexts.
+		«3/5/11; 5:58:53 PM by DW
+			«Give me a URL and I return HTML for its favicon. 
+	local (ul);
+	try {
+		ul = string.urlsplit (url)}
+	else {
+		try {
+			ul = string.urlsplit (url + "/x")}
+		else {
+			ul = {"", "", ""}}};
+	return ("<a href=\"" + url + "\"><img class=\"icon\" src=\"http://www.google.com/s2/favicons?domain=" + ul [2] + "\" width=\"16\" height=\"16\" border=\"0\" alt=\"Click here to visit the site.\"></a>")};
+bundle { //test code
+	webbrowser.displaytext (getFavIconHtml ("http://twitter.com"))}
+
+

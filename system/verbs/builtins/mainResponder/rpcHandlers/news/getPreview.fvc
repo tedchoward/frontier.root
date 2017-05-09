@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.rpcHandlers.news.getPreview
+
+on getPreview (sitename) {
+	return (mainresponder.news.getPreview (sitename))}
+
+

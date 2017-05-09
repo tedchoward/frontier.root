@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.thread.callScript
+
+on callScript (adrScript, paramList, adrParamTable) { //6.1
+	kernel (thread.callScript)}
+
+

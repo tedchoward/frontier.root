@@ -1,0 +1,352 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Finder.objectHierarchy
+
+accessoryProcess -- A process launched from a desk accessory file
+	Properties:
+		deskAccessoryFile -- the desk accessory file from which this process was launched
+accessorySuitcase -- A desk accessory suitcase
+	Elements:
+		item
+aliasFile -- An alias file (created with “Make Alias”)
+	Properties:
+		originalItem -- the original item pointed to by the alias
+application -- An application program
+	Properties:
+		aboutThisMacintosh -- the “About this Macintosh” dialog, and the list of running processes displayed in it
+		appleMenuItemsFolder -- the special folder “Apple Menu Items,” the contents of which appear in the Apple menu
+		clipboard -- the Finder's clipboard window
+		controlPanelsFolder -- the special folder “Control Panels”
+		desktop -- the desktop
+		extensionsFolder -- the special folder “Extensions”
+		fileSharing -- Is file sharing on?
+		fontsFolder -- the special folder “Fonts”
+		frontmost -- Is this the frontmost application?
+		insertionLocation -- the container that a new folder would appear in if “New Folder” was selected
+		largestFreeBlock -- the largest free block of process memory available to launch an application
+		preferencesFolder -- the special folder “Preferences”
+		productVersion -- the version of the System software running on this Macintosh
+		selection -- the selection visible to the user
+		sharingStartingUp -- Is File sharing in the process of starting up (still off, but soon to be on)?
+		shortcuts -- the “Finder Shortcuts” item in the Finder's help menu
+		shutdownItemsFolder -- the special folder “Shutdown Items”
+		startupItemsFolder -- the special folder “Startup Items”
+		systemFolder -- the System folder
+		temporaryItemsFolder -- the special folder “Temporary Items” (invisible)
+		version -- the version of the Finder Scripting Extension
+		viewPreferences -- the view preferences control panel
+		visible -- Is the Finder's layer visible?
+	Elements:
+		accessorySuitcase
+		aliasFile
+		applicationFile
+		container
+		containerWindow
+		contentSpace
+		controlPanel
+		deskAccessoryFile
+		desktop-object
+		disk
+		documentFile
+		file
+		folder
+		fontFile
+		fontSuitcase
+		informationWindow
+		item
+		sharableContainer
+		sharingWindow
+		soundFile
+		suitcase
+		trash-object
+		window
+applicationFile -- An application's file on disk
+	Properties:
+		minimumPartitionSize -- the smallest memory size that the application can possibly be launched with
+		partitionSize -- the memory size that the application will be launched with
+		scriptable -- Is this application high-level event aware (accepts open application, open document, print document, and quit)?
+		suggestedPartitionSize -- the memory size that the developer recommends that the application should be launched with
+applicationProcess -- A process launched from an application file
+	Properties:
+		applicationFile -- the application file from which this process was launched
+container -- An item that contains other items
+	Properties:
+		completelyExpanded -- Is the container and all of its children open in outline view?
+		containerWindow -- the main window for the container
+		entireContents -- the entire contents of the container, including the contents of its children
+		expandable -- Is the container capable of being expanded into outline view?
+		expanded -- Is the container open in outline view?
+		previousListView -- the last non-icon view (by name, by date, etc.) selected for the container (forgotten as soon as the window is closed)
+		selection -- the selection visible to the user
+		view -- the view selected for the container (by icon, by name, by date, etc.)
+	Elements:
+		accessorySuitcase
+		aliasFile
+		applicationFile
+		container
+		controlPanel
+		deskAccessoryFile
+		documentFile
+		file
+		folder
+		fontFile
+		fontSuitcase
+		item
+		sharableContainer
+		soundFile
+		suitcase
+containerWindow -- A window that contains items
+	Properties:
+		container -- the container this window is opened from
+		disk -- the disk on which the item this window was opened from is stored
+		folder -- the folder this window is opened from
+		item -- the item this window is opened from
+		previousListView -- the last non-icon view (by name, by date, etc.) selected for the window (forgotten as soon as the window is closed)
+		selection -- the selection visible to the user
+		view -- the view selected for the window (by icon, by name, by date, etc.)
+	Elements:
+		accessorySuitcase
+		aliasFile
+		applicationFile
+		container
+		controlPanel
+		deskAccessoryFile
+		documentFile
+		file
+		folder
+		fontFile
+		fontSuitcase
+		item
+		sharableContainer
+		soundFile
+		suitcase
+contentSpace -- All windows, including the desktop window (“Window” does not include the desktop window)
+controlPanel -- A control panel
+	Properties:
+		calculateFolderSizes -- (Views) Are folder sizes calculated and displayed in Finder list windows?
+		commentHeading -- (Views) Are comments displayed in Finder list windows?
+		dateHeading -- (Views) Are modification dates displayed in Finder list windows?
+		diskInformationHeading -- (Views) Is information about the volume displayed in Finder list windows?
+		iconSize -- (Views) the size of icons displayed in Finder list windows
+		kindHeading -- (Views) Are document kinds displayed in Finder list windows?
+		labelHeading -- (Views) Are labels displayed in Finder list windows?
+		sizeHeading -- (Views) Are file sizes displayed in Finder list windows
+		snapToGrid -- (Views) Are items always snapped to the nearest grid point when they are moved?
+		staggeredGrid -- (Views) Are grid lines staggered?
+		versionHeading -- (Views) Are file versions displayed in Finder list windows?
+		viewFont -- (Views) the id of the font used in Finder views
+		viewFontSize -- (Views) the size of the font used in Finder views
+deskAccessoryFile -- A desk accessory file
+desktop-object -- Desktop-object is the class of the “desktop” object
+	Properties:
+		startupDisk -- the startup disk
+		trash -- the trash
+	Elements:
+		accessorySuitcase
+		aliasFile
+		applicationFile
+		container
+		controlPanel
+		deskAccessoryFile
+		documentFile
+		file
+		folder
+		fontFile
+		fontSuitcase
+		item
+		sharableContainer
+		soundFile
+		suitcase
+disk -- A disk
+	Properties:
+		capacity -- the total number of bytes (free or used) on the disk
+		ejectable -- Can the media can be ejected (floppies, CD's, syquest)?
+		freeSpace -- the number of free bytes left on the disk
+		localVolume -- Is the media is a local volume (rather than a file server)?
+		startup -- Is this disk the boot disk?
+	Elements:
+		accessorySuitcase
+		aliasFile
+		applicationFile
+		container
+		controlPanel
+		deskAccessoryFile
+		documentFile
+		file
+		folder
+		fontFile
+		fontSuitcase
+		item
+		sharableContainer
+		soundFile
+		suitcase
+documentFile -- A document file
+file -- A file
+	Properties:
+		creatorType -- the OSType identifying the application that created the item
+		fileType -- the OSType identifying the type of data contained in the item
+		locked -- Is the file locked?
+		productVersion -- the version of the product (visible at the top of the “Get Info” dialog)
+		stationery -- Is the item a stationery pad?
+		version -- the version of the file (visible at the bottom of the “Get Info” dialog)
+folder -- A folder
+	Elements:
+		accessorySuitcase
+		aliasFile
+		applicationFile
+		container
+		controlPanel
+		deskAccessoryFile
+		documentFile
+		file
+		folder
+		fontFile
+		fontSuitcase
+		item
+		sharableContainer
+		soundFile
+		suitcase
+fontFile -- A font file
+fontSuitcase -- A font suitcase
+	Elements:
+		item
+group -- A Group in the Users and Groups control panel
+	Properties:
+		bounds -- the bounding rectangle of the group
+		icon -- the icon bitmap of the group
+		labelIndex -- the label of the group
+		name -- the name of the group
+		position -- the position of the group within its parent window
+informationWindow -- An information window (opened by “Get Info…”)
+	Properties:
+		comment -- the comment
+		creationDate -- the date on which the item was created
+		icon -- the icon bitmap of the item
+		item -- the item this window was opened from
+		locked -- Is the item locked?
+		minimumPartitionSize -- the smallest memory size that the application can possibly be launched with
+		modificationDate -- the date on which the item was last modified
+		partitionSize -- the memory size that the application will be launched with
+		physicalSize -- the actual space used by the item on disk
+		productVersion -- the version of the product (visible at the top of the “Get Info” dialog)
+		size -- the logical size of the item
+		stationery -- Is the item a stationery pad?
+		suggestedPartitionSize -- the memory size that the developer recommends that the application should be launched with
+		version -- the version of the file (visible at the bottom of the “Get Info” dialog)
+		warnBeforeEmptying -- Is a dialog displayed when “Empty trash…” is selected?
+item -- An item
+	Properties:
+		bounds -- the bounding rectangle of the item
+		comment -- the comment displayed in the “Get Info” window of the item
+		container -- the container of this item
+		contentSpace -- the window that would open if the item was opened
+		creationDate -- the date on which the item was created
+		disk -- the disk on which the item is stored
+		folder -- the folder in which the item is stored
+		icon -- the icon bitmap of the item
+		id -- an id that identifies the item
+		informationWindow -- the information window for the item
+		kind -- the kind of the item
+		labelIndex -- the label of the item
+		modificationDate -- the date on which the item was last modified
+		name -- the name of the item
+		physicalSize -- the actual space used by the item on disk
+		position -- the position of the item within its parent window
+		selected -- Is the item selected?
+		size -- the logical size of the item
+		window -- the window that would open if the item was opened
+process -- A process running on this Macintosh
+	Properties:
+		creatorType -- the creator type of this process
+		file -- the file that launched this process
+		fileType -- the file type of the file that launched this process
+		frontmost -- Is this the frontmost application?
+		name -- the name of the process
+		partitionSize -- the size of the partition that this application was launched with
+		partitionSpaceUsed -- the number of bytes currently used in this partition
+		remoteEvents -- Will this process accepts remote events?
+		scriptable -- Is this process high-level event aware (accepts open application, open document, print document, and quit)?
+		visible -- Is this process' layer visible?
+sharableContainer -- A container that may be shared (disks and folders)
+	Properties:
+		exported -- Is this folder a share point or inside a share point?
+		group -- the user or group that has special access to the folder
+		groupPrivileges -- the see folders/see files/make changes privileges for the group
+		guestPrivileges -- the see folders/see files/make changes privileges for everyone
+		inheritedPrivileges -- Are the privileges of this item always the same as the container it is stored in?
+		mounted -- Is this folder mounted on another machine's desktop?
+		owner -- the user that owns this folder
+		ownerPrivileges -- the see folders/see files/make changes privileges for the owner
+		protected -- Is container protected from being moved, renamed or deleted?
+		shared -- Is container a share point?
+		sharingWindow -- the sharing window for the container
+	Elements:
+		accessorySuitcase
+		aliasFile
+		applicationFile
+		container
+		controlPanel
+		deskAccessoryFile
+		documentFile
+		file
+		folder
+		fontFile
+		fontSuitcase
+		item
+		sharableContainer
+		soundFile
+		suitcase
+sharingPrivileges -- A set of sharing properties
+	Properties:
+		makeChanges -- privileges to make changes
+		seeFiles -- privileges to see files
+		seeFolders -- privileges to see folders
+sharingWindow -- A sharing window (opened by “Sharing…”)
+	Properties:
+		container -- the container that this window was opened from
+		exported -- Is this container a share point or inside a share point?
+		folder -- the folder that this window was opened from
+		group -- the user or group that has special access to the container
+		groupPrivileges -- the see folders/see files/make changes privileges for the group
+		guestPrivileges -- the see folders/see files/make changes privileges for everyone
+		inheritedPrivileges -- Are the privileges of this item always the same as the container it is stored in?
+		item -- the item that this window was opened from
+		mounted -- Is this container mounted on another machine's desktop?
+		owner -- the user that owns the container
+		ownerPrivileges -- the see folders/see files/make changes privileges for the owner
+		protected -- Is container protected from being moved, renamed or deleted?
+		sharableContainer -- the sharable container that this window was opened from
+		shared -- Is container a share point?
+soundFile -- This class represents sound files
+statusWindow -- These windows are progress dialogs (copy window, rebuild desktop database, empty trash)
+suitcase -- A font or desk accessory suitcase
+	Elements:
+		item
+trash-object -- Trash-object is the class of the “trash” object
+	Properties:
+		warnBeforeEmptying -- Is a dialog displayed when “Empty trash…” is selected?
+	Elements:
+		accessorySuitcase
+		aliasFile
+		applicationFile
+		container
+		controlPanel
+		deskAccessoryFile
+		documentFile
+		file
+		folder
+		fontFile
+		fontSuitcase
+		item
+		sharableContainer
+		soundFile
+		suitcase
+user -- A User in the Users and Groups control panel
+	Properties:
+		bounds -- the bounding rectangle of the user
+		icon -- the icon bitmap of the user
+		labelIndex -- the label of the user
+		name -- the name of the user
+		position -- the position of the user within its parent window
+window -- A window
+
+
+

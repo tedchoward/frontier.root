@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:workspace.userlandSamples.rpcInteropTests.rpcHandlers.echoString
+
+on echoString (inputString) {
+	if typeOf (inputString) == stringType {
+		return (inputString)};
+	ScriptError ("Can't process the request because the input parameter is not a string.")}
+
+

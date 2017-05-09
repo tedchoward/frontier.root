@@ -1,0 +1,99 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.re.docs.porting
+
+#title "Developer's Guide to Upgrading from the Regex Extension to the Re Kernel Verbs"
+Regular Expression Matching Engines
+	The Regex extension is based on version 0.12 of the GNU Regex library, first released in 1993.
+	The re kernel verbs were introduced in Frontier 9.1b3 and are based on version 4.2 of the <a href="http://www.pcre.org/">Perl Compatible Regular Expression (PCRE) library package</a>, released in February 2003.
+Regular Expression Syntax
+	The regular expression syntax used by the re kernel verbs is more powerful than the one used by the Regex extension. Many of the new features first showed up in <a href="http://perl.org/">Perl 5</a>: setting of internal options on the fly, named subpatterns, non-greedy quantifiers, atomic grouping, possessive quantifiers, lookahead and lookbehind assertions, conditional subpatterns, comments, recursive patterns, and subpatterns as subroutines.
+	Still, almost all regular expressions written for the Regex extensions should work with the Re kernel verbs without requiring a change.
+	The only meta-characters that are supported by the Regex extension but not by the Re kernel verbs are \&lt; and \&gt; which match the empty string at the start and end of a word, respectively.
+MatchInfo Table
+	Some verbs of the Regex extension used a so-called MatchInfo table to make detailed information about a successful match available to UserTalk scripts.
+	The Re kernel verbs also use a MatchInfo table whose layout is fully backward compatible to the Regex extension verbs. To support named subpatterns, the Re kernel verbs will optionally add a new sub-table "namedGroups" to the MatchInfo table. It contains a sub-table for each named subpattern whose name is the name of the subpattern and whose contents are elements named "groupNumber", "matchString", "matchOffset", and "matchLength", describing the corresponding group number of the subpattern and the position where the subpattern matched.
+Handling Compiled Patterns
+	Some verbs of the Regex extension require you to call regex.compile to compile a regular expression into an internal representation. This call returns a so-called pattern reference, basically a number that is the memory address of the internal representation. After you are done with a pattern, you are supposed to call regex.free to release the memory allocated for the internal representation. If you do not construct your code carefully, you will end up leaking memory everytime you compile a pattern but forget to call regex.free for it.
+	The Re kernel verbs use a different approach that takes advantage of UserTalk's built-in memory management. You have to call re.compile for every regular expression you wish to use. This will return a binary value of type 'PCRE' which you then pass in to any subsequent call to a Re verb that takes a compiled pattern as a parameter. You can leave it up to UserTalk to dispose of the compiled pattern when it is no longer needed. Therefore, there is no Re kernel verb that corresponds to regex.free.
+	Since all Re kernel verbs treat compiled patterns as read-only values, you can safely share the same compiled pattern between multiple calls to Re verbs or even between multiple threads. However, you should not assume that a compiled pattern will be recognized as valid by versions of Frontier running on a different platform or having a different version number.
+Compiling Regular Expressions
+	regex.compile (pattern, caseSensitive = false, fastmap = true)
+	re.compile (pattern, flCaseSensitive = false, flDotMatchesAll = true, flMultiLine = true, flAutoCapture = true, flGreedyQuantifiers = true, flMatchEmptyString = true, flExtendedMode = false)
+	The pattern parameter of re.compile is the only place where you specify a literal regular expression when using the Re kernel verbs. All the other Re kernel verbs that match a pattern take the result of a re.compile call as their first parameter.
+	As explained above, the regular expression syntax accepted by re.compile is different from regex.compile, though almost fully backward compatible for all practical purposes.
+	The caseSensitive parameter of regex.compile corresponds to the flCaseSensitive parameter of re.compile.
+	The fastmap parameter of regex.compile has no equivalent parameter in the Re kernel verbs. However, the equivalent functionality is performed behind the scenes, automatically.
+	The re.compile  kernel verb has serveral more parameters that allow the caller to specify certain options to be taken into account while compiling or matching the pattern.
+Releasing Memory for Compiled Patterns
+	regex.free (patternRef)
+	As explained above, there is no kernel verb corresponding to regex.free.
+Getting Information about a Compiled Pattern
+	re.getPatternInfo (cp, adrInfoTable)
+	This kernel verb has no corresponding verb in the Regex.extension.
+Matching Patterns
+	regex.match (patternRef, adrObject, adrTable=nil, start=1, makeGroups=false)
+	regex.search (patternRef, adrObject, adrTable=nil, start=1, range=0, makeGroups=false)
+	regex.easyMatch (pattern, s, adrTable = nil, start = 1)
+	regex.easySearch (pattern, s, adrTable = nil, start = 1)
+	re.match (cp, s, ix = 1, ct = infinity, adrMatchInfoTable = nil, flMakeGroups = false, flMakeNamedGroups = false)
+	The first parameter of re.match is the result of a call to re.compile.
+	The second parameter of re.match is the target string itself, not an address pointing to it.
+	The start and range parameters of the listed regex verbs correspond to the ix and ct parameters of re.match. The adrTable and makeGroups parameters of the regex verbs correspond to the adrMatchInfoTable and flMakeGroups parameters of re.match.
+	The re.match verb attempts to match the pattern at successive positions of the target string, i.e. it works like regex.search and regex.easySearch. To emulate the functionality of regex.match and regex.easyMatch, call re.match with the ct parameter set to zero.
+	The flMakeNamedGroups of re.match has been added to allow the caller to request information about named subpatterns to be added to the MatchInfo table.
+	The listed Regex verbs return a boolean indicating whether a match was found. The re.match verb returns a number indicating the position of the match, or zero if no match was found.
+Replacing Matched Substrings
+	regex.subst (pattern, repl, adrObject, caseSensitive=false, maxSubs=infinity, abortOnNoSubst=true)
+	re.replace (cp, repl, s, maxReplacements = infinity, adrReplacementCount = nil, adrCallback = nil)
+	The first parameter of re.match is the result of a call to re.compile.
+	The repl parameter of regex.subst can be a script or a string, whereas it will always be coerced to a string by re.match. The re.match verb also interprets the character sequence \g<xyz> in the repl string as a reference to a subpattern, where xyz can either be a number or the name of a named subpattern.
+	If the repl parameter is the address of a script, regex.subst calls that script once before each replacement, passing in the address of a MatchInfo table and the address of a string variable that the script can manipulate to determine the replacement string for the current match. You can get similar functionality from re.replace by specifying the address of the same script as the adrCallback parameter. Note that regex.subst sets the string pointed to by the second parameter of the callback script to the empty string, whereas re.replace sets it to the default replacement string that would be used if not callback script had been specified.
+	The third parameter of re.replace is the target string itself, not an address pointing to it.
+	The caseSensitive flag of regex.subst has no corresponding parameter in re.replace, since with the Re kernel verbs, case-sensitivity is specified when compiling the regular expression.
+	The maxSubs parameter of regex.subst corresponds to the maxReplacements parameter of re.replace.
+	The re.replace verb does not have a parameter corresponding to the abortOnNoSubst parameter of regex.subst. If the callback script returns false, re.replace will not perform the current replacement and it will not attempt further matches. If the callback script just needs to veto the current replacement but it does not want to prevent further matching  attempts, it should set the replacement string to the value of the matchString element of the MatchInfo table and return true.
+	The regex.subst verb returns the number of replacements made while setting the object pointed to by adrObject to the result string. The re.replace verb returns the result string directly while the number of replacements made can optionally be returned via the adrReplacementCount parameter.
+Extracting Matched Substrings
+	regex.extract (pattern, adrObject, adrList, groups={}, caseSensitive=false)
+	re.extract (cp, s, groups = {})
+	The first parameter of re.replace is the result of a call to re.compile.
+	The second parameter of re.match is the target string itself, not an address pointing to it.
+	The caseSensitive flag of regex.extract has no corresponding parameter in re.extract, since with the Re kernel verbs, case-sensitivity is specified when compiling the regular expression.
+	The groups parameter of both verbs follow the same convention with the addition that re.extract also allows string elements in the groups list that contain the names of named subpatterns.
+	The regex.extract verb returns the number of elements in the result list while setting the object pointed to by adrList to the result list. The re.extract verb returns the result list directly.
+Splitting Strings Using Matched Substrings as Delimiters
+	regex.split (pattern, adrObject, caseSensitive = false, maxChunks = infinity)
+	re.split (cp, s, maxSplits = infinity)
+	The first parameter of re.split is the result of a call to re.compile.
+	The second parameter of re.split is the target string itself, not an address pointing to it.
+	The caseSensitive flag of regex.split has no corresponding parameter in re.split, since with the Re kernel verbs, case-sensitivity is specified when compiling the regular expression.
+	The maxChunks parameter of regex.split corresponds to the maxSplits parameter of re.split.
+	Both verbs return the result list directly.
+Visiting Matched Substrings
+	regex.visit (pattern, adrObject, callBack, caseSensitive=false, makeGroups=false, maxRuns=infinity)
+	re.visit (cp, s, adrCallBack, flMakeGroups = false, flMakeNamedGroups = false, maxRuns = infinity)
+	The first parameter of re.visit is the result of a call to re.compile.
+	The second parameter of re.visit is the target string itself, not an address pointing to it.
+	The third parameter of both verbs specifies the address of a script taking the address of a MatchInfo table as its single parameter, which will be called  once for every successful match of the pattern.
+	The caseSensitive flag of regex.visit has no corresponding parameter in re.visit, since with the Re kernel verbs, case-sensitivity is specified when compiling the regular expression.
+	The makeGroups parameter of regex.visit verbs correspond to the flMakeGroups parameter of re.visit.
+	The flMakeNamedGroups of re.match has been added to allow the callback script to receive information about named subpatterns in the MatchInfo table.
+	The maxRuns parameter has the same meaning for both verbs.
+	The regex.visit verb always returns true, whereas the re.visit verb returns a boolean value corresponding to the return value of the last call to the callback script.
+Filtering Lists or Strings
+	regex.grep (expr, adrObject, includeMatches=true)
+	re.grep (cp, s, flIncludeMatches = true)
+	The first parameter of re.grep is the result of a call to re.compile.
+	The regexp.grep verb allows you to pass in the address of a callback script as the first parameter. This functionality is not supported by the re.grep verb.
+	The second parameter of re.grep is the target list or string itself, not an address pointing to it.
+	The includeMatches parameter of regex.grep verbs correspond to the flIncludeMatches parameter of re.grep.
+	Both verbs return the result list directly.
+Expanding References to Subpatterns
+	re.expand (s, adrMatchInfoTable)
+	This kernel verb has no corresponding verb in the Regex.extension. It transforms the s parameter in the same way that re.replace would treat its repl parameter, given a MatchInfo table with the same content.
+Joining Lists
+	regex.join (exprStr, adrList)
+	re.join (s, strList)
+	The second parameter of re.grep is the target list itself, not an address pointing to it. Otherwise, the functionality of the two verbs is identical.
+
+
+

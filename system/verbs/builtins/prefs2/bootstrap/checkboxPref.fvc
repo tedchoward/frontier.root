@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.prefs2.bootstrap.checkboxPref
+
+on checkboxPref (prompt, adrboolean) {
+	«Changes
+		«3/22/12; 3:03:48 PM by DW
+			«We must handle POST events here. They're different from string and text prefs. 
+		«1/13/12; 10:08:30 AM by DW
+			«Created.
+	local (pta = html.getpagetableaddress (), t);
+	new (tabletype, @t);
+	if pta^.method == "POST" { //3/22/12 by DW
+		if defined (pta^.postargs.[nameof (adrboolean^)]) {
+			adrboolean^ = true}
+		else {
+			adrboolean^ = false}};
+	t.itemName = nameof (adrboolean^);
+	t.itemPrompt = "";
+	bundle { //set t.itemCode
+		local (checkbox = "<input type=\"checkbox\" name=\"" + t.itemName + "\" value=xxx");
+		if adrboolean^ {
+			checkbox = checkbox + " checked>"}
+		else {
+			checkbox = checkbox + ">"};
+		t.itemCode = checkbox + "&nbsp;" + prompt};
+	return (string.multiplereplaceall (string (prefs2.bootstrap.panelItemTemplate), @t, false, "<%", "%>"))};
+bundle { //test code
+	checkboxPref ()}
+
+

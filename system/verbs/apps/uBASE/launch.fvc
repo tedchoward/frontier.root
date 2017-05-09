@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.uBASE.launch
+
+on launch () {
+	return (app.start ("ubase"))}
+
+

@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.server.getMyOutline
+
+on getMyOutline (username) {
+	«Changes
+		«8/7/10; 5:21:53 AM by DW
+			«Created. 
+	local (adruser = io.server.initUser (username));
+	return (adruser^.opmltext)};
+bundle { //test code
+	dialog.alert (getMyOutline ("davewiner"))}
+
+

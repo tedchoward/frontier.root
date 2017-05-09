@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.data.scripts.statusCenterMessage
+
+«Changes
+	«<%now%> by <%initials%>
+		«Created. Returns a string which appears in the Status Center on the Radio UserLand home page.
+return ("I'm a cool Tool!")
+
+

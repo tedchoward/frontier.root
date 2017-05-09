@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.root.defined
+
+on defined (adrserver, path) {
+	return (appleEvent (adrserver, 'ODBF', 'DEFI', '----', string (path)))}
+
+

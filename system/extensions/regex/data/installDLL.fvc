@@ -1,0 +1,60 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.data.installDLL
+
+on installDLL () {
+	on putResources (f, rs) {
+		if typeOf (rs) ‚ listType {
+			scriptError ("Can't install Regex extension because the list of resources for this platform is missing.")};
+		local (i, nt = sizeOf (rs));
+		for i = 1 to nt {
+			local (typeRec = rs[i]);
+			local (itemList = typeRec['itms']);
+			local (j, nr = sizeOf (itemList), ty = typeRec['type']);
+			for j = 1 to nr {
+				local (rNm, rID, itemRec = typeRec['itms'][j], rData);
+				rNm = itemRec['name'];
+				rID = itemRec['itID'];
+				rData = itemRec['data'];
+				if rNm ‚ "" {
+					rez.putNamedResource (f, ty, rNm, @rData)}
+				else {
+					rez.putResource (f, ty, rID, @rData)}}}};
+	on checkDLL (fname, adrpath) {
+		local (dllfolder = file.folderFromPath (frontier.getProgramPath()) + "DLLs" + file.getPathChar ());
+		file.sureFolder (dllfolder);
+		adrpath^ = dllfolder + fname;
+		if file.exists (adrpath^) {
+			try { « versionLessThan fails with numbers like 2.0b5a (because of 'a')
+				if date.versionLessThan (file.getVersion (adrpath^), regex.version) {
+					file.delete (adrpath^)}}
+			else {
+				file.delete (adrpath^)}};
+		regex.data.dllpath = adrpath^;
+		return (file.exists (adrpath^))};
+	local (f);
+	case sys.os () {
+		"Win95";
+		"WinNT" {
+			if not checkDLL ("regexw32.dll", @f) {
+				file.writeWholeFile (f, regex.data.dll.windows)}};
+		"MacOS" {
+			local (fname, adrdata);
+			if Frontier.isPowerPC () {
+				if defined (system.environment.isCarbon) and system.environment.isCarbon {
+					fname = "regexcarbon.dll";
+					adrdata = @regex.data.dll.macCarbon}
+				else {
+					fname = "regexclassic.dll";
+					adrdata = @regex.data.dll.macPPC}}
+			else {
+				scripterror ("Can't initialize Regex extension because it is not implemented on 68k Macs.")};
+			if not checkDLL (fname, @f) {
+				file.writeWholeFile (f, adrdata^.dFork, 'shlb', '????');
+				putResources (f, adrdata^.rFork)}}}
+	else {
+		scripterror ("Can't initialize Regex extension because it is not implemented on this platform.")};
+	return (f)};
+
+«bundle « test code
+	«installDLL ()
+
+

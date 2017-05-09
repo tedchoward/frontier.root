@@ -1,0 +1,37 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.mainResponder.controlPanel.["#template"]
+
+<table border="0" cellspacing="0" cellpadding= "0">
+	<tr>
+		<td colspan="2" bgcolor="#DCDCFF">&nbsp;</td>
+		<td colspan="2">&nbsp;</td>
+		<td colspan="1" valign="top" align="left">
+			<a href="/controlPanel/"><img src="/mainResponderResources/userlandIcons/controlPanelHeader" width="306" height="67" border="0"></a>
+			<br>&nbsp;
+			</td>
+		</tr>
+	<tr>
+		<td valign="top" align="right" bgcolor="#DCDCFF" width="90" height="1300">
+			<b>{homePageLink ()}</b><p>
+			<b>Sites</b><br>
+			{drawNavigator ("navigatorSites")}<p>
+			<b>Settings</b><br>
+			{drawNavigator ("navigator")}<p>
+			{addInsLinks ()}
+			<b>Readouts</b><br>
+			{drawNavigator ("navigatorReadouts")}<p>
+			<b>Help</b><br><a href="http://support.userland.com/">Support<br>Site</a>
+			<br>&nbsp;
+			</td>
+		<td width="10" bgcolor="#DCDCFF">&nbsp;</td>
+		<td width="1"><br></td>
+		<td width="15">&nbsp;</td>
+		<td valign="top" width="700">
+			<h2>{title}</h2><br>
+			{bodytext}
+			</td>
+		</tr>
+	</table>
+{pageFooter ()}
+
+
+

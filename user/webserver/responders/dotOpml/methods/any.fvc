@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:user.webserver.responders.dotOpml.methods.any
+
+on any (pta) { //boilerplate for your responder
+	pta^.responseHeaders.["Content-Type"] = "text/html";
+	pta^.code = 200; //everything was OK
+	pta^.responseBody = clock.now (); //build response
+	return (true)}
+
+

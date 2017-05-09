@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.comments.open
+
+on open () {
+	«Changes
+		«10/7/12; 12:34:16 PM by DW
+			«Send the editorialDomain param to the open routine.
+				«http://worknotes.scripting.com/october2012/10712ByDw/editorialdomainAttOnComments
+		«10/3/12; 9:42:17 AM by DW
+			«Since the title is now url-encoded, we must url-decode it. 
+				«http://worknotes.scripting.com/october2012/10312ByDw/encodingAndOpmlComments
+		«9/5/12; 5:06:04 PM by DW
+			«Created.
+	local (pta = html.getpagetableaddress (), referer = pta^.requestHeaders.Referer, args);
+	«scratchpad.commentsopenparams = pta^
+	new (tabletype, @args);
+	webserver.parseargs (pta^.searchargs, @args);
+	«scratchpad.commentargs = args
+	opmlEditor.comments.open (referer, string.urldecode (args.title), string.urldecode (args.editorialDomain));
+	frontier.bringtofront ();
+	webserver.redirect (pta, referer)}
+«bundle //test code
+	«html.setpagetableaddress (@scratchpad.commentsopenparams)
+	«open ()
+
+

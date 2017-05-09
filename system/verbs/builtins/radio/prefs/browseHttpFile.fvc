@@ -1,0 +1,36 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.radio.prefs.browseHttpFile
+
+on browseHttpFile (url, ctCacheSeconds=3600, flNeuterMacros=true) {
+	«Changes
+		«10/31/12; 2:49:47 PM by JES
+			«Instead of looking at environment variable, look for pta^.macroStartCharacters, and neuter accordingly.
+		«2/5/02; 11:45:03 AM by PBS
+			«Conditionalized to work in Frontier.
+		«11/23/01; 12:25:25 PM by DW
+			«Created. Reads an OPML file via HTTP and runs it through the browser.
+	local (flread = true, adrincache);
+	bundle { //set flread, adrincache
+		if not defined (system.temp.radio) { //PBS 02/05/02: this table may not exist in Frontier
+			new (tableType, @system.temp.radio)};
+		local (adrcache = @system.temp.radio.outlineCache);
+		if not defined (adrcache^) {
+			new (tabletype, adrcache)};
+		adrincache = @adrcache^.[url];
+		if defined (adrincache^) {
+			if (clock.now () - timeModified (adrincache)) < ctCacheSeconds {
+				flread = false}}};
+	if flread {
+		local (xmltext = tcp.httpReadUrl (url));
+		if flNeuterMacros {
+			local (macroStart = "{", replaceWith = "&#123;");
+			if defined (pta^.macroStartCharacters) {
+				macroStart = pta^.macroStartCharacters;
+				replaceWith = "&#" + number (macroStart[1]) + string.delete (macroStart, 1, 1)};
+			xmltext = string.replaceall (xmltext, macroStart, replaceWith)};
+		op.xmltooutline (xmltext, adrincache);
+		settimemodified (adrincache, clock.now ())};
+	return (radio.prefs.browser (adrincache))}
+«bundle //test code
+	«browseHttpFile ("http://radio.weblogs.com/0001015/gems/todolist.opml")
+
+

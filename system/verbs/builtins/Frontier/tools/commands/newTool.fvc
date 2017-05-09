@@ -1,0 +1,31 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.commands.newTool
+
+on newTool () {
+	«Changes
+		«11/25/07; 1:15:48 PM by DW
+			«Only prompt for the name of the tool, not the location. 
+		«09/30/00; 11:51:33 PM by PBS
+			«Prompt the user for location and name of the new tool gdb.
+	local (newToolName = "untitled.root");
+	if dialog.ask ("Name of new tool?", @newToolName) {
+		local (f = Frontier.tools.getToolsFolderPath () + newToolName);
+		if file.exists (f) {
+			scriptError ("Can't create the tool because the file already exists.")};
+		Frontier.tools.newTool (f);
+		edit (@[f]); //make gdb visible
+		window.zoom (@[f])}} //zoom the window -- make all top-level items visible
+	«bundle //old code
+		«local (f)
+		«local (toolsFolder = Frontier.tools.getToolsFolderPath ())
+		«f = toolsFolder + "untitled.root"
+		«if file.putFileDialog ("New Tool:", @f)
+			«if file.exists (f)
+				«if defined ([f])
+					«fileMenu.close (f)
+			«Frontier.tools.newTool (f)
+			«edit (@[f]) //make gdb visible
+			«window.zoom (@[f]) //zoom the window -- make all top-level items visible
+«bundle //test code
+	«newTool ()
+
+

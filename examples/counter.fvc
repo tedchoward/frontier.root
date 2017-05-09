@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:examples.counter
+
+«this is an example script -- click on the Debug button to run it 
+	«Then click on "Follow"
+for i = 1 to 10 {
+	window.msg (i)}
+
+

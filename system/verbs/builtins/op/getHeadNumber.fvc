@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.getHeadNumber
+
+on getHeadNumber () {
+	kernel (op.getheadnumber)}
+
+

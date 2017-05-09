@@ -1,0 +1,44 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.trim.newAccount
+
+on newAccount (username, password, email="", apikey="") {
+	«Changes
+		«4/28/09; 10:17:28 AM by DW
+			«Create a new tr.im account with the indicated username and password. The email address is optional.
+				«Dave,
+				«
+				«We have setup access for your API key to access the account creation API method. It is specced as follows:
+				«
+				«addadd_account
+				«This function will create a new tr.im account.
+				«
+				«URL: http://tr.im/api/addadd_account.<format>
+				«Method: GET or POST
+				«Formats: xml, json
+				«Parameters:
+				«
+					«€ username. Required. The desired tr.im account ID.
+					«€ password. Required. The desired tr.im account password.
+					«€ email. Optional. The email address to set with the account setup.
+				«Response:
+				«
+					«€ status. Either OK or ERROR with a code number and explanation.
+					«€ username. Confirmation of the username chosen.
+					«€ password. Confirmation of the password chosen.
+				«
+				«Let me know if you need anything else here. It returns a response code of 447 if the account username requested is already taken. It is not a method that has been heavily used, but it works fine for what we have been using it for.
+	local (apiurl = "http://tr.im/api/addadd_account.xml");
+	apiurl = apiurl + trim.pushParams (username, password, apikey, '?');
+	if email != "" {
+		apiurl = apiurl + "&email=" + string.urlencode (email)};
+	local (xmltext = tcp.httpreadurl (apiurl), xstruct);
+	xml.compile (xmltext, @xstruct);
+	«scratchpad.xstruct = xstruct
+	local (adrtrim = xml.getaddress (@xstruct, "trim"));
+	local (adrstatus = xml.getaddress (adrtrim, "status"));
+	return (xml.getattributevalue (adrstatus, "code") == 200)}
+«bundle //test code
+	«local (username = string.getrandompassword (10))
+	«local (password = string.getrandompassword (10))
+	«dialog.alert (newAccount (username, password))
+
+

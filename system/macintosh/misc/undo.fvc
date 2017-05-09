@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.misc.undo
+
+on undo (appID) { «Undo the action of the previous event or user interaction
+	return (appleEvent (appID, 'misc', 'undo'))}
+
+

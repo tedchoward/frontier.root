@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.redo
+
+on redo () { «Reverses the effects of the most recent Undo, if possible.
+	return (appleEvent (BBEdit.id, 'misc', 'redo'))}
+
+

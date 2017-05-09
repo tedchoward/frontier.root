@@ -1,0 +1,71 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.adjix.create
+
+on create (url, partnerEmail=nil, partnerID=nil, customDomain=nil) {
+	«Changes
+		«3/11/11; 8:53:27 AM by DW
+			«Checking and cleanup on customDomain. OK if user specifies it as "r2.ly" or "http://r2.ly/" or many different variants. 
+		«12/21/09; 5:36:25 PM by DW
+			«If Adjix returns an error message, return the original url unshortened. This happens when we pass in the empty string.
+		«8/25/09; 8:17:33 AM by DW
+			«Create a short URL given either an email address or partner ID. If customDomain is non-nil, we'll return a shortened URL using that domain instead of adjix.com.
+				«Docs are here: http://web.adjix.com/AdjixAPI.html
+	local (adrdata = adjix.init (), now = clock.now (), apiurl = "http://api.adjix.com/shrinkLink?url=");
+	apiurl = apiurl + string.urlencode (url);
+	if partnerEmail != nil {
+		apiurl = apiurl + "&partnerEmail=" + string.urlencode (partnerEmail)}
+	else {
+		if partnerID != nil {
+			apiurl = apiurl + "&partnerID=" + string.urlencode (partnerID)}};
+	if customDomain != nil {
+		apiurl = apiurl + "&tokenOnly=y";
+		bundle { //clean up customDomain, 3/11/11 by DW
+			on getdomainname (s) {
+				local (ul);
+				try {
+					ul = string.urlsplit (s);
+					s = ul [2]}
+				else {
+					try {
+						ul = string.urlsplit (s + "/");
+						s = ul [2]}};
+				return (s)};
+			customDomain = "http://" + getdomainname (customDomain) + "/"}};
+	try {
+		local (s = tcp.httpreadurl (apiurl));
+		bundle { //12/21/09 by DW, ugly error checking
+			if s beginswith "Invalid Adjix request." {
+				return (url)}};
+		bundle { //stats
+			adrdata^.stats.ctCreates++;
+			adrdata^.stats.whenLastCreate = now;
+			local (adrday = mainresponder.calendar.getdayaddress (@adrdata^.stats.calendar, now));
+			if defined (adrday^.ctCreates) {
+				adrday^.ctCreates++}
+			else {
+				adrday^.ctCreates = 1}};
+		if customDomain != nil {
+			return (customDomain + s)}
+		else {
+			return (s)};
+		return (s)}
+	else {
+		adrdata^.stats.ctCreateErrors++;
+		adrdata^.stats.whenLastCreateError = now;
+		adrdata^.stats.lastCreateError = tryerror;
+		scripterror (tryerror)}};
+bundle { //test code
+	local (url = "http://www.guardian.co.uk/lifeandstyle/2011/mar/06/ask-hadley-john-galliano-antisemitism");
+	local (pid = config.radio2.prefs.shortener.partnerid);
+	create (url, partnerid:pid);
+	
+	
+	partnerid = config.adjix.prefs.partnerid;
+	partneremail = config.adjix.prefs.email;
+	partneremail = config.twitterPusher.users.jayrosen_nyu.prefs.adjix.email;
+	url = "http://www.scripting.com/stories/2009/08/25/howToGetLessigToBlog.html";
+	url = "http://www.scripting.com/stories/2009/08/25/urgentlyNeedAnIntelBuildOf.html";
+	url = "http://discuss.flickrfan.org/2009/08/30/0958745.html";
+	url = "";
+	clipboard.putvalue (create (url, partneremail, customDomain:"http://j.oy.ly/"))}
+
+

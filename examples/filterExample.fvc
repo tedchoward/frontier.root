@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:examples.filterExample
+
+on filter (path) {
+	return (file.created (path) <= date ("September 1, 1991"))};
+
+file.filteredCopy ("System:Frontier Docs:", "System:Early Work:", @filter)
+
+

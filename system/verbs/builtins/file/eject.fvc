@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.eject
+
+on eject (path) {
+	kernel (file.eject)}
+
+

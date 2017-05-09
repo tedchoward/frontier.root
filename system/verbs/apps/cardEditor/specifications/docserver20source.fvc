@@ -1,0 +1,1070 @@
+FrontierVcsFile:3:optx:system.verbs.apps.cardEditor.specifications.["docserver source"]
+
+cardEditor.cleanObject
+	Syntax
+		cardEditor.cleanObject (name)
+	Parameters
+		name is a string containing the name of an object that you want to clean up.
+	Action
+		Applies the same "clean up logic" as Card Editor's Clean Up command to the object.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		Cleaning up an object only changes its position on the card and the size of its rectangle.
+		The rules for cleaning each object varies from type to type. The result is a minimally sized object that can display as much of its information as possible.
+	Examples
+		cardEditor.cleanObject ("okButton") «this object exists
+			// true
+		cardEditor.cleanObject ("nirvana") «this object doesn't exist
+			// false
+	See Also
+		cardEditor.countObjects
+		cardEditor.countSelectedObjects
+cardEditor.countObjects
+	Syntax
+		cardEditor.countObjects ()
+	Parameters
+		None.
+	Action
+		Determines the number of objects in the frontmost card window.
+	Returns
+		The number of objects in the frontmost card window.
+	Examples
+		cardEditor.countObjects ()
+			// 4
+	Notes
+		Combined with cardEditor.getNthObject, this verb can be used to loop over all the objects in the frontmost card window.
+	See Also
+		cardEditor.getNthObject
+		cardEditor.countSelectedObjects
+cardEditor.countSelectedObjects
+	Syntax
+		cardEditor.countSelectedObjects ()
+	Parameters
+		None.
+	Action
+		Determines the number of selected objects in the target card window.
+	Returns
+		The number of selected objects in the frontmost card window.
+	Examples
+		cardEditor.countSelectedObjects () «1 item selected
+			// 1
+		cardEditor.countSelectedObjects () «shift-click to select another
+			// 2
+	Notes
+		Combined with cardEditor.getNthSelectedObject, this verb can be used to loop over all the selected objects in the frontmost card window.
+	See Also
+		cardEditor.getNthSelectedObject
+		cardEditor.countObjects
+		cardEditor.getNthObject
+cardEditor.deleteObject
+	Syntax
+		cardEditor.deleteObject (name)
+	Parameters
+		name is a string containing the name of an object that you want to delete.
+	Action
+		Deletes the object.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Examples
+		cardEditor.deleteObject ("item1")
+			// true
+	See Also
+		cardEditor.newObject
+cardEditor.getCardAttributes
+	Syntax
+		cardEditor.getCardAttributes (tableAdr)
+	Parameters
+		tableAdr is the address of an object database table to hold the attributes of the card.
+	Action
+		Determines the attributes of the frontmost card window.
+	Returns
+		True if a card window is open.
+	Notes
+		This is a low-level verb that forms the basis for higher level verbs which allow you to get the value of a single object attribute.
+		Here's a list of the attributes available for each card window:
+			atob: a string, contains the name of the active text object. Empty string if there's no active text object.
+			bakc: an RGB color, the background color for the card.
+			grid: a boolean, if true Snap to Grid is turned on in Card Editor.
+			grun: a number, the number of pixels per "grid stop" in Card Editor.
+			grvs: a boolean, if true the grid is drawn in Card Editor.
+			rcal: a boolean, if true the formulas in the card need to be recalculated.
+			rctc: a number, the "tickcount" for the next formula recalc. Use clock.ticks to set this.
+			rbor: a number, the number of horizontal pixels used to display the card when it's running.
+			bbor: a number, the number of vertical pixels used to display the card when it's running.
+			floa: a boolean, if true the window is a floating palette.
+			wind: a number, the id of the WIND resource used to display the card when it's running.
+	Examples
+		cardEditor.getCardAttributes (@scratchpad.cardatts); edit (@scratchpad.cardatts)
+			// true
+	See Also
+		cardEditor.setCardAttributes
+		cardEditor.setObjectAttributes
+		cardEditor.getObjectAttributes
+cardEditor.getCardBackColor
+	Syntax
+		cardEditor.getCardBackColor ()
+	Parameters
+		None.
+	Action
+		Determines the background color for the target card window.
+	Returns
+		An rgb containing the background color of the target card window.
+	Examples
+		cardEditor.getCardBackColor () «white
+			// -1,-1,-1
+		cardEditor.getCardBackColor () «blue
+			// 0,0,65535
+	See Also
+		cardEditor.setCardBackColor
+cardEditor.getCardGrid
+	Syntax
+		cardEditor.getCardGrid (adrGridOn, adrGridVisible, adrGridUnits)
+	Parameters
+		adrGridOn is the location where the card's grid flag is to be stored.
+		adrGridVisible is the location where the card's gridVisible flag is to be stored.
+		adrGridUnits is the location where the card's gridUnits value is to be stored.
+	Action
+		Copies information about the target card window's grid into the three addresses. 
+	Returns
+		True.
+	Examples
+		cardEditor.getCardGrid (@gridOn, @gridVisible, @gridUnits); dialog.alert (gridOn + ", " + gridVisible + ", " + gridUnits)
+			// true
+	See Also
+		cardEditor.setCardGrid
+cardEditor.getCardSize
+	Syntax
+		cardEditor.getCardSize (adrWidth, adrHeight)
+	Parameters
+		adrWidth is the location where the card's width is to be stored.
+		adrHeight is the location where the card's height is to be stored.
+	Action
+		Copies the horizontal and vertical size of the card into the two addresses.
+	Returns
+		True.
+	Notes
+		These values determine the size of the card when it's run by the Iowa Runtime component.
+		The card's size can be edited interactively by dragging the card border in Card Editor.
+	Examples
+		cardEditor.getCardSize (@w, @h); dialog.alert (w + ", " + h)
+			// true
+	See Also
+		cardEditor.setCardSize
+cardEditor.getNthObject
+	Syntax
+		cardEditor.getNthObject (n)
+	Parameters
+		n is a number between 1 and the number of objects in the frontmost card window.
+	Action
+		Determines the name of the nth object in the frontmost card window.
+	Returns
+		The name of the nth object in the frontmost card window.
+	Examples
+		// cardEditor.getNthObject (2)
+			y
+	Notes
+		If the object doesn't exist or doesn't have a name, the empty string is returned.
+		Combined with cardEditor.countObjects, this verb can be used to loop over all the objects in the frontmost card window.
+	See Also
+		cardEditor.countObjects
+cardEditor.getNthSelectedObject
+	Syntax
+		cardEditor.getNthSelectedObject (n)
+	Parameters
+		n is a number between 1 and the number of selected objects in the target card window.
+	Action
+		Determines the name of the nth selected object in the target card window.
+	Returns
+		The name of the nth selected object in the frontmost card window.
+	Examples
+		cardEditor.getNthSelectedObject (1)
+			// item1
+	Notes
+		If the object doesn't exist or doesn't have a name, the empty string is returned.
+		Combined with cardEditor.countSelectedObjects, this verb can be used to loop over all the selected objects in the target card window.
+	See Also
+		cardEditor.countSelectedObjects
+		cardEditor.getNthObject
+		cardEditor.countObjects
+cardEditor.getObjectAttributes
+	Syntax
+		cardEditor.getObjectAttributes (name, tableAdr)
+	Parameters
+		name is a string containing the name of an object whose attributes you wish to determine.
+		tableAdr is the address of an object database table to hold the attributes of the object.
+	Action
+		Determines the attributes of the indicated object in the frontmost card window.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		This is a low-level verb that forms the basis for higher level verbs which allow you to get the value of a single object attribute.
+		Here's a list of the attributes available for each object:
+			auto: a boolean, if true, the object is automatically resized when it is edited.
+			enab: a boolean, if true, the object is enabled. If false the object is disabled.
+			errs: a string, contains the last error message generated when evaluating the object's script. If empty, then the script evaluated without error.
+			filc: a number, the index into Card Editor's color table for the fill color of the object
+			flag: a boolean, the object's flag. See cardEditor.getObjectFlag for details.
+			font: a string, the font that the object's text is displayed in.
+			fram: a boolean, if true a frame is drawn around the object.
+			frmc: a number, the index into Card Editor's color table for the frame color of the object.
+			inva: a boolean, if true the object is "invalid" and is redrawn the next time the card displayer gets a chance to.
+			just: a number, the text justification of the object. 0 is left justified, 1 is center justified, 2 is right justified.
+			lang: a string4, the identifier of the scripting language that executes this script. 'LAND' for UserTalk, 'ascr' for AppleScript.
+			name: a string, the object's name.
+			rect: a rectangle, the object's rectangle.
+			scri: a string, the object's script.
+			sdwd: a number, the object's shadow depth, the width in pixels of it's shadow.
+			size: a number, the size of the font that the object's text is displayed in.
+			styl: a number, the style that the object's text is displayed in.
+			tran: a boolean, if true the object is transparent, false it obscures objects below it.
+			txtc: a number, the index into Card Editor's color table for the text color of the object.
+			type: a number, the object's type. See card.types for a list of all types.
+			valu: a string, the object's value, the text displayed in the object.
+			visi: a boolean, if true the object is visible, if false the object is invisible.
+	Examples
+		cardEditor.getObjectAttributes ("mustard", @scratchpad.atts)
+			// true
+	See Also
+		cardEditor.setObjectAttributes
+cardEditor.getObjectEnabled
+	Syntax
+		cardEditor.getObjectEnabled (name)
+	Parameters
+		name is a string containing the name of an object.
+	Action
+		Determines if the object is enabled or disabled.
+	Returns
+		True if the object is enabled, false if it is disabled.
+	Examples
+		cardEditor.getObjectEnabled ("item1")
+			// true
+	See Also
+		cardEditor.setObjectEnabled
+cardEditor.getObjectFillColor
+	Syntax
+		cardEditor.getObjectFillColor (name)
+	Parameters
+		name is a string containing the name of an object whose fill color you want to determine.
+	Action
+		Determines the object's fill color.
+	Returns
+		An rgb value containing the object's fill color.
+	Examples
+		cardEditor.getObjectFillColor ("item1")
+			// 32767,32767,32767
+	See Also
+		cardEditor.setObjectFillColor
+		rgb.get
+		rgb.set
+		rgb
+cardEditor.getObjectFlag
+	Syntax
+		cardEditor.getObjectFlag (name)
+	Parameters
+		name is a string containing the name of an object.
+	Action
+		Determines if the object's flag is true or false.
+	Returns
+		The value of the object's flag.
+	Examples
+		cardEditor.getObjectFlag ("button1") «true if it's the default button
+			// false
+		cardEditor.getObjectFlag ("checkbox1") «true if it's checked
+			// true
+	Notes
+		The way the flag is used varies according to the object's type. 
+		Buttons: the flag determines if it's the default button or not.
+		Checkboxes: the flag determines if it's checked or not.
+		Radio buttons: the flag determines if it's highlighted.
+	See Also
+		cardEditor.setObjectFlag
+cardEditor.getObjectFont
+	Syntax
+		cardEditor.getObjectFont (name, adrFontName, adrFontSize, adrFontStyle)
+	Parameters
+		name is a string containing the name of an object.
+		adrFontName is the location where the object's font name is to be stored.
+		adrFontSize is the location where the object's font size is to be stored.
+		adrFontStyle is the location where the object's font style is to be stored.
+	Action
+		Copies the font name, size and style into the three addresses.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Examples
+		cardEditor.getObjectFont ("item1", @font, @size, @style); dialog.alert (font + ", " + size + ", " + style)
+			// true
+	See Also
+		cardEditor.setObjectFont
+cardEditor.getObjectFrame
+	Syntax
+		cardEditor.getObjectFrame (name)
+	Parameters
+		name is a string containing the name of an object.
+	Action
+		Determines if the object has a visible frame.
+	Returns
+		True if the object has a frame, false otherwise.
+	Examples
+		cardEditor.getObjectFrame ("item1")
+			// true
+	See Also
+		cardEditor.setObjectFrame
+cardEditor.getObjectFrameColor
+	Syntax
+		cardEditor.getObjectFrameColor (name)
+	Parameters
+		name is a string containing the name of an object whose frame color you want to determine.
+	Action
+		Determines the object's frame color.
+	Returns
+		An rgb value containing the object's frame color.
+	Examples
+		cardEditor.getObjectFrameColor ("item1") «it's black
+			// 0,0,0
+	See Also
+		cardEditor.setObjectFrameColor
+		rgb.get
+		rgb.set
+		rgb
+cardEditor.getObjectJustification
+	Syntax
+		cardEditor.getObjectJustification (name)
+	Parameters
+		name is a string containing the name of an object.
+	Action
+		Determines the object's text justification.
+	Returns
+		A number containing the object's text justification.
+	Notes
+		If justification is 0, the text is left justified.
+		If justification is 1, the text is centered.
+		If justification is 2, the text is right justified.
+	Examples
+		cardEditor.getObjectJustification ("item1") «it's centered
+			// 1
+	See Also
+		cardEditor.setObjectJustification
+cardEditor.getObjectLanguage
+	Syntax
+		cardEditor.getObjectLanguage (name)
+	Parameters
+		name is a string containing the name of an object.
+	Action
+		Determines which system scripting language the script is written in.
+	Returns
+		A string4 containing the identifier of the scripting language.
+	Notes
+		Scripts written to be executed by Frontier are identified by 'LAND'.
+		Scripts written to be executed by AppleScript are identified by 'ascr'.
+	Examples
+		cardEditor.getObjectLanguage ("item1") «it's a UserTalk script
+			// LAND
+		cardEditor.getObjectLanguage ("item1") «it's an AppleScript script
+			// ascr
+	See Also
+		cardEditor.setObjectLanguage
+		cardEditor.getObjectScript
+cardEditor.getObjectRect
+	Syntax
+		cardEditor.getObjectRect (name)
+	Parameters
+		name is a string containing the name of an object whose rectangle you want to determine.
+	Action
+		Determines the rectangle of the object.
+	Returns
+		A rect value containing the object's rectangle.
+	Notes
+		The object rectangle determines where the object is drawn on the card and how large it is.
+	Examples
+		cardEditor.getObjectRect ("item1")
+			// 110,10,135,100
+	See Also
+		cardEditor.setObjectRect
+		rectangle.get
+		rectangle.set
+		rect
+cardEditor.getObjectScript
+	Syntax
+		cardEditor.getObjectScript (name)
+	Parameters
+		name is a string containing the name of an object whose script you want to determine.
+	Action
+		Retrieves the script linked into the object.
+	Returns
+		A string containing the script linked into the object.
+	Examples
+		cardEditor.getObjectScript ("item1")
+			// speaker.beep ()
+	See Also
+		cardEditor.setObjectScript
+		cardEditor.getObjectLanguage
+cardEditor.getObjectSeeThru
+	Syntax
+		cardEditor.getObjectSeeThru (name)
+	Parameters
+		name is a string containing the name of an object.
+	Action
+		Determines if the object is see-thru.
+	Returns
+		True if the object has is see-thru, false otherwise.
+	Examples
+		cardEditor.getObjectSeeThru ("item1")
+			// true
+	See Also
+		cardEditor.setObjectSeeThru
+cardEditor.getObjectShadowDepth
+	Syntax
+		cardEditor.getObjectShadowDepth (name)
+	Parameters
+		name is a string containing the name of an object whose shadow depth you want to determine.
+	Action
+		Retrieves the the drop-shadow depth of the object.
+	Returns
+		A number containing the object's drop-shadow depth.
+	Examples
+		cardEditor.getObjectShadowDepth ("item1")
+			// 3
+	See Also
+		cardEditor.setObjectShadowDepth
+cardEditor.getObjectText
+	Syntax
+		cardEditor.getObjectText (name)
+	Parameters
+		name is a string containing the name of an object whose text you want to determine.
+	Action
+		Determines the text displayed by the object.
+	Returns
+		A string containing the text displayed by the object.
+	Examples
+		cardEditor.getObjectText ("item1")
+			// France
+	See Also
+		cardEditor.setObjectText
+cardEditor.getObjectTextColor
+	Syntax
+		cardEditor.getObjectTextColor (name)
+	Parameters
+		name is a string containing the name of an object whose text color you want to determine.
+	Action
+		Determines the object's text color.
+	Returns
+		An rgb value containing the object's text color.
+	Examples
+		cardEditor.getObjectTextColor ("item1") «it's black
+			// 0,0,0
+	See Also
+		cardEditor.setObjectTextColor
+		rgb.get
+		rgb.set
+		rgb
+cardEditor.getObjectType
+	Syntax
+		cardEditor.getObjectType (name)
+	Parameters
+		name is a string containing the name of an object whose type you want to determine.
+	Action
+		Determines the object's type.
+	Returns
+		A number containing the object's type.
+	Examples
+		cardEditor.getObjectType ("item1") «it's a button
+			// 7
+	Notes
+		A table of object types can be found at system.verbs.apps.card.types.
+	See Also
+		cardEditor.setObjectType
+cardEditor.getObjectVisible
+	Syntax
+		cardEditor.getObjectVisible (name)
+	Parameters
+		name is a string containing the name of an object.
+	Action
+		Determines if the object is visible or invisible.
+	Returns
+		True if the object is visible, false otherwise.
+	Examples
+		cardEditor.getObjectVisible ("item1")
+			// true
+	See Also
+		cardEditor.setObjectVisible
+cardEditor.getPackedCard
+	Syntax
+		cardEditor.getPackedCard ()
+	Parameters
+		None.
+	Action
+		Packs all the objects in the card.
+	Returns
+		A packed binary value of type 'data'.
+	Notes
+		This verb can be used to extract a packed binary version of the card so it can be stored in Frontier's object database or in other databases that can handle binary objects.
+		If you just want the packed table, use cardEditor.getPackedTable. A card's embedded table is packed into the packed card, so you don't have to extract it separately.
+	Examples
+		scratchpad.x = cardEditor.getPackedCard (); edit (@scratchpad.x)
+			// true
+	See Also
+		cardEditor.getPackedObject
+		cardEditor.getPackedTable
+cardEditor.getPackedObject
+	Syntax
+		cardEditor.getPackedObject (name)
+	Parameters
+		name is a string containing the name of an object that you want a packed binary version of.
+	Action
+		Packs the named object into a binary handle.
+	Returns
+		A packed binary value of type 'CARD'.
+	Notes
+		This verb can be used to extract a packed binary version of any named object so it can be stored in Frontier's object database or in other databases that can handle binary objects.
+		This verb is used in the Add to Library… command in Card Editor.
+		In this command the first selected object is added to the card.library table so it can be referenced from other cards.
+	Examples
+		scratchpad.x = cardEditor.getPackedObject ("x"); edit (@scratchpad.x)
+			// true
+		getBinaryType (scratchpad.x)
+			// CARD
+	See Also
+		cardEditor.getNthSelectedObject
+cardEditor.getPackedTable
+	Syntax
+		cardEditor.getPackedTable ()
+	Parameters
+		None.
+	Action
+		Packs the target card's embedded table and returns it in a form suitable for storing in a database.
+	Returns
+		A packed binary value of type 'tabl'.
+	Examples
+		scratchpad.x = cardEditor.getPackedTable (); edit (@scratchpad.x)
+			// true
+		getBinaryType (scratchpad.x)
+			// tabl
+		unpack (@scratchpad.x, @scratchpad.x) «turn it into a table
+			// true
+		edit (@scratchpad.x)
+	Notes
+		There is no card.setPackedTable. We're not even sure if we need this verb, and even less sure about the other direction. What do you think?
+	See Also
+		cardEditor.getPackedObject
+		cardEditor.getPackedCard
+cardEditor.invalObject
+	Syntax
+		cardEditor.invalObject (name)
+	Parameters
+		name is a string containing the name of an object that you want to re-display.
+	Action
+		Marks the object as "invalid" forcing a re-display of the object.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		This is the most efficient way to force the redisplay of an object. 
+		The object is redisplayed the next time Card Editor becomes the current application. 
+		If you require an immediate update before continuing with the next operation, use cardEditor.updateObject instead.
+		It's a fairly advanced verb, which is another way of saying that we don't actually have any scripts that use this verb.
+	Examples
+		cardEditor.invalObject ("item1")
+			// true
+	See Also
+		cardEditor.updateObject
+cardEditor.memAvail
+	Syntax
+		cardEditor.memAvail ()
+	Parameters
+		None.
+	Action
+		Determines the amount of free memory in the Card Editor application.
+	Returns
+		The amount of free memory in the Card Editor application.
+	Examples
+		cardEditor.memAvail () / 1024 «number of kilobytes free in Card Editor
+			// 423
+	See Also
+		memAvail
+cardEditor.newClone
+	Syntax
+		cardEditor.newClone (cloneScript)
+	Parameters
+		cloneScript is a script that evaluates to an object database address.
+	Action
+		Creates a new clone object in the target Card Editor window.
+	Returns
+		True if the clone was created.
+	Notes
+		This verb is used in the Library Objects browser card included in the Sample Cards folder.
+		The cloneScript is usually a call to the UserLand-supplied card.refLibrary verb, but it can be any expression that can be coerced into an object database address.
+	Examples
+		name = "bonbon"; cardEditor.newClone (“card.refLibrary ("” + name + “")”)
+			// true
+	See Also
+		cardEditor.newObject
+cardEditor.newObject
+	Syntax
+		cardEditor.newObject (objType, objName, objText, objScript)
+	Parameters
+		objType is a number indicating the new object's type.
+		objName is a string containing the new object's name.
+		objText is a string containing the text that the new object displays.
+		objScript is a string containing the script to be linked into the new object.
+	Action
+		A new object of the indicated type is created in the target Card Editor window.
+	Returns
+		True if the new object was created.
+	Notes
+		The object is created at a default location, you can use cardEditor.setObjectRect to set the exact location if necessary.
+		The new object isn't drawn. Many scripts want to immediately set the object's rectangle. By not drawing the new object, we avoid possible braincell burners. 
+		If you aren't setting the object rectangle, or changing another attribute (which will cause an update), use cardEditor.updateObject to display the new object.
+		If you want leverage, use cardEditor.cleanObject to adjust the size and location of the new object. It almost always makes the object look great.
+		A complete list of all UserLand-supplied object types can be found at system.verbs.apps.card.types table.
+	Examples
+		cardEditor.newObject (card.types.buttonType, "helloButton", "Hello World!", "dialog.alert (“Hello World!”)")
+			// true
+		cardEditor.cleanObject ("helloButton")
+			// true
+		cardEditor.newObject (card.types.buttonType, "okButton", "OK", "card.close ()")
+			// true
+		cardEditor.examples.newOKbutton () «detailed sample script
+			// true
+	See Also
+		cardEditor.setObjectRect
+		cardEditor.cleanObject
+		cardEditor.newClone
+		cardEditor.updateObject
+cardEditor.renameObject
+	Syntax
+		cardEditor.renameObject (name, newName)
+	Parameters
+		name is a string containing the name of an object that you want to rename.
+	Action
+		Renames the object.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Examples
+		cardEditor.renameObject ("item1", "xxx")
+			// true
+	See Also
+		cardEditor.newObject
+cardEditor.setCardAttributes
+	Syntax
+		cardEditor.setCardAttributes (tableAdr)
+	Parameters
+		tableAdr is the address of an object database table that holds the new attributes for the card.
+	Action
+		Sets the attributes of the target card window.
+	Returns
+		True if a card window is open.
+	Notes
+		This is a low-level verb that forms the basis for higher level verbs which allow you to set the value of individual card attributes.
+		See the DocServer page for cardEditor.getCardAttributes for a list of object attributes.
+		All parameters to the Apple Event behind this verb are optional, therefore you can include only those attributes you want to set in the table, and leave out the ones you want to stay the same.
+		The 'atob' attribute (active text object) is read-only. There's no way to change the active text object from a script.
+	Examples
+		cardEditor.setCardAttributes (@scratchpad.cardatts)
+			// true
+	See Also
+		cardEditor.getCardAttributes
+cardEditor.setCardBackColor
+	Syntax
+		cardEditor.setCardBackColor (color)
+	Parameters
+		color is an rgb value.
+	Action
+		Sets the background color of the target card window.
+	Returns
+		True.
+	Examples
+		cardEditor.setCardBackColor (rgb.set (0, 32000, 0)) «green
+			// true
+	See Also
+		cardEditor.getCardBackColor
+		rgb.set
+cardEditor.setCardGrid
+	Syntax
+		cardEditor.setCardGrid (gridOn, gridVisible, gridUnits)
+	Parameters
+		gridOn is a boolean, if true the card is in "Snap to Grid" mode.
+		gridVisible is a boolean that determines whether or not the grid is visible when editing the card.
+		gridUnits is a number that determines how far apart the "grid stops" are.
+	Action
+		Changes the behavior of Card Editor's grid.
+	Returns
+		True.
+	Examples
+		cardEditor.setCardGrid (true, false, 25) «on, not visible, 25 pixels between stops
+			// true
+	See Also
+		cardEditor.getCardGrid
+cardEditor.setCardSize
+	Syntax
+		cardEditor.setCardSize (width, height)
+	Parameters
+		width is the number of horizontal pixels used to display the card when it's running.
+		height is the number of vertical pixels used to display the card when it's running.
+	Action
+		Sets the dimensions of the card when it's running.
+	Returns
+		True.
+	Notes
+		These values determine the size of the card when it's run by the Iowa Runtime component.
+		The card's size can be edited interactively by dragging the card border in Card Editor.
+	Examples
+		cardEditor.setCardSize (250, 100)
+			// true
+	See Also
+		cardEditor.getCardSize
+cardEditor.setObjectAttributes
+	Syntax
+		cardEditor.setObjectAttributes (name, tableAdr)
+	Parameters
+		name is a string containing the name of an object whose attributes you wish to change.
+		tableAdr is the address of an object database table that holds the new attributes of the object.
+	Action
+		Sets the attributes of the indicated object in the frontmost card window.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		This is a low-level verb that forms the basis for higher level verbs which allow you to set the value of individual object attributes.
+		See the DocServer page for cardEditor.getObjectAttributes for a list of object attributes.
+		All parameters to the Apple Event behind this verb are optional, therefore you can include only those attributes you want to set in the table, and leave out the ones you want to stay the same.
+	Examples
+		cardEditor.setObjectAttributes ("mustard", @scratchpad.atts)
+			// true
+	See Also
+		cardEditor.getObjectAttributes
+cardEditor.setObjectEnabled
+	Syntax
+		cardEditor.setObjectEnabled (name, flag)
+	Parameters
+		name is a string containing the name of an object that you want to enable or disable.
+		flag is a boolean, if true the object is enabled, if false it is disabled.
+	Action
+		Enables or disables the object.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		A disabled object is displayed in gray. The user cannot interact with a disabled object.
+	Examples
+		cardEditor.setObjectEnabled ("item1", false) «disable the object
+			// true
+		cardEditor.setObjectEnabled ("item1", true) «enable the object
+			// true
+	See Also
+		cardEditor.getObjectEnabled
+cardEditor.setObjectFillColor
+	Syntax
+		cardEditor.setObjectFillColor (name, color)
+	Parameters
+		name is a string containing the name of an object whose fill color you want to set.
+		color is an rgb containing the new fill color for the object.
+	Action
+		Sets the fill color of the object.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		The object's fill color is the background color of the interior of the object.
+	Examples
+		cardEditor.setObjectFillColor ("item1", rgb.set (0, 0, 0)) «fill color is black
+			// true
+		cardEditor.setObjectFillColor ("item1", rgb.set (0, 65535, 0)) «fill color is green
+			// true
+		cardEditor.setObjectFillColor ("item1", rgb.set (52428, 52428, 65535)) «light blue
+			// true
+	See Also
+		cardEditor.getObjectFillColor
+		rgb.get
+		rgb.set
+		rgb
+cardEditor.setObjectFlag
+	Syntax
+		cardEditor.setObjectFlag (name, flag)
+	Parameters
+		name is a string containing the name of an object whose flag you want to change.
+		flag is a boolean containing the new value of the object's flag.
+	Action
+		Sets the object's flag.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		The way the flag is used varies according to the object's type. 
+		Buttons: the flag determines if it's the default button or not.
+		Checkboxes: the flag determines if it's checked or not.
+		Radio buttons: the flag determines if it's highlighted.
+	Examples
+		cardEditor.setObjectFlag ("button1", true) «make it the default button
+			// true
+		cardEditor.setObjectFlag ("button1", false) «now it's not the default button
+			// true
+	See Also
+		cardEditor.getObjectFlag
+cardEditor.setObjectFont
+	Syntax
+		cardEditor.setObjectFont (name, fontName, fontSize, fontStyle)
+	Parameters
+		name is a string containing the name of an object whose text you wish to change.
+		fontName is a string containing the name of a Macintosh font.
+		fontSize is a number containing the font size.
+		fontStyle is a number containing the font style.
+	Action
+		Changes the font used to display the object's text.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Examples
+		cardEditor.setObjectFont ("item1", "Palatino", 12, plain)
+			// true
+		cardEditor.setObjectFont ("item1", "Geneva", 9, bold)
+			// true
+		cardEditor.setObjectFont ("item1", "Helvetica", 18, bold + underline)
+			// true
+	See Also
+		cardEditor.getObjectFont
+cardEditor.setObjectFrame
+	Syntax
+		cardEditor.setObjectFrame (name, flag)
+	Parameters
+		name is a string containing the name of an object whose frame you want to draw or not draw.
+		flag is a boolean, if true the object's frame is visible, if false it is not visible.
+	Action
+		Enables or disables the object's frame.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Examples
+		cardEditor.setObjectFrame ("item1", true)
+			// true
+	See Also
+		cardEditor.getObjectFrame
+cardEditor.setObjectFrameColor
+	Syntax
+		cardEditor.setObjectFrameColor (name, color)
+	Parameters
+		name is a string containing the name of an object whose frame color you want to change.
+		color is an rgb containing the new frame color for the object.
+	Action
+		Sets the frame color of the object.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		The object's frame color is the foreground color of the frame of the object.
+	Examples
+		cardEditor.setObjectFrameColor ("item1", rgb.set (0, 32000, 0)) «green
+			// true
+	See Also
+		cardEditor.getObjectFrameColor
+		rgb.get
+		rgb.set
+		rgb
+cardEditor.setObjectJustification
+	Syntax
+		cardEditor.setObjectJustification (name, justification)
+	Parameters
+		name is a string containing the name of an object.
+		justification is a number indicating whether the object is left, right or center-justified.
+	Action
+		Changes the text justification of the object.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		If justification is 0, the text is left justified.
+		If justification is 1, the text is centered.
+		If justification is 2, the text is right justified.
+	Examples
+		cardEditor.setObjectJustification ("item1", 0) «left justified
+			// true
+		cardEditor.setObjectJustification ("item1", 1) «centered
+			// true
+		cardEditor.setObjectJustification ("item1", 2) «right justified
+			// true
+	See Also
+		cardEditor.getObjectJustification
+cardEditor.setObjectLanguage
+	Syntax
+		cardEditor.setObjectLanguage (name, idLanguage)
+	Parameters
+		name is a string containing the name of an object.
+		idLanguage is a string4 containing the identifier of a scripting language.
+	Action
+		Changes the scripting language of the object.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		Scripts written to be executed by Frontier are identified by 'LAND'.
+		Scripts written to be executed by AppleScript are identified by 'ascr'.
+	Examples
+		cardEditor.setObjectLanguage ("item1", 'ascr') «AppleScript will run the script
+			// true
+		cardEditor.setObjectLanguage ("item1", 'LAND') «Frontier will run the script
+			// true
+	See Also
+		cardEditor.getObjectLanguage
+		cardEditor.setObjectScript
+cardEditor.setObjectRect
+	Syntax
+		cardEditor.setObjectRect (name, rectangle)
+	Parameters
+		name is a string containing the name of an object whose rectangle you want to change.
+		rectangle is a rect value containing the new rectangle for the object.
+	Action
+		Changes the rectangle of the object.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		The object rectangle determines where the object is drawn on the card and how large it is.
+	Examples
+		cardEditor.setObjectRect ("item1", rectangle.set (10, 10, 35, 100))
+			// true
+		cardEditor.setObjectRect ("item1", rectangle.set (110, 10, 135, 100))
+			// true
+	See Also
+		cardEditor.getObjectRect
+		rectangle.get
+		rectangle.set
+		rect
+cardEditor.setObjectScript
+	Syntax
+		cardEditor.setObjectScript (name, script)
+	Parameters
+		name is a string containing the name of an object whose linked script you want to change.
+		script is a string containing the new script linked to the object.
+	Action
+		Changes the script linked into the object.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		The way the script is used varies according to the object's type. 
+		For example, when you click on a button, the linked script is executed. 
+		The script of a radio button is used to initialize the text of the button.
+	Examples
+		cardEditor.setObjectScript ("item1", "speaker.beep ()")
+			// true
+	See Also
+		cardEditor.getObjectScript
+		cardEditor.setObjectLanguage
+cardEditor.setObjectSeeThru
+	Syntax
+		cardEditor.setObjectSeeThru (name, flag)
+	Parameters
+		name is a string containing the name of an object.
+		flag is a boolean, if true the object the object becomes see-thru.
+	Action
+		Sets the object's see-thru flag.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Examples
+		cardEditor.setObjectSeeThru ("item1", false)
+			// true
+	See Also
+		cardEditor.getObjectSeeThru
+cardEditor.setObjectShadowDepth
+	Syntax
+		cardEditor.setObjectShadowDepth (name, shadowDepth)
+	Parameters
+		name is a string containing the name of an object.
+		shadowDepth is a number containing the object's drop-shadow depth.
+	Action
+		Changes the shadow depth of the object.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		Some objects look really funny with drop shadows. Please use good taste!
+	Examples
+		cardEditor.setObjectShadowDepth ("item1", 0)
+			// true
+		cardEditor.setObjectShadowDepth ("item1", 3)
+			// true
+	See Also
+		cardEditor.getObjectShadowDepth
+cardEditor.setObjectText
+	Syntax
+		cardEditor.setObjectText (name, text)
+	Parameters
+		name is a string containing the name of an object whose text you want to change.
+		text is a string containing the new text for the object.
+	Action
+		Changes the text displayed in the object.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		The way the text is used varies according to the object's type. 
+		For example, the text of a button is displayed in the button. The text of a radio button is displayed to the right of the button's circle.
+	Examples
+		cardEditor.setObjectText ("item1", "France")
+			// true
+	See Also
+		cardEditor.getObjectText
+cardEditor.setObjectTextColor
+	Syntax
+		cardEditor.setObjectTextColor (name, color)
+	Parameters
+		name is a string containing the name of an object whose text color you want to change.
+		color is an rgb containing the new text color for the object.
+	Action
+		Sets the text color of the object.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		The object's text color is the foreground color of the text drawn inside the object.
+	Examples
+		cardEditor.setObjectTextColor ("item1", rgb.set (32000, 0, 0)) «red
+			// true
+	See Also
+		cardEditor.getObjectTextColor
+		rgb.get
+		rgb.set
+		rgb
+cardEditor.setObjectType
+	Syntax
+		cardEditor.setObjectType (name, type)
+	Parameters
+		name is a string containing the name of an object whose type you want to change.
+		type is a number containing the new type for the object.
+	Action
+		Changes the object's type.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		A table of object types can be found at system.verbs.apps.card.types.
+		This is a very low-level operation, it simply sets the object type field of the object's record and forces a redisplay.
+	Examples
+		cardEditor.setObjectType ("item1", card.types.statictextType)
+			// true
+		cardEditor.setObjectType ("item1", card.types.buttonType)
+			// true
+	See Also
+		cardEditor.getObjectType
+cardEditor.setObjectVisible
+	Syntax
+		cardEditor.setObjectVisible (name, flag)
+	Parameters
+		name is a string containing the name of an object that you want to make visible or invisible.
+		flag is a boolean, if true the object is visible, if false it is invisible.
+	Action
+		Makes the object visible or invisible.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		An invisible object is not displayed. The user cannot interact with an invisible object.
+	Examples
+		cardEditor.setObjectVisible ("item1", false) «hide the object
+			// true
+		cardEditor.setObjectVisible ("item1", true) «show the object
+			// true
+	See Also
+		cardEditor.getObjectText
+cardEditor.updateObject
+	Syntax
+		cardEditor.updateObject (name)
+	Parameters
+		name is a string containing the name of an object that you want to update.
+	Action
+		Updates the display of the object, but does not recalculate it.
+	Returns
+		True if an object with the indicated name exists, false if it doesn't.
+	Notes
+		This verb is used when you set the text attribute of an object and want the card display to reflect the changed text.
+	Examples
+		cardEditor.updateObject ("helpMessage") 
+			// true
+	See Also
+		cardEditor.cleanObject
+
+
+

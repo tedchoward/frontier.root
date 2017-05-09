@@ -1,0 +1,6 @@
+FrontierVcsFile:3:wptx:system.verbs.apps.wordPress.data.enclosureTemplate
+
+<br><br><a href="<%enclosureUrl%>"><b><%enclosureFname%></b></a> (<%enclosureType%>, <%enclosureMegabytes%>)<br /><%pubDateString%>.
+
+
+

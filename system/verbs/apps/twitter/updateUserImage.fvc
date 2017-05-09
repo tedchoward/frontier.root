@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.updateUserImage
+
+on updateUserImage (f, username=nil, password=nil) {
+	«Changes
+		«6/10/09; 8:36:02 PM by DW
+			«Created. Update the user's avatar image. 
+	local (apiurl = "http://twitter.com/account/update_profile_image.xml", code);
+	bundle { //set defaults
+		if username == nil {
+			username = user.twitter.prefs.username};
+		if password == nil {
+			password = string (user.twitter.prefs.password)}};
+	local (xmltext = tcp.httpPostMultipart (apiurl, f, username, password, filePartName:"image", adrCode:@code));
+	xml.compile (xmltext, @xstruct);
+	«scratchpad.xstruct = xstruct
+	return (code == 200)}
+«bundle //test code
+	«dialog.alert (updateUserImage ("ohio:twitterimages:dave.jpg"))
+
+

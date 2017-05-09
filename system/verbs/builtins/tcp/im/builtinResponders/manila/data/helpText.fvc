@@ -1,0 +1,5 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.tcp.im.builtinResponders.manila.data.helpText
+
+Usage: manila [post | flip | homepage | settitle | login | logoff | replace] text...
+
+

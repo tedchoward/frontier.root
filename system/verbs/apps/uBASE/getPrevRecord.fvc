@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.uBASE.getPrevRecord
+
+on getPrevRecord (fnum, key) {
+	return (systemEvent ('ubas', 'recp', 'fref', short (fnum), 'key ', string (key)))}
+
+

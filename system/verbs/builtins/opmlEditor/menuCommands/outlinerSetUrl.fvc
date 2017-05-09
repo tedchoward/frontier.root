@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.outlinerSetUrl
+
+on outlinerSetUrl () {
+	«Changes
+		«10/8/12; 10:06:22 AM by DW
+			«Created.
+	local (adrdata = opmlEditor.worldOutline.init (), url);
+	opmleditor.init ();
+	op.attributes.getone ("url", @url);
+	if dialog.ask ("Set url for \"" + op.getlinetext () + "\"?", @url) {
+		op.attributes.setone ("url", url)}};
+bundle { //test code
+	outlinerSetUrl ()}
+
+

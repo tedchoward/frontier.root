@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.members.compareHashes
+
+on compareHashes (hashString, password, groupName) {
+	«Compare the hash string sent in the cookie to a calculated hash derived from the password and group name stored on the server. Return true if they match, false otherwise.
+		«04/10/00; 11:54:40 AM by PBS
+	
+	local (expectedHash = mainResponder.members.getHash (password, groupName));
+	
+	if hashString == expectedHash {
+		return (true)};
+	
+	return (false)}
+
+

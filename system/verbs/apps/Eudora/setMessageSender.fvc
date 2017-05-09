@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.setMessageSender
+
+on setMessageSender (msgObj, msgSender) {
+	with objectModel, Eudora, eventInfo {
+		return (core.set (id, msgObj.field ["From"], msgSender))}}
+
+

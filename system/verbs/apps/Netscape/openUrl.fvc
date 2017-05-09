@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Netscape.openUrl
+
+on openUrl (s, openUrlIn = nil) { «Loads a URL
+	return (appleEvent (netscape.id, 'GURL', 'GURL', '----', string (s), 'cwin', openUrlIn))}
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.stack.dispose
+
+on dispose (adrStack) {
+	delete (adrstack);
+	return (true)}
+
+

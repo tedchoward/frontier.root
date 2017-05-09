@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.re.grep
+
+on grep (cp, s, flIncludeMatches = true) {
+	kernel (re.grep)}
+
+

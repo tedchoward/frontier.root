@@ -1,0 +1,83 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.newPost
+
+on newPost (text, username=nil, password=nil, maxchars=nil, posturl=nil, source=nil, inResponseTo=nil, adrResponse=nil, latitude=nil, longitude=nil, adruser=nil) {
+	«Changes
+		«4/2/11; 7:40:51 PM by DW
+			«In OAuth version, if adrRespons is non-nil, return the whole struct that Twitter returns.
+		«3/26/11; 11:14:13 AM by DW
+			«Uncomment some pretty important code. 
+		«3/26/11; 9:40:15 AM by DW
+			«Add OAuth support. New optional param -- adruser, if not nil, points to a table (which we create if it doesn't exist) of information about this user, including an OAuth authorization. If it's nil, we do the username and password thing, as we always have. 
+		«11/19/09; 2:01:25 PM by DW
+			«Add optional latitude and longitude params.
+		«8/15/08; 12:35:56 PM by DW
+			«Add optional params that support the new features Twitter announced today (which identi.ca quickly matched). http://groups.google.com/group/twitter-development-talk/browse_thread/thread/f009c76d17199084#
+			«New optional parameter, adrResponse, if non-nil, a table that contains all the info Twitter sends us as a response. We're only returning the id-related info right now, the other stuff seems redundant (we already have it around).
+			«New optional parameter, inResponseTo, if non-nil, this post is in response to that status id (doh).
+		«7/3/07; 6:58:41 PM by DW
+			«New optional parameter, source. If not nil, we put a source parameter on the request, which corresponds to as registered app name. If present, when Twitter displays the status message it will include the name of the source app along with a link to a page describing the app.
+	twitter.init ();
+	
+	bundle { //try doing it the OAuth way, 3/26/11 by DW
+		if adruser != nil {
+			if twitter.oAuth.initUser (adruser) {
+				try {
+					local (adrapp = @adruser^.oauth, params, xmltext);
+					new (tabletype, @params);
+					params.status = text;
+					OAuth.authenticatedCall (user.twitter.prefs.posturl, @params, adrapp^.consumerkey, adrapp^.consumersecret, adrapp^.accesstoken, adrapp^.accesstokensecret, @xmltext, "POST");
+					wp.newtextobject (xmltext, @scratchpad.xmltext);
+					if adrresponse != nil { //4/2/11 by DW
+						xml.compile (xmltext, adrresponse)};
+					«extractdata (xmltext)
+					return (true)}};
+			return (false)}};
+	
+	bundle { //set defaults
+		if username == nil {
+			username = user.twitter.prefs.username};
+		if password == nil {
+			password = string (user.twitter.prefs.password)};
+		if maxchars == nil {
+			maxchars = user.twitter.prefs.maxchars};
+		if posturl == nil {
+			posturl = user.twitter.prefs.posturl}};
+	if sizeof (text) > maxchars {
+		text = string.mid (text, 1, maxchars)};
+	local (urllist = string.urlsplit (posturl));
+	local (path = urllist [3] + "?status=" + string.urlencode (text));
+	if source != nil {
+		path = path + "&source=" + string.urlencode (source)};
+	if inResponseTo != nil { //8/15/08 by DW
+		path = path + "&in_reply_to_status_id=" + inResponseTo};
+	if latitude != nil { //11/19/09 by DW
+		path = path + "&lat=" + latitude};
+	if longitude != nil { //11/19/09 by DW
+		path = path + "&long=" + longitude};
+	try {
+		local (tc = clock.ticks (), timeoutticks = 60 * user.twitter.prefs.timeOutSecs);
+		local (s = string.httpResultSplit (tcp.httpClient (server:urllist [2], path:path, username:username, password:password,  method:"POST", timeoutticks:timeoutticks, flmessages:false)));
+		«wp.newtextobject (s, @scratchpad.twitterresult)
+		if adrresponse != nil { //8/15/08 by DW
+			local (xstruct);
+			new (tabletype, adrresponse);
+			xml.compile (s, @xstruct);
+			local (adrstatus = xml.getaddress (@xstruct, "status"));
+			adrresponse^.id = xml.getvalue (adrstatus, "id");
+			adrresponse^.inReplyToStatusId = xml.getvalue (adrstatus, "in_reply_to_status_id");
+			adrresponse^.inReplyToUserId = xml.getvalue (adrstatus, "in_reply_to_user_id")};
+		user.twitter.stats.whenLastPost = clock.now ();
+		user.twitter.stats.ctPosts++;
+		user.twitter.stats.ctSecsLastPost = double (clock.ticks () - tc) / 60;
+		user.twitter.stats.lastPostError = "";
+		return (true)}
+	else {
+		user.twitter.stats.lastPostError = tryerror;
+		return (false)}};
+bundle { //test code
+	newpost ("Excuse the interruption. This is just a test post.", adruser:@config.radioReallySimple.users.bullmancuso);
+	return;
+	local (lat = random (-90, 90), long = random (-180, 180));
+	newpost ("This twit has geocoding info, if it works. :-)", source:"Lucky Lou", latitude:lat, longitude:long)}
+
+

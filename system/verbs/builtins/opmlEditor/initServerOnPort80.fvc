@@ -1,0 +1,64 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.initServerOnPort80
+
+on initServerOnPort80 () {
+	«Changes
+		«8/15/09; 6:50:29 PM by DW
+			«This procedure is called from opmlEditor.init, therefore it is a mistake to call xxx from this procedure. Commented the call.
+		«3/18/09; 6:56:12 PM by DW
+			«Now that the default responder is calling mainresponder.respond, we don't need a special responder for port 80. If it exists, delete it; otherwise don't install it.
+		«8/4/08; 9:13:19 AM by DW
+			«Created. 
+	«opmlEditor.init () //8/15/09 by DW -- commented
+	if user.opmlEditor.prefs.flServerOnPort80 {
+		if not system.temp.opmlEditor.port80.flStarted {
+			bundle { //set up an http daemon for port 80
+				local (adrd = @user.inetd.config.http3);
+				if not defined (adrd^) {
+					adrd^ = opmlEditor.data.daemon;
+					if system.environment.isMac { //6/4/06 by DW
+						adrd^.port = 5338};
+					if user.opmlEditor.prefs.ipAddressPort80 != "" {
+						adrd^.ip = user.opmlEditor.prefs.ipAddressPort80};
+					filemenu.save ();
+					inetd.startone (adrd)}};
+			bundle { //set up a responder that calls mainResponder.respond for requests on port 80
+				local (adrr = @user.webserver.responders.mainResponderOnPort80);
+				«if not defined (adrr^) //commented, 3/18/09 by DW
+					«adrr^ = @opmlEditor.data.responder
+					«if system.environment.isMac //6/4/06 by DW
+						«opmlServer.data.responder.condition = "(port == 5338)"
+					«filemenu.save ()
+				if defined (adrr^) { //3/18/09 by DW
+					delete (adrr)}};
+			bundle { //on Mac only, forward from port 80 to port 5338
+				if system.environment.isMac { //6/4/06 by DW
+					on macPortForward (sourcePort = 80, destinationPort = 5338) {
+						«Changes
+							«6/4/06; 8:27:08 AM by PM
+								«Adapted from userland.portForward.
+						local (sourceAddr="any");
+						if not defined (user.prefs.portForwardingAdminPassword) {
+							local (adminPassword = "");
+							Frontier.bringToFront ();
+							if not dialog.getPassword ("Admin password (for port forwarding)?", @adminPassword) {
+								return (false)};
+							user.prefs.portForwardingAdminPassword = binary (adminPassword);
+							filemenu.save ()};
+						
+						local (pw = string (user.prefs.portForwardingAdminPassword), s);
+						s = sys.unixShellCommand ("echo \"" + pw + "\" | sudo -S /usr/sbin/sysctl -w net.inet.ip.forwarding=1");
+						if s == "" {
+							scriptError ("Can't start up the OPML Server because port forwarding failed.")};
+						s = s + sys.unixShellCommand ("sudo /sbin/ipfw add 102 fwd 127.0.0.1," + destinationPort + " tcp from any to " + sourceAddr + " " + sourcePort + " in");
+						s = s + sys.unixShellCommand ("sudo -K"); //drop our privs
+						return (true)};
+					macPortForward (80, 5338)}};
+			system.temp.opmlEditor.port80.flStarted = true}}
+	else {
+		if system.temp.opmlEditor.port80.flStarted {
+			inetd.stopone (@user.inetd.config.http3);
+			system.temp.opmlEditor.port80.flStarted = false}}}
+«bundle //test code
+	«initServerOnPort80 ()
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.memAvail
+
+on memAvail () {
+	return (appleEvent (cardEditor.id, 'IOWA', 'mema'))}
+
+

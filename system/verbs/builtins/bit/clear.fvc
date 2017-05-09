@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.bit.clear
+
+on clear (num, bit) {
+	kernel (bit.clear)}
+
+

@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.utilities.setCookieDomain
+
+on setCookieDomain (domain) {
+	«Changes
+		«8/28/12; 8:52:35 AM by DW
+			«We were setting the cookie domain to the root domain, but now we set it to the full domain. For example we'd turn hello.goodbye.com into goodbye.com. This meant the value of cookies would apply everywhere on goodbye.com. That immediately caused problems for me because I was setting cookies for all of scripting.com. So instead we'll now set the cookie domain to hello.goodbye.com.
+		«8/27/12; 4:03:27 PM by DW
+			«We're setting the external name to domain, now set the cookie domain accordingly.
+				«http://worknotes.scripting.com/august2012/82712ByDw/validateExternalName
+	on getrootdomain (domain) {
+		local (ct = 0, i);
+		for i = sizeof (domain) downto 1 {
+			if domain [i] == "." {
+				if ct++ == 1 {
+					return (string.delete (domain, 1, i))}}};
+		return (domain)};
+	if defined (radio2Suite) {
+		if defined (config.radio2.prefs.domain) and (sizeof (config.radio2.prefs.domain) > 0) {
+			return}};
+	local (adrgroup = opmleditor.member.initGroup ());
+	adrgroup^.cookieDomain = string.trimwhitespace (domain)}; // = getrootdomain (domain)
+bundle { //test code
+	setCookieDomain ("hello.goodbye.com")}
+
+

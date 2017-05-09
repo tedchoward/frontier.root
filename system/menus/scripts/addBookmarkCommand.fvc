@@ -1,0 +1,42 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.addBookmarkCommand
+
+«Add an item to the user's Bookmarks menu.
+	«Changes:
+		«9/20/99; 3:26:56 PM by PBS
+			«If the item is in a guest database, strip the leading path from the title.
+			«Make sure the guest database is open before editing the object.
+		«10/11/99; 5:45:31 PM by PBS
+			«Call string.popFileFromAddress, rather than including code for stripping the file path from the address.
+
+local (adr);
+bundle { //determine the object adr of the thing to be added
+	try {
+		adr = table.getCursorAddress ()}
+	else {
+		scriptError ("Can't add to the Bookmarks menu because the front window doesn't contain an addressable object.")}};
+
+local (adrMenu = @user.menus.bookmarkMenu);
+local (title = string (adr));
+local (logic);
+
+bundle { //PBS 9/20/99: if item is in guest database, strip the path from the address, and add fileMenu.open to the logic.
+	if table.inGuestDatabase (adr) {
+		«PBS 9/20/99: first strip the path part from the address.
+		title = string.popFileFromAddress (adr); //PBS 10/11/99: call this verb, new in 6.1, to delete the file path part of the address
+		
+		local (f = window.getFile (table.getRootAddress (adr))); //get the file path to the gdb
+		logic = "fileMenu.open (\"" + string.replaceAll (f, "\\", "\\\\") + "\", true);"}}; //open the gdb as hidden
+
+logic = logic + "edit (@" + string (adr) + ")";
+
+local (menuName); //PBS 9/21/99: the name of the Bookmarks menu
+bundle { //PBS 9/21/99: get the name of the Bookmarks menu
+	local (oldTarget = target.set (adrMenu));
+	op.firstSummit ();
+	menuName = op.getLineText ();
+	try {target.set (oldTarget)}};
+
+if dialog.confirm ("Add \"" + title + "\" to the " + menuName + " menu?") { //PBS 9/20/99: use the title in the prompt
+	menu.addMenuCommand (adrMenu, menuName, title, logic)}
+
+

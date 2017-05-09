@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.tableReplace
+
+on tableReplace (s, adrtable) {
+	«Changes
+		«5/28/12; 7:59:16 PM by DW
+			«A version of string.multipleReplaceAll with the defaults we always call it with.
+	return (string.multiplereplaceall (s, adrtable, false, "<%", "%>"))}
+«bundle //test code
+	«tableReplace ()
+
+

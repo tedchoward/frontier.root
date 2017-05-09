@@ -1,0 +1,41 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.re.docs.DocServer.match
+
+#title "re.match"
+#renderOutlineWith "docServerRenderer"
+Syntax
+	re.match (cp, s, ix, ct, adrMatchInfoTable, flMakeGroups, flMakeNamedGroups)
+Params
+	cp is a binary param containing the compiled pattern that was returned by a call to "re.compile".
+	s is a string param containing the target string.
+	ix is an optional number param determining at what position the attempts to match the pattern against the target string should start. Defaults to 1, i.e. the first character of the target string.
+	ct is an optional number param determining at how many successive character positions the match will be attempted. Defaults to infinity, i.e. all of the target string.
+	adrMatchInfoTable is an optional address param determining where a match info table will be created containing detailed information about a match. Defaults to nil, i.e. no information will be returned.
+	flMakeGroups is an optional boolean param determining whether the match info table will contain information about sub-strings captured by parentheses in the pattern. Defaults to false.
+	flMakeNamedGroups is an optional boolean param determining whether the match info table will contain information about sub-strings captured by named parentheses in the pattern. Defaults to false.
+Action
+	Attempts to match the compiled pattern against successive character positions in the target string, starting at position ix.
+Returns
+	The character position where the match was successful, or zero if no match was found.
+Examples
+	re.match (re.compile ("a+b+"), "123abc456")
+		// 4
+	local (mi)
+	re.match (re.compile ("(a+)(b+)"), "123abc456", adrMatchInfoTable:@mi, flMakeGroups:true)
+		// 4  //mi will contain detailed information about the matched string and the captured groups
+Errors
+	An error will be generated if the cp param is not a valid byte-code representation of a regular expression.
+Notes
+	If adrMatchInfoTable contains a valid address, a new match info table will be created at that address containing at least three elements: a number element named "matchOffset" containing the character position of the successful match, a number element named "matchLength" containing the length of the matched string, and a string element named "matchString" containing the matched string.
+	If adrMatchInfoTable contains a valid address and flMakeGroups is true, the match info table will contain three additional elements: a list of numbers named "groupOffsets" containing the character positions of the captured sub-strings, a list of numbers named "groupLengths" containing the lengths of the captured sub-strings, and a list of strings named "groupStrings" containing the captured sub-strings.
+	If adrMatchInfoTable contains a valid address and flMakeNamedGroups is true, the match info table will also contain a sub-table named "namedGroups" which in turn contains a sub-table for each named group in the pattern. The name of each sub-table is the name of the group given in the pattern. Each sub-table contains three elements: a number element named "matchOffset" containing the character position of the captured sub-string, a number element named "matchLength" containing the length of the captured sub-string, and a string element named "matchString" containing the captured sub-string.
+	The same layout of the match info table is also used by "re.replace" and "re.visit".
+	The kernel implementation of the re verbs is based on the Perl Compatible Regular Expressions (PCRE) library. This is the same library used by Python, Apache, and PHP. Mandatory excerpt from the PCRE license:
+		Regular expression support is provided by the PCRE library package, which is open source software, written by Philip Hazel, and copyright by the University of Cambridge, England.
+		The source code for the PCRE library is available for download from ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/
+See Also
+	"re.compile"
+	"re.replace"
+	"re.visit"
+
+
+

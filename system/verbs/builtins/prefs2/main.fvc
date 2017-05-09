@@ -1,0 +1,37 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.prefs2.main
+
+on main (adrprefsoutline, adrtoolprefs=nil) {
+	«Changes
+		«7/17/12; 1:05:41 PM by DW
+			«Allow for a new path param.
+				«http://worknotes.scripting.com/july2012/71712ByDw/pointingToPrefsPages
+		«9/16/11; 6:51:14 PM by DW
+			«New optional parameter, adrtoolprefs. If non-nil it contains a set of addresses of outlines for tools that have their own system-level (as opposed to user-level) prefs.
+		«9/1/11; 12:37:54 PM by DW
+			«Created.
+	local (pta = html.getpagetableaddress (), args);
+	scratchpad.prefsparams = pta^;
+	
+	new (tabletype, @args);
+	webserver.parseargs (pta^.searchargs, @args);
+	
+	if sizeof (args) == 0 { //no args
+		pta^.title = "Preferences";
+		return (prefs2.viewIndex (adrprefsoutline, adrtoolprefs))}
+	else {
+		local (catnum, panelnum, titleparam=nil, pathparam = "");
+		if defined (args.page) {
+			catnum = number (string.nthfield (args.page, ".", 1));
+			panelnum = number (string.nthfield (args.page, ".", 2))}
+		else {
+			if defined (args.title) {
+				titleparam = args.title}
+			else {
+				if defined (args.path) { //7/17/12 by DW
+					pathparam = args.path}}};
+		return (prefs2.viewPanel (adrprefsoutline, catnum, panelnum, titleparam, adrtoolprefs, pathparam))}};
+bundle { //test code
+	html.setpagetableaddress (@scratchpad.prefsparams);
+	main ()}
+
+

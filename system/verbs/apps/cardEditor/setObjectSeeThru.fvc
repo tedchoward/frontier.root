@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.setObjectSeeThru
+
+on setObjectSeeThru (name, flag) {
+	new (tableType, @atts);
+	atts.tran = boolean (flag);
+	return (cardEditor.setObjectAttributes (name, @atts))}
+
+

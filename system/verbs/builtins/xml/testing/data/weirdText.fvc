@@ -1,0 +1,53 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.xml.testing.data.weirdText
+
+<?XML VERSION="1.0"?>
+
+<!--This file tests strange cases and boundary conditions-->
+
+<funnyStuff>
+
+	<bases count="4"></bases>
+
+	<state capital="Sacramento">California</state>
+
+	<baseballTeam league="National">
+
+		<name>San Francisco Giants</name>
+
+		<!--This is a comment-->
+
+		</baseballTeam>
+
+	<thisSpaceReserved></thisSpaceReserved>
+
+	<thisSpaceToo></thisSpaceToo>
+
+	<someSpecialTypes>
+
+		<domedStadium><boolean>0</boolean></domedStadium>
+
+		<averageBeersPerUser><double>2.30208</double></averageBeersPerUser>
+
+		<aVerySmallNumber><i4>254</i4></aVerySmallNumber>
+
+		<stadiumCapacity><i4>30000</i4></stadiumCapacity>
+
+		<stadiumCapacity><i4>60000</i4></stadiumCapacity>
+
+		</someSpecialTypes>
+
+	<baseballTeam league="American">
+
+		<name>Angels</name>
+
+		</baseballTeam>
+
+	<vacation cost="$2098" place="Hawaii" when="2002">Nice!</vacation>
+
+	</funnyStuff>
+
+<!--This is a comment-->
+
+
+
+

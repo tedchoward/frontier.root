@@ -1,0 +1,70 @@
+FrontierVcsFile:3:scpt:user.html.renderers.tableOutliner
+
+on tableOutliner (adroutline) {
+	local (htmltext = "");
+	on add (s) {
+		htmltext = htmltext + s + cr};
+	op.firstsummit ();
+	op.fullexpand ();
+	on addcell () {
+		local (s = "<td>");
+		if firstrow {
+			s = s + "<b>"};
+		local (flcenter = centeredcols contains (colnum++));
+		if flcenter {
+			s = s + "<center>"};
+		s = s + op.getlinetext ();
+		if flcenter {
+			s = s + "</center>"};
+		if firstrow {
+			s = s + "</b>"};
+		s = s + "</td>";
+		add (s)};
+	local (firstrow = true, centeredcols = {});
+	with html.getPageTableAddress ()^ { //PBS 06/17/00: don't use html.data.adrPageTable
+		local (s = "<table border=");
+		if defined (border) {
+			s = s + border}
+		else {
+			s = s + "0"};
+		
+		s = s + " width=\"";
+		if defined (width) {
+			s = s + width}
+		else {
+			s = s + "75%"};
+		
+		s = s + "\" cellpadding=\"";
+		if defined (cellpadding) {
+			s = s + cellpadding}
+		else {
+			s = s + "0"};
+		
+		s = s + "\">";
+		add (s);
+		if defined (centeredColumns) {
+			centeredcols = centeredColumns}};
+	loop {
+		add ("<tr>");
+		colnum = 1;
+		addcell ();
+		if op.go (right, 1) {
+			loop {
+				addcell ();
+				if not op.go (down, 1) {
+					break}};
+			op.go (left, 1)};
+		if not op.go (down, 1) {
+			break};
+		firstrow = false};
+	add ("</table>");
+	return (htmltext)}
+«bundle «test code
+	«local (name = "table1")
+	«table.copy (@user.websites.frontier.testing.[name], @scratchpad)
+	«target.set (@scratchpad.[name])
+	«edit (@scratchpad.[name])
+	«webbrowser.displaytext (html.data.standardmacros.renderobject (@scratchpad.[name]))
+	«target.clear ()
+
+

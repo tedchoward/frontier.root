@@ -1,0 +1,83 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.getTimeLine
+
+on getTimeLine (adrtimeline, flfriends = true, username = nil, password = nil, timelineurl = nil, adruser=nil) {
+	«Changes
+		«7/22/12; 7:24:15 AM by DW
+			«Updated to work with the OAuth-based authentication system. 
+				«http://worknotes.scripting.com/july2012/72212ByDw/twittergettimelineUpdated
+		«5/21/09; 3:30:06 PM by DW
+			«Call twitter.extractUserInfo to get the user info from the status. 
+		«5/9/09; 11:02:04 AM by DW
+			«Gather three more bits of info from the profile: userFollowedBy, userFollows, userCtStatuses.
+		«8/16/08; 10:32:18 AM by DW
+			«Add support for inReplyToStatusId and inReplyToUserId in timelines.
+		«12/8/07; 4:55:27 PM by DW
+			«Copy the user's "protected" value into the timeline table.
+		«6/24/07; 1:36:22 PM by DW
+			«They dropped support for relative_created_at. I put the code that extracts it in a try block.
+				«http://groups.google.com/group/twitter-development-talk/browse_thread/thread/d5a16cf4a9dc8dca/b25986a8f7635831?q=relative&lnk=ol&
+	twitter.init ();
+	bundle { //set defaults
+		if username == nil {
+			username = user.twitter.prefs.username};
+		if password == nil {
+			password = string (user.twitter.prefs.password)};
+		if timelineurl == nil {
+			if flfriends {
+				timelineurl = user.twitter.prefs.friendstimelineurl}
+			else {
+				timelineurl = user.twitter.prefs.publictimelineurl}}};
+	local (urllist = string.urlsplit (timelineurl));
+	try {
+		local (s = "", tc = clock.ticks (), timeoutticks = 60 * user.twitter.prefs.timeOutSecs);
+		if adruser != nil { //7/22/12 by DW
+			if twitter.oAuth.initUser (adruser) {
+				try {
+					local (adrapp = @adruser^.oauth, params);
+					new (tabletype, @params);
+					OAuth.authenticatedCall (timelineurl, @params, adrapp^.consumerkey, adrapp^.consumersecret, adrapp^.accesstoken, adrapp^.accesstokensecret, @s, "GET")}}};
+					«wp.newtextobject (s, @scratchpad.xmltext)
+					«xml.compile (s, @scratchpad.myfuckingxstruct)
+		if sizeof (s) == 0 {
+			s = string.httpResultSplit (tcp.httpClient (server:urllist [2], path:urllist [3], username:username, password:password,  method:"GET", timeoutticks:timeoutticks, flMessages:false))};
+		user.twitter.stats.whenLastGet = clock.now ();
+		user.twitter.stats.ctGets++;
+		user.twitter.stats.ctSecsLastGet = double (clock.ticks () - tc) / 60;
+		bundle { //extract data from the xml in adrtimeline^
+			local (xstruct, adrstatus);
+			xml.compile (s, @xstruct);
+			new (tabletype, adrtimeline);
+			«scratchpad.xstruct = xstruct
+			local (adrstatuses = xml.getaddress (@xstruct, "statuses"));
+			for adrstatus in adrstatuses {
+				if nameof (adrstatus^) contains "status" {
+					local (id = xml.getvalue (adrstatus, "id"));
+					local (adrsub = @adrtimeline^.[id]);
+					new (tabletype, adrsub);
+					adrsub^.createdAt = xml.getvalue (adrstatus, "created_at");
+					adrsub^.text = xml.getvalue (adrstatus, "text");
+					try {adrsub^.relativeCreatedAt = xml.getvalue (adrstatus, "relative_created_at")}; //6/24/07; 1:35:00 PM by DW
+					local (adruser = xml.getaddress (adrstatus, "user"));
+					«adrsub^.userId = xml.getvalue (adruser, "id")
+					«adrsub^.userName = xml.getvalue (adruser, "name")
+					«adrsub^.userScreenName = xml.getvalue (adruser, "screen_name")
+					«adrsub^.userLocation = xml.getvalue (adruser, "location")
+					«adrsub^.userDescription = xml.getvalue (adruser, "description")
+					«adrsub^.userProfileImageUrl = xml.getvalue (adruser, "profile_image_url")
+					«adrsub^.userUrl = xml.getvalue (adruser, "url")
+					«adrsub^.userFollowedBy = number (xml.getvalue (adruser, "followers_count")) //5/9/09 by DW
+					«adrsub^.userFollows = number (xml.getvalue (adruser, "friends_count")) //5/9/09 by DW
+					«adrsub^.userCtStatuses = number (xml.getvalue (adruser, "statuses_count")) //5/9/09 by DW
+					«adrsub^.flProtected = xml.getvalue (adruser, "protected") //12/8/07 by DW
+					twitter.extractUserInfo (adrstatus, adrsub, false); //5/21/09 by DW
+					adrsub^.inReplyToStatusId = xml.getvalue (adrstatus, "in_reply_to_status_id"); //8/16/08 by DW
+					adrsub^.inReplyToUserId = xml.getvalue (adrstatus, "in_reply_to_user_id")}}}; //8/16/08 by DW
+		user.twitter.stats.lastGetError = "";
+		return (true)}
+	else {
+		user.twitter.stats.lastGetError = tryerror;
+		return (false)}};
+bundle { //test code
+	getTimeLine (@scratchpad.twittertimeline, username:"davewiner", password:system.temp.twpass)}
+
+

@@ -1,0 +1,73 @@
+FrontierVcsFile:3:scpt:suites.webEdit.commands.sendToServer
+
+on sendToServer () {
+	«Changes
+		«3/7/11; 9:04:39 PM by DW
+			«Do a better job of cleaning up the address before adding it to the recentChanges table.
+		«3/6/11; 11:47:41 AM by DW
+			«The recentChanges outline becomes a table.
+		«3/2/11; 6:51:18 PM by DW
+			«Record the send in user.webEdit.stats.recentChanges, if enabled.
+	local (adrObject, s, note = "", now = clock.now ());
+	bundle { //get the currently selected object
+		adrObject = webEdit.getSelectedObject ();
+		if adrObject == false {
+			return (false)}};
+	
+	local (currentServer = webEdit.getCurrentServer ());
+	local (adrPrefs = @user.webEdit.servers.[currentServer]);
+	
+	if (defined (adrPrefs^.flNotes)) and (adrPrefs^.flNotes) {
+		if not (dialog.ask ("Change Note:", @note)) {
+			return (false)}};
+	
+	s = webEdit.sendObjectToServer (adrObject, note);
+	
+	bundle { //init user.webedit.stats/prefs, 3/2/11 by DW
+		if not defined (user.webEdit.stats) {
+			new (tableType, @user.webEdit.stats)};
+		bundle { //user.webEdit.stats.recentChanges
+			if defined (user.webEdit.stats.recentChanges) {
+				if typeof (user.webEdit.stats.recentChanges) == outlinetype {
+					table.rename (@user.webEdit.stats.recentChanges, "recentChangesOutline");
+					new (tabletype, @user.webEdit.stats.recentChanges)}}
+			else {
+				new (tabletype, @user.webEdit.stats.recentChanges)}};
+		if not (defined (user.webEdit.prefs.flKeepRecentChangesOutline)) {
+			user.webEdit.prefs.flKeepRecentChangesOutline = false}};
+	bundle { //add the change to recentChanges table, 3/6/11 by DW
+		if user.webEdit.prefs.flKeepRecentChangesOutline {
+			local (nameobject);
+			bundle { //set nameobject
+				local (s = string.popFileFromAddress (adrObject), adr);
+				for adr in @system.paths {
+					if s beginswith adr^ {
+						s = string.delete (s, 1, sizeof (adr^) + 1);
+						break}};
+				if s beginswith "suites." {
+					s = string.delete (s, 1, sizeof ("suites."))};
+				nameobject = s};
+			local (adr = @user.webEdit.stats.recentChanges.[nameobject]);
+			if not defined (adr^) {
+				new (tabletype, adr);
+				adr^.ct = 0};
+			adr^.ct++;
+			adr^.when = clock.now ()}};
+			«bundle //old code, for outline
+				«local (oldtarget = target.set (@user.webEdit.stats.recentChanges))
+				«op.firstsummit ()
+				«if string.trimwhitespace (op.getlinetext ()) == ""
+					«op.setlinetext (nameobject)
+				«else
+					«op.insert (nameobject, up)
+				«op.insert (now, right)
+				«op.go (left, 1)
+				«op.collapse ()
+				«target.set (oldtarget)
+	
+	webEdit.notify (s);
+	return (true)};
+bundle { //test code
+	sendToServer ()}
+
+

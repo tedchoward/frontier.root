@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.outliner.showAttribute
+
+on showAttribute (attname) {
+	local (atts);
+	op.attributes.getall (@atts);
+	local (att = atts.[attname]);
+	if att == "" {
+		att = "None."};
+	dialog.notify (att)}
+
+

@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.wordPress.init
+
+on init () {
+	«Changes
+		«10/28/09; 9:01:39 AM by DW
+			«Created. 
+	local (adrdata = @config.wordPress);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)}};
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)}};
+	if not defined (adrdata^.sites) {
+		new (tabletype, @adrdata^.sites)};
+	bundle { //temp table
+		if not defined (system.temp.wordPress) {
+			new (tabletype, @system.temp.wordPress)}};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

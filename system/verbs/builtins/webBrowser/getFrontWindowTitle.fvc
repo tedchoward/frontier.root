@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.getFrontWindowTitle
+
+on getFrontWindowTitle () {
+	case sys.os () {
+		"MacOS" {
+			local (windowlist, windowinfo);
+			windowlist = webBrowser.getWindowList ();
+			if sizeof (windowlist) == 0 {
+				return ("")};
+			windowinfo = webBrowser.getWindowInfo (windowlist [1]);
+			local (title = windowinfo [2]);
+			if user.webBrowser.currentid == Netscape.id {
+				title = title - "Netscape: "};
+			return (title)}}}
+
+

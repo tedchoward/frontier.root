@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.FilemakerLib.unlockDB
+
+on unlockDB (db) {
+	return (semaphores.unLock (db))}
+
+

@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.menu.importSuite
+
+on importSuite (adr, menustring) {
+	system.menus.buildSuitesSubMenu ();
+	«if not Frontier.isRuntime ()
+		«local (s = "menu.addSuite (@suites." + nameOf (adr^)  + ")")
+		«menu.addMenuCommand (@system.menus.suitesMenu, "Suites", menustring, s)
+	return (true)}
+
+

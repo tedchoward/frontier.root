@@ -1,0 +1,411 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Eudora.data.DocServerSource
+
+Eudora.attachFiles
+	Syntax
+		 attachFiles (msgObj, Documents, spooling)
+	Parameters
+		msgObj Is an Object Specifier to a Eudora Message
+		documents is a file, or list of files to attach to the message
+		[spooling]  True to make Eudora copy the document and attach the copy, and delete the copy when the message is deleted.
+	Action
+		Attaches the a file or list of files to a specified message
+	Returns
+		True if successful
+	Examples
+		with objectModel, Eudora, eventInfo
+			local(f)
+			file.getFileDialog("Choose a file to attach to current message",@f,0)
+			attachFiles(message[""],f)
+Eudora.close
+	Syntax
+		 close (obj)
+	Parameters
+		obj is the object to close
+	Action
+		Close an object
+Eudora.closeMessage
+	Syntax
+		 closeMessage (msgObj)
+	Parameters
+		msgObj Is an Object Specifier to a Eudora Message
+	Action
+		Closes the specified message
+	Returns
+		
+	Examples
+		
+Eudora.connect
+	Syntax
+		 connect (sendMail, checkMail, wait)
+	Parameters
+		[sending]  -- true to make eudora send queued messages
+		[checking]  -- true to make eudora check for mail
+		[wait]  -- true to make eudora wait for idle time before checking
+	Action
+		Connect to the mail server and transfer mail
+	Returns
+		True if successful
+	Examples
+		with objectModel, Eudora, eventInfo
+			connect()
+		
+		with objectModel, Eudora, eventInfo
+			connect(true,wait:true)
+Eudora.count
+	Syntax
+		 count (obj, each)
+	Parameters
+		obj is the object containing the items you wish to count
+		each is the type of object you wish to count
+	Action
+		Return the number of elements of a particular class within an object
+	Returns
+		Number of items in the object of the class specified
+	Examples
+		with objectModel, Eudora, eventInfo
+			connect(mailFolder[""].mailbox["In"],message)
+				«35
+		
+		with objectModel, Eudora, eventInfo
+			connect(mailFolder[""],mailbox)
+				«4
+Eudora.createMessage
+	Syntax
+		 createMessage (whichMailFolder, whichMailBox)
+	Parameters
+		whichMailFolder is a folder containing mailboxes - if none is supplied the default Eudora folder is used
+		whichMailBox is a Eudora mailbox name (not object).  If none is supplied the "Out" mailbox is used
+	Action
+		Creates a new message at the specified location
+	Returns
+		True if successful
+	Examples
+		with objectModel, Eudora, eventInfo
+			createMessage()
+Eudora.delete
+	Syntax
+		 delete (obj)
+	Parameters
+		obj is the object which you wish to delete
+	Action
+		Delete an object item
+	Returns
+		True if successful
+	Examples
+		with objectModel, Eudora, eventInfo
+			delete(mailfolder[""].mailbox["In"].message[4])
+Eudora.duplicate
+	Syntax
+		 duplicate (obj, duplicateTo)
+	Parameters
+		obj is the object (usually a message) that you want to duplicate
+		duplicateTo is a location reference to where you want the duplicate to go
+	Action
+		Make a duplicate object
+	Returns
+		And object specifier to the duplicate message
+	Examples
+		with objectModel, Eudora, eventInfo
+			duplicate(mailfolder[""].mailbox["In"].message[2],endOf(mailfolder[""].mailbox["trash"]))
+Eudora.exists
+	Syntax
+		 exists (obj)
+	Parameters
+		obj is the object whose existance you wish to check
+	Action
+		Verify if an object exists
+	Returns
+		True if the object exists, false otherwise
+	Examples
+		with objectModel, Eudora, eventInfo
+			exists(mailfolder[""].mailbox["In"].message[1])
+Eudora.fetchurl
+	Syntax
+		 fetchurl (x)
+	Parameters
+		x the URL to fetch (finger/ph/mailto)
+	Action
+		Return the contents of a URL.
+	Returns
+		to the contents of the URL
+	Examples
+		""
+Eudora.forward
+	Syntax
+		 forward (obj)
+	Parameters
+		obj is the message to forward
+	Action
+		Forward a message
+	Returns
+		reference to forwarded message
+	Examples
+		with objectModel, Eudora, eventInfo
+			forward(mailfolder[""].mailbox["In"].message[1])
+Eudora.get
+	Syntax
+		 get (obj)
+	Parameters
+		obj is the object whose data is to be returned
+	Action
+		Get the data for an object
+	Returns
+		anything  -- the data from the object
+	Examples
+		with objectModel, Eudora, eventInfo
+			get(mailfolder[""].mailbox["In"].message[1].subject)
+Eudora.getSelectedText
+	Syntax
+		 getSelectedText ()
+	Parameters
+		None
+	Action
+		""
+	Returns
+		The currently selected text
+	Examples
+		local(x)
+		x=eudora.getSelectedText()
+Eudora.getSignature
+	Syntax
+		getSignature () 
+	Parameters
+		None
+	Action
+		Returns the current standard signature
+	Returns
+		Returns the current standard signature
+	Examples
+		with objectModel, Eudora, eventInfo
+			local(x)
+			x=getSignature()
+Eudora.getAlternateSignature
+	Syntax
+		getAlternateSignature () 
+	Parameters
+		None
+	Action
+		Returns the current alternate signature
+	Returns
+		Returns the current alternate signature
+	Examples
+		with objectModel, Eudora, eventInfo
+			local(x)
+			x=getAlternateSignature()
+Eudora.geturl
+	Syntax
+		 geturl (x)
+	Parameters
+		x is the URL to display (finger/ph/mailto)
+	Action
+		Display the contents of a URL.
+	Returns
+		
+	Examples
+		
+Eudora.make
+	Syntax
+		 make (new, at, withData)
+	Parameters
+		new is the class of object you wish to create
+		at is the location at which to insert the element 
+		[withData] is the initial data for the element
+	Action
+		Make a new element
+	Returns
+		A reference to the new element
+	Examples
+		with objectModel, Eudora, eventInfo
+			make(message,endOf(mailfolder[""].mailbox["Out"])
+Eudora.move
+	Syntax
+		 move (obj, moveTo)
+	Parameters
+		obj is the object to be moved
+		moveTo is the location that the object is to be moved to
+	Action
+		Move object to a new location
+	Returns
+		reference to the object after has been moved
+	Examples
+		with objectModel, Eudora, eventInfo
+			move(mailfolder[""].mailbox["In"].message[1],endOf(mailfolder[""].mailbox["Trash"]))
+Eudora.newOutgoingMessage
+	Syntax
+		 newOutgoingMessage (recipient, returnaddress, subject, text)
+	Parameters
+		recipient is the recipient of the message
+		returnaddress is the return address for the outgoing message
+		subject is the messages subject
+		text is the body of the message
+	Action
+		Creates a new outgoing message
+	Returns
+		True if successful
+	Examples
+		with objectModel, Eudora, eventInfo
+			newOutgoingMessage ("Joe@smith.com", "Pres@whitehouse", "Whats up", "Hows the weather")
+Eudora.open
+	Syntax
+		 open (obj)
+	Parameters
+		obj object or list of objects to open
+	Action
+		Open the specified object
+	Returns
+		True
+	Examples
+		with objectModel, Eudora, eventInfo
+			open(mailfolder[""].mailbox["In"])
+			open(mailfolder[""].mailbox["In"].message[2])
+Eudora.queue
+	Syntax
+		 queue (obj, queueFor)
+	Parameters
+		obj is the message to queue
+		[queueFor] is the date & time to send the message
+	Action
+		Queue a message to be sent
+	Returns
+		True
+	Examples
+		with objectModel, Eudora, eventInfo
+			queue(message[""])
+Eudora.redirect
+	Syntax
+		 redirect (obj)
+	Parameters
+		obj is the message to redirect
+	Action
+		Redirect a message
+	Returns
+		reference  to the redirected message
+	Examples
+Eudora.replaceSelectedText
+	Syntax
+		 replaceSelectedText (newtext)
+	Parameters
+		newtext The text to set the selection to
+	Action
+		Replaces the currently selected text with the specified string
+	Returns
+		true
+	Examples
+		with objectModel, Eudora, eventInfo
+			replaceSelectedText("Replacement text")
+Eudora.reply
+	Syntax
+		 reply (obj, everyone, quoting, self)
+	Parameters
+		obj The message to reply to
+		everyone -- true if you want the reply to go to everyone who got the original
+		quoting  -- true if you want to quote the original text in the reply
+		self -- true if you want the reply to go to yourself, too
+	Action
+		Reply to a message
+	Returns
+		 reference to the reply message
+	Examples
+		with objectModel, Eudora, eventInfo
+			reply(mailfolder[""].mailbox["In"].message[1])
+Eudora.sendAgain
+	Syntax
+		 sendAgain (obj)
+	Parameters
+		obj is the message to send again
+	Action
+		Send a message again
+	Returns
+		 reference  -- to the message sent again
+	Examples
+		
+Eudora.set
+	Syntax
+		 set (obj, setTo)
+	Parameters
+		obj is the object to change
+		setTo is the new value
+	Action
+		Set an object's data
+	Returns
+		true
+	Examples
+		with objectModel, Eudora, eventInfo
+			set(message[""].subject, "Hello There")
+			set(mailfolder[""].mailbox[2].name,"Box 2")
+Eudora.setAlternateSignature
+	Syntax
+		 setAlternateSignature (signature)
+	Parameters
+		signature is the text of the signature
+	Action
+		Sets the value of the alternate signature
+	Returns
+		true
+	Examples
+		
+Eudora.setSignature
+	Syntax
+		 setSignature (signature)
+	Parameters
+		signature is the text of the signature
+	Action
+		Sets the value of the signature
+	Returns
+		true
+	Examples
+		
+Eudora.turnNotificationOff
+	Syntax
+		 turnNotificationOff (appPath, whatEvent)
+	Parameters
+		[appPath] path to the application to stop notifying (Frontier by default)
+		[whatEvent] mailArrives/mailSent/willConnect/hasConnected/hasManuallyFiltered
+	Action
+		Eudora will send a notification event to the app specified at app path when the specified event occurs
+	Returns
+		
+	Examples
+		
+Eudora.turnNotificationOn
+	Syntax
+		 turnNotificationOn (appPath, whatEvent)
+	Parameters
+		[appPath] path to the application to stop notifying (Frontier by default)
+		[whatEvent] mailArrives/mailSent/willConnect/hasConnected/hasManuallyFiltered
+	Action
+		Eudora will stop sending a notification event to the app specified at app path when the specified event occurs
+	Returns
+		
+	Examples
+		
+Eudora.unqueue
+	Syntax
+		 unqueue (obj)
+	Parameters
+		obj is the message to unqueue
+	Action
+		Remove a message from the queue, so it won’t be sent
+	Returns
+		true
+	Examples
+		
+Eudora.visitMessages
+	Syntax
+		 visitMessages (mailboxObj, callback)
+	Parameters
+		mailboxObj is the Mailbox to loop through each message of
+		callback is the address to a script that will be run for each message
+	Action
+		Loops through a mailbox running a callback script for each message
+	Returns
+		True if each iteration of the callback returns true, false if otherwise
+	Examples
+		with objectModel, Eudora, eventInfo
+			on aCallbackScript(msgObj)
+				msg(get(msgObj.subject))
+				return(true)
+			visitMessages(mailfolder[""].mailbox["In"],@aCallbackScript)
+
+
+

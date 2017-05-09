@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.getPathChar
+
+on getPathChar () {
+	«Old code:
+		«case sys.os ()
+			«osMacOS
+				«return (":")
+			«osWin95
+			«osWinNT
+				«return ("\\")
+		«return (false)
+	kernel (file.getPathChar)}
+
+

@@ -1,0 +1,18 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.codeHeader
+
+«Changes
+	«8/3/08; 4:19:25 PM by DW
+		«If the first line begins with "on" make the "Changes" headline to the right not up.
+	«7/28/08; 10:12:41 AM by DW
+		«Created. Adds a header like this one to a script.
+local (dir = up);
+op.firstsummit ();
+if op.getlinetext () beginswith "on " {
+	dir = right};
+op.insert ("Changes", dir);
+script.makeComment ();
+op.insert (clock.now () + " by " + user.prefs.initials, right);
+op.insert ("Created. ", right);
+wp.setTextMode (true)
+
+

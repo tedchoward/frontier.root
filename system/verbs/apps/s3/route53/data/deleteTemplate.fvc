@@ -1,0 +1,18 @@
+FrontierVcsFile:3:optx:system.verbs.apps.s3.route53.data.deleteTemplate
+
+<Change>
+	<Action>DELETE</Action>
+	<ResourceRecordSet>
+		<Name><%name%></Name>
+		<Type><%type%></Type>
+		<TTL><%ttl%></TTL>
+		<ResourceRecords>
+			<ResourceRecord>
+				<Value><%value%></Value>
+				</ResourceRecord>
+			</ResourceRecords>
+		</ResourceRecordSet>
+	</Change>
+
+
+

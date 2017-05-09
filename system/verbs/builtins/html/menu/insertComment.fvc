@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.menu.insertComment
+
+on insertComment () {
+	«Changes
+		«5/22/09; 11:31:45 AM by DW
+			«Called from system.menus.menubar. Inserts a comment in the HTML text. I had it remember the last string you entered, it was driving me crazy to have to type the same string over and over.
+	if dialog.ask ("Comment:", @user.prefs.lastCommentString) {
+		wp.setTextMode (true);
+		wp.insert ("<!-- " + user.prefs.lastCommentString + " -->")}}
+
+

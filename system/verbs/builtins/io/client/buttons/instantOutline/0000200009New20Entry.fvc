@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.buttons.instantOutline.["00002000\tNew Entry"]
+
+«Changes
+	«1/30/09; 11:43:33 AM by DW
+		«The code in this script was moved to a separate script so it can be called in a thread.
+thread.callscript (@io.client.newEntry, {})
+
+

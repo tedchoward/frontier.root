@@ -1,0 +1,24 @@
+FrontierVcsFile:3:wptx:suites.people.webAdmin.services
+
+#title "Services"
+<table border=0 cellspacing=0 cellpadding=0>
+	<tr>		
+		<td valign=top align=left>
+			{displayServices ()}
+		</td>
+		<td valign=top align=left width=60>
+			&nbsp;
+		</td>
+		<td valign=top align=left>
+			<form method=get action="newService.wsf">
+***Create new service:
+
+<input name="serviceName" size=30>
+
+<input type="submit" value="Create Service">
+			</form>
+		</td>
+	</tr>
+</table>
+
+

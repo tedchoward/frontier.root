@@ -1,0 +1,18 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.webBrowser.protocols.readme
+
+It's complicated! 
+
+Come back here when you have some time to think a bit.
+
+Cooool.
+
+Both Netscape and Microsoft web browsers allow you to specify protocol handlers, scripts that re-route mailto's and evaluate scripts embedded in web pages. So, for example, you could use Eudora to create mail messages, or have Fetch do your FTP downloads.
+
+We ship Frontier with all the handlers disabled. If you want to change this, copy the handler from the otherhandlers table into the activehandlers table, quit Frontier and relaunch it. If you did this with the ftp handler, from that point on, all FTP requests would be handled by Frontier, which then would delegate it to Fetch.
+
+Poke around, this may be a feature people want or don't want. This is the simplest way for us to support it, and not have it get in the way of people who don't want it.
+
+Dave
+Sun, Apr 14, 1996 at 9:41:05 AM
+
+

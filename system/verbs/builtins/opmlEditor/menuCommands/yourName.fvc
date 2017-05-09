@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.yourName
+
+on yourName () {
+	«Changes
+		«9/10/12; 10:27:10 AM by DW
+			«Also set the comments username.
+		«9/10/12; 9:04:25 AM by DW
+			«Created.
+	local (adrdata = opmleditor.comments.init ());
+	if dialog.ask ("What is your name?", @user.prefs.name) {
+		adrdata^.prefs.username = user.prefs.name}};
+bundle { //test code
+	yourName ()}
+
+

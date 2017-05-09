@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.getToolsInfo
+
+on getToolsInfo () {
+	«Changes
+		«8/15/09; 6:39:47 PM by DW
+			«Used to cache the Catalog table, meaning you'd have to quit the OPML Editor if a new tool was recently released. The file is not that big, caching isn't really necessary, so I turned it off and we read it every time you go to the Catalog page. 
+		«7/29/08; 11:29:38 AM by DW
+			«Created. 
+	local (adrtoolsInfo = @system.temp.opmlEditor.toolsInfo);
+	opmlEditor.init (); //be sure system.temp.opmlEditor exists
+	fatPages.getHttp (opmlEditor.data.urls.toolCatalogTable, adrtoolsInfo);
+	return (adrtoolsInfo)}
+«bundle //test code
+	«getToolsInfo ()
+
+

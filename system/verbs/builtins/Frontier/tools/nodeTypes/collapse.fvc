@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.nodeTypes.collapse
+
+local (adrtable);
+if Frontier.tools.nodetypes.findnodetype ("", @adrtable) {
+	local (adrscript = @adrtable^.collapse);
+	if defined (adrscript^) {
+		return (adrscript^ ())}
+	else {
+		return (false)}};
+return (false)
+
+

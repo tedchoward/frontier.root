@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.getSizes
+
+on getSizes (id, adrsizestable) {
+	«Changes
+		«6/10/07; 1:52:36 PM by DW
+			«Created.
+			«http://www.flickr.com/services/api/flickr.photos.getSizes.html
+	local (mystruct);
+	new (tabletype, @mystruct);
+	mystruct.api_key = user.flickr.prefs.apiKey;
+	mystruct.photo_id = id;
+	local (s = [user.flickr.prefs.server].flickr.photos.getSizes (mystruct), xstruct);
+	s = xml.entitydecode (s, true);
+	xml.compile (s, @xstruct);
+	scratchpad.xstruct = xstruct;
+	local (adrsizes = xml.getaddress (@xstruct, "sizes"), adr);
+	new (tabletype, adrsizestable);
+	for adr in adrsizes {
+		if nameof (adr^) endswith "size" {
+			adrsizestable^.[adr^.["/atts"].label] = adr^.["/atts"]}}};
+bundle { //test code
+	getSizes ("539372113", @scratchpad.sizes)}
+
+

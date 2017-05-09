@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.prefs2.bootstrap.stringPref
+
+on stringPref (prompt, adrstring, type="text", size=50, maxlength=100, flreadonly=false) {
+	«Changes
+		«1/13/12; 5:15:26 PM by DW
+			«Add optional flreadonly param.
+		«1/13/12; 9:27:05 AM by DW
+			«Created.
+	local (t, stringvalue);
+	new (tabletype, @t);
+	t.itemName = nameof (adrstring^);
+	t.itemPrompt = prompt;
+	if sizeof (t.itemPrompt) > 0 {
+		t.itemPrompt = t.itemPrompt + ":"};
+	bundle { //set stringvalue
+		if string.lower (type) == "password" {
+			stringvalue = ""}
+		else {
+			stringvalue = adrstring^}};
+	bundle { //set t.itemCode
+		if flreadonly {
+			t.itemCode = "<span class=\"uneditable-input\">" + stringvalue + "</span>"}
+		else {
+			t.itemCode = "<input class=\"xlarge\" id=\"" + t.itemName + "\" name=\"" + t.itemName + "\" size=\"" + size + "\" type=\"text\" value=\"" + stringvalue + "\" />"}};
+	return (string.multiplereplaceall (string (prefs2.bootstrap.panelItemTemplate), @t, false, "<%", "%>"))};
+bundle { //test code
+	wp.newtextobject (stringPref ("Author name", @scratchpad.myNameHello), @scratchpad.bscode)}
+
+

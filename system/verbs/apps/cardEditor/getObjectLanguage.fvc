@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.getObjectLanguage
+
+on getObjectLanguage (name) {
+	local (atts);
+	if not cardEditor.getObjectAttributes (name, @atts) {
+		return ("")};
+	return (atts.lang)}
+
+

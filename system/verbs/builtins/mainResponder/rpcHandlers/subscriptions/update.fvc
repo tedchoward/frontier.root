@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.rpcHandlers.subscriptions.update
+
+on update (dbname, ipaddress, lastupdate, platform, serialNumber, username, mailaddress, frontierVersion) {
+	return (mainresponder.subscriptions.server (dbname, ipaddress, lastupdate, username, mailaddress, serialNumber))}
+
+

@@ -1,0 +1,8 @@
+FrontierVcsFile:3:optx:system.verbs.apps.winShell.data.scripts.msgBox
+
+Function Main (message, buttonsNum, title)
+	Main = MsgBox (message, buttonsNum, title)
+End Function
+
+
+

@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.date.midnight
+
+on midnight (when=clock.now ()) {
+	«Changes
+		«1/6/09; 9:02:29 AM by DW
+			«Created. Another bit of annoying code that appears too often not to be factored. Return midnight of the day in question.
+	local (day, month, year, hour, minute, second);
+	date.get (when, @day, @month, @year, @hour, @minute, @second);
+	return (date.set (day, month, year, 0, 0, 0))}
+«bundle //test code
+	«dialog.alert (date.midnight ())
+
+

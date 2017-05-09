@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.globals.property
+
+on property (prop, container) {
+	return (setObj (cProperty, container, formProperty, prop))}
+
+

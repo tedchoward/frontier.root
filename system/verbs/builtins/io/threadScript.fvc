@@ -1,0 +1,21 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.threadScript
+
+on threadScript () {
+	«Changes
+		«8/6/10; 4:24:26 PM by DW
+			«Created. 
+	local (adrdata = io.init ());
+	if adrdata^.client.prefs.enabled {
+		local (server = adrdata^.client.prefs.server);
+		local (username = adrdata^.client.prefs.username);
+		local (password = adrdata^.client.prefs.password);
+		if (username != "") and (password != "") {
+			realtime.client.start ("io", server, username, password, @io.client.incomingUpdate)}};
+	if adrdata^.server.prefs.enabled {
+		local (adruser);
+		for adruser in @adrdata^.server.users {
+			try {io.server.initUser (nameof (adruser^))}}}};
+bundle { //test code
+	threadScript ()}
+
+

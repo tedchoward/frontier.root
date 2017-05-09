@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.isUserAdminLike
+
+on isUserAdminLike (username) {
+	«Changes
+		«9/27/11; 1:26:07 PM by DW
+			«"admin" is now admin-like. 
+		«9/21/11; 11:50:20 AM by DW
+			«Created. Returns true if the user has some of the abilities of the admin user.
+	local (s = string.lower (user.opmlEditor.prefs.adminUserList), ct = string.countfields (s, ","));
+	local (lowerusername = string.lower (username), i);
+	if lowerusername == "admin" { //9/27/11 by DW
+		return (true)};
+	for i = 1 to ct {
+		if string.trimwhitespace (string.nthfield (s, ",", i)) == lowerusername {
+			return (true)}};
+	return (false)}
+«bundle //test code
+	«dialog.alert (isUserAdminLike ("dave"))
+
+

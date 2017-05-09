@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.globals.evaluate
+
+on evaluate (s) {
+	kernel (lang.evaluate)}
+
+

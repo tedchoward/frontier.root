@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.easyMatch
+
+local (matchInfo, sr);
+sr = regex.easyMatch ("[a-zA-Z]+[0-9]+", "a123four", @matchInfo);
+dialog.notify (sr);
+sr = regex.easyMatch ("(be){1,2}", "bebe bop", @matchInfo, 1);
+dialog.notify (sr)
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.getPackedCard
+
+on getPackedCard () {
+	return (appleEvent (cardEditor.id, 'IOWA', 'gpcd'))}
+
+

@@ -1,0 +1,42 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.render.compileRules
+
+on compileRules (xmltext, adrcompiledrules) {
+	«Changes
+		«3/27/12; 5:59:23 PM by DW
+			«It shouldn't be an error for xmltext to be empty.
+		«2/8/12; 12:08:23 PM by DW
+			«Created. 
+	if sizeof (xmltext) == 0 { //3/27/12 by DW
+		return};
+	local (struct, level = 0);
+	bundle { //compile
+		try {
+			xml.compile (xmltext, @struct)}
+		else {
+			local (s = "Can't complile the rules text because it is not valid XML.");
+			«wp.newtextobject (xmltext, @scratchpad.badtext)
+			scripterror (s + "<pre>\r\r" + xml.entityencode (xmltext, true) + "</pre>")}};
+	local (adrrules = xml.getaddress (@struct, "rules"));
+	local (rulelist = xml.getaddresslist (adrrules, "rule"), item, startlevel, endlevel);
+	for item in rulelist {
+		local (adrsub = @adrcompiledrules^.[string.padwithzeros (sizeof (adrcompiledrules^), 3)]);
+		new (tabletype, adrsub);
+		«scratchpad.item = item^
+		try {startlevel = xml.getattribute (item, "level")^} else {startlevel = 1};
+		try {endlevel = xml.getattribute (item, "to")^} else {endlevel = infinity};
+		adrsub^.startlevel = startlevel; adrsub^.endlevel = endlevel;
+		bundle { //populate the values sub-table, without requiring a legalvaluetags list -- 2/5/12 by DW
+			local (name, adrx, attname);
+			new (tabletype, @adrsub^.values);
+			for adrx in item {
+				name = nameof (adrx^);
+				if name contains "\t" {
+					attname = string.nthfield (name, "\t", 2);
+					adrsub^.values.[attname] = adrx^}}}}};
+bundle { //test code
+	local (rules);
+	new (tabletype, @rules);
+	compileRules (string (op.render.testing.examples.rulesXml), @rules);
+	op.render.testing.examples.rulesCompiled.["000"] = rules}
+
+

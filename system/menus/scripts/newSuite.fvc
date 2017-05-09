@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.newSuite
+
+if dialog.ask ("Name of new suite:", @user.prefs.dialogs.newSuiteName) {
+	local (name = user.prefs.dialogs.newSuiteName);
+	local (adrSuite = @suites.[name]);
+	if defined (adrSuite^) {
+		if not dialog.confirm ("Replace existing suite named \"" + name + "\"?") {
+			return (false)}};
+	table.newSuite (adrSuite);
+	edit (adrSuite)}
+
+

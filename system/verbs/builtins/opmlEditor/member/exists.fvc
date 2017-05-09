@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.member.exists
+
+on exists (membername, groupname="default") {
+	«Changes
+		«8/28/11; 10:40:05 AM by DW
+			«Returns true if the indicated member exists.
+	local (f = system.temp.mainResponder.membersRootFile);
+	local (adrmembers = @[f].[groupName]);
+	if not defined (adrmembers^) {
+		new (tabletype, adrmembers)};
+	return (defined (adrmembers^.users.[membername]))};
+bundle { //test code
+	dialog.alert (exists ("admin"))}
+
+

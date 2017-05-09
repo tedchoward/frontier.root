@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.history.add
+
+on add (historyatts) {
+	«Changes
+		«12/13/12; 1:36:43 PM by DW
+			«Created.
+	local (adrdata = opmleditor.worldoutline.init (), now = clock.now ());
+	local (adrday = mainresponder.calendar.getdayaddress (@adrdata^.history, now));
+	local (adritem = @adrday^.[string.padwithzeros (adrdata^.stats.ctHistoryAdds++, 5)]);
+	adritem^ = historyatts};
+bundle { //test code
+	add ()}
+
+

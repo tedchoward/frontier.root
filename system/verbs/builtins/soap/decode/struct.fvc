@@ -1,0 +1,18 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.decode.struct
+
+on struct (adrmsg, adrelement, flEnforceSimpleTypes=true) {
+	«Changes:
+		«04/06/01; 12:44:43 PM by JES
+			«New optional parameter, flEnforceSimpleTypes, specifies whether to fault on elements whose type is not specified. This is passed to soap.decode.main.
+	local (resulttable);
+	new (tableType, @resulttable);
+	local (nomad = soap.xmlutils.getFirstChildElement (adrelement));
+	while nomad {
+		local (name = soap.xmlutils.getElementName (nomad));
+		if defined (resulttable.[name]) {
+			scripterror ("Can't decode element of \"" + soap.xmlutils.getElementName (adrelement) + "\" struct because the element name \"" + name + "\" is already in use.")};
+		resulttable.[name] = soap.decode.main (adrmsg, nomad, flEnforceSimpleTypes);
+		nomad = soap.xmlutils.getNextSiblingElement (nomad)};
+	return (resulttable)}
+
+

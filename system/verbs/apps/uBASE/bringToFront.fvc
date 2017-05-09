@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.uBASE.bringToFront
+
+on bringToFront () {
+	return (sys.bringAppToFront (ubase.appInfo.path))}
+
+

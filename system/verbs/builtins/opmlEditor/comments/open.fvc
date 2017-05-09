@@ -1,0 +1,83 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.comments.open
+
+on open (referer=nil, title=nil, editorialDomain=nil) {
+	«Changes
+		«10/7/12; 12:34:43 PM by DW
+			«New param, editorialDomain. It says its optional, but I don't think it is since we're called from one place, and it's always provided.
+				«http://worknotes.scripting.com/october2012/10712ByDw/editorialdomainAttOnComments
+		«9/30/12; 12:47:05 PM by DW
+			«The World Outline right-click menu now works in the Comments Workspace window.
+				«http://worknotes.scripting.com/september2012/93012ByDw/rightclickInComments
+		«9/18/12; 12:19:45 PM by DW
+			«If referer is nil, just open the window, don't start a new comment. I added this to make a new How To easier. 
+				«http://howtos.opml.org/programmingHowtos/addingABookmarkManually
+		«9/14/12; 12:20:00 PM by DW
+			«New att when creating a comment, created -- an RFC 822 string of the time the comment was created. 
+		«9/5/12; 5:06:04 PM by DW
+			«Created.
+	local (adrdata = opmleditor.comments.init (), adroutline = @adrdata^.workspace, mynodetype = "comment", username, now = clock.now ());
+	if referer != nil { //9/18/12 by DW
+		bundle { //set username
+			loop {
+				username = adrdata^.prefs.username;
+				if sizeof (username)> 0 {
+					break};
+				frontier.bringtofront ();
+				if not dialog.ask ("What is your name?", @adrdata^.prefs.username) {
+					return}}};
+		bundle { //set up workspace
+			local (oldtarget = target.set (adroutline), ct = 0, flfound = false);
+			bundle { //search top-level heads, set flfound and ct if found
+				local (opmltext = op.outlinetoxml (adroutline), xstruct);
+				xml.compile (opmltext, @xstruct);
+				local (adropml = xml.getaddress (@xstruct, "opml"));
+				local (adrbody = xml.getaddress (adropml, "body"));
+				for adr in adrbody {
+					if nameof (adr^) endswith "outline" {
+						local (adratts = @adr^.["/atts"]);
+						if defined (adratts^.type) {
+							if adratts^.type == mynodetype {
+								if adratts^.url == referer {
+									flfound = true;
+									break}}};
+						ct++}}};
+			if flfound {
+				op.firstsummit ();
+				op.go (down, ct);
+				op.setlinetext (title);
+				op.attributes.setone ("editorialDomain", editorialDomain); //10/7/12 by DW
+				op.expand (1)}
+			else {
+				local (suboutline);
+				op.firstsummit ();
+				if op.getlinetext () == "" {
+					op.setlinetext (title)}
+				else {
+					op.insert (title, up)};
+				bundle { //set node atts
+					local (atts);
+					new (tabletype, @atts);
+					atts.type = mynodetype;
+					atts.url = referer;
+					atts.title = title;
+					atts.editorialDomain = editorialDomain; //10/7/12 by DW
+					atts.created = date.netstandardstring (now); //9/14/12 by DW
+					op.attributes.addgroup (@atts)};
+				if opmlEditor.comments.getReview (referer, username, @suboutline) {
+					op.insertoutline (@suboutline, right);
+					op.go (right, 1)}
+				else {
+					op.insert ("", right);
+					wp.settextmode (true)}};
+			target.set (oldtarget)}};
+	bundle { //open the outline
+		if not window.isopen (adroutline) {
+			edit (adroutline, "Comments Workspace", false, @opmlEditor.comments.buttons)}
+		else {
+			window.bringtofront (adroutline)}};
+	bundle { //attach right-click menu to window, 9/30/12 by DW
+		window.attributes.setone ("rightClickCallback", @opmlEditor.worldOutline.rightClickCallback, adroutline)}}
+«bundle //test code
+	«open ()
+
+

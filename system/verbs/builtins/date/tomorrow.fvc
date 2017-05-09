@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.date.tomorrow
+
+on tomorrow (param1) {
+	kernel (date.tomorrow)}
+
+

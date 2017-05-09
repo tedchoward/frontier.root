@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:suites.FilemakerLib.open
+
+on open (dbPath, reportError = false) {
+	on doIt () {
+		filemaker.open (dbPath)};
+	if reportError {
+		return (doIt ())}
+	else {
+		try {
+			return (doIt ())}
+		else {
+			return (false)}}}
+
+

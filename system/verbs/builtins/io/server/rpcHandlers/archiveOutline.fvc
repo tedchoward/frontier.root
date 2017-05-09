@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.server.rpcHandlers.archiveOutline
+
+on archiveOutline (username, password, opmltext) {
+	«Changes
+		«8/28/10; 1:39:08 PM by DW
+			«Created. 
+	io.server.validatePassword (username, password);
+	return (io.server.archiveOutline (username, opmltext))}
+
+

@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:user.twitter.prefs.friendstimelineurl
+
+http://api.twitter.com/1/statuses/friends_timeline.xml
+
+

@@ -1,0 +1,50 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.server.initUser
+
+on initUser (username, flCreate=false) {
+	«Changes
+		«9/23/10; 2:35:40 PM by DW
+			«Make sure there's a table for this user in realtimeData.root.
+		«9/23/10; 12:46:07 PM by DW
+			«New users, by default, follow themselves. If not, it's eerily quiet when you start up a new server. :-)
+		«9/1/10; 6:36:09 PM by DW
+			«Init the "follows" table.
+		«8/30/10; 7:04:17 PM by DW
+			«Init prefs and stats for server-side archiving of outlines.
+		«8/6/10; 3:28:50 PM by DW
+			«Created. 
+	local (adrdata = io.init ());
+	local (adruser = @adrdata^.server.users.[username]);
+	if not defined (adruser^) {
+		if not flcreate {
+			scripterror ("Can't process the request because there is no user named \"" + username + ".\"")};
+		new (tabletype, adruser)};
+	if not defined (adruser^.opmltext) {
+		adruser^.opmltext = ""};
+	if not defined (adruser^.calendar) { //8/28/10 by DW
+		new (tabletype, @adruser^.calendar)};
+	if not defined (adruser^.follows) { //9/1/10 by DW
+		adruser^.follows = adrdata^.server.prefs.defaultFollows;
+		adruser^.follows.[username] = clock.now ()}; //9/23/10 by DW
+	bundle { //prefs
+		if not defined (adruser^.prefs) {
+			new (tabletype, @adruser^.prefs)};
+		if not defined (adruser^.prefs.password) {
+			adruser^.prefs.password = string.getrandompassword (10)}};
+	bundle { //stats
+		if not defined (adruser^.stats) {
+			new (tabletype, @adruser^.stats)};
+		if not defined (adruser^.stats.ctSaves) {
+			adruser^.stats.ctSaves = 0};
+		if not defined (adruser^.stats.whenLastSave) {
+			adruser^.stats.whenLastSave = date (0)};
+		if not defined (adruser^.stats.archiveSerialnum) { //8/28/10 by DW
+			adruser^.stats.archiveSerialnum = 0};
+		if not defined (adruser^.stats.whenLastArchive) { //8/28/10 by DW
+			adruser^.stats.whenLastArchive = date (0)}};
+	bundle { //make sure the realtime code knows about this user, 9/23/10 by DW
+		realtime.server.inituser (username, true)};
+	return (adruser)};
+bundle { //test code
+	initUser ("davewiner")}
+
+

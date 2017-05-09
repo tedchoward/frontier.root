@@ -1,0 +1,28 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.aggregator.rpcHandlers.getRecentItemsForSub
+
+on getRecentItemsForSub (url, numberOfItems, username, password) {
+	«Changes
+		«11/6/02; 1:42:04 PM by JES
+			«Created. Get the most recent items in a given subscription as an array of structs. The structs match the struct returned by aggregator.getItem.
+	xml.aggregator.securityForRpc (client, username, password);
+	local (adrdata = xml.aggregator.init ());
+	local (adrstories = @adrdata^.stories);
+	local (sizestories = sizeOf (adrstories^));
+	local (returnStruct); new (tableType, @returnStruct);
+	local (i, ct = 0);
+	for i = sizestories downto 1 {
+		local (adritem = @adrstories^[i] );
+		if adritem^.url == url {
+			ct++;
+			local (itemId = nameOf (adritem^));
+			returnStruct.[itemId] = xml.aggregator.rpcHandlers.getItem (itemId, username, password)};
+		if ct == numberOfItems {
+			break}};
+	return (returnStruct)}
+«bundle //testing
+	«local (t); new (tabletype, @t)
+	«t.client = "127.0.0.1"
+	«with user.radio.prefs.security
+		«scratchpad.items = callscript (@xml.aggregator.rpcHandlers.getRecentItemsForSub, {"http://www.scripting.com/rss.xml", 10, remoteUsername, remotePassword}, @t)
+
+

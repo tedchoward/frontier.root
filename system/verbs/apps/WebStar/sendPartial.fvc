@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.sendPartial
+
+on sendPartial (x, connection, more, appID = WebStar.id) {
+	appleEvent (appID, 'WWW‡', 'SPar', '----', x, 'Kcid', connection, 'Kmor', boolean (more))}
+
+

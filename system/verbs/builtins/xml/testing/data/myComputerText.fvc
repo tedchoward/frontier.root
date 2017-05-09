@@ -1,0 +1,19 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.xml.testing.data.myComputerText
+
+<?XML VERSION="1.0"?>
+
+<myComputer>
+
+	<brand>Dell</brand>
+
+	<model>Latitude CP</model>
+
+	<ram>64MB</ram>
+
+	<os>Windows NT 4.0</os>
+
+	</myComputer>
+
+
+
+

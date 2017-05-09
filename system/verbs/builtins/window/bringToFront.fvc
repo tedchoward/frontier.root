@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.window.bringToFront
+
+on bringToFront (adr) {
+	kernel (window.bringtofront)}
+
+

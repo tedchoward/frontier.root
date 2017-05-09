@@ -1,0 +1,36 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.wordPress.savePost
+
+on savePost (siteUrl, username, password, title=nil, bodytext=nil, postId = nil, pubDate=nil, enclosureUrl=nil) {
+	«Changes
+		«10/28/09; 12:28:27 PM by DW
+			«Created. 
+	local (adrdata = wordPress.init ());
+	local (adrsite = wordPress.getSiteData (siteurl), struct, rpcdata);
+	wordPress.getRpcData (siteurl, @rpcdata);
+	bundle { //fill struct
+		new (tabletype, @struct);
+		if pubDate != nil {
+			struct.dateCreated = pubDate};
+		if enclosureUrl != nil {
+			new (tabletype, @struct.enclosure);
+			struct.enclosure.url = enclosureUrl;
+			tcp.httpGetTypeLength (enclosureUrl, @struct.enclosure.type, @struct.enclosure.length, 5)}};
+	bundle { //set defaults
+		if title == nil {
+			title = ""};
+		if bodytext == nil {
+			bodytext = ""}};
+	if postid == nil {
+		postid = metaweblog.newPost (title, "", bodytext, @struct, username, password, adrsite^.blogid, adrdata:@rpcdata)}
+	else {
+		metaweblog.editpost (title, "", bodytext, @struct, postid, username, password, adrsite^.blogid, adrdata:@rpcdata)};
+	return (postid)};
+bundle { //test code
+	local (adrtable = @config.myTwitterProfile.calendar.["2009"].["10"].["28"].["00041"]);
+	local (title = adrtable^.title, pubdate = adrtable^.pubdate);
+	local (bodytext = string (adrtable^.description), postid = nil);
+	if defined (adrtable^.postid) {
+		postid = adrtable^.postid};
+	adrtable^.postid = savePost ("http://rebootnews.wordpress.com/", user.wordpress.prefs.username, user.wordpress.prefs.password, title, bodytext, postid, pubdate, enclosureUrl:"http://mp3.morningcoffeenotes.com/reboot09Oct26.mp3")}
+
+

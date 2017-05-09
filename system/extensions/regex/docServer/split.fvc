@@ -1,0 +1,48 @@
+FrontierVcsFile:3:optx:system.extensions.regex.docServer.split
+
+#title "regex.split"
+#renderOutlineWIth "docServerRenderer"
+Syntax
+	regex.split (pattern, adrObject, caseSensitive, maxChunk)
+Params
+	pattern is a regular expression (string).
+	
+	adrObject  is the address of an object that can be coerced to a string.
+	
+	caseSensitive is an optional boolean flag. Default is false.
+	
+	maxChunk is an optional integer. Default is infinity
+Action
+	Using the pattern as a delimiter, the coerced string is broken into fields.
+Returns
+	Returns a list of strings. 
+Examples
+	s = "www.scripting.com"
+	regex.split( "\\.", @s )
+		// {"www", "scripting", "com"}
+	
+	regex.split ("\\.", @s, maxChunks: 2)
+		// {"www", "scripting.com"}
+	
+	s = ".www.scripting.com"
+	regex.split( "(\\.)", @s )
+		// {"", ".", "www", ".", "scripting", ".", "com"}
+Notes
+	Unlike most regex operations, which return substrings matching the pattern, regex.split returns the text between the patterns.
+	
+	If parentheses are used to create groups in the pattern, the returned list will also contain the delimiters matching the pattern.
+	
+	The delimited substrings and group match substrings appear in the list in same order as in the target string
+	
+	If a delimiter match appears at the beginning of the target string, an entry equal to the empty string will be inserted at the beginning of the list.
+	
+	If a delimiter match appears at the end of the target string, an entry equal to the empty string will be inserted at the end of the list.
+	
+	If two delimiter matches appear consecutively in the target string, with no other text between them, an empty string will be inserted at the corresponding location in the list.
+	
+	maxChunk limits the number of chunks that are returned.
+See Also
+	"regex.join"
+
+
+

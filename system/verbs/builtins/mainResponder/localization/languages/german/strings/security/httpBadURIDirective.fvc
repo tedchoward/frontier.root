@@ -1,0 +1,5 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.localization.languages.german.strings.security.httpBadURIDirective
+
+Der Request konnte vom Server nicht verarbeitet werden weil die Request-URI nicht gleich der URI-Direktive des Authorization-Headers war.
+
+

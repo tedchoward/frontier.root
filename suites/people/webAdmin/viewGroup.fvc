@@ -1,0 +1,6 @@
+FrontierVcsFile:3:wptx:suites.people.webAdmin.viewGroup
+
+#title "View Group"
+{viewGroup ()}
+
+

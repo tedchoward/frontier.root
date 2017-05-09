@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FriendFeed.twitterEcho.startup
+
+«Changes
+	«7/15/08; 2:56:30 PM by DW
+		«Not exactly turnkey, but this gives some idea of how to startup for a user.
+		«You want to read the whole feed for each user before passing it over to everyMinute, that way all the initial messages don't spew at the Twitter users in one shot.
+FriendFeed.twitterEcho.init ();
+user.FriendFeed.twitterEcho.users.user1.friendFeedName = user.friendfeed.prefs.username;
+user.FriendFeed.twitterEcho.users.user1.twitterName = user.twitter.prefs.username;
+user.FriendFeed.twitterEcho.users.user1.twitterPassword = user.twitter.prefs.password;
+FriendFeed.getUserUpdates (user.FriendFeed.twitterEcho.users.user1.friendFeedName, @scratchpad.updates, true, "twitterEcho")
+
+

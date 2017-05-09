@@ -1,0 +1,15 @@
+FrontierVcsFile:3:wptx:system.verbs.apps.OAuth.testing.result
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<hash>
+
+  <request>/statuses/friends_timeline.xml?oauth_token=3839-hu5bzdVyUJFlOyOQAa0NAcrkeIiA6Zrj9465BhSM</request>
+
+  <error>Could not authenticate you.</error>
+
+</hash>
+
+
+
+

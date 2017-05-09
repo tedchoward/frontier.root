@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.popup.setMenu
+
+on setMenu (objectname, menustring) {
+	local (atts);
+	new (tabletype, @atts);
+	atts.mens = string (menustring);
+	return (card.setObjectAttributes (objectname, @atts))}
+
+

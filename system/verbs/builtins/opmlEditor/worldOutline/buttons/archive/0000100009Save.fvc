@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.buttons.archive.["00001000\tSave"]
+
+«Changes
+	«11/2/11; 11:05:36 AM by DW
+		«Created. 
+thread.callscript (@opmlEditor.worldOutline.saveArchivedOutline, {})
+
+

@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.testing.checkNRecords
+
+on checkNRecords (n) {
+	«Changes
+		«10/26/11; 9:43:21 AM by DW
+			«Check the records created by createNRecords.
+	local (i);
+	for i = 1 to 150 {
+		local (url = "http://test" + string.padwithzeros (i, 3) + ".davecast.org/");
+		tcp.httpreadurl (url)}};
+bundle { //test code
+	checkNRecords (150)}
+
+

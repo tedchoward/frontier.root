@@ -1,0 +1,45 @@
+FrontierVcsFile:3:optx:system.extensions.regex.docServer.extract
+
+#title "regex.extract"
+#renderOutlineWIth "docServerRenderer"
+Syntax
+	regex.extract (pattern, adrObject, adrList, groups, caseSensitive)
+Params
+	pattern is a regular expression (string)
+	
+	adrObject is the address of an object that can be  coerced into a string.
+	
+	adrList is the address of the list to contain the matches.
+	
+	groups is an optional list of integers. Default is {}.
+	
+	caseSensitive is an optional boolean flag. Default is false.
+Action
+	Extracts all matches of a regular expression to a target string into a list. The list is pointed to by adrList.
+Returns
+	Number of items in the list pointed to by adrList
+Examples
+	local
+		inStr = "This is a silly test. This is only a stupid test."
+		matchList = {}
+		pattern = "(This [^.]+(silly|stupid)[^.]+[.])"
+	regex.extract (pattern, @inStr, @matchList, {1,2})
+		// 2
+		// matchList: {{"This is a silly test.", "silly"}, {"This is only a stupid test.", "stupid"}}
+		// Because the groups parameter specifies multiple items,
+		// each entry in the match list is itself a list.
+	regex.extract (pattern, @inStr, @matchList, {2})
+		// 2
+		// matchList: {"silly", "stupid"}
+		// Because the groups parameter specifies only a single item,
+		// each entry in the match list is just a string.
+Notes
+	The groups parameter permits any matching subexpressions to be included in the list pointed to by adrList. That is, the groups parameter controls the format for each element of the list.
+	
+	If groups is a single element list (or the default empty list), then each element in the list will be the subexpression identified in the groups parameter.For example {0} returns the whole match, and {1} returns the first subexpression matched.
+	
+	If groups is a list (containing more than one element), then each element of the list will itself be a list, with the elements of that list being the subexpressions identified in the groups parameter.
+	For example,  {2,1}, results in each element of the list containing a list - the first element of which will be the second matching subexpression and the second element will be the first matching subexpression.
+
+
+

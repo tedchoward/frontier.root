@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.styleCommand
+
+on styleCommand (styleName) {
+	with user.prefs.commonStyles.[styleName] {
+		editMenu.setFont (font);
+		editMenu.setFontSize (size)}}
+		«window.update (window.frontMost ())
+
+

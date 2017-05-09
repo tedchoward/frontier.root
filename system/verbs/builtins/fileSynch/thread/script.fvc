@@ -1,0 +1,37 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fileSynch.thread.script
+
+«Changes
+	«11/18/13; 3:57:45 PM by DW
+		«Maintain a new stat, system.temp.filesynch.whenLastCheck.
+	«7/15/08; 5:45:58 PM by DW
+		«Respect the enabled boolean.
+	«7/24/06; 8:40:01 AM by DW
+		«Subtract one from startticks so that the denominator of the division is never 0.
+	«7/11/06; 4:39:54 PM by DW
+		«When comparing the clock to the whenNextCheck, compare for >= not >.
+local (ctticks = 0, startticks = clock.ticks () - 1);
+filesynch.init ();
+system.temp.filesynch.idThread = thread.getCurrentId ();
+system.temp.filesynch.ctloops = 0;
+loop {
+	«msg (this)
+	local (adr, tc = clock.ticks ());
+	for adr in @user.filesynch.synchpoints {
+		fileSynch.initSynchPoint (nameof (adr^));
+		if adr^.prefs.enabled { //7/15/08 by DW
+			if clock.now () >= adr^.stats.whenNextCheck {
+				fileSynch.synch (adr);
+				adr^.stats.whenNextCheck = clock.now () + adr^.prefs.secsBetweenScans}}};
+	local (nowticks = clock.ticks ());
+	ctticks = ctticks + (nowticks - tc);
+	system.temp.filesynch.portionCpuUsed = double (ctticks) / double (nowticks - startticks);
+	system.temp.filesynch.ctTicksUsed = ctticks;
+	«thread.sleepfor (random (0, 5))
+	local (day, month, year, hour, minute, second, now = clock.now ());
+	date.get (now, @day, @month, @year, @hour, @minute, @second);
+	«msg ("")
+	system.temp.filesynch.ctloops++;
+	system.temp.filesynch.whenLastCheck = now;
+	thread.sleepfor (10 - ((second + 10) % 10))}
+
+

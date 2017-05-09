@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FinderClassic.restart
+
+on restart () { «restart the Macintosh
+	return (finderEvent (Finder.id, Finder.class, 'rest'))}
+
+

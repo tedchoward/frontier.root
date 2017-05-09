@@ -1,0 +1,5 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.localization.languages.danish.strings.discuss.cantReceiveMsgMissingField
+
+Can't receive the message because it is missing an essential field, [[fieldname]], or the value of the field is invalid.
+
+

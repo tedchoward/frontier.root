@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.registerUrlEcho
+
+on registerUrlEcho (x) { «Registers the ³echo² application. Each download from now on will be echoed to this application.
+	case sys.os () {
+		"MacOS" {
+			pack (x, @x);
+			setbinarytype (@x, 'sign');
+			return (appleEvent (user.webBrowser.currentid, 'WWW!', 'RGUE', '----', x))}}}
+
+

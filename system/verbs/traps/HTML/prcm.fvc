@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.HTML.prcm
+
+on prcm (f) {
+	«Fri, Dec 5, 1997 at 12:14:16 PM by PBS
+		«Changed toys references.
+	local (s = string (file.readwholefile (f)));
+	s = html.processmacros (s);
+	outf = filespec (file.folderfrompath (f) + "bbedit.preview.html");
+	file.writewholefile (outf, s, 'TEXT', BBEdit.id, clock.now ());
+	scratchpad.f = outf;
+	return (outf)}
+
+

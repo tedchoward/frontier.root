@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.readStream
+
+on readStream (stream, bytesToRead) { «Read from an open stream
+	kernel (tcp.readStream)}
+
+

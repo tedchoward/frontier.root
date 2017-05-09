@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.["WWW?"].OURL
+
+on OURL (url) { «handler for WWW?OURL event
+	return (webBrowser.protocols.handleURL (url))}
+
+

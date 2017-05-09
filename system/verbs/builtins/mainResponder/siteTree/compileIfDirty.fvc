@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.siteTree.compileIfDirty
+
+on compileIfDirty (adrDomain) {
+	«Changes
+		«8/6/02; 1:27:54 AM by JES
+			«Created.
+	local (adrtree = @adrdomain^.siteTree);
+	local (adrdir = @adrtree^.directory);
+	local (adroutline = @adrdir^.outline);
+	local (adrstruct = @adrdir^.structure);
+	if defined (adrstruct^) {
+		if timeModified (adroutline) <= timeModified (adrstruct) {
+			return (true)}};
+	xml.compile (string (adroutline^), adrstruct);
+	return (true)}
+
+

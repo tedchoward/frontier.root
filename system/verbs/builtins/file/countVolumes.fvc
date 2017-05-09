@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.countVolumes
+
+on countVolumes () {
+	local (count = 0);
+	fileloop (fname in "") {
+		count++};
+	return (count)}
+
+

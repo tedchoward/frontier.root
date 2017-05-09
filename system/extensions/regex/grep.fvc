@@ -1,0 +1,48 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.grep
+
+on grep (expr, adrObject, includeMatches=true) {
+	local (theList = {});
+	case (typeof (expr)) {
+		addressType { // script-based execution (if "expr" is a callback script address)
+			if (typeof (expr^) == scriptType || typeof (expr^) == codeType) {
+				
+				local (adrList, tempList, ix, ss);
+				
+				if typeof (adrObject^) == listType {
+					adrList = adrObject}
+				else {
+					local (s);
+					try {
+						s = string (adrObject^)}
+					else {
+						scriptError ("Can't do regex.grep because \"" + adrObject + "\" is of an invalid type.")};
+					tempList = regex.split ("\r", @s);
+					adrList = @tempList};
+				
+				for ix = 1 to sizeof (adrList^) {
+					ss = string (adrList^ [ix]);
+					if (expr^ (@ss)) {
+						if (includeMatches) {
+							theList = theList + {ss};}}
+					else {
+						if (!includeMatches) {
+							theList = theList + {ss};}}};
+				}
+			else {
+				scriptError ("Can't do regex.grep because \"" + expr + "\" is of an invalid type.")}};
+		stringType { // DLL-based execution (if "expr" is a regular expression)
+			if typeof (adrObject^) == listType {
+				theList = list (dll.call (regex.data.getPath (), "reggreplistverb", string (expr), true, true, long (regex.data.adrSyntaxOptions^), list (adrObject^), long (includeMatches)))}
+			else {
+				local (s);
+				try {
+					s = string (adrObject^)}
+				else {
+					scriptError ("Can't do regex.grep because \"" + adrObject + "\" is of an invalid type.")};
+				theList = list (dll.call (regex.data.getPath (), "reggrepstringverb", string (expr), true, true, long (regex.data.adrSyntaxOptions^), s, long (includeMatches)))}}}
+	else {
+		scriptError ("Can't do regex.grep because \"" + expr + "\" is of an invalid type.")};
+	
+	return (theList)}
+
+

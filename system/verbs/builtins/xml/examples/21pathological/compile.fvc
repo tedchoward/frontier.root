@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.examples.["!pathological"].compile
+
+with xml.examples.pathological {
+	xml.compile (string (taggedText), @tableStructure)}
+
+

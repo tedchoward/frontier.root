@@ -1,0 +1,52 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.controlPanel.["#tools"].legends.rpc
+
+<table cellspacing="3">
+
+<tr><td valign="top" width="15">1</td><td valign="top">The time the request was received.</td></tr>
+
+
+
+<tr><td valign="top">2</td><td valign="top">The fault code if an error occured while processing the call, otherwise a dash. The fault codes have the following meaning:
+<table cellspacing="3">
+<tr><td valign="top" width="15">1</td><td valign="top">Could not build the XML-RPC response.</td></tr>
+<tr><td valign="top" width="15">2</td><td valign="top">The result returned by the requested method could not be encoded.</td></tr>
+<tr><td valign="top" width="15">3</td><td valign="top">The structure of the XML-RPC request was illegal.</td></tr>
+<tr><td valign="top" width="15">4</td><td valign="top">A script error occured while executing the requested method.</td></tr>
+<tr><td valign="top" width="15">5</td><td valign="top">Not used. (unsupportedReturnTypeError)</td></tr>
+<tr><td valign="top" width="15">6</td><td valign="top">The XML-RPC request was not well-formed.</td></tr>
+<tr><td valign="top" width="15">7</td><td valign="top">Failed to locate the requested XML-RPC method.</td></tr>
+<tr><td valign="top" width="15">8</td><td valign="top">Security fault.</td></tr>
+</table>
+</td></tr>
+
+
+
+<tr><td valign="top">3</td><td valign="top">The number of concurrent threads running when the request was received.</td></tr>
+
+
+
+<tr><td valign="top">4</td><td valign="top">The number of seconds the request took to process. If it's greater than two seconds it's displayed bold and red to help identify places where optimization could improve performance.</td></tr>
+
+
+<tr><td valign="top">5</td><td valign="top">The size of the client's request.</td></tr>
+
+
+
+<tr><td valign="top">6</td><td valign="top">The size of this server's response.</td></tr>
+
+
+
+<tr><td valign="top">7</td><td valign="top">The domain name or IP address of the client.</td></tr>
+
+
+
+<tr><td valign="top">8</td><td valign="top">The host name that the request was sent to.</td></tr>
+
+
+<tr><td valign="top">9</td><td valign="top">The name of the RPC method that was called.</td></tr>
+
+</table>
+
+
+
+

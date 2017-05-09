@@ -1,0 +1,19 @@
+FrontierVcsFile:3:optx:system.verbs.apps.s3.route53.data.createTemplate
+
+
+<Change>
+	<Action>CREATE</Action>
+	<ResourceRecordSet>
+		<Name><%name%></Name>
+		<Type><%type%></Type>
+		<TTL><%ttl%></TTL>
+		<ResourceRecords>
+			<ResourceRecord>
+				<Value><%value%></Value>
+				</ResourceRecord>
+			</ResourceRecords>
+		</ResourceRecordSet>
+	</Change>
+
+
+

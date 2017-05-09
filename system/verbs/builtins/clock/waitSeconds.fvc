@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.clock.waitSeconds
+
+on waitSeconds (count) {
+	kernel (clock.waitseconds)}
+
+

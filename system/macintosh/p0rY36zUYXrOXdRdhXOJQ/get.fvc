@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.core.get
+
+on get (appID, obj, as = nil) { «Get the data for an object
+	return (appleEvent (appID, 'core', 'getd', '----', objspec (obj), 'rtyp', string4 (as)))}
+
+

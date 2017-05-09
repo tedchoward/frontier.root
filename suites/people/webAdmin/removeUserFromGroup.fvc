@@ -1,0 +1,7 @@
+FrontierVcsFile:3:wptx:suites.people.webAdmin.removeUserFromGroup
+
+#title "Remove User From Group"
+{removeUserFromGroup ()}
+{goBack ()}
+
+

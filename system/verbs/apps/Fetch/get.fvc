@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.get
+
+on get (obj, as = nil) { «Get the data for an object
+	return (core.get (Fetch.id, obj, as))}
+
+

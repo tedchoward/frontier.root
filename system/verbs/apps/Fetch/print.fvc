@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.print
+
+on print (obj) { «Print an object
+	return (core.print (Fetch.id, obj))}
+
+

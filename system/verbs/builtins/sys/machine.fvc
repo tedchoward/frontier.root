@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.sys.machine
+
+on machine () {
+	kernel (sys.machine)}
+
+

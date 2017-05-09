@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.netEvents.isRunning
+
+on isRunning () {
+	return (sys.appIsRunning (netevents.id))}
+
+

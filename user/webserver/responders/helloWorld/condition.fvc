@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:user.webserver.responders.helloWorld.condition
+
+(string.lower (path) contains "helloworld")
+
+

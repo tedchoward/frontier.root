@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:user.im.rpiHandlers.examples.msg
+
+on msg (s) {
+	msg(s);
+	return}
+
+

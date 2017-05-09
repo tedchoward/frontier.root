@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.getVersion
+
+on getVersion (appID = WebStar.id) { « New in  WebStar1.2 (d4)
+	with objectModel, WebStar.eventInfo {
+		return (core.get (appID, version))}}
+
+

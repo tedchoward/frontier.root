@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.extensions.latintomac.convert
+
+on convert (latinText) {
+	«Changes:
+		«5/30/01; 9:14:30 PM by PBS
+			«If this is the OS X version of Frontier, use the built-in string.latinToMac verb.
+	if defined (system.environment.isCarbon) {
+		if system.environment.isCarbon {
+			return (string.latinToMac (latinText))}};
+	if frontier.isPowerPC () {
+		return (appleEvent (@latintomac.codePPC, 'cvtx', 'l12m', '----', string (latinText)))}
+	else {
+		return (appleEvent (@latintomac.code68K, 'cvtx', 'l12m', '----', string (latinText)))}}
+
+

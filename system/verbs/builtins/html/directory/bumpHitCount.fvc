@@ -1,0 +1,50 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.directory.bumpHitCount
+
+on bumpHitCount (pta) {
+	«Changes
+		«7/28/11; 11:51:01 AM by DW
+			«A typographic error broke the hitcounter. We were always setting it to 1 instead of incrementing it. Oy. http://hitct.blorkmark.com/
+		«7/20/11; 2:07:11 PM by DW
+			«Init and maintain ctUniqueAddresses stat.
+		«7/20/11; 10:13:29 AM by DW
+			«More scalable way of tracking hit counts. Instead of creating one large table for each host, we do a walk. So instead of having one super-huge table, we have a structure that mirrors the structure of the outline we're serving. Because of inclusion that outline can be very large.
+	local (adrdata = frontier.opendatafile ("worldOutlineStats", defined (system.temp.htmlDirectory.flStatsFileOpen)));
+	local (nomad, path = pta^.uri, name, now = clock.now ());
+	system.temp.htmlDirectory.flStatsFileOpen = true;
+	bundle { //init code
+		if not defined (adrdata^.hits) {
+			new (tabletype, @adrdata^.hits)};
+		bundle { //stats
+			if not defined (adrdata^.stats) {
+				new (tabletype, @adrdata^.stats)};
+			if not defined (adrdata^.stats.ctHits) {
+				adrdata^.stats.ctHits = 0};
+			if not defined (adrdata^.stats.ctUniqueAddresses) {
+				adrdata^.stats.ctUniqueAddresses = 0}}};
+	bundle { //top-level stats
+		adrdata^.stats.ctHits++;
+		adrdata^.stats.lastPath = path;
+		adrdata^.stats.whenLastHit = now};
+	nomad = @adrdata^.hits.[pta^.host];
+	if path beginswith "/" {
+		path = string.delete (path, 1, 1)};
+	loop {
+		if not defined (nomad^) {
+			adrdata^.stats.ctUniqueAddresses++;
+			new (tabletype, nomad)};
+		if sizeof (path) == 0 {
+			break};
+		name = string.nthfield (path, "/", 1);
+		path = string.delete (path, 1, sizeof (name) + 1);
+		nomad = @nomad^.["/" + name]};
+	bundle { //bump count
+		if defined (nomad^.ctHits) { //7/28/11 by DW -- site of a stupid typo
+			nomad^.ctHits++}
+		else {
+			nomad^.ctHits = 1};
+		nomad^.whenLast = now};
+	return (nomad^.ctHits)};
+bundle { //test code
+	bumpHitCount (@scratchpad.vdparams)}
+
+

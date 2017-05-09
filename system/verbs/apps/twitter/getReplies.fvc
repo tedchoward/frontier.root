@@ -1,0 +1,90 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.getReplies
+
+on getReplies (adrreplies, username = nil, password = nil, repliesurl = nil, maxcount = 20, adruser = nil) {
+	«Changes
+		«7/25/12; 11:28:31 AM by DW
+			«Decode the text of replies. So instead of &lt;hello&gt; you get <hello>. 
+		«7/22/12; 10:02:09 AM by DW
+			«Updated to work with the OAuth-based authentication system. 
+				«http://worknotes.scripting.com/july2012/72212ByDw/twittergettimelineUpdated
+		«3/12/09; 6:05:06 AM by DW
+			«Fixed a bug in the bug fix. :-)
+		«3/12/09; 5:36:55 AM by DW
+			«Fixed bug where it would infinitely loop if the total number of replies received by user was less than maxcount.
+		«2/19/09; 3:48:22 PM by DW
+			«Add optional "maxcount" parameter, indicates the maximum number of posts to retrieve, defaults to 20.
+		«8/16/08; 10:32:18 AM by DW
+			«Add support for inReplyToStatusId and inReplyToUserId in timelines.
+		«12/8/07; 4:55:27 PM by DW
+			«Copy the user's "protected" value into the replies table.
+		«12/6/07; 11:26:50 AM by DW
+			«Created.
+	local (pagenum = 1, cttotalstatuses = 0, flmaxed = false);
+	on decode (s) {
+		s = xml.entitydecode (s, flAlphaEntities:true);
+		return (s)};
+	new (tabletype, adrreplies);
+	twitter.init ();
+	bundle { //set defaults
+		if username == nil {
+			username = user.twitter.prefs.username};
+		if password == nil {
+			password = string (user.twitter.prefs.password)};
+		if repliesurl == nil {
+			repliesurl = user.twitter.prefs.repliesurl}};
+	local (urllist = string.urlsplit (repliesurl));
+	loop {
+		try {
+			local (s = "", tc = clock.ticks (), timeoutticks = 60 * user.twitter.prefs.timeOutSecs, path, flAtLeastOneStatus = false);
+			if adruser != nil { //7/22/12 by DW
+				if twitter.oAuth.initUser (adruser) {
+					try {
+						local (adrapp = @adruser^.oauth, params);
+						new (tabletype, @params);
+						params.pagenum = pagenum++;
+						OAuth.authenticatedCall (repliesurl, @params, adrapp^.consumerkey, adrapp^.consumersecret, adrapp^.accesstoken, adrapp^.accesstokensecret, @s, "GET")}}};
+						«wp.newtextobject (s, @scratchpad.xmltext)
+						«xml.compile (s, @scratchpad.myfuckingxstruct)
+			if sizeof (s) == 0 {
+				bundle { //set path, 2/19/09 by DW
+					path = urllist [3] + "?page=" + pagenum++};
+				s = string.httpResultSplit (tcp.httpClient (server:urllist [2], path:path, username:username, password:password,  method:"GET", timeoutticks:timeoutticks, flMessages:false))};
+			user.twitter.stats.whenLastGet = clock.now ();
+			user.twitter.stats.ctGets++;
+			user.twitter.stats.ctSecsLastGet = double (clock.ticks () - tc) / 60;
+			bundle { //extract data from the xml in adrtimeline^
+				local (xstruct, adrstatus);
+				xml.compile (s, @xstruct);
+				«scratchpad.xstruct = xstruct
+				local (adrstatuses = xml.getaddress (@xstruct, "statuses"));
+				for adrstatus in adrstatuses {
+					if nameof (adrstatus^) contains "status" {
+						local (id = xml.getvalue (adrstatus, "id"));
+						local (adrsub = @adrreplies^.[id]);
+						new (tabletype, adrsub);
+						flAtLeastOneStatus = true;
+						adrsub^.createdAt = xml.getvalue (adrstatus, "created_at");
+						adrsub^.text = decode (xml.getvalue (adrstatus, "text")); //7/25/12 by DW
+						local (adruser = xml.getaddress (adrstatus, "user"));
+						adrsub^.userId = xml.getvalue (adruser, "id");
+						adrsub^.userName = xml.getvalue (adruser, "name");
+						adrsub^.userScreenName = xml.getvalue (adruser, "screen_name");
+						adrsub^.userLocation = xml.getvalue (adruser, "location");
+						adrsub^.userDescription = xml.getvalue (adruser, "description");
+						adrsub^.userProfileImageUrl = xml.getvalue (adruser, "profile_image_url");
+						adrsub^.userUrl = xml.getvalue (adruser, "url");
+						adrsub^.flProtected = xml.getvalue (adruser, "protected"); //12/8/07 by DW
+						adrsub^.inReplyToStatusId = xml.getvalue (adrstatus, "in_reply_to_status_id"); //8/16/08 by DW
+						adrsub^.inReplyToUserId = xml.getvalue (adrstatus, "in_reply_to_user_id"); //8/16/08 by DW
+						if ++cttotalstatuses >= maxcount {
+							break}}}};
+			user.twitter.stats.lastGetError = "";
+			if (cttotalstatuses >= maxcount) or (not flAtLeastOneStatus) { //3/12/09 by DW
+				return (true)}}
+		else {
+			user.twitter.stats.lastGetError = tryerror;
+			return (false)}}}
+«bundle //test code
+	«getReplies (@scratchpad.twitterreplies, maxcount:100)
+
+

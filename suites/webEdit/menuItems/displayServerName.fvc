@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:suites.webEdit.menuItems.displayServerName
+
+on displayServerName (name) {
+	if name == user.webEdit.prefs.currentServer {
+		return ("!" + name)};
+	return (name)}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.table.rename
+
+on rename (adr, name) {
+	kernel (table.rename)}
+
+

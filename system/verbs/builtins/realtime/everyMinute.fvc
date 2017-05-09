@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.everyMinute
+
+on everyMinute () {
+	«Changes
+		«9/25/10; 12:31:21 PM by DW
+			«Also delete longpoll tables that have their enabled booleans set false.
+		«8/15/10; 9:40:15 PM by DW
+			«Created. 
+	bundle { //remove all long-poll tables for threads that have expired
+		realtime.server.collectTempTables ()}};
+bundle { //test code
+	everyMinute ()}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.AnArchie.mkdir
+
+on mkdir (host, path, user, password, url) { «Make directory
+	return (appleEvent (AnArchie.id, 'Arch', 'MkDr', 'FTPh', string (host), 'FTPc', string (path), 'ArGU', string (user), 'ArGp', string (password), 'ArUR', string (url)))}
+
+

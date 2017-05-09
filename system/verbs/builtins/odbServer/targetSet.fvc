@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.odbServer.targetSet
+
+on targetSet (adroutline) {
+	semaphores.lock (string (adroutline), 30 * 60);
+	target.set (adroutline)}
+
+

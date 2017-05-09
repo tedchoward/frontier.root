@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.openGlossary
+
+on openGlossary () {
+	«Changes
+		«5/14/12; 11:01:38 AM by DW
+			«Created.
+				«http://worknotes.scripting.com/may2012/51412ByDw/openGlossaryCommand
+	local (adrdata = opmlEditor.worldOutline.init (), adroutline = @adrdata^.glossaryOutline, opmltext, server, username, password);
+	opmlEditor.worldOutline.getServerInfo (@server, @username, @password);
+	opmltext = [server].worldOutline.getGlossary (username, password);
+	if sizeof (opmltext) == 0 {
+		new (outlinetype, adroutline)}
+	else {
+		op.xmltooutline (opmltext, adroutline)};
+	edit (adroutline, "Glossary", adrButtonTable:@opmlEditor.worldOutline.buttons.glossary)};
+bundle { //test code
+	openGlossary ()}
+
+

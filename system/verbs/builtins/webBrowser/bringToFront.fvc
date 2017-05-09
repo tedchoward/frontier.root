@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.bringToFront
+
+on bringToFront () {
+	«Changes
+		«7/13/12; 11:12:52 AM by DW
+			«If we're running on Windows, do nothing. Assume this verb is called immediately after a webBrowser.openUrl, which now also does the bringToFront on its own. We were getting a weird situation where first Chrome would come to the front, then Firefox (and the page we were interested in was in Chrome). So the old way of doing things had become a bug. 
+	if not system.environment.isWindows {
+		if webBrowser.isRunning () {
+			return (sys.bringAppToFront (user.webBrowser.currentid))}}}
+
+

@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Netscape.unregisterProtocol
+
+on unregisterProtocol (x, forProtocol = nil) { «reverses the effects of ³register protocol²
+	pack (x, @x);
+	setbinarytype (@x, 'sign');
+	return (appleEvent (Netscape.id, 'WWW!', 'UNRP', '----', x, 'PROT', string (forProtocol)))}
+
+

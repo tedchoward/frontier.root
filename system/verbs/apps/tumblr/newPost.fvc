@@ -1,0 +1,118 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.tumblr.newPost
+
+on newPost (title, body, email=nil, password=nil, type=nil, generator=nil, pubDate=nil, flPrivate=nil, tags=nil, format=nil, group=nil, data=nil, caption=nil, clickThroughUrl=nil, flMultipart=false, fData=nil, idPost=nil, adrparamtable=nil) {
+	«Changes
+		«5/15/11; 12:01:06 PM by DW
+			«New optional param, adrparamtable. Tumblr has lots of optional param. Rather than include all of them in this script's param list, this serves as open architecture. See rssToBlogSuite.saveIfNewOrChanged for an example of its use. 
+		«11/23/09; 2:09:23 PM by DW
+			«Add idpost optional param, if specified, we're modifying that post.
+		«6/9/09; 7:35:58 PM by DW
+			«Corrected.
+				«http://www.scripting.com/stories/2009/06/09/helpImTrappedInsideTheTumb.html
+		«5/14/09; 9:57:51 AM by DW
+			«Created. 
+	local (adrdata = tumblr.init (), apiurl = "http://www.tumblr.com/api/write", params);
+	bundle { //set defaults
+		if email == nil {
+			email = adrdata^.prefs.email};
+		if password == nil {
+			password = adrdata^.prefs.password};
+		if type == nil {
+			type = "regular"};
+		if generator == nil {
+			generator = frontier.getprogramname ()}};
+	bundle { //build params
+		if flmultipart {
+			new (tabletype, @params)}
+		else {
+			params = ""};
+		on push (name, value) {
+			if value != nil {
+				if flmultipart {
+					params.[name] = value}
+				else {
+					params = params + "&" + name + "=" + string.urlencode (value, flFullEncode:true)}}};
+		push ("email", email);
+		push ("password", password);
+		push ("title", title);
+		push ("body", body);
+		push ("type", type);
+		push ("generator", generator);
+		push ("post-id", idPost); //11/23/09 by DW
+		push ("pubDate", date.netstandardstring (pubDate));
+		if flPrivate != nil {
+			if flPrivate {
+				push ("private", 1)}
+			else {
+				push ("private", 0)}};
+		push ("tags", tags);
+		push ("format", format);
+		push ("group", group);
+		if not flmultipart {
+			push ("data", data)};
+		push ("caption", caption);
+		push ("click-through-url", clickThroughUrl);
+		bundle { //push params from adrparamtable if non-nil -- open architecture -- 5/15/11 by DW
+			if adrparamtable != nil {
+				local (adrparam);
+				for adrparam in adrparamtable {
+					push (nameof (adrparam^), adrparam^)}}};
+		if not flmultipart {
+			params = string.delete (params, 1, 1)}}; //pop the first &
+	local (response, code);
+	if flmultipart {
+		local (f, fldelete = false);
+		if fData != nil {
+			f = fData}
+		else {
+			f = frontier.getSubFolder ("ops/Temp") + "tumblr" + clock.ticks () + ".data";
+			file.writewholefile (f, data);
+			fldelete = true};
+		response = tcp.httpPostMultipart (apiurl, f, adrparams:@params, filePartName:"data", adrCode:@code);
+		if fldelete {
+			file.delete (f)}}
+	else {
+		local (urllist = string.urlsplit (apiurl));
+		response =  tcp.httpClient ("POST", server:urllist [2], path:urllist [3], data:params, datatype:"application/x-www-form-urlencoded", ctFollowRedirects:3, flMessages:false, debug:false);
+		«wp.newtextobject (string (scratchpad.httpcommand), @tumblr.testing.request)
+		code = tcp.httpGetStatusCode (response);
+		response = string.httpResultSplit (response)};
+	«wp.newtextobject (response, @tumblr.testing.response)
+	bundle { //throw an error if code != 201
+		if code == 403 {
+			scriptError ("Couldn't create the post because the email address or password were incorrect.")};
+		if code == 400 {
+			scriptError ("Couldn't create the post because there was at least one error while trying to save your post.")}};
+	return (response)}
+«bundle //test code
+	«bundle //photo
+		«local (bits = file.readwholefile ("ohio:test:chumby.jpg"))
+		«newPost ("My New Chumby", "", type:"photo", data:bits)
+		«return
+	«bundle //50 random states
+		«local (body = "")
+		«for i = 1 to 50
+			«body = body + states.nthstate (random (1, 50)) + " "
+		«dialog.alert (newPost ("50 random states", body))
+		«return
+	«bundle //post from an outline
+		«local (oldtarget = target.set (@tumblr.testing.postOutline))
+		«op.firstsummit ()
+		«local (title = op.getlinetext (), bodytext = "")
+		«op.expand (infinity)
+		«op.go (right, 1)
+		«loop
+			«bodytext = bodytext + "<p>" + op.getlinetext () + "</p>\r"
+			«if not op.go (down, 1)
+				«break
+		«s = string.replaceall (s, "</p>", "+++++")
+		«s = searchengine.stripmarkup (s)
+		«s = string.replaceall (s, "+++++ ", "\r\r")
+		«s = string.replaceall (s, "&nbsp;", " ")
+		«s = string.replaceall (s, "\";->\"", ":-)")
+		«wp.newtextobject (s, @tumblr.testing.s)
+		«local (id = newPost (title, bodytext))
+		«newPost (title, string.upper (bodytext), idpost:id) //text should now be uppercase
+		«target.set (oldtarget)
+
+

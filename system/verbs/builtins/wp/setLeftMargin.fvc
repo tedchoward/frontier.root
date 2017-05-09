@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.wp.setLeftMargin
+
+on setLeftMargin (leftmargin) {
+	kernel (wp.setleftmargin)}
+
+

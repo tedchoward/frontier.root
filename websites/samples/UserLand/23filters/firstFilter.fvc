@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:websites.samples.UserLand.["#filters"].firstFilter
+
+on firstFilter (adrPageTable) {
+	return (true)}
+
+

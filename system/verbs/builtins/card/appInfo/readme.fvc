@@ -1,0 +1,9 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.card.appInfo.readme
+
+The card.xxx verbs call into Iowa Runtime, which is embedded in the app that the card is running within.
+
+In other words, the current app must have an Apple Event handler installed for a class named 'card' and must be prepared to receive the events sent by the scripts in this table.
+
+DW 12/29/94
+
+

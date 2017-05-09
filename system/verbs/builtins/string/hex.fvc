@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.hex
+
+on hex (n) {
+	kernel (string.hex)}
+
+

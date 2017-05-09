@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.myAddress
+
+on myAddress () {
+	kernel (tcp.myAddress)}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.osa.compile
+
+on compile (adrScript, executeOnly, adrCode) {
+	kernel (osa.compile)}
+
+

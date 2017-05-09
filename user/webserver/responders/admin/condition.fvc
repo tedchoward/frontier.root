@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:user.webserver.responders.admin.condition
+
+(path endsWith ".wsf" and string.lower (path) beginsWith "/admin/")
+
+

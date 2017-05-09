@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.soap.constants.responseTemplate.["00001000\tEnvelope"].["/atts"].["SOAP-ENV3AencodingStyle"]
+
+http://schemas.xmlsoap.org/soap/encoding/
+
+

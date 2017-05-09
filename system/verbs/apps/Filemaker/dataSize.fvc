@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.dataSize
+
+on dataSize (obj, as = nil) { «Return the size in bytes of an object
+	return (appleEvent (Filemaker.id, 'core', 'dsiz', '----', objspec (obj), 'rtyp', string4 (as)))}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.version
+
+on version () {
+	return ("1.0b15")}
+
+

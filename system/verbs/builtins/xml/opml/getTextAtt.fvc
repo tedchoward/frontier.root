@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.opml.getTextAtt
+
+on getTextAtt (adrnode) {
+	«Changes
+		«5/8/11; 9:24:30 AM by DW
+			«Created. 
+	local (adratts = @adrnode^.["/atts"]);
+	if defined (adratts^) {
+		if defined (adratts^.text) {
+			return (xml.entityDecode (adratts^.text, flAlphaEntities:true))}};
+	return ("")}
+
+

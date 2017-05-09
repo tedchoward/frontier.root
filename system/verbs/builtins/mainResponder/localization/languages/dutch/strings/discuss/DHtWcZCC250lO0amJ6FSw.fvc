@@ -1,0 +1,13 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.localization.languages.dutch.strings.discuss.sendRpcEnclosureDidntWorkBody
+
+Sorry, server kon de inhoud van bericht [[msgnum]] niet naar uw machine zenden.<p>
+Hier volgen de meldingen die wij van uw machine ontvingen (dit kan criptisch zijn):
+<blockquote><i>[[errorstring]]</i></blockquote>
+<b>Controleer het volgende</b>:<ul><p>
+	<li>user.betty.rpcHandlers.userland moet zijn ge&#239;nstalleerd.<p>
+	<li>Frontier moet <i>op uw machine</i> draaien.<p>
+	<li>Frontier moet draaien op poort 80. (Dit wordt een voorkeursinstelling.)<p>
+	<li>Als u er zeker van bent dat alles goed is ingesteld, en u bent met ons verbonden via een proxy server of firewall, neem dan contact op met uw systeembeheerder over eventuele fouten in de serverconfiguratie.<p>
+	</ul>
+
+

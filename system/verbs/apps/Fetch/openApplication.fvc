@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.openApplication
+
+on openApplication () {
+	return (required.openApplication (Fetch.id))}
+
+

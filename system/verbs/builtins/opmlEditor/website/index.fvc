@@ -1,0 +1,32 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.index
+
+on index () {
+	«Changes
+		«9/21/11; 5:58:44 PM by DW
+			«Report free space on disk, size of config.root.
+		«9/21/11; 10:42:54 AM by DW
+			«Show more info on the home page of the opmlEditor site.
+		«8/28/11; 11:45:47 AM by DW
+			«Created.
+	local (pta = html.getpagetableaddress (), adrdata = opmleditor.init (), htmltext = "\r\r", indentlevel = 0);
+	pta^.title = "Home";
+	on add (s) {
+		htmltext = htmltext + (string.filledstring ("\t", indentlevel) + s + "\r");};
+	add ("<div class=\"divSystemStatusPage\">"); indentlevel++;
+	add ("<ul>"); indentlevel++;
+	add ("<li>" + clock.now () + "</li>");
+	add ("<li>Server IP address: " + tcp.dns.getmydottedid () + ".</li>");
+	add ("<li>Domain name: " + user.opmleditor.prefs.server.externaldomainname + ".</li>");
+	add ("<li>Server up since: " + system.temp.frontier.startuptime + ".</li>");
+	add ("<li>Free space on system disk: " + string.gigabytestring (file.freeSpaceOnVolumeDouble (file.getSystemDisk ())) + ".</li>");
+	bundle { //size of config.root
+		local (x = string.parseAddress (@config), f = x [1]);
+		add ("<li>Size of config.root: " + string.gigabytestring (file.size (f)) + ".</li>")};
+	add ("<li>Threads, hits: " + Frontier.countThreads () + ", " + user.webserver.stats.hits + ".</li>");
+	add ("</ul>"); indentlevel--;
+	add ("</div>"); indentlevel--;
+	return (htmltext)};
+bundle { //test code
+	index ()}
+
+

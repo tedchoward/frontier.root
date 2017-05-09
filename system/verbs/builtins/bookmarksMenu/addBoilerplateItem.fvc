@@ -1,0 +1,35 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.bookmarksMenu.addBoilerplateItem
+
+local (adrmenu = bookmarksMenu.init ());
+
+local (itemName = op.getLineText ());
+itemName = string.trimWhiteSpace (itemName);
+if sizeOf (itemName > 30) {
+	itemName = string.mid (itemName, 1, 30);
+	itemName = string.trimWhiteSpace (itemName);
+	local (countFields = string.countFields (itemName, ' '));
+	if countFields > 1 {
+		itemName = string.popSuffix (itemName, ' ')}}; //pop the last word
+
+if dialog.ask ("Add the selection as boilerplate?", @itemName) {
+	bundle { //store it as an outline in the odb
+		local (localOutline);
+		new (outlineType, @localOutline);
+		op.getSelectedSubOutlines (@localOutline);
+		user.bookmarksMenu.boilerplate.[itemName] = localOutline};
+	
+	bundle { //add the menu item command
+		local (menuname);
+		bundle { //get the name of the Bookmarks menu
+			local (oldtarget = target.set (adrmenu));
+			local (oldcursor = op.getcursor ());
+			op.firstsummit ();
+			menuname = op.getlinetext ();
+			op.setcursor (oldcursor);
+			target.set (oldtarget)};
+		local (logic = "bookmarksMenu.insertBoilerplateInOutline (\"" + itemName + "\")");
+		menu.addMenuCommand (adrmenu, menuname, itemName, logic)}};
+
+return (true)
+
+

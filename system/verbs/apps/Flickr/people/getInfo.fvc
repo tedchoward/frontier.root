@@ -1,0 +1,38 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.people.getInfo
+
+on getInfo (id, adrtable) {
+	«Changes
+		«6/5/11; 10:04:45 AM by DW
+			«Return info about the user. Can be used to validate a Flickr ID.
+				«http://www.flickr.com/services/api/flickr.people.getInfo.html
+	local (mystruct);
+	flickr.init ();
+	new (tabletype, adrtable);
+	new (tabletype, @mystruct);
+	mystruct.api_key = user.flickr.prefs.apiKey;
+	mystruct.method = "flickr.people.getInfo";
+	mystruct.user_id = id;
+	local (s = [user.flickr.prefs.server].flickr.people.getInfo (mystruct), xstruct);
+	s = xml.entityDecode (s, true);
+	xml.compile (s, @xstruct);
+	
+	local (adrperson = xml.getaddress (@xstruct, "person"));
+	adrtable^.username = xml.getvalue (adrperson, "username");
+	adrtable^.realname = xml.getvalue (adrperson, "realname");
+	adrtable^.location = xml.getvalue (adrperson, "location");
+	adrtable^.photosurl = xml.getvalue (adrperson, "photosurl");
+	adrtable^.profileurl = xml.getvalue (adrperson, "profileurl");
+	adrtable^.photosurl = xml.getvalue (adrperson, "photosurl");
+	adrtable^.mobileurl = xml.getvalue (adrperson, "mobileurl");
+	
+	local (adrphotos = xml.getaddress (adrperson, "photos"));
+	adrtable^.ctphotos = xml.getvalue (adrphotos, "count");
+	«adrtable^.whenFirstDateTaken = date (xml.getvalue (adrphotos, "firstdatetaken"))
+	adrtable^.whenFirstDate = date.unixDateToDate (xml.getvalue (adrphotos, "firstdate"));
+	
+	«scratchpad.xstruct = xstruct
+	return (true)};
+bundle { //test code
+	getInfo (user.flickr.prefs.nsid, @scratchpad.personInfo)}
+
+

@@ -1,0 +1,48 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.openHelpPage
+
+on openHelpPage (url, folderNames="", fname="default.html") {
+	«Open a Help Menu page.
+		«Sunday, March 01, 1998 at 11:10:24 PM by PBS
+		«The page may be local -- if so, find it and open it.
+		«If not found, open it on the web.
+	local (f);
+	
+	on getLocalPath () { //Get local path to file.
+		local (localFolders = {}, localPaths = {});
+		local (mainFolder = file.folderFromPath (frontier.getProgramPath ()));
+		local (i, pc = file.getPathChar ());
+		for i = 1 to sizeOf (folderNames) {
+			localPaths = localPaths + (mainFolder + "Documentation" + pc + folderNames [i] + pc + fname);
+			localPaths = localPaths + (mainFolder + folderNames [i] + pc + fname);
+			localPaths = localPaths + (mainFolder + "Docs" + pc + folderNames [i] + pc + fname);
+			localPaths = localPaths + (mainFolder + "On-line Documentation" + pc + folderNames [i] + pc + fname)};
+		for i = 1 to sizeOf (localPaths) {
+			if file.exists (localPaths [i]) {
+				f = localPaths [i];
+				return (true)}};
+		return (false)};
+	on openWebPage (url) { //Open a page over the web.
+		webBrowser.openURL (url);
+		case sys.os () {
+			"MacOS";
+			"MacCn" {
+				webBrowser.bringToFront ()}}};
+	on openLocalPage (f) { //Open a local html page.
+		webBrowser.openDocument (f);
+		case sys.os () {
+			"MacOS" {
+				webBrowser.bringToFront ()}}};
+	
+	if folderNames == "" { //No folder names, it can't be local.
+		return (openWebPage (url))};
+	if typeOf (folderNames) != listType {
+		folderNames = {folderNames}};
+	
+	if getLocalPath () { //It's local, open it from disk.
+		openLocalPage (f)}
+	else { //It's not local, open it over the web.
+		openWebPage (url)};
+	
+	return (true)}
+
+

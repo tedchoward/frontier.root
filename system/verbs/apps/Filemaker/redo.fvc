@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.redo
+
+on redo () { «Reverse the action of the immediately preceding undo
+	return (appleEvent (Filemaker.id, 'misc', 'redo'))}
+
+

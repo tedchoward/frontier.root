@@ -1,0 +1,24 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.tcp.im.builtinDrivers.jabber.code.examples.pubsub.pubsubDocs.pubsubSubscribe
+
+#title "pubsubSubscribe"
+jabber.messages.pubsubSubscribe
+	Syntax
+		jabber.messages.pubsubSubscribe ( dest = "", subscribeTo = nil, nsList = {}, id = nil, connection = default )
+	Params
+		dest is the destination of the presence message. (Despite the name, 'presence' is also used as subscribe requests.)
+		subscribeTo is the name of the publisher to which you are subscribing. (I think that's what this is; at any rate it's the &quot;to&quot; attribute of the &quot;subscribe&quot; tag.)
+		nsList is a list of strings, corresponding to the specific subscriptions you wish to request.
+		id is an optional idTable.
+		connection is the address of the connection table corresponding to the connection you wish to send the subscription request on, and thereby receive publish notifications on. It defaults to the framework-maintained connection.
+	Action
+		Sends the pubsub-subscription message described to the server or user.
+	Returns
+		Nothing
+	Examples
+		&nbsp;&nbsp;&nbsp;&#187; jabber.messages.pubsubSubscribe ( "SomeUser@jabber.aserver.com/resource1", "statusReport", \{&quot;webserver&quot;, &quot;emailserver&quot;\})
+	Notes
+		See <a href='"http://www.jabber.org/jeps/jep-0024.html">JEP 24</a> for more information about the pubsub system.
+		This is currently implemented as an async function, and any return values are ignored. That can be corrected later, so a scriptError will be thrown when a subscription fails.
+
+
+

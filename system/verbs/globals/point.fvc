@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.globals.point
+
+on point (val) {
+	kernel (lang.point)}
+
+

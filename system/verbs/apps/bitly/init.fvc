@@ -1,0 +1,38 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.bitly.init
+
+on init () {
+	«Changes
+		«9/11/11; 8:40:03 AM by DW
+			«Created.
+	local (adrdata = @config.bitly);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)};
+		if not defined (adrdata^.prefs.enabled) {
+			adrdata^.prefs.enabled = true};
+		if not defined (adrdata^.prefs.username) {
+			adrdata^.prefs.username = ""};
+		if not defined (adrdata^.prefs.apiKey) {
+			adrdata^.prefs.apiKey = ""};
+		if not defined (adrdata^.prefs.apiDomain) {
+			adrdata^.prefs.apiDomain = "api.bitly.com"}};
+		«if not defined (adrdata^.prefs.flUseCustomDomain)
+			«adrdata^.prefs.flUseCustomDomain = false
+		«if not defined (adrdata^.prefs.customDomain)
+			«adrdata^.prefs.customDomain = ""
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)};
+		if not defined (adrdata^.stats.ctCreates) {
+			adrdata^.stats.ctCreates = 0};
+		if not defined (adrdata^.stats.ctErrors) {
+			adrdata^.stats.ctErrors = 0}};
+	if not defined (adrdata^.calendar) {
+		new (tabletype, @adrdata^.calendar)};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.exists
+
+on exists (obj) { «Tell if an object exists
+	return (core.exists (Fetch.id, obj))}
+
+

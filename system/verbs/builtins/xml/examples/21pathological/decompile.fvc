@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.examples.["!pathological"].decompile
+
+with xml.examples.pathological {
+	wp.newtextobject (xml.decompile (@tableStructure), @xText)}
+
+

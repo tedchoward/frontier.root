@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.xmlutils.setCharacterData
+
+on setCharacterData (adrelement, value) {
+	if typeof (adrelement^) == tableType {
+		adrelement^.["/pcdata"] = string (value)}
+	else {
+		adrelement^ = string (value)};
+	return (true)}
+
+

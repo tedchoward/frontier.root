@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:user.html.macros.randomFortune
+
+local (s);
+target.set (@scratchpad.fortunes);
+op.firstsummit ();
+op.go (down, random (0, 4));
+s = op.getlinetext ();
+target.clear ();
+return (s)
+
+

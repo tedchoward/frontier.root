@@ -1,0 +1,22 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.table.uniqueName
+
+on uniqueName (prefix, adrtable, ctplaces=nil) {
+	«Changes
+		«5/20/10; 8:56:31 AM by DW
+			«Cleaned up code. Hadn't been touched in 13 years.
+		«11/1/97 at 6:22:14 PM by DW
+			«Added optional third param to mimic behavior of toys.uniqueTableName.
+			«Returns the address of a unique object in the database
+	local (name, ct = 1, adr);
+	loop {
+		if ctplaces == nil {
+			adr = @adrtable^.[prefix + ct]}
+		else {
+			adr = @adrtable^.[prefix + string.padWithZeros (ct, ctplaces)]};
+		if not defined (adr^) {
+			return (adr)};
+		ct++}}
+«bundle //test code
+	«dialog.alert (uniqueName ("object", @scratchpad, 3))
+
+

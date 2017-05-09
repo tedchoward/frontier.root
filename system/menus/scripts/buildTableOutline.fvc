@@ -1,0 +1,36 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.buildTableOutline
+
+«Builds an outline of any table in the object database
+
+on buildTableOutline (tableAdr, outlineAdr, fluserwatches=false) {
+	new (outlineType, outlineAdr);
+	target.set (outlineAdr);
+	if fluserwatches {
+		edit (outlineAdr)};
+	op.setLineText ("Outline of " + tableAdr + " table");
+	local (dir = right); «first headline inserted to the right
+	on traverse (adr) {
+		local (adrsubitem, i);
+		for i = 1 to sizeof (adr^) {
+			adrsubitem = @adr^ [i];
+			op.insert (nameOf (adrsubitem^), dir);
+			if typeOf (adrsubitem^) == tableType {
+				dir = right;
+				traverse (adrsubitem); «recurse
+				if dir != right { «at least one item added from the table
+					op.go (left, 1)}};
+			dir = down;
+			rollBeachBall ()}};
+	traverse (tableAdr);
+	op.firstSummit ();
+	window.zoom (outlineAdr);
+	return (true)}
+«bundle «test code
+	«local (tableAdr = table.getCursor ())
+	«if typeof (tableAdr^) != tableType
+		«tableAdr = toys.getParentTable (tableAdr)
+	«local (outlineAdr = @scratchpad.tableOutline)
+	«buildTableOutline (tableAdr, outlineAdr)
+	«edit (outlineAdr)
+
+

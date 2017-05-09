@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.synchFolder.deletefile
+
+on deleteFile (adrdata, adrfile) {
+	«Changes
+		«3/6/08; 1:49:38 PM by DW
+			«Replace the file path char with / so that folders on the local file system are reflected in the S3 storage space.
+	local (relpath = string.replaceall (nameof (adrfile^), file.getpathchar (), "/"));
+	local (path = adrdata^.prefs.rootPath + relpath);
+	s3.deleteObject (path)}
+«bundle //test code
+	«deleteFile (@user.fileSynch.synchPoints.["Amazon S3"], @user.fileSynch.synchPoints.["Amazon S3"].files.["florida.opml"])
+
+

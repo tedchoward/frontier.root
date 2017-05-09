@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.setBufferSize
+
+on setBufferSize (x, appID = WebStar.id) {
+	with objectModel, WebStar.eventInfo {
+		return (core.set (appID, bufferSize, x))}}
+
+

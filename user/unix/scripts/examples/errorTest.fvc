@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:user.unix.scripts.examples.errorTest
+
+on errorTest (s) {
+	«This script will generate a scriptError. The result of the scriptError will be written to stderr.
+		«05/09/01; 1:19:07 AM by PBS
+	
+	scriptError ("It's time for an error message! Yeah!")}
+
+

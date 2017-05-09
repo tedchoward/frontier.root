@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.clickers.typeFTds
+
+on typeFTds (path) {
+	«Run a desktop script.
+	return (Frontier.clickers.typeFATP (path))}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.globals.rgb
+
+on rgb (val) {
+	kernel (lang.rgb)}
+
+

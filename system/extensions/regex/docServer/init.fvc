@@ -1,0 +1,20 @@
+FrontierVcsFile:3:optx:system.extensions.regex.docServer.init
+
+#title "regex.init"
+#renderOutlineWIth "docServerRenderer"
+Syntax
+	regex.init ()
+Params
+	None.
+Action
+	Initializes the regex extension for use by other regex verbs.
+Returns
+	The path to the regex DLL file on disk.
+Examples
+	regex.init ()
+		// "Apps:Frontier:DLLs:regex.dll" (on MacOS).
+Notes
+	You should never have to call this verb from your scripts.
+
+
+

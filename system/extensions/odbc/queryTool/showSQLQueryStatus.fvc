@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.queryTool.showSQLQueryStatus
+
+on showSQLQueryStatus () {
+	«Author: Henri Asseily, Binary Compass Enterprises
+		«Created: Mon, Jan 26, 1998 at 11:10:40 AM
+	«Script to display the right menu item for show/hide SQL query
+	
+	if (user.prefs_odbc.showQuery == false) {
+		return("Show SQL query in results")}
+	else {
+		return("!Show SQL query in results")}}
+
+

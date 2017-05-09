@@ -1,0 +1,133 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.adminSite.prefs.listSubscribableDatabases
+
+on listSubscribableDatabases () {
+	«Changes
+		«9/7/02; 10:22:30 PM by JES
+			«Be more tolerant about which databases are allowed to be subscribed.
+		«8/26/02; 5:52:49 PM by JES
+			«Created. Lists databases on this server, with checkboxes for whether or not the database should be subscribable.
+	local (pta = html.getPageTableAddress ());
+	local (bgcolors = {pta^.trbg1, pta^.trbg2});
+	
+	on findInUserDatabases (f) {
+		local (lowerpath = string.lower (f));
+		local (adrtable);
+		for adrtable in @user.databases {
+			if string.lower (adrtable^.f) == lowerpath {
+				return (adrtable)}};
+		return (@user.databases.[file.fileFromPath (f)] )};
+	
+	local (htmltext);
+	on add (s) {
+		htmltext = htmltext + (s + "\r");};
+	
+	bundle { //list the databases
+		local (t); new (tableType, @t);
+		bundle { //build sorted table of databases
+			local (pc = file.getPathChar ());
+			
+			on isSubscribable (f) {
+				local (lowerpath = string.lower (f));
+				local (adrtable);
+				for adrtable in @user.databases {
+					try {
+						if string.lower (adrtable^.f) == lowerpath {
+							return (adrtable^.supportsSubscribe)}}};
+				return (false)};
+			on skipDatabase (f) {
+				bundle { //skip all databases that are getting updates from elsewhere
+					local (lowerfname = string.lower (file.fileFromPath (f)));
+					local (adrtable);
+					for adrtable in @user.rootUpdates.servers {
+						try {
+							if string.lower (adrtable^.dbname) == lowerfname {
+								if tcp.equalNames (tcp.dns.getMyDottedId (), adrtable^.server) {
+									return (false)};
+								return (true)}}}};
+				bundle { //skip other canonical databases
+					local (lowerpath = string.lower (f));
+					local (appFolder = Frontier.getSubFolder ("apps"));
+					local (logFolder = Frontier.getSubFolder ("ops") + "logs" + pc);
+					local (opsFolder = Frontier.getSubFolder ("ops"));
+					local (datafilesFolder = Frontier.getSubFolder ("ops") + "datafiles" + pc);
+					on checkOne (path) {
+						if string.lower (path) == lowerpath {
+							return (true)};
+						return (false)};
+					if checkOne (appFolder + "config.root") {return (true)};
+					if checkOne (datafilesFolder + "mainResponderSearchQueue.root") {return (true)};
+					if checkOne (opsFolder + "members.root") {return (true)};
+					if checkOne (opsFolder + "discuss.root") {return (true)};
+					if lowerpath beginsWith string.lower (logfolder) {return (true)}};
+				return (false)};
+			
+			local (adr);
+			for adr in @system.compiler.files {
+				local (f = nameOf (adr^));
+				if skipDatabase (f) {
+					continue};
+				local (dbname = file.fileFromPath (f));
+				local (dbsize = file.size (f));
+				local (modified = file.modified (f));
+				local (folder = file.folderFromPath (f));
+				local (foldername = file.fileFromPath (folder));
+				local (adrdb = @[f] );
+				local (dbtables = sizeOf (adrdb^));
+				local (adrfolder = @t.[foldername]);
+				if not defined (adrfolder^) {
+					new (tableType, adrfolder)};
+				local (adrdbinfo = @adrfolder^.[dbname]);
+				new (tableType, adrdbinfo);
+				if defined (adrdb^.["#changes"]) {
+					adrdbinfo^.changes = sizeOf (adrdb^.["#changes"])}
+				else {
+					adrdbinfo^.changes = 0};
+				adrdbinfo^.flSubscribable = isSubscribable (f);
+				adrdbinfo^.f = f}};
+		
+		add ("<table cellpadding=\"2\" cellspacing=\"0\" border=\"0\">");
+		bundle { //headers
+			add ("<tr><td>&nbsp;</td><td><b>Folder</b></td><td><b>Database</b></td><td align=\"right\"><b>Changes</b></td></tr>")};
+		local (ct = 0, adrfolder, adrdb);
+		for adrfolder in @t {
+			local (folder = nameOf (adrfolder^) + "&nbsp;&nbsp;");
+			for adrdb in adrfolder {
+				local (dbname = nameOf (adrdb^));
+				if pta^.method == "POST" { //set up this db
+					if defined (pta^.postArgs.[string.urlEncode (adrdb^.f)] ) {
+						local (adrinfo = findInUserDatabases (adrdb^.f));
+						if not defined (adrinfo^) { //init user.databases sub-table
+							new (tableType, adrinfo);
+							adrinfo^.f = adrdb^.f;
+							adrinfo^.openOnStartup = true;
+							adrinfo^.runStartupScript = false};
+						adrinfo^.supportsSubscribe = true;
+						if not defined ([adrdb^.f].["#changes"]) {
+							new (tableType, @[adrdb^.f].["#changes"])};
+						adrdb^.flsubscribable = true}
+					else { //turn off subscriptions for this database
+						local (adrinfo = findInUserDatabases (adrdb^.f));
+						if defined (adrinfo^) {
+							adrinfo^.supportsSubscribe = false;
+							adrdb^.flsubscribable = false}}};
+				add ("<tr bgcolor=\"" + bgcolors[(ct++% 2) + 1] + "\">");
+				bundle { //checkbox
+					local (checked = "");
+					if adrdb^.flsubscribable {
+						checked = " checked"};
+					add ("<td>&nbsp;<input type=\"checkbox\" name=\"" + string.urlEncode (adrdb^.f) + "\"" + checked + " />&nbsp;</td>")};
+				add ("<td class=\"small\">" + folder + "</td>");
+				folder = ""; //only display the folder once
+				add ("<td class=\"small\">" + dbname + "</td>");
+				add ("<td class=\"small\" align=\"right\">" + adrdb^.changes + "&nbsp;</td>");
+				add ("</tr>")}};
+			«add ("<tr><td>&nbsp;</td></tr>"); ct = 0
+		
+		add ("</table>")};
+	
+	return (htmltext)}
+«bundle //test code
+	«html.setPageTableAddress (@workspace.pt)
+	«listSubscribableDatabases ()
+
+

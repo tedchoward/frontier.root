@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.rpcHandlers.news.editStory
+
+on editStory (username, password, sitename, pathToStory, storytitle, storytext) {
+	return (mainResponder.news.editStory (username, password, sitename, pathToStory, storytitle, storytext))}
+
+

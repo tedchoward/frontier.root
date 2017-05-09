@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.getSuffixMappings
+
+on getSuffixMappings (appID = WebStar.id) {
+	with objectModel, WebStar.eventInfo {
+		return (core.get (appID, suffixMappings))}}
+
+

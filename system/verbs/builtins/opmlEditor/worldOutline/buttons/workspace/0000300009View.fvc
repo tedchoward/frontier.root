@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.buttons.workspace.["00003000\tView"]
+
+«Changes
+	«6/8/11; 8:36:29 AM by DW
+		«Created. 
+thread.callscript (@opmlEditor.worldOutline.viewHeadline, {})
+
+

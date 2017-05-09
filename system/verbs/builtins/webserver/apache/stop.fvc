@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webserver.apache.stop
+
+on stop () {
+	«Changes
+		«11/23/08; 4:55:17 AM by DW
+			«Allow 15 seconds for it to stop before returning.
+		«11/23/08; 4:39:05 AM by DW
+			«Created. Stop Apache so we can roll the log files or whatever. I only have code for this on Windows at this time.
+	if system.environment.isWindows {
+		sys.dosBatchCommand ("net stop apache2.2");
+		clock.waitseconds (15)}} //takes a few seconds to stop
+«bundle //test code
+	«stop ()
+
+

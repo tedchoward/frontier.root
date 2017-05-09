@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.getHostedZone
+
+on getHostedZone (idHostedZone, adrtable) {
+	«Changes
+		«6/20/11; 4:12:57 PM by DW
+			«Created.
+	local (xmltext);
+	new (tabletype, adrtable);
+	xmltext = s3.route53.httpClient ("/2011-05-05/hostedzone/" + idHostedZone);
+	xml.compile (xmltext, @xstruct);
+	«s3.route53.xstruct = xstruct
+	local (adrgethostedzoneresponse = xml.getaddress (@xstruct, "GetHostedZoneResponse"));
+	local (adrhostedzone = xml.getaddress (adrgethostedzoneresponse, "HostedZone"));
+	adrtable^.id = xml.getvalue (adrhostedzone, "Id");
+	adrtable^.name = xml.getvalue (adrhostedzone, "Name");
+	adrtable^.callerReference = xml.getvalue (adrhostedzone, "CallerReference");
+	
+	local (adrdelegationset = xml.getaddress (adrgethostedzoneresponse, "DelegationSet"));
+	local (adrnameservers = xml.getaddress (adrdelegationset, "NameServers"), adrnameserver, ctnameservers=0);
+	for adrnameserver in adrnameservers {
+		if nameof (adrnameserver^) endswith "NameServer" {
+			ctnameservers++;
+			adrtable^.["ns" + ctnameservers] = adrnameserver^}}};
+bundle { //test code
+	getHostedZone ("Z3LV037TPQ6WL5", @s3.route53.zone)}
+
+

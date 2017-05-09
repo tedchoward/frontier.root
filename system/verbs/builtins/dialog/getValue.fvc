@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.dialog.getValue
+
+on getValue (itemnumber) {
+	kernel (dialog.getvalue)}
+
+

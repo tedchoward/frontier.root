@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.metaWeblog.getRecentPosts
+
+on getRecentPosts (blogid, username, password, numberOfPosts, adrdata=@metaWeblog.data) {
+	«Changes
+		«8/24/06; 2:47:48 PM by DW
+			«Created.
+	local (url);
+	metaWeblog.init ();
+	bundle { //set defaults
+		if username == nil {
+			username = user.metaWeblog.username};
+		if password == nil {
+			password = string (user.metaWeblog.password)};
+		if blogId == nil {
+			blogId = user.metaWeblog.blogId}};
+	url = "xmlrpc://" + adrdata^.server + ":" + adrdata^.port + adrdata^.rpcPath;
+	return ([url].metaWeblog.getRecentPosts (blogid, username, password, numberOfPosts))}
+
+

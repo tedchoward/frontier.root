@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.findInFile
+
+on findInFile (path, pattern) {
+	kernel (file.findinfile)}
+
+

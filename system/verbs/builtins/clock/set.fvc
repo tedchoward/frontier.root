@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.clock.set
+
+on set (time) {
+	kernel (clock.set)}
+
+

@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.OAuth.getNonce
+
+on getNonce () {
+	«Changes
+		«2/11/09; 7:24:02 PM by DW
+			«Created. Nonce means number used once, however it seems that OAuth wants them to be strings. Also the strings must only be unique for a specific timeframe, but they don't say what the timeframe is. With a 10 character random string of alpha and numeric characters, the chances are slim we'll ever repeat a string, even without a timeframe.
+	return (string.getrandompassword (10))}
+«bundle //test code
+	«local (i, tc = clock.ticks ())
+	«for i = 1 to 1000 //takes 68 ticks
+		«getnonce ()
+	«dialog.alert (clock.ticks () - tc)
+
+

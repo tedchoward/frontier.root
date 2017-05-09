@@ -1,0 +1,11 @@
+FrontierVcsFile:3:wptx:examples.testText2
+
+This document is used in some of the examples in the Frontier Language Reference to demonstrate some of the word processing-related verbs.
+
+It differs from examples.testText in that it has several paragraphs, where as the smaller document has only one paragraph.
+
+It also has some styled text and some text that is centered, as in the paragraph below.
+
+This is a centered paragraph in italics.
+
+

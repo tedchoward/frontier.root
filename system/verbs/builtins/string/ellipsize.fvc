@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.ellipsize
+
+on ellipsize (s, ct) { //6.1
+	kernel (string.ellipsize)}
+
+

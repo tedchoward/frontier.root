@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinResponders.news.script
+
+on script (driverName, screenname, message) {
+	local (adrstory = @aggregatorData.stories [random (1, sizeof (aggregatorData.stories))]);
+	local (s = adrstory^.channeltitle + ": " + adrstory^.storytext);
+	tcp.im.send (driverName, screenName, s)}
+«bundle //test code
+	«dialog.alert (script ("xxx", "news"))
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.odbServer.targetClear
+
+on targetClear (adroutline) {
+	target.clear ();
+	semaphores.unlock (string (adroutline))}
+
+

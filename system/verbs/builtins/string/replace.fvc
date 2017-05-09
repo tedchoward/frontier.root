@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.replace
+
+on replace (s, searchfor, replacewith, flCaseSensitive = true) {
+	kernel (string.replace)}
+
+

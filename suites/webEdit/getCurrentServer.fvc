@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:suites.webEdit.getCurrentServer
+
+on getCurrentServer (adrObject=nil) {
+	«Changes:
+		«PBS 1/12/99
+			«If a #webEditServer directive is found, this over-rides the current server setting.
+	
+	if adrObject != nil { //look for a #webEditServer directive. PBS 1/12/99
+		local (nomad = adrObject);
+		
+		if not (user.webEdit.prefs.overrideWebEditServerDirective) {
+			loop {
+				nomad = parentOf (nomad^);
+				if nomad == nil {
+					break};
+				
+				if defined (nomad^.["#webEditServer"]) {
+					return (nomad^.["#webEditServer"])};
+				if defined (nomad^.["#prefs"].webEditServer) {
+					return (nomad^.["#prefs"].webEditServer)};
+				if defined (nomad^.["#prefs"].["#webEditServer"]) {
+					return (nomad^.["#prefs"].["#webEditServer"])}}}};
+	
+	«No #webEditServer directive, return the current server.
+	return (user.webEdit.prefs.currentServer)}
+
+

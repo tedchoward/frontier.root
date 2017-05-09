@@ -1,0 +1,33 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.blorkmark.add
+
+on add (fullname, cname=nil) {
+	«Changes
+		«2/12/12; 10:22:52 AM by DW
+			«New optional param, cname. If non-nil use that name instead of the pref. 
+		«1/23/12; 5:44:31 PM by DW
+			«If user.opmlEditor.prefs.dnsApiCNAME is empty, use user.opmleditor.worldoutline.prefs.domain in its place.
+		«7/13/11; 6:53:39 PM by DW
+			«Change the name of the class of the RPC handler to dnsApi2. 
+		«7/12/11; 12:51:52 PM by DW
+			«Rewritten to use Amazon Route 53 API, and to be configurable to support more than one domain and more than one server.
+		«5/23/11; 1:15:38 AM by DW
+			«Created.
+	local (adrdata = opmlEditor.blorkmark.init ());
+	local (recordname = string.nthfield (fullname, ".", 1));
+	if sizeof (recordname) == 0 {
+		scripterror ("Can't add the blorkmark because \"" + fullname + "\" is not a correctly formatted domain name.")};
+	local (domainname = string.delete (fullname, 1, sizeof (recordname) + 1));
+	local (adrserver = @adrdata^.domains.[domainname]);
+	bundle { //work with cname
+		if cname == nil { //2/12/12 by DW
+			cname = user.opmlEditor.prefs.dnsApiCNAME};
+		if cname == "" { //1/23/12 by DW
+			local (adrworldoutlinedata = opmleditor.worldoutline.init ());
+			cname = adrworldoutlinedata^.prefs.domain}};
+	if not defined (adrserver^) {
+		scripterror ("Can't add the blorkmark because \"" + domainname + "\" is not one of the supported domains.")};
+	adrdata^.stats.lastresponse = [adrserver^].dnsapi2.createRecord (domainname, recordname, cname, "CNAME")};
+bundle { //test code
+	add ("test2.blorkmark.net")}
+
+

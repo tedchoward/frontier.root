@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.script.setLanguage
+
+on setLanguage (adrScript, language) {
+	kernel (script.setLanguage)}
+
+

@@ -1,0 +1,40 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.newScript
+
+on newScript (adrscript) {
+	«Changes
+		«4/2/11; 9:52:42 AM by DW
+			«Do all the things I do when I start a new script object, automatically:
+				«1. Size and place the window.
+				«2. Enter a header: on scriptname ()
+				«3. Comment at top.
+				«4. bundle //test code
+				«5. Insert new line at beginning of script.
+	if not defined (adrscript^) {
+		new (scripttype, adrscript)};
+	local (oldtarget = target.set (adrscript));
+	bundle { //size and place the window
+		«window.getsize (this, @scratchpad.width, @scratchpad.height)
+		«window.getposition (this, @scratchpad.h, @scratchpad.v)
+		window.setsize (adrscript, 640, 400);
+		window.setposition (adrscript, 820, 240)};
+	bundle { //enter a header, comment
+		op.firstsummit ();
+		op.setlinetext ("on " + nameof (adrscript^) + " ()");
+		op.insert ("Changes", right);
+		script.makecomment ();
+		op.insert (clock.now () + " by " + user.prefs.initials, right);
+		op.insert ("Created.", right);
+		op.firstsummit ();
+		op.insert ("bundle //test code", down);
+		op.insert (nameof (adrscript^) + " ()", right);
+		op.firstsummit ();
+		op.go (right, 1);
+		op.insert ("", down);
+		wp.settextmode (true)};
+	target.set (oldtarget)};
+bundle { //test code
+	delete (@scratchpad.testscript);
+	newscript (@scratchpad.testscript);
+	edit (@scratchpad.testscript)}
+
+

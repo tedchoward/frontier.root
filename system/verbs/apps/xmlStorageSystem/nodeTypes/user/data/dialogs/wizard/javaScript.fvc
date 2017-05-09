@@ -1,0 +1,39 @@
+FrontierVcsFile:3:optx:system.verbs.apps.xmlStorageSystem.nodeTypes.user.data.dialogs.wizard.javaScript
+
+<script>
+	function setReturnValue () {
+		window.returnValue = [[values]];
+		} //setReturnValue
+	function doCancel () {
+		window.close ();
+		} //doCancel
+	function doOkay () {
+		try {
+			if (account_password.value == account_passwordCompare.value && account_password.value.length > 3) {
+				setReturnValue ();
+				window.close ();
+			} else { // the passwords don't match
+				if (account_email.value == "") { // don't complain about the password, if the user hasn't entered an email address
+					setReturnValue ();
+					window.close ();
+					}
+				if (account_password.value.length > 3) {
+					window.alert ("Can't set the preferences because your password and confirmation don't match.");
+				} else { // password must be at least four characters
+					window.alert ("Can't set the preferences because your password must be at least four characters long.");
+					}
+				}
+			} catch (x) {
+				setReturnValue ();
+				window.close ();
+			}
+		} //doOkay
+	</script>
+
+<SCRIPT FOR=window EVENT=onload LANGUAGE="JScript">
+	try {email_text.focus ()} catch (e) {}
+	try {weblogPostText.focus ()} catch (e) {}
+	</SCRIPT>
+
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.exampleRpcHandlers.getStateName
+
+on getStateName (statenum) {
+	return (states.nthState (statenum))}
+
+

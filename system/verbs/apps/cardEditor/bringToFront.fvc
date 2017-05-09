@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.bringToFront
+
+on bringToFront () {
+	return (sys.bringAppToFront (cardEditor.id))}
+
+

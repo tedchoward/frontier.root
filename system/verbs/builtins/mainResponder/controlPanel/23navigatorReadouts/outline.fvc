@@ -1,0 +1,15 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.mainResponder.controlPanel.["#navigatorReadouts"].outline
+
+<navigator>
+	<item name="HTTP" pagename="/controlPanel/http"/>
+	<item name="XML-RPC " pagename="/controlPanel/rpc"/>
+	<item name="Databases" pagename="/controlPanel/databases"/>
+	<item name="Domains" pagename="/controlPanel/domains"/>
+	<item name="Updates" pagename="/controlPanel/updates"/>
+	<item name="Objects" pagename="/controlPanel/objects"/>
+	<item name="Searches" pagename="/controlPanel/searchEngine"/>
+	<item name="Email Config" pagename="/controlPanel/emailConfig"/>
+	</navigator>
+
+
+

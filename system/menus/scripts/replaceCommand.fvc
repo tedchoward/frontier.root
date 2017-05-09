@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.replaceCommand
+
+case sys.os () {
+	"MacOS" {
+		search.dialog ()};
+	"Win95";
+	"WinNT" {
+		search.replaceTextDialog ()}}
+
+

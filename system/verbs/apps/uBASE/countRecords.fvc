@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.uBASE.countRecords
+
+on countRecords (fnum) {
+	return (systemEvent ('ubas', 'crec', 'fref', short (fnum)))}
+
+

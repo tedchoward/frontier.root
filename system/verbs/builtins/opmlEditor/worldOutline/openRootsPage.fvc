@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.openRootsPage
+
+on openRootsPage () {
+	«Changes
+		«2/12/12; 3:34:05 PM by DW
+			«Get server info with new method.
+		«1/19/12; 8:55:45 AM by DW
+			«Created.
+	local (adrdata = opmlEditor.worldOutline.init (), server, username, password);
+	opmlEditor.worldOutline.getServerInfo (@server, @username, @password); //2/11/12 by DW
+	local (url = [server].worldoutline.getrootspageurl (username, password));
+	webbrowser.openurl (url);
+	webbrowser.bringtofront ()};
+bundle { //test code
+	openRootsPage ()}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.code.sampleCallbacks.goto_url
+
+on GOTO_URL(adrSelf, windowName, strUrl) {
+	return("GOTO_URL")}
+
+

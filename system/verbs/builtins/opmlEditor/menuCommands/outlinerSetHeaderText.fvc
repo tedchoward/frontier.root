@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.outlinerSetHeaderText
+
+on outlinerSetHeaderText () {
+	«Changes
+		«8/21/11; 8:03:00 AM by DW
+			«Created.
+	local (ht);
+	op.attributes.getone ("headerText", @ht);
+	if dialog.ask ("Header text?", @ht) {
+		op.attributes.setone ("headerFont", user.opmlEditor.prefs.worldOutlineHeaderFont);
+		op.attributes.setone ("headerFontSize", "64px");
+		op.attributes.setone ("headerText", ht)}};
+bundle { //test code
+	outlinerSetHeaderText ()}
+
+

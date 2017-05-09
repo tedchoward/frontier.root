@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:examples.QSOpen
+
+window.quickScript ();
+window.msg ("I was opened from QSOpen in the examples table.")
+
+

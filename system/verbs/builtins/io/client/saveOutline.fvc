@@ -1,0 +1,43 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.saveOutline
+
+on saveOutline () {
+	«Changes
+		«2/5/11; 3:26:21 PM by DW
+			«Hook into Scripting2.
+		«9/12/10; 5:07:04 PM by DW
+			«Get rid of the beep sound in this routine.
+		«8/21/10; 5:05:25 PM by DW
+			«Save a copy of the opmltext in system.temp.io.
+		«8/13/10; 7:37:16 AM by DW
+			«Backup the outline every time it's saved.
+		«6/13/10; 6:20:40 PM by DW
+			«Maintain a local backup copy of outlines.
+		«6/11/10; 10:43:42 PM by DW
+			«Created. 
+	local (adrdata = io.init (), now = clock.now ());
+	local (adroutline = address (window.frontmost ()));
+	local (username = adrdata^.client.prefs.username);
+	local (password = string (adrdata^.client.prefs.password));
+	local (server = string (adrdata^.client.prefs.server));
+	local (opmltext = op.outlinetoxml (adroutline), url);
+	bundle { //8/21/10 by DW
+		system.temp.io.myOpml = string.trimwhitespace (opmltext)};
+	[server].io.saveOutline (username, password, opmltext);
+	bundle { //local backup copy, 8/13/10 by DW
+		if adrdata^.client.prefs.flBackupMyOutlineLocally {
+			local (folder = adrdata^.client.prefs.backupFolder + file.getdatepath ());
+			local (day, month, year, hour, minute, second);
+			date.get (now, @day, @month, @year, @hour, @minute, @second);
+			on pad (num) {
+				return (string.padwithzeros (num, 2))};
+			local (f = folder + pad (hour) + "-" + pad (minute) + "-" + pad (second) + ".opml");
+			file.surefilepath (f);
+			file.writewholefile (f, opmltext)}};
+	bundle { //hook into Scripting2,  2/5/11 by DW
+		if defined (scripting2suite) {
+			io.client.saveBlogPost ()}}};
+	«speaker.beep ()
+bundle { //test code
+	saveOutline ()}
+
+

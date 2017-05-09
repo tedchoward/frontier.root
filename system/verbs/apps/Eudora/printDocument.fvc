@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.printDocument
+
+on printDocument (file) {
+	return (required.printDocument (Eudora.id, file))}
+
+

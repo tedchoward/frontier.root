@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.statsUrls
+
+on statsUrls () {
+	«Changes
+		«2/16/12; 3:19:46 PM by DW
+			«Created.
+	local (pta = html.getpagetableaddress (), args);
+	new (tabletype, @args);
+	webserver.parseargs (pta^.searchargs, @args);
+	pta^.title = "URLs for " + args.domain;
+	return (opmlEditor.viewUrls (args.domain))};
+bundle { //test code
+	statsUrls ()}
+
+

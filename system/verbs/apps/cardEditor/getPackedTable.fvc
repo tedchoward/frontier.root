@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.getPackedTable
+
+on getPackedTable () {
+	local (x = systemEvent ('iowa', 'gptb'));
+	setBinaryType (x, tableType);
+	return (x)};
+getPackedTable ()
+
+

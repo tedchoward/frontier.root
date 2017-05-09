@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.open
+
+on open (files, withPassword = nil) {
+	FileMaker.bringToFront ();
+	«setEventInteraction (false)  «added 3/12/96 PBS  «removed 9/25/96 PBS (problems with passwords)
+	return (appleEvent (Filemaker.id, 'aevt', 'odoc', '----', files, 'pPAS', string (withPassword)))}
+
+

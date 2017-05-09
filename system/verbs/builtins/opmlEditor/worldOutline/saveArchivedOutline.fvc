@@ -1,0 +1,130 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.saveArchivedOutline
+
+on saveArchivedOutline () {
+	«Changes
+		«12/18/13; 11:30:05 AM by DW
+			«If flDialogAfterSave pref is true, we use dialog.notify instead of speaker.beep to signal completion of the save.
+		«8/13/12; 10:03:30 AM by DW
+			«Encode special characters.
+				«http://worknotes.scripting.com/august2012/81212ByDw/characterEncodingIssues
+		«6/19/12; 9:34:01 AM by DW
+			«As we're saving the outline, check if the default server setting has been set. If not, set it to the server we're talking to, to save the outline. This will make the My Outlines and Glossary commands work, even if you haven't been to the Preferences page. Eliminate one step.
+				«http://worknotes.scripting.com/june2012/61912ByDw/whenSavingTheFirstOutline
+		«3/23/12; 12:40:42 PM by DW
+			«Save the outline with the correct author name and email.
+		«2/12/12; 3:39:31 PM by DW
+			«Works with mutliple worldoutline servers.
+		«2/2/12; 10:51:46 AM by DW
+			«When calling op.getnetoutline, set the optional param flKeepXml, true.
+		«2/1/12; 2:01:35 PM by DW
+			«In addition to extracting domains from the outline as we're saving it, also extract all glossary defs. 
+		«1/4/12; 12:55:53 PM by DW
+			«Add support for domains.
+		«12/22/11; 3:45:43 PM by DW
+			«Beep after saving outline. Record number of ticks for save in stats table.
+		«11/3/11; 9:44:43 AM by DW
+			«Save the outline locally before uploading it.
+		«11/2/11; 11:05:55 AM by DW
+			«Created.
+	local (adrdata = opmlEditor.worldOutline.init (), now = clock.now (), startticks = clock.ticks ());
+	local (adroutline = window.frontmost (), server, username, password, domains, glossary, authorName, authorEmail);
+	window.attributes.getone ("authorName", @authorName, adroutline); //3/23/12 by DW
+	window.attributes.getone ("authorEmail", @authorEmail, adroutline); //3/23/12 by DW
+	local (urlOutline, opmltext = op.outlinetoxml (adroutline, authorName, authorEmail));
+	
+	bundle { //encode special characters in opmltext -- 8/13/12 by DW
+		opmltext = string.mactolatin (opmltext);
+		opmltext = string.multiplereplaceall (opmltext, @opmlEditor.data.worldOutline.replaceTable)};
+	
+	on decode (s) {
+		return (xml.entitydecode (s, flAlphaEntities:true))};
+	if not opmlEditor.worldOutline.getServerInfo (@server, @username, @password, adroutline) { //2/11/12 by DW
+		return};
+	
+	bundle { //set default server if it has not been set -- 6/19/12 by DW
+		if adrdata^.prefs.defaultServer == "" {
+			local (urllist = string.urlsplit (server));
+			adrdata^.prefs.defaultServer = urllist [2]}};
+	
+	window.attributes.getone ("urlOutline", @urlOutline, adroutline);
+	opmlEditor.worldOutline.saveOutlineInLocalArchive (urlOutline, opmltext); //11/3/11 by DW
+	bundle { //set up domains, glossary tables
+		local (xstruct);
+		«wp.newtextobject (opmltext, @scratchpad.myfuckingopmltext)
+		xml.compile (opmltext, @xstruct);
+		on addSubToGloss (adrx, adrglossary) {
+			local (adrsub);
+			bundle { //if it's an include node, point adrx to the body of its opml
+				local (adratts = @adrx^.["/atts"]);
+				if defined (adratts^.type) {
+					if adratts^.type == "include" {
+						local (adrtable, adrxstruct, adropml);
+						op.getnetoutline (adratts^.url, @adrtable, flKeepXml:true); //2/2/12 by DW
+						xml.thread.accessStruct (@adrtable^.struct, @adrxstruct);
+						adropml = xml.getaddress (adrxstruct, "opml");
+						adrx = xml.getaddress (adropml, "body")}}};
+			for adrsub in adrx {
+				if nameof (adrsub^) endswith "outline" {
+					local (glossname = decode (adrsub^.["/atts"].text));
+					if sizeof (glossname) > 0 {
+						local (adrdef, glossdef = "");
+						for adrdef in adrsub {
+							if nameof (adrdef^) endswith "outline" {
+								glossdef = glossdef + decode (adrdef^.["/atts"].text)}};
+						if sizeof (glossdef) > 0 {
+							adrglossary^.[glossname] = glossdef}}}}};
+		on visit (adrx) {
+			local (adratts = @adrx^.["/atts"]);
+			if defined (adratts^) {
+				if defined (adratts^.domain) {
+					domains.[adratts^.domain] = true};
+				if defined (adratts^.text) { //might be a glossary
+					if string.lower (adratts^.text) == "glossary" {
+						addSubToGloss (adrx, @glossary)}};
+				if defined (adratts^.inFeed) { //might be added to changes table
+					local (lowertype = string.lower (adratts^.type));
+					if (lowertype == "blogpost") or (lowertype == "howto") {
+						if defined (adratts^.created) {
+							local (adrchange = @changes.[string.padwithzeros (sizeof (changes) + 1, 5)]);
+							new (tabletype, adrchange);
+							adrchange^.atts = adratts^;
+							bundle { //set adrchange^.url
+								local (path = "", nomad = adrx);
+								«scratchpad.atts = adratts^
+								loop {
+									if defined (nomad^.["/atts"].domain) {
+										if path endswith "/" {
+											path = string.mid (path, 1, sizeof (path) - 1)};
+										adrchange^.url = "http://" + nomad^.["/atts"].domain + "/" + path;
+										break};
+									path = html.directory.getcanonicalname (nomad^.["/atts"].text) + "/" + path;
+									nomad = parentof (nomad^);
+									if nameof (nomad^) endswith "body" {
+										if path endswith "/" {
+											path = string.mid (path, 1, sizeof (path) - 1)};
+										adrchange^.url = "http://" + user.opmlEditor.worldOutline.stats.userPrefs.domain + "/" + path;
+										break}}};
+							bundle { //add adrchange^.firstSubText
+								local (adrsub);
+								for adrsub in adrx {
+									if nameof (adrsub^) endswith "outline" {
+										adrchange^.firstSubText = decode (adrsub^.["/atts"].text);
+										break}};
+								if not defined (adrchange^.firstSubText) {
+									adrchange^.firstSubText = ""}}}}}};
+			return (false)}; //keep searching
+		new (tabletype, @domains);
+		new (tabletype, @glossary); //2/1/12 by DW
+		xml.opml.search (@xstruct, @visit)};
+	[server].worldOutline.archiveOutline (username, password, opmltext, urlOutline, domains, glossary);
+	bundle { //beep or alert, depending on pref -- 12/18/13 by DW
+		if adrdata^.prefs.flDialogAfterSave {
+			dialog.notify ("\"" + window.gettitle (adroutline) + "\" saved.")}
+		else {
+			speaker.beep ()}};
+	adrdata^.stats.ctTicksLastArchiveSave = clock.ticks () - startticks;
+	adrdata^.stats.whenLastArchiveSave = now};
+bundle { //test code
+	saveArchivedOutline ()}
+
+

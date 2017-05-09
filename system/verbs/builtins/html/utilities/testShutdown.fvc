@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.utilities.testShutdown
+
+loop {
+	msg (html.processmacros ("{clock.now () + string.memavailstring ()}"));
+	html.shutdown ()}
+
+

@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.testing.changeRecordValue
+
+on changeRecordValue (name, value) {
+	«Changes
+		«8/31/12; 7:01:43 PM by DW
+			«Example code to change a record value. 
+	local (cname = string.nthfield (name, ".", 1), domain = s3.route53.getDomainName (name));
+	try {s3.route53.deleteRecord (name)}; //might not exist
+	s3.route53.createRecord (domain, cname, value, "CNAME", flsynch:false)};
+bundle { //test code
+	changeRecordValue ("yit.jriver.org", "tabs.mediahackers.org")}
+
+

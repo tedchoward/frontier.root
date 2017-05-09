@@ -1,0 +1,60 @@
+FrontierVcsFile:3:optx:system.extensions.odbc.queryTool.ReadMe
+
+This is the ODBC Query Tool suite. Release 8.
+
+Created by Henri Asseily of Binary Compass Enterprises on Wed, Jan 21, 1998 at 2:51:53 PM.
+Last modified Wed, Apr 29, 1998 at 2:12:53 PM by HA
+
+Purpose of the ODBC Query Tool
+	It interfaces with your ODBC databases, allowing you to easily create ad-hoc queries and run them.
+	I wrote it to simplify querying a Windows NT SQL Server. I was getting tired of the bulkiness of MSQuery.
+	
+	To use the ODBC Query Tool, select it in the Suites menu. You will then have access to the ODBC Query Tool menu.
+	The menu items are all explained below.
+
+
+Menu Items
+	About ODBC Query Tool
+		This window
+	Preferences
+		Edit Connect Params
+			To edit the connection parameters (user, password, db). Set them up once and forget them.
+		Break on Errors
+			If there is an error returned by the ODBC driver, toggles whether the ODBC extension should
+			put up a scriptError dialog and break, or should just return the error data as part of the returned set.
+		Show SQL Query in Results
+			Toggles whether to write or not the SQL query string in the same window as the results.
+			This is very useful so as to remember what query gave the results you're looking at
+		Format Results as
+			Allows you to change the way data is returned to the query result window
+	-
+	Edit SQL Query
+		Opens the window of the SQL Query for editing. You don't need to close it for the changes to be recorded.
+	Run Query
+		Runs the script to return the query results
+	View Query Results
+		Opens the window with the results of the query.
+		You can keep that window open, or close it any time you want.
+		The Query Tool does NOT automatically clear the results window. Do it manually.
+	-
+	Save Query...
+		Allows you to save the currently used query.
+	Load Query
+		Shows in the sub menu all the queries available that were previously saved.
+		If you don't see your latest one, select the menu item "Refresh Query List"
+	Delete Query
+		Deletes the query you select. WARNING: Can't be undone!!!
+	Refresh Query List
+		Refreshes the query list after Load/Delete Query or manual changes
+	-
+	Set Comment
+		Comments out selected SQL text. Use in the SQL Query editing window.
+		If no text is selected, comments out the paragraph at the insertion point
+	Remove Comment
+		Uncomments selected text. If no text is selected, uncomments the paragraph at the insertion point
+	-
+	Edit Menu
+		For programmers only. Opens the menu for editing.
+
+
+

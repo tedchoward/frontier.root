@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.core.getd
+
+on getd (obj, as = nil) { «get object data
+	if not defined (obj^) {
+		scriptError (-1728)}; «no such object
+	case as {
+		nil {
+			return (obj^)};
+		stringType {
+			return (string (obj^))}}
+	else {
+		return (coerceValue (obj^, as))}}
+
+

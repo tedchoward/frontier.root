@@ -1,0 +1,87 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fileSynch.initSynchPoint
+
+on initSynchPoint (name, adrUploadFile=nil, adrDeleteFile=nil, folder=nil, secsBetweenScans=30) {
+	«Changes
+		«6/21/12; 9:46:28 AM by DW
+			«Init new pref, flDeleteEnabled. If true, we don't delete files on the server when they are gone from the folder. For backward compatibility, it's initialized to true.
+		«4/15/12; 6:42:41 PM by DW
+			«Only create the folder if it the synchpoint is enabled.
+		«2/10/11; 11:50:55 AM by DW
+			«Init prefs.rootUrl, prefs.flSynchDirectory, prefs.directoryFilename.
+		«7/29/08; 7:44:45 PM by DW
+			«rootPath is initialized to "/" and enabled is initialized to false.
+		«7/15/08; 5:41:56 PM by DW
+			«Add an enabled boolean, defaults true.
+		«7/9/06; 12:12:39 PM by DW
+			«Init adrdata^.prefs.rootPath.
+		«7/8/06; 12:00:22 PM by DW
+			«If the folder is not specified create it on the desktop.
+		«7/7/06; 7:07:35 PM by DW
+			«Created.
+	local (adrpoint);
+	fileSynch.init ();
+	adrpoint = @user.fileSynch.synchPoints.[name];
+	if not defined (adrpoint^) {
+		new (tabletype, adrpoint)};
+	if not defined (adrpoint^.files) {
+		new (tabletype, @adrpoint^.files)};
+	if not defined (adrpoint^.callbacks) {
+		new (tabletype, @adrpoint^.callbacks)};
+	if adrUploadFile != nil {
+		if not defined (adrpoint^.callbacks.uploadFile) {
+			adrpoint^.callbacks.uploadFile = adrUploadFile}};
+	if adrDeleteFile != nil {
+		if not defined (adrpoint^.callbacks.deleteFile) {
+			adrpoint^.callbacks.deleteFile = adrDeleteFile}};
+	bundle { //prefs
+		if not defined (adrpoint^.prefs) {
+			new (tabletype, @adrpoint^.prefs)};
+		if not defined (adrpoint^.prefs.enabled) {
+			adrpoint^.prefs.enabled = false};
+		if not defined (adrpoint^.prefs.folder) {
+			if folder == nil {
+				if system.environment.isMac {
+					folder = file.getspecialfolderpath ("", "desktop folder", false)}
+				else {
+					folder = file.getspecialfolderpath ("", "desktop", false)};
+				folder = folder + name + file.getpathchar ()};
+			adrpoint^.prefs.folder = folder};
+			«file.surefilepath (folder + "xxx")
+		
+		if not file.exists (adrpoint^.prefs.folder) { //4/15/12 by DW
+			if adrpoint^.prefs.enabled {
+				file.surefilepath (folder + "xxx")}};
+		
+		if not defined (adrpoint^.prefs.secsBetweenScans) {
+			adrpoint^.prefs.secsBetweenScans = secsBetweenScans};
+		if not defined (adrpoint^.prefs.rootPath) { //7/29/08 by DW
+			adrpoint^.prefs.rootPath = "/"};
+		if not defined (adrpoint^.prefs.rootUrl) { //2/10/11 by DW
+			adrpoint^.prefs.rootUrl = ""};
+		if not defined (adrpoint^.prefs.flSynchDirectory) { //2/10/11 by DW
+			adrpoint^.prefs.flSynchDirectory = false};
+		if not defined (adrpoint^.prefs.directoryFilename) { //2/10/11 by DW
+			adrpoint^.prefs.directoryFilename = "directory.json"};
+		if not defined (adrpoint^.prefs.flDeleteEnabled) { //6/21/12 by DW
+			adrpoint^.prefs.flDeleteEnabled = true}};
+	bundle { //stats
+		if not defined (adrpoint^.stats) {
+			new (tabletype, @adrpoint^.stats)};
+		if not defined (adrpoint^.stats.cterrors) {
+			adrpoint^.stats.cterrors = 0};
+		if not defined (adrpoint^.stats.ctuploads) {
+			adrpoint^.stats.ctuploads = 0};
+		if not defined (adrpoint^.stats.ctdeletes) {
+			adrpoint^.stats.ctdeletes = 0};
+		if not defined (adrpoint^.stats.ctscans) {
+			adrpoint^.stats.ctscans = 0};
+		if not defined (adrpoint^.stats.whenNextCheck) {
+			adrpoint^.stats.whenNextCheck = date (0)}};
+	«if not defined (adrpoint^.trash)
+		«new (tabletype, @adrpoint^.trash)
+	return (adrpoint)};
+bundle { //test code
+	«initSynchPoint ("Amazon S3", @msg, @msg)
+	initSynchPoint ("staticOpmlOrg", @msg, @msg)}
+
+

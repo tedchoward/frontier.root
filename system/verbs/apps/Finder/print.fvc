@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Finder.print
+
+on print (obj) { «Print the specified object(s)
+	if Finder.isScriptable () {
+		return (appleEvent (Finder.id, 'aevt', 'pdoc', '----', Finder.finderSpec (obj)))}
+	else {
+		return (Finder.folderVerb ('spri', obj))}}
+
+

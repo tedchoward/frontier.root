@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:user.webserver.responders.photoFan.methods.any
+
+on any (pta) {
+	return (photoFanSuite.responder (pta))}
+
+

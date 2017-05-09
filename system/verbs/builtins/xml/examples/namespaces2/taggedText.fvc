@@ -1,0 +1,13 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.xml.examples.namespaces2.taggedText
+
+<?xml version="1.0"?>
+<a:a xmlns="http://example.org/B/" xmlns:a="http://example.org/A/" xmlns:c="http://example.org/C/">
+	<b>
+		<c:c xmlns="http://example.org/D/">
+			<d></d>
+			</c:c>
+		</b>
+	</a:a>
+
+
+

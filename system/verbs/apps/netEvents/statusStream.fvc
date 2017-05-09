@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.netEvents.statusStream
+
+on statusStream (stream, adrbytespending) { «Get the status of a stream
+	local (vals);
+	complexEvent (@vals, netEvents.id, 'WAPI', 'STAT', '----', long (stream));
+	adrbytespending^ = vals.PEND;
+	return (vals.['----'])}
+
+

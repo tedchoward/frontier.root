@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.server.saveOutline
+
+on saveOutline (username, opmltext) {
+	«Changes
+		«8/6/10; 2:47:26 PM by DW
+			«Created. 
+	local (adruser = io.server.initUser (username), now = clock.now ());
+	local (htmltext = "User \"" + username + "\" updated his or her instant outline.");
+	scratchpad.opmltext = opmltext;
+	realtime.server.pushUpdate (htmltext, "instantOutline", username, opmltext);
+	adruser^.opmltext = opmltext;
+	adruser^.stats.ctSaves++;
+	adruser^.stats.whenLastSave = now};
+bundle { //test code
+	saveOutline ("davewiner", scratchpad.opmltext)}
+
+

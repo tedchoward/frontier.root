@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.doScript
+
+on doScript (appScript) { «Execute a script
+	return (misc.doScript (BBEdit.id, appScript))}
+
+

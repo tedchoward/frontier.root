@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.adminSite.website.["#security"]
+
+if defined (system.temp.Frontier.setupFrontier) { //possibly allow access to the setup page from the local machine
+	if defined (system.temp.Frontier.setupFrontier.flAllowLocalAccessToSetupPage) {
+		if system.temp.Frontier.setupFrontier.flAllowLocalAccessToSetupPage {
+			local (clientDomain = string.popSuffix (client, ":"));
+			if tcp.equalNames (clientDomain, "127.0.0.1") or tcp.equalNames (clientDomain, tcp.dns.getMyDottedId ()) { //client must be on this computer
+				if string.lower (uri) == "/setupfrontier" { //only allow the setup page through -- block the rest of the control panel
+					return (true)}}}}};
+if defined (config.mainResponder.prefs.flControlPanel) { //make sure this machine permits access to the control panel site
+	if config.mainResponder.prefs.flControlPanel {
+		local (securityLevel = 0);
+		if defined (config.mainResponder.prefs.controlPanelSecurityLevel) {
+			securityLevel = config.mainResponder.prefs.controlPanelSecurityLevel};
+		return (mainResponder.security.httpAuthentication ("Frontier Admin", groupName:"Admin", domain:"/", securityLevel:securityLevel))}};
+code = 403;
+responseBody = webserver.util.buildErrorPage ("403 FORBIDDEN", "Access not allowed.");
+scriptError ("!return") //prevent mainResponder.respond from overwriting our response
+
+

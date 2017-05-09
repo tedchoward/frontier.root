@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.editMenu.setUnderline
+
+on setUnderline (flunderline) {
+	kernel (editmenu.setunderline)}
+
+

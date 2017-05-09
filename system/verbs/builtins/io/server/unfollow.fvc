@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.server.unfollow
+
+on unfollow (username, userToUnfollow) {
+	«Changes
+		«9/1/10; 2:59:28 PM by DW
+			«Created. 
+	local (adrdata = io.init (), adruser = io.server.initUser (username));
+	local (adrfollow = @adruser^.follows.[userToUnfollow]);
+	if not defined (adrfollow^) {
+		scripterror ("Can't unfollow user \"" + userToUnfollow + "\" because you're not following that user.")};
+	delete (adrfollow);
+	return (true)}
+
+

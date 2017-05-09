@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.dll.unload
+
+on unload (dllPath) {
+	kernel (dll.unload)}
+
+

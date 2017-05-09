@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.insertGlossaryEntry
+
+on insertGlossaryEntry (s) { «Inserts the specified glossary entry into the front editing window.
+	return (appleEvent (BBEdit.id, 'R*ch', 'Igls', '----', string (s)))}
+
+

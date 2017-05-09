@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.odbServer.serverStart
+
+odbServer.init ();
+inetd.startOne (@odbServer.daemon)
+
+

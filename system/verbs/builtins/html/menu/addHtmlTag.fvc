@@ -1,0 +1,34 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.menu.addHtmlTag
+
+on addHtmlTag (tag) {
+	«Changes:
+		«11/27/01; 6:36:47 PM by JES
+			«If not in text mode, apply the tag to the entire heading, and switch back to bar-cursor mode.
+		«09/19/00; 1:41:21 AM by PBS
+			«The call to window.update is now no longer necessary with 7.0b22 and up. It was an annoying workaround for a kernel display bug that's been fixed.
+	local (start, end, x);
+	tag = html.menu.setTagCase (tag);
+	local (textmode = wp.inTextMode ());
+	wp.setTextMode (true);
+	wp.getSelect (@start, @end);
+	if start == end { // Nothing selected
+		if textmode {
+			wp.insert ("<" + tag + "></" + tag + ">");
+			wp.setSelect (start + (sizeOf (tag) + 2) , start + (sizeOf (tag) + 2));
+			return (true)}
+		else {
+			wp.setSelect (0, infinity);
+			wp.getSelect (@start, @end)}};
+	local (source, html);
+	source = wp.getSelText ();
+	html = "<" + tag + ">" + source + "</" + tag + ">";
+	wp.insert (html);
+	if textmode {
+		wp.setSelect (start + (sizeOf (tag) + 2), end + sizeOf (tag) + 2)}
+	else {
+		wp.setTextMode (false)};
+	if date.versionLessThan (Frontier.version (), "7.0b22") { //PBS 09/19/00: call window.update only if necessary
+		window.update (window.frontmost ())};
+	return (true)}
+
+

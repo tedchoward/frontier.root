@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.msExplorer.openDocument
+
+on openDocument (file) {
+	return (required.openDocument (msExplorer.id, file))}
+
+

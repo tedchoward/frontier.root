@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.free
+
+on free (patternRef) {
+	return (boolean (dll.call (regex.data.getPath (), "regfreeverb", long (patternRef))))}
+
+

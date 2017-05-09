@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.menuCommands.lookupDomainReverse
+
+if dialog.ask ("Find the domain name for which IP address?", @config.mainResponder.prefs.lastIpAddressLookup) {
+	local (dn = tcp.dns.getDomainName (config.mainResponder.prefs.lastIpAddressLookup));
+	dialog.alert (dn)}
+
+

@@ -1,0 +1,433 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Eudora.objectHierarchy
+
+application -- An application program
+	Properties:
+		version -- the version number
+		selectedText -- the text of the user’s current selection
+	Elements:
+		window
+		mailFolder
+		setting
+		filter
+field -- An RFC 822 header field in a message (field named "" is the body) or a named part of a nickname.
+filter -- One of Eudora’s filters.
+	Properties:
+		name -- the name
+		id -- the filter’s unique id
+		useDate -- the last date & time the filter matched a message
+		incoming -- should filter run on incoming messages
+		outgoing -- should filter run on outgoing messages
+		manual -- should filter run when doing manual filtering
+		conjunction -- the filter’s conjunction
+		subject -- change the subject to this
+		label -- change the subject to this
+		priority -- priority change; -1/0/1
+		destination -- name of mailbox to copy or transfer to
+		copying -- copy (true) or transfer (false)?
+	Elements:
+		matchTerm
+mailbox -- A mailbox.
+	Properties:
+		name -- the name of the mail folder
+		spaceWasted -- the amount of waste space in the mailbox
+		spaceRequired -- the minimum amount of space required to hold the mailbox
+		location -- the file the mailbox is stored in
+		tocLocation -- the file the table of contents is stored in
+		window -- the mailbox's window, if any
+	Elements:
+		message
+mailFolder -- A folder containing mailboxes or other mail folders.
+	Properties:
+		name -- the name
+	Elements:
+		destination
+		mailFolder
+		nicknameFile
+matchTerm -- A match term of a filter.
+	Properties:
+		header -- the header field to search
+		verb -- the term’s verb
+		value -- the header field to search
+message -- A message
+	Properties:
+		id -- unique id of the message
+		body -- the body of the message
+		priority -- the priority
+		label -- the index of the label
+		status -- the message status
+		sender -- the sender as appearing in the message summary
+		date -- the date as appearing in the message summary
+		subject -- the subject as appearing in the message summary
+		size -- the size of the message
+		outgoing -- is the message is outgoing?
+		signature -- which signature the message should have
+		qp -- is Eudora allowed to encode text?
+		returnReceipt -- is a return receipt is requested?
+		wrap -- should the text be wrapped when sent?
+		tabExpansion -- should tabs get expanded to spaces?
+		keepCopy -- should a copy should be kept after message is sent?
+		preserveMacintoshInfo -- should Macintosh information always be sent with attachments?
+		attachmentEncoding -- the type of encoding to use for attachments
+		showAllHeaders -- should all headers be visible?
+		transliterationTable -- the resource id of the transliteration table
+		willBeFetched -- will the message be [re]fetched on next check?
+		willBeDeleted -- will the message be deleted from server on next check?
+		destroyAttachments -- will attachments be trashed after the message is sent?
+		window -- the message's window, if any
+	Elements:
+		field
+nickname -- A nickname for a user.
+	Properties:
+		nickname -- the nickname itself
+		addresses -- the addresses to which the nickname expands
+		notes -- the notes associated with this nickname, after fields have been removed
+		expansion -- the full expansion of the nickname
+		recipient -- is the nickname on the Quick Recipients list?
+		rawNotes -- the notes associated with this nickname, including encoded fields
+		nicknameFile -- the name of the file the nickname comes from
+	Elements:
+		field
+nicknameFile -- A file full of nicknames
+	Properties:
+		file -- the filespec of the file
+	Elements:
+		nickname
+setting -- Eudora's settings
+	1 The font to use in windows.
+	2 The size of the font to use in windows.
+	3 Your login name and the name of your POP server, with an '@' between them.  Eg,'jdoe@anyhost.anyschool.edu'.
+	4 The host to use to send mail. If you leave it blank, Eudora will use your POP server.
+	5 Your return address. If you fill this in, be SURE you put in a working address. 
+	6 How often (in minutes) Eudora will check for mail.
+	7 Eudora will word-wrap outoing messages.
+	8 Eudora will show all the headers from messages, not just an abbreviated set.
+	9 Eudora will try to guess where paragraphs are when you do a Save As..., and will remove returns that don't end paragraphs.
+	10 Four-character creator code for the application that the Finder will use to open text files that Eudora saves.
+	11 Name of the application that the Finder will use to open text files that Eudora saves.
+	12 Last time (in seconds) Eudora scanned your maildrop to see if it should do deletions.
+	13 Eudora will send queued mail whenever it checks mail.
+	14 windows will be zoomed to full size when first opened.
+	15 Eudora will dismiss alert dialogs after two minutes.
+	16 Quitting Eudora will empty Eudora's trash.
+	17 Eudora will compact mailboxes when you quit.
+	18 Eudora will not immediately delete mail from the POP server.
+	19 Eudora will keep a copy of all mail you send.
+	20 Eudora will use an alert dialog to get your attention.
+	21 Eudora will use sound to get your attention.
+	22 Eudora will attach your signature to messages you create.
+	23 The host to use for ph service.
+	24 Eudora will remember your password from one session to the next. Only check it if your Macintosh is in a secure location.
+	25 Eudora will send mail immediately instead of queueing it.
+	26 Eudora will always send Macintosh resources, type, and creator with attachments.
+	27 Whether to use the Communications Toolbox to transfer mail.
+	28 Eudora will insert spaces when you press the tab key in the body of an outgoing message. When unchecked, pressing tab will move you to the “To:” field. This switch also affects the treatment of tabs on incoming mail.
+	29 Use this menu to set the font to use when printing.
+	30 Type the font size to use when printing.
+	31 The text of your saved password. Whoever put this in a dialog should be shot.
+	32 
+	33 Eudora will not flash an icon in the menu bar to get your attention.
+	34 Eudora will not show what it's doing with a progress window.
+	35 Eudora will warn you before it deletes unread or unsent mail.
+	36 Closing a mailbox will close all messages from that mailbox.
+	37 Eudora's Find command will care about the case of letters.
+	38 nothing interesting will happen.
+	39 Message windows will open wide enough to display this many characters.
+	40 Message windows will open tall enough to display this many lines.
+	41 Eudora will include headers when doing a Save As...
+	42 Can use the arrow keys to move from one message to the next.
+	43 Name of the folder to which Eudora will save attachments.
+	44 Eudora will save attachments to a folder without consulting the user.
+	45 Volume and directory id of the folder to which attachments are saved.
+	46 Can not use the arrow keys with command held down to move from one message to the next.
+	47 Large messages will not be automatically downloaded from the POP server.
+	48 
+	49 
+	50 Eudora will search only in the summaries of messages, not the messages themselves.
+	51 Eudora will not open mailboxes after depositing new mail in them.
+	52 
+	53 Eudora will not worry if a mailbox has been changed since its table of contents was created; it will use the table of contents anyway.
+	54 Nothing interesting now.
+	55 Eudora will reply to all recipients of a message; unchecked, only the sender gets the reply. Hold down the option key to reverse the setting for a single reply.
+	56 Eudora will include your address when doing a reply to all.
+	57 Use APOP for authentication. Your server administrator will tell you if you should use this; most people should use passwords.
+	58 Number of the monitor on which to put new windows.
+	59 Work faster, but you might lose mail if your Macintosh crashes.
+	60 
+	61 Username to substitute for “\\U” in navigation scripts.
+	62 Password to substitute for “\\P” in navigation scripts.
+	63 
+	64 
+	65 
+	66 
+	67 
+	68 
+	69 
+	70 
+	71 Eudora can log certain actions to a file named “Eudora Log” in your Eudora Folder. Check the item(s) you wish to log.
+	72 Eudora will pay no attention to priority headers on incoming messages.
+	73 Do not copy priorities from original messages to replies.
+	74 
+	75 Transliteration table to use on incoming non-MIME mail.
+	76 Transliteration table to use on outgoing mail.
+	77 Your real name.
+	78 Eudora will not open the next message when you delete the message you're reading, if the next message is unread.
+	79 Eudora will not draw separator lines in mailbox windows.
+	80 Eudora will ignore illegal characters in BinHex attachments.
+	81 Eudora will use the POP3 LAST command to figure out what mail on the server is new.
+	82 The maximum number of messages Eudora will fetch in a single session.
+	83 
+	84 Eudora will make no connections.
+	85 Eudora will not replace certain special characters (“”‘’•—–) with plain ascii characters (\"\"''o--) when sending mail.
+	86 Eudora will put attachments in the Finder's Trash when you put the messages they came with into Eudora's Trash.
+	87  Eudora will use the “XTND XMIT” extension to POP3 to send mail, in lieu of SMTP.
+	88 Transliteration table for ph results.
+	89 Transliteration table for ph queries.
+	90 Defunct.
+	91 Eudora will use MIME Quoted-Printable encoding when necessary to protect special characters.
+	92 
+	93 replies to all will put the recipients from the To: field into the Cc: field of the reply, not the To: field.
+	94 Eudora will color only the label part of message summaries, not whole summaries.
+	95 Eudora should show the time of the message using the sender's timezone.
+	96 
+	97 Eudora will open the next message after you delete or transfer a message, if that next message is unread.
+	98 Last time Eudora checked for mail to be deleted.
+	99 Eudora should use Status: headers in lieu of XTND XLST or UIDL in discovering what mail on the server has been read.
+	100
+	101 Number of days to leave mail on server, if you have Leave Mail On Server checked. Leaving it blank means forever.
+	102 mail emptied from Eudora's trash will be removed from the server on the next mail check.
+	103 Host to use for finger queries.
+	104 Host to use for whois queries.
+	105 Host to use for LDAP (X.500) queries.
+	106 If a server has multiple IP addresses, Eudora will pick one at random instead of just using the first.
+	107 Attachments will be sent with BinHex encoding. This is best for sending to other Macintoshes.
+	108 Attachments will be sent with AppleSingle encoding. A few whackos need this.
+	109 Attachments will be sent with AppleDouble encoding. This is best for sending to MIME mailers.
+	110 Attachments will be sent with uuencode encoding. Use this only if the recipient says you have to.
+	111 The sound to play when mail arrives.
+	112 The sound to play when Eudora needs help.
+	113 Eudora will use a more compatible (but much slower) way of building its menus.
+	114 Eudora will allow From: fields to be editted in composition windows.
+	115 Eudora will do turbo redirect; unchecked, Eudora does regular redirect. Hold down the option key to reverse for a single redirect. Turbo Redirect redirects the message, queues the redirected message, and deletes the original.
+	116 This domain will be added to any address that doesn't have a domain. E.g., if you put “anytown.us” in it, and send mail to “jdoe”, the address Eudora uses will be “jdoe@anytown.us”.
+	117 Use Kerberos for authentication. Your server administrator will tell you if you should use Kerberos; most people should use passwords.
+	118 Kerberos realm. Go ask your Kerberos administrator.
+	119 Eudora will not do a cleartext password to login to the POP server.
+	120 Eudora will not do automatic checks if the Mac is on battery power.
+	121 Whether or not Eudora should vary date format with the age of a message.
+	122 Eudora will do only synchronous disk i/o. This may be needed by buggy SCSI disk drivers.
+	5501 Name of alternate signature file.
+	5502 Name of header box in filters window.
+	5503 Name of Match: section of filters window.
+	5504 Name of Action: section of filters window.
+	5505 Label for Make Subject
+	5511 Replacement metastring for subject area of filters window.
+	5515 Label of transfer to button.
+	5516 Label of copy to button.
+	5602 The number of seconds before alerts are automatically dismissed.
+	5604 Width of the Nickname list column in the Nicknames window.
+	5605 Don't touch.
+	5606 Label for the addresses section of the nicknames window.
+	5607 Name of nickname file.
+	5608 Percent of vertical space to allot to addresses in nicknames.
+	5614 Status header (substring) for already-read message.
+	5615 Name of application font.
+	5706 Name of default stationery file.
+	5709 Don't touch.
+	5713 Return-receipt header.
+	5801 BinHex intro line, used to recognize BinHex files. DON'T TOUCH.
+	5808 BinHex intro line, put on outgoing messages. DON'T TOUCH.
+	5816 Disk I/O buffer size.
+	5909 Magic string for filter to match any header.
+	5910 Magic string for filter to match body of mail.
+	5911 Don't touch.
+	5912 Don't touch.
+	5914 Don't touch.
+	5915 Don't touch.
+	5916 Don't touch.
+	5917 Don't touch.
+	5918 Don't touch.
+	6001 Height of icon bar.
+	6017 Newline used during CTB connections.
+	6020 Don't touch.
+	6102 Don't touch.
+	6104 Don't touch.
+	6106 Percent by which text should be darker when colored
+	6107 Percent by which large areas should be lighter when colored
+	6108 Template for building name of filter; ^0 is first header, ^1 is first value
+	6109 Format for “ancient” date summaries; time, date, weekday, zone
+	6110 Format for “old” date summaries; time, date, weekday, zone.
+	6111 Format for recent date summaries; time, date, weekday, zone.
+	6112 How old is “old” for date display; in hours, or -1 for “not today”.
+	6113 How old is “ancient” for date display; in hours.
+	6114 Lightness for a pastel color
+	6115 Saturation for a pastel color
+	6116 Format for naming stationery or bookmark files
+	6201 Don't touch.
+	6203 Don't touch.
+	6205 Double-click mouse movement tolerance.
+	6211 Don't touch.
+	6213 Number of seconds between FlushVol calls.
+	6214 Name of Eudora folder.
+	6219 Number of seconds to leave ICMP messages on-screen.
+	6220 Name of In mailbox (be sure to change Mailbox && Transfer menus, too.)
+	6401 Don't touch.
+	6408 Size at which to split messages. Must satisfy FRAGMENT_SIZE<SPLIT_THRESH<32K
+	6411 Mailboxes window button name.
+	6412 Mailboxes window button name.
+	6413 Mailboxes window button name.
+	6414 Mailboxes window button name.
+	6415 Mailboxes window button name.
+	6416 Command used for notes in nicknames window.
+	6602 Navigation In string name.
+	6603 Navigation Out string name.
+	6604 TCP newline string.
+	6804 Timeout for opening connections.
+	6805 Name of Out mailbox (be sure to change Mailbox menu, too.)
+	6806 Number of ticks before Live Nicknames moves pointer.
+	6812 Default ph host.
+	6814 Port used for ph.
+	6815 Query command used in ph. Should end with space.
+	6816 Quit command used in ph.
+	6820 Port used for POP3.
+	7002 Names of window size 
+	7004 Default print font.
+	7005 Print header font.
+	7006 Print header margin.
+	7007 Print header fontsize.
+	7008 Name of Queue button.
+	7009 Prefix for quoted sections.
+	7016 Don't touch.
+	7017 Receive timeout, in seconds.
+	7020 String with which to prefix replies.
+	7207 Name of Send button.
+	7208 Name of settings file.
+	7209 Number of seconds for timeouts during navigation.
+	7210 Name of signature file.
+	7211 Port for SMTP.
+	7213 Message state labels.
+	7214 Header that gives message status.
+	7216 String to insert before quoted Forward text
+	7218 Number of chars to indent for a tab.
+	7219 Buffer size for network.
+	7220 Name of tcp/ip driver.
+	7402 Temp file suffix.
+	7403 Default TEXT file creator.
+	7408 Suffix for table of contents files.
+	7411 Prefix for use in Transfer menu.
+	7412 Name of Trash mailbox (be sure to change Mailbox && Transfer menus, too.)
+	7413 CTB connect request string.
+	7419 Number of chars at which to wrap messages.
+	7605 Navigation Mid string name.
+	7606 Left printout margin.
+	7607 Right printout margin.
+	7609 SMTP Helo argument for dialups.
+	7610 SMTP Helo argument for networks.
+	7612 Message width when PREF_MWIDTH is not set.
+	7613 Message when an incorrect line length is found in uuencoded data.
+	7614 Eudora will decode a BinHex file if the message is at least this percent of the size the BinHex file reports, or...
+	7615 if the message is less than this size.
+	7616 Size limit for Skip Big Messages.
+	7619 Size at which a message must be split. Must satisfy FRAGMENT_SIZE<SPLIT_THRESH<32K
+	7620 Size display format for mailbox windows.
+	7801 size of mailbox size display
+	7804 Size of font for mailbox size box.
+	7805 Characters forbidden in aliases.
+	7813 Put in the To: field if a message has only Bcc:'s.
+	7817 String to put after forwarded text
+	7818 Reply to sender attribution
+	7820 # seconds to wait for ODoc, OApp, or PDoc
+	8008 extra desktop margin on the left when creating a window
+	8009 extra desktop margin on the right when creating a window
+	8010 extra desktop margin on the bottom when creating a window
+	8011 extra desktop margin on the top when creating a window
+	8012 X-Sender: header
+	8014 Nicknames for sender.
+	8015 text for normal reply
+	8016 text if PREF_REPLY_ALL is set
+	8203 Never warn the user of mail to be sent this many hours into the future
+	8204 # of body lines of a skipped big message to download
+	8205 # attribution line; from, date, subject, time
+	8206 Label for private notes section of nicknames
+	8207 Port from which Eudora connects; leave at 0
+	8216 Port for password-change protocol
+	8402 Wrap limit for quoted sections
+	8403 Port for finger requests
+	8404 Format for the priority header.
+	8406 Percentage of waste space that triggers a compaction
+	8407 Percentage of free disk space that triggers a compaction
+	8410 Quote character for forwards
+	8604 Format for date summaries; time, date, timezone
+	8610 Message titling string; 0 mailbox, 1 sender, 2 date, 3 subject.
+	8613 Return clause for ph. Should be empty or begin with space.
+	8614 Number of ticks between page scrolls.
+	8619 Don't touch.
+	8620 Don't touch.
+	8801 Don't touch.
+	8802 Don't touch.
+	8803 Don't touch
+	8804 Don't touch
+	8805 Don't touch
+	8806 Don't touch
+	8807 Don't touch
+	8808 Don't touch
+	8809 Don't touch
+	8812 Don't touch
+	9003 Maximum line to send to SMTP
+	9007 Don't touch.
+	9205 Name of signature folder
+	9208 Don't touch.
+	9209 Magic bytes for PostScript file
+	9217 Don't touch
+	9218 Filename template for 
+	9219 Don't touch.
+	9220 Resource name for extra config params.
+	9402 Don't touch.
+	9403 Don't touch.
+	9404 Don't touch.
+	9405 Don't touch.
+	9406 Set to either appledouble (oldstyle) or header-set (newstyle)
+	9411 Size of chunk of text attachment to check for funny characters.
+	9412 # of ticks to wait between arrow scrolls
+	9413 Time Eudora must be idle before doing a timed check
+	9414 Max # of quote chars Eudora will recognize as such
+	9415 Apple Event timeout, in ticks.
+	9416 Label to use for uuencoded body parts.
+	9417 Don't touch.
+	9418 Don't touch.
+	9419 Don't touch.
+	9601 # of days Eudora should wait before scanning for messages to delete on POP server
+	9602 Style to use for mailboxes with unread mail
+	9603 # of days after which to consider mailboxes not to have unread mail.
+	9611 Name of the kerberos driver.
+	9613 Name of kerberized POP3 service.
+	9614 Kerberos service name format. ^0=service, ^1=host.domain, ^2=realm, ^3=host
+	96158 characters of junk for sendauth server
+	9616 size of kerberos ticket buffer
+	9617 kerberos checksum
+	9619 Characters that should be backslashed in kerberos names
+	9620 Meaningless argument to Kerberos password
+	9801 Size of font to use in settings window
+	9818 Name of progress window
+	10001 Minimum percent lightness for color displays.
+	10002 Maximum percent lightness for color displays.
+	10003 Port # for kerberized popper.
+	10004 Size in K at which log file will be ended and a new one started. One old log is kept, named “Old log.”
+	10005 Creator for files of unknown MIME types.
+	10006 Type for files of unknown MIME types.
+	10007 Format for “fixed” date summaries; time, date, weekday, zone.
+window -- A window
+	Properties:
+		bounds -- the boundary rectangle for the window
+		closeable -- Does the window have a close box?
+		resizeable -- Is the window resizeable?
+		zoomable -- Does the window have a zoom box?
+		zoomed -- Is the window zoomed?
+		name -- the title of the window
+		index -- the number of the window
+		id -- the window's id
+		modified -- has the window been modified since the last save?
+		position -- upper left coordinates of the window
+		selectedText -- the text of the user’s current selection
+
+
+

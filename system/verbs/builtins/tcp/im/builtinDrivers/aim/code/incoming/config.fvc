@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.code.incoming.config
+
+on CONFIG (adrSelf, data) {
+	return(tcp.im.builtinDrivers.aim.code.core._callsub(adrSelf, "CONFIG", {adrSelf, data}, adrSelf^._adrSubCallbacks ))}
+
+

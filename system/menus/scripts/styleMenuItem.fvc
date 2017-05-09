@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.styleMenuItem
+
+on styleMenuItem (styleName) {
+	with user.prefs.commonStyles.[styleName] {
+		return (font + " " + size)}}
+
+

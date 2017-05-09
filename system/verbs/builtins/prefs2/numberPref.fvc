@@ -1,0 +1,37 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.prefs2.numberPref
+
+on numberPref (prompt, adrnumber, lowerbound=0, upperbound=infinity, colspan=1, textToRight="", labelAlign="right") {
+	«Changes
+		«3/26/12; 6:13:38 PM by DW
+			«Fixed a problem with url-encoding addresses. 
+				«http://worknotes.scripting.com/march2012/32612ByDw/s3FolderSynchPrefsBug/
+		«8/31/11; 7:38:32 AM by DW
+			«Created.
+	local (pta = html.getpagetableaddress (), size, error = "", type = "text", itemtext);
+	local (itemaddress = string.popFileFromAddress (adrnumber), itemname = string.urlEncode (itemaddress));
+	bundle { //set size
+		size = sizeof (string (upperbound));
+		if sizeof (string (lowerbound)) > size {
+			size = sizeof (string (lowerbound))}};
+	if pta^.method == "POST" {
+		local (value);
+		try {
+			«scratchpad.args = pta^.postargs
+			value = number (pta^.postargs.[itemname]);
+			if value < lowerbound {
+				error = prefs2.errorstring ("Must be <= " + lowerbound + ".")};
+			if value > upperbound {
+				error = prefs2.errorstring ("Must be >= " + upperbound + ".")};
+			if sizeof (error) == 0 {
+				local (adr = address (itemaddress));
+				adr^ = value}}
+		else {
+			«scratchpad.mynumbererr = tryerror
+			error = prefs2.errorstring ("Must be a number.")}};
+	bundle { //set itemtext
+		itemtext = "<input class=\"xlarge\" name=\"" + itemname + "\" size=\"" + size + "\" maxlength=\"" + size + "\" style=\"padding: 0px; height: 28px; font-size: 18px;\" value=\"" + string (adrnumber^) + "\" type=\"" + type + "\" />" + textToRight};
+	return ("<label for=\"" + itemname + "\">" + prompt + ":</label><div class=\"input\">" + itemtext + error + "</div>")}
+«bundle //test code
+	«numberPref ()
+
+

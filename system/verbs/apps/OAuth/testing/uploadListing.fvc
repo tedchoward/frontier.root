@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.OAuth.testing.uploadListing
+
+on uploadlisting (adrscript) {
+	local (s = string (adrscript^));
+	s = string.replaceall (s, "«", "//");
+	s = string.replaceall (s, "\r", "\r\r");
+	workspace.ftptoscripting (s, "/misc/programming/" + nameof (adrscript^) + ".txt")};
+bundle { //test code
+	uploadListing (@OAuth.getSignature)}
+
+

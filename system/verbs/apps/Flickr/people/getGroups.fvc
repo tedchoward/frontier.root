@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.people.getGroups
+
+on getGroups (id, adrgroups) {
+	«Changes
+		«5/30/12; 12:15:18 PM by DW
+			«Return a table of groups the user belongs to.
+	local (mystruct, xmltext, xstruct);
+	new (tabletype, adrgroups);
+	new (tabletype, @mystruct);
+	mystruct.api_key = user.flickr.prefs.apiKey;
+	mystruct.method = "flickr.people.getGroups";
+	mystruct.user_id = id;
+	mystruct.auth_token = user.flickr.prefs.token;
+	Flickr.signStruct (@mystruct);
+	xmltext = [user.flickr.prefs.server].flickr.people.getGroups (mystruct);
+	xmltext = xml.entitydecode (xmltext, flAlphaEntities:true);
+	xml.compile (xmltext, @xstruct);
+	«scratchpad.xstructgroups = xstruct
+	
+	local (adrxgroups = xml.getaddress (@xstruct, "groups"), adrgroup);
+	for adrgroup in adrxgroups {
+		if nameof (adrgroup^) endswith "group" {
+			local (adratts = @adrgroup^.["/atts"], adrsub = @adrgroups^.[adratts^.nsid]);
+			adrsub^ = adratts^;
+			adrsub^.urlFeed = "http://api.flickr.com/services/feeds/groups_pool.gne?id=" + adratts^.nsid + "&format=rss_200_enc"}}};
+bundle { //test code
+	getGroups (user.flickr.prefs.nsid, @scratchpad.mygroups)}
+
+

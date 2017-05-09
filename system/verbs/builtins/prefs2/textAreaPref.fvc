@@ -1,0 +1,41 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.prefs2.textAreaPref
+
+on textAreaPref (prompt, adrstring, cols=70, rows=5, colspan=1, labelAlign="right") {
+	«Changes
+		«11/9/11; 10:52:14 PM by DW
+			«Make the font size on textarea prefs agree with the size of string prefs.
+		«11/9/11; 9:20:07 AM by DW
+			«Various issues resolved with encoding, when dealing with object database addresses that have double-quotes in them. 
+		«9/5/11; 10:59:58 AM by DW
+			«Created.
+	local (pta = html.getpagetableaddress (), itemname = string.popFileFromAddress (adrstring), encodeditemname = string.urlencode (itemname));
+	«bundle //save debugging info, 11/9/11 by DW
+		«scratchpad.textareaparams = pta^
+		«scratchpad.textareaprompt = prompt
+		«scratchpad.textareaadrstring = adrstring
+	on demunge (s) {
+		if typeOf (s) != stringType {
+			table.assign (@s, string (s))};
+		s = string.replaceall (s, "\t", "  ");
+		s = html.translateToEntities (s);
+		s = string.replaceall (s, "\r\n", "\r");
+		s = string.replaceall (s, "\r", "&#013;");
+		return (s)};
+	if pta^.method == "POST" {
+		local (postargs = pta^.postargs);
+		local (adr = address (itemname));
+		if defined (adr^) {
+			if typeof (adr^) != stringtype {
+				delete (adr)}};
+		local (s = postargs.[encodeditemname]);
+		if system.environment.isMac {
+			s = string.latinToMac (s)};
+		adr^ = s};
+	if sizeof (prompt) > 0 {
+		prompt = prompt + ":"};
+	return ("<label for=\"" + encodeditemname + "\">" + prompt + "</label><div class=\"input\"><textarea class=\"xxlarge\" id=\"" + encodeditemname + "\" name=\"" + encodeditemname + "\" style=\"padding: 2px; font-size: 18px; line-height: 120%;\" cols=\"" + cols + "\" rows=\"" + rows + "\">" + demunge (adrstring^) + "</textarea></div>")}
+«bundle //test code
+	«html.setpagetableaddress (@scratchpad.textareaparams)
+	«textAreaPref (scratchpad.textareaprompt, scratchpad.textareaadrstring)
+
+

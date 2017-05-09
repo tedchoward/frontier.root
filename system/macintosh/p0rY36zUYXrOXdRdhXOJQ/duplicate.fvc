@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.core.duplicate
+
+on duplicate (appID, obj, duplicateTo = nil) { «Duplicate an object
+	return (appleEvent (appID, 'core', 'clon', '----', obj, 'insh', duplicateTo))}
+
+

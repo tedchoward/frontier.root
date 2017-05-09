@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.ucmds.testoutlinecmd
+
+local (s = html.ucmds.getOutlineHtml (@userland.changes1, "<ul>", "</ul>", "<li>", ""));
+Netscape.displayText ("<html><body>" + s + "</body></html>")
+
+

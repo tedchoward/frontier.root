@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.userland.oldstuff.testscripts.testlog
+
+ct = 0;
+loop {
+	log.add (ct++, "test log 1")}
+
+

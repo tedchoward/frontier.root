@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.launch.appleMenu
+
+on appleMenu (itemname) {
+	kernel (launch.applemenu)}
+
+

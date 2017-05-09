@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.table.getSelection
+
+on getSelection () {
+	kernel (table.getSelection)}
+
+

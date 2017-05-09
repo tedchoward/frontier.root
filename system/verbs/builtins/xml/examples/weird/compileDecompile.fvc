@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.examples.weird.compileDecompile
+
+with xml.examples.weird {
+	xml.compile (string (taggedtext), @tableStructure);
+	wp.newtextobject (xml.decompile (@tableStructure), @scratchpad.weirdText)}
+
+

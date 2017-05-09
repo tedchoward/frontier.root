@@ -1,0 +1,11 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.controlPanel.["#prefs"].javaScript
+
+<script language="JavaScript">
+<!--
+		function openWin ( windowURL, windowName, windowFeatures ) { 
+			return window.open ( windowURL, windowName, windowFeatures ) ; 
+		} 
+		// -->
+</script>
+
+

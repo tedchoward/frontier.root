@@ -1,0 +1,26 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.authenticate
+
+on authenticate (username, password) {
+	«Changes
+		«8/6/08; 8:00:09 AM by DW
+			«Validates the username/password combination. Cribbed from builtins.identica.
+	local (adrcache);
+	bundle { //check the cache
+		adrcache = @system.temp.twitterAuthentications;
+		if not defined (adrcache^) {
+			new (tabletype, adrcache)};
+		adrcache = @adrcache^.[username];
+		if defined (adrcache^) {
+			if adrcache^ == password {
+				return (true)}}};
+	try {
+		local (replies);
+		if twitter.getReplies (@replies, username, password) {
+			adrcache^ = password;
+			return (true)}};
+	return (false)}
+«bundle //test code
+	«dialog.alert (authenticate ("georgematesky", "fuckyou!"))
+	«dialog.alert (authenticate (user.twitter.prefs.username, user.twitter.prefs.password))
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.menu.remove
+
+try { «remove html menu
+	html.menu.init ();
+	menu.remove (@html.menu.theMenu)}
+
+

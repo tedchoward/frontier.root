@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.OAuth.getSignature
+
+on getSignature (adrparams, url, consumerSecret, tokenSecret="", method="GET") {
+	«Changes
+		«3/26/11; 9:41:22 PM by DW
+			«When calling string.urlEncode, pass the second optional param for the "full" encode. Otherwise characters like @ aren't encoded, and the signatures are declared invalid.
+	local (s = "");
+	for adr in adrparams {
+		s = s + nameof (adr^) + "=" + string.urlencode (adr^, true) + "&"};
+	s = string.delete (s, sizeof (s), 1); //delete last ampersand
+	s = method + "&" + string.urlencode (url, true) + "&" + string.urlencode (s, true);
+	OAuth.testing.sigbasestring = s;
+	local (key = string.urlencode (consumerSecret, true) + "&" + string.urlencode (tokenSecret, true));
+	s = base64.encode (OAuth.getHmac (s, key), infinity);
+	return (s)}
+
+

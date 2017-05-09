@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.cleanObject
+
+on cleanObject (param1) {
+	return (appleEvent (cardEditor.id, 'IOWA', 'clob', 'prm1', string (param1)))}
+
+

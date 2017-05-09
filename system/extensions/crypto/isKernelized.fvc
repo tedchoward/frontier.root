@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.extensions.crypto.isKernelized
+
+on isKernelized () {
+	«Changes
+		«8/31/09; 2:45:12 PM by DW
+			«Return true if we're running a version of the OPML Editor (or Frontier) that has the crypto code built-into the kernel.
+	return (defined (system.compiler.["kernel"].crypt))}
+«bundle //test code
+	«dialog.alert (isKernelized ())
+
+

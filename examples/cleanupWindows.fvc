@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:examples.cleanupWindows
+
+local {
+	h = 15;
+	v = 64};
+on cleanupvisit (wname) {
+	if wname == "Frontier.root" {
+		window.setPosition (wname, 10, 20)}
+	else {
+		window.setPosition (wname, h, v);
+		window.setSize (wname, 300, 200);
+		h = h + 20;
+		v = v + 20};
+	return (true)};
+window.visit (@cleanupvisit)
+
+

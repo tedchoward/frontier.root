@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.pocalypseButton.open
+
+on open () {
+	«Changes
+		«3/9/12; 3:00:54 PM by DW
+			«Created.
+	local (pta = html.getpagetableaddress (), t);
+	scratchpad.pocaparams = pta^;
+	new (tabletype, @t);
+	webserver.parseargs (pta^.searchargs, @t);
+	scratchpad.t = t;; //edit (@scratchpad.t)
+	opmlEditor.pocalypse.openworkspace (t.url, t.responder, t.title, t.username);
+	frontier.bringtofront ();
+	webserver.redirect (pta, pta^.requestHeaders.Referer)};
+bundle { //test code
+	html.setpagetableaddress (@scratchpad.pocaparams);
+	open ()}
+
+

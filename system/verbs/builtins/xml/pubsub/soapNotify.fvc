@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.pubsub.soapNotify
+
+on soapNotify (path, procedure, params, domain, port) {
+	soap.rpc.client (path, procedure, @params, domain, port)}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.details.notsupported
+
+on notsupported (operation) {
+	scriptError ("The \"card." + operation + "\" operation is not supported in Iowa Runtime v" + card.version () + " . Sorry! DW")}
+
+

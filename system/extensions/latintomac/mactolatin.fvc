@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.extensions.latintomac.mactolatin
+
+on mactolatin (macText) {
+	«Changes:
+		«5/30/01; 9:17:32 PM by PBS
+			«If this is the OS X version, call string.macToLatin instead of calling the UCMD.
+	if defined (system.environment.isCarbon) {
+		if system.environment.isCarbon {
+			return (string.macToLatin (macText))}};
+	if frontier.isPowerPC () {
+		return (appleEvent (@latintomac.codePPC, 'cvtx', 'm2l1', '----', string (macText)))}
+	else {
+		return (appleEvent (@latintomac.code68K, 'cvtx', 'm2l1', '----', string (macText)))}}
+
+

@@ -1,0 +1,77 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.firewall
+
+on firewall (pta, username=nil, password=nil) {
+	«Changes
+		«3/1/11; 10:47:26 AM by DW
+			«Temporarily, allow caller to pass us the username and password, which overrides the global one. Part of a bootstrap of a new identity system in here.
+		«2/26/11; 11:19:38 PM by DW
+			«Patterned after river2suite.firewall.
+	local (adrdata = opmleditor.init ());
+	«bundle //call the callbacks
+		«local (adr)
+		«for adr in @user.radio.callbacks.firewall
+			«try
+				«while typeOf (adr^) == addressType
+					«adr = adr^
+				«if adr^ (pta)
+					«return (true)
+	scratchpad.firewallparams = pta^;
+	on getHostFromReferer (referer) {
+		local (urllist, host);
+		try {
+			urllist = string.urlsplit (pta^.requestHeaders.referer)}
+		else {
+			urllist = string.urlsplit (pta^.requestHeaders.referer + "/")};
+		host = urllist [2];
+		if host contains ":" {
+			host = string.nthField (host, ":", 1)};
+		return (host)};
+	bundle { //init pta^.opmlEditor
+		if not defined (pta^.opmlEditor) {
+			new (tabletype, @pta^.opmlEditor)};
+		pta^.opmlEditor.flSameMachine = opmlEditor.isSameMachine (pta^.client)};
+	if pta^.opmlEditor.flSameMachine {
+		return (true)};
+	if not adrdata^.prefs.security.flAllowRemoteViewing {
+		scriptError ("Access denied.")};
+	if pta^.method == "POST" {
+		if not adrdata^.prefs.security.flAllowRemotePost {
+			scriptError ("Access denied.")}};
+	if adrdata^.prefs.security.flRequireRemoteLogin or (pta^.method == "POST") {
+		local (flsecure = false);
+		if webserver.util.parseAuth (pta) { //get username and password
+			if username == nil {
+				username = pta^.username};
+			if password == nil {
+				password = pta^.password};
+			if string.lower (username) == string.lower (adrdata^.prefs.security.remoteUsername) {
+				if string (password) == string (adrdata^.prefs.security.remotePassword) {
+					flsecure = true}}};
+		if not flsecure { //send challenge
+			pta^.responseBody = webserver.util.buildErrorPage ("401 Unauthorized", "A valid username and password are required to access this page.");
+			pta^.responseHeaders.["WWW-Authenticate"] = "Basic realm=\"Admin\"";
+			pta^.code = 401;
+			return (false)};
+		if pta^.method == "POST" { //1/23/02 JES: check non-local referers
+			try { //some users behind proxy servers can't do DNS lookups -- don't do a 500 Server Error
+				local (refererhost = getHostFromReferer (pta^.requestHeaders.referer));
+				if refererhost != tcp.dns.getMyDottedId () {
+					if not tcp.equalNames (refererhost, tcp.dns.getMyDottedId ()) {
+						scriptError ("Access denied.")}}}
+			else { //check for local NAT IP addresses, as defined by ICANN
+				«Reference: http://www.riverstonenet.com/technology/nat.shtml
+				local (myIp = tcp.dns.getMyDottedId ());
+				if myIp beginsWith "10." { //10.x.x.x is ok. (Class A)
+					return (true)};
+				if myIp beginsWith "172." { //172.31.0.0 to 172.31.255.255 are ok. (Class B)
+					local (x = number (string.nthField (myIp, ".", 2)));
+					if x >= 0 and x <= 31 {
+						return (true)}};
+				if myIp beginsWith "192.168." { //192.168.x.x is ok. (Class C)
+					return (true)};
+				scriptError ("Access denied.")}}};
+	return (true)};
+bundle { //test code
+	firewall (@scratchpad.firewallparams)}
+
+

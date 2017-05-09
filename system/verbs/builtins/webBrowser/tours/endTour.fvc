@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.tours.endTour
+
+webBrowser.tours.flrecording = false;
+webBrowser.tours.tourname = "";
+webBrowser.unregisterURLecho (Frontier.id);
+fileMenu.save ()
+
+

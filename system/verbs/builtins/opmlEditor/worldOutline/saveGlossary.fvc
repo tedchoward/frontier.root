@@ -1,0 +1,64 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.saveGlossary
+
+on saveGlossary () {
+	«Changes
+		«2/12/12; 3:45:11 PM by DW
+			«Works with multiple worldoutline servers.
+		«2/2/12; 10:51:46 AM by DW
+			«When calling op.getnetoutline, set the optional param flKeepXml, true.
+		«1/31/12; 10:14:18 PM by DW
+			«The code that runs when you click the Save button in the glossary editing window.
+	local (adrdata = opmlEditor.worldOutline.init (), adroutline = window.frontmost (), xmltext, glossary);
+	bundle { //fill the glossary from the outline
+		local (xstruct);
+		xmltext = op.outlinetoxml (adroutline);
+		xml.compile (xmltext, @xstruct);
+		«scratchpad.xstruct = xstruct
+		local (adropml = xml.getaddress (@xstruct, "opml"));
+		local (adrbody = xml.getaddress (adropml, "body"), adrx);
+		on decode (s) {
+			return (xml.entitydecode (s, flAlphaEntities:true))};
+		on hassubs (adrx) { //return true if the outline node has sub-outlines
+			local (adr);
+			for adr in adrx {
+				if nameof (adr^) endswith "outline" { //contains at least one sub
+					return (true)}};
+			return (false)};
+		new (tabletype, @glossary);
+		for adrx in adrbody {
+			if nameof (adrx^) endswith "outline" {
+				local (glossname = decode (adrx^.["/atts"].text), adrsub);
+				if sizeof (glossname) > 0 {
+					if hassubs (adrx) {
+						local (glossdef = "");
+						on dolevel (adrx) {
+							local (adrdef);
+							for adrdef in adrx {
+								if nameof (adrdef^) endswith "outline" {
+									glossdef = glossdef + decode (adrdef^.["/atts"].text);
+									if hassubs (adrdef) {
+										dolevel (adrdef)}}}};
+						dolevel (adrx);
+						if sizeof (glossdef) > 0 {
+							glossary.[glossname] = glossdef}}
+					else {
+						local (adratts = @adrx^.["/atts"]);
+						if defined (adratts^.type) {
+							if adratts^.type == "include" {
+								local (adrtable, adrxstruct);
+								op.getnetoutline (adratts^.url, @adrtable, flKeepXml:true); //2/2/12 by DW
+								xml.thread.accessStruct (@adrtable^.struct, @adrxstruct);
+								if not defined (adrtable^.outline) {
+									op.xmltooutline (adrtable^.xmltext, @adrtable^.outline)};
+								glossary.[glossname] = string (adrtable^.outline)}}}}}}};
+		«scratchpad.glossary = glossary
+	bundle { //send it to the server
+		local (server, username, password);
+		if not opmlEditor.worldOutline.getServerInfo (@server, @username, @password, adroutline) { //2/11/12 by DW
+			return};
+		[server].worldOutline.setGlossary (username, password, xmltext, glossary);
+		speaker.beep ()}};
+bundle { //test code
+	saveGlossary ()}
+
+

@@ -1,0 +1,5 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.protocols.testing.test
+
+webbrowser.displaytext (string (webbrowser.protocols.testing.webtext))
+
+

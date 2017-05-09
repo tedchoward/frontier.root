@@ -1,0 +1,28 @@
+FrontierVcsFile:3:optx:user.html.templates.normal
+
+{pageheader (title)}
+<h4>
+	Part of {user.prefs.name}'s website. {user.prefs.mailaddress}. 
+	{string.nthField (clock.now (), ';', 1)}.
+	<hr size=1 noshade>
+	</h4>
+<h2>{title}</h2>
+<blockquote>
+	{bodytext}
+	</blockquote>
+<hr size=1 noshade>
+<table cellspacing=5>
+	<tr>
+		<td valign=center>{frontierLogo ()}</td>
+		<td valign=center>
+			<font face="geneva,arial" size=-2>
+				This page was last built with "Frontier" on a {platformLink ()} on {string.dateString ()} at {string.timeString ()}. 
+				Thanks for checking it out! {user.prefs.name}
+				</font>
+			</td>
+		</tr>
+	</table>
+{pagefooter ()}
+
+
+

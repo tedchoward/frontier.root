@@ -1,0 +1,18 @@
+FrontierVcsFile:3:scpt:suites.FilemakerLib.getRecordIDs
+
+on getRecordIDs (db, foundSet = true, reportError = false) {
+	on doIt () {
+		with objectModel, filemaker {
+			if foundSet {
+				return (get (window [db].record [all].uniqueID))}
+			else {
+				return (get (database [db].record [all].uniqueID))}}};
+	if reportError {
+		return (doIt ())}
+	else {
+		try {
+			return (doIt ())}
+		else {
+			return (false)}}}
+
+

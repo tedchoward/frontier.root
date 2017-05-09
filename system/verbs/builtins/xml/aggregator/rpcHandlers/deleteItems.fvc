@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.aggregator.rpcHandlers.deleteItems
+
+on deleteItems (itemIdArray, username, password) {
+	«Changes
+		«11/6/02; 2:43:36 PM by JES
+			«Created. Delete more than one item as specified by the item IDs contained in itemIdArray.
+	xml.aggregator.securityForRpc (client, username, password);
+	local (itemId);
+	for itemId in itemIdArray {
+		try {xml.aggregator.rpcHandlers.deleteItem (itemId, username, password)}};
+	return (true)}
+
+

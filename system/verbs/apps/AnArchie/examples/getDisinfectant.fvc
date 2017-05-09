@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.AnArchie.examples.getDisinfectant
+
+on getDisinfectant () {
+	if (file.getFolderDialog("Select Destination for Disinfectant", @dest)) {
+		anarchie.mget("disinfectant", "/pub/disinfectant/", "ftp.acns.nwu.edu", dest)}}
+
+

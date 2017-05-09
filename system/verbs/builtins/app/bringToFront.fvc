@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.app.bringToFront
+
+on bringToFront () {
+	local (path = app.adrAppTable^.appInfo.path);
+	if not sys.bringAppToFront (file.fileFromPath (path)) {
+		return (false)};
+	«clock.waitSeconds (2)
+	return (true)}
+
+

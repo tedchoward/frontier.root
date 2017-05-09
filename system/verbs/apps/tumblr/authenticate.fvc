@@ -1,0 +1,51 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.tumblr.authenticate
+
+on authenticate (email=nil, password=nil, adruserdata=nil) {
+	«Changes
+		«6/10/09; 4:51:02 PM by DW
+			«Got it working.
+		«5/14/09; 12:42:34 PM by DW
+			«Created. 
+	local (adrdata = tumblr.init (), urllist = string.urlsplit ("http://www.tumblr.com/api/authenticate"));
+	if adruserdata != nil {
+		new (tabletype, adruserdata)};
+	bundle { //set defaults
+		if email == nil {
+			email = adrdata^.prefs.email};
+		if password == nil {
+			password = adrdata^.prefs.password}};
+	local (params = "");
+	bundle { //set up params
+		on push (name, value) {
+			params = params + "&" + name + "=" + string.urlencode (value)};
+		push ("email", email);
+		push ("password", password);
+		params = string.delete (params, 1, 1)}; //pop the first &
+	response =  tcp.httpClient ("POST", server:urllist [2], path:urllist [3], data:params, datatype:"application/x-www-form-urlencoded", ctFollowRedirects:3, flMessages:false, debug:false);
+	local (xmltext = string.httpResultSplit (response), xstruct);
+	local (code = tcp.httpGetStatusCode (response));
+	if code != 200 {
+		scripterror ("Can't access Tumblr because the email address and password are not correct.")};
+	xml.compile (xmltext, @xstruct);
+	«scratchpad.tumblrstruct = xstruct
+	bundle { //extract info
+		if adruserdata != nil {
+			local (adrtumblr = xml.getaddress (@xstruct, "tumblr"));
+			local (adruser = xml.getaddress (adrtumblr, "user"));
+			adruserdata^.flCanUploadAiff = boolean (xml.getattributevalue (adruser, "can-upload-aiff"));
+			adruserdata^.flCanUploadAudio = boolean (xml.getattributevalue (adruser, "can-upload-audio"));
+			adruserdata^.flCanUploadVideo = boolean (xml.getattributevalue (adruser, "can-upload-video"));
+			adruserdata^.defaultPostFormat = xml.getattributevalue (adruser, "default-post-format");
+			adruserdata^.vimeoLoginUrl = xml.getattributevalue (adruser, "vimeo-login-url");
+			
+			local (adrtumblelog = xml.getaddress (adrtumblr, "tumblelog"));
+			adruserdata^.avatarUrl = xml.getattributevalue (adrtumblelog, "avatar-url");
+			adruserdata^.isPrimary = xml.getattributevalue (adrtumblelog, "is-primary");
+			adruserdata^.name = xml.getattributevalue (adrtumblelog, "name");
+			adruserdata^.title = xml.getattributevalue (adrtumblelog, "title");
+			adruserdata^.type = xml.getattributevalue (adrtumblelog, "type");
+			adruserdata^.url = xml.getattributevalue (adrtumblelog, "url")}}}
+«bundle //test code
+	«authenticate (adruserdata:@scratchpad.userdata)
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.search.find
+
+on find (searchstring) {
+	user.prefs.search.searchfor = searchstring;
+	search.findNext ()}
+
+

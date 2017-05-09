@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.rpcHandlers.search.deIndex
+
+on deIndex (url) {
+	«Changes
+		«8/4/02; 1:21:36 AM by JES
+			«Created. De-index a page given its url.
+	return (mainResponder.search.server.deIndexPage (url))}
+
+

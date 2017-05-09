@@ -1,0 +1,34 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.simpleDb.listDomains
+
+on listDomains (adrlist, adrerrorstring=nil) {
+	«Changes
+		«1/4/08; 4:12:16 PM by DW
+			«Created.
+	local (nexttoken = nil);
+	adrlist^ = {};
+	loop {
+		local (t, xstruct);
+		new (tabletype, @t);
+		t.MaxNumberOfDomains = 100;
+		if nexttoken != nil {
+			t.NextToken = nexttoken};
+		if not s3.simpleDb.httpClient ("ListDomains", @t, adrerrorstring, @xstruct) { //error
+			return (false)};
+		«scratchpad.xstruct = xstruct
+		nexttoken = nil;
+		local (adrListDomainsResponse = xml.getaddress (@xstruct, "ListDomainsResponse"));
+		local (adrListDomainsResult = xml.getaddress (adrListDomainsResponse, "ListDomainsResult"), adr);
+		for adr in adrListDomainsResult {
+			if nameof (adr^) endswith "DomainName" {
+				adrlist^ = adrlist^ + adr^}
+			else {
+				if nameof (adr^) endswith "NextToken" {
+					nexttoken = adr^}}};
+		if nexttoken == nil { //hit the end of the list
+			return (true)}}};
+bundle { //test code
+	local (errorstring);
+	if not listDomains (@scratchpad.domainlist, @errorstring) {
+		dialog.alert (errorstring)}}
+
+

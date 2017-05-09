@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.aggregator.rpcHandlers.getSubs
+
+on getSubs (username, password) {
+	«Changes
+		«1/11/06; 5:29:08 AM by DW
+			«Put the call to getSubInfo in a try, because it's possible one of the services is malformed.
+		«11/6/02; 1:49:30 PM by JES
+			«Created. Return an array of structs for all the channels we're subscribed to.
+	xml.aggregator.securityForRpc (client, username, password);
+	local (adrdata = xml.aggregator.init ());
+	local (adrservices = @adrdata^.services);
+	local (returnStruct); new (tableType, @returnStruct);
+	local (adrservice);
+	for adrservice in adrservices {
+		local (url = nameOf (adrservice^));
+		try {
+			returnStruct.[url] = xml.aggregator.rpcHandlers.getSubInfo (url, username, password)}};
+	return (returnStruct)}
+«bundle //testing
+	«root.client = "127.0.0.1"
+	«scratchpad.subs = getSubs (aggregatorData.prefs.security.username, aggregatorData.prefs.security.password)
+	«delete (@root.client)
+
+

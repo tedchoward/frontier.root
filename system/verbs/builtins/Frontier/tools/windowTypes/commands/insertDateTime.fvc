@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.windowTypes.commands.insertDateTime
+
+on insertDateTime () {
+	«Insert the current date and time. Called from the Edit menu.
+		«10/16/00; 7:39:26 PM by PBS
+	clock.timeStamp ()}
+
+

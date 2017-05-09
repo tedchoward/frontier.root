@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FinderClassic.drag
+
+on drag (selectionpath, folderpath) { «drag (copy) the selection into the folder
+	folder = alias (folderpath);
+	selection = Finder.makeAliasList (selectionpath);
+	return (finderEvent (Finder.id, Finder.class, 'drag', '----', folder, 'fsel', selection, 'fmsc', 0))}
+
+

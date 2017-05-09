@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.viewFileList
+
+on viewFileList (obj) { «list the contents of a remote directory in a text window
+	return (appleEvent (Fetch.id, 'FTCh', 'VwFL', '----', objspec (obj)))}
+
+

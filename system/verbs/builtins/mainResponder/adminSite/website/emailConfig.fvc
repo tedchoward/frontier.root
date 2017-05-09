@@ -1,0 +1,5 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.adminSite.website.emailConfig
+
+return (mainResponder.controlPanel.emailConfig ())
+
+

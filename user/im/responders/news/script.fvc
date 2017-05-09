@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:user.im.responders.news.script
+
+on script (driverName, screenname, message) {
+	return (tcp.im.builtinResponders.news.script (driverName, screenname, message))}
+
+

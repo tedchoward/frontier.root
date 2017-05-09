@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.setPath
+
+on setPath (path) {
+	kernel (file.setpath)}
+
+

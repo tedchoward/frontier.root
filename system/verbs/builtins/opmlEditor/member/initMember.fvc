@@ -1,0 +1,54 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.member.initMember
+
+on initMember (membername, groupname="default", flcreate=false) {
+	«Changes
+		«4/14/12; 11:26:36 AM by DW
+			«If we're setting the admin user's password, write it out to a text file where he or she can find it.
+		«4/20/11; 8:33:21 PM by DW
+			«Init stats.clients table.
+		«4/3/11; 4:35:14 PM by DW
+			«Init stats.ctLocalAccessess.
+		«3/7/11; 4:33:50 AM by DW
+			«Created. 
+	local (f = system.temp.mainResponder.membersRootFile);
+	local (adrmembers = @[f].[groupName]);
+	if not defined (adrmembers^) {
+		new (tabletype, adrmembers)};
+	local (adrmember = @adrmembers^.users.[membername]);
+	if not defined (adrmember^) {
+		if not flcreate {
+			scripterror ("Can't find the member named \"" + membername + ".\"")};
+		new (tabletype, adrmember)};
+	bundle { //prefs
+		if not defined (adrmember^.prefs) {
+			new (tabletype, @adrmember^.prefs)};
+		if not defined (adrmember^.prefs.enabled) {
+			adrmember^.prefs.enabled = true};
+		if not defined (adrmember^.prefs.password) {
+			adrmember^.prefs.password = string.getrandompassword (10);
+			if (string.lower (membername) == "admin") and (string.lower (groupname) == "default") { //4/14/12 by DW
+				opmlEditor.utilities.writeAdminPasswordTextFile ()}}};
+	bundle { //stats
+		if not defined (adrmember^.stats) {
+			new (tabletype, @adrmember^.stats)};
+		if not defined (adrmember^.stats.ctInits) {
+			adrmember^.stats.ctInits = 0};
+		if not defined (adrmember^.stats.ctValidate) {
+			adrmember^.stats.ctValidate = 0};
+		if not defined (adrmember^.stats.ctNotValidate) {
+			adrmember^.stats.ctNotValidate = 0};
+		if not defined (adrmember^.stats.ctLocalAccessess) { //4/3/11 by DW
+			adrmember^.stats.ctLocalAccessess = 0};
+		bundle { //clients
+			if not defined (adrmember^.stats.clients) {
+				new (tabletype, @adrmember^.stats.clients)};
+			if not defined (adrmember^.stats.clients.valid) {
+				new (tabletype, @adrmember^.stats.clients.valid)};
+			if not defined (adrmember^.stats.clients.invalid) {
+				new (tabletype, @adrmember^.stats.clients.invalid)}}};
+	adrmember^.stats.ctInits++;
+	return (adrmember)};
+bundle { //test code
+	init ("dave", flcreate:true)}
+
+

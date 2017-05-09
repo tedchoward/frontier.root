@@ -1,0 +1,8 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.localization.languages.english.strings.setupFrontier.newUserConfirmMessage
+
+The Frontier setup process is complete, and your first Manila website has been created.</p>
+{local (whenTrialExpires = date.nextMonth (date.nextMonth (userland.trialVersion.whenInstalled))); if userland.trialVersion.flTrialVersion {"<p>This fully-functional trial installation of Frontier will work until " + date.longString (whenTrialExpires) + " at " + string.timeString (whenTrialExpires) + ".</p>"} else {""}}
+<p>If you want to modify any server settings, use the links at the left. You will be asked to log in with the email address and password you supplied. You can return to the {"<a href=\"http://" + host + "/controlPanel/\">"}Frontier Control Panel</a> at any time, using the Open Control Panel command in Frontier's Server menu.</p>
+<p>Click the Continue button to open your new <a href="[[myManilaServerSiteUrl]]">Manila website</a>.</p>
+
+

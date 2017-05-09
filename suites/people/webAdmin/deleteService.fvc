@@ -1,0 +1,7 @@
+FrontierVcsFile:3:wptx:suites.people.webAdmin.deleteService
+
+#title "Delete Service"
+{deleteService ()}
+{goBack ()}
+
+

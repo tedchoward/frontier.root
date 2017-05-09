@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FinderMenu.init
+
+if not defined (user.FinderMenu) {
+	new (tableType, @user.FinderMenu)}
+
+

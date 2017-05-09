@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.data.virginWebsite.index
+
+on index () {
+	«Changes
+		«5/12/11; 9:20:25 AM by DW
+			«Created.
+	};
+bundle { //test code
+	index ()}
+
+

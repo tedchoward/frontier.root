@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.fileWriters.odb.shutdown
+
+on shutdown (adrStorage) {
+	local (adrDatabase = adrStorage^.adrDatabase);
+	if file.exists (adrDatabase) { //is this a guest database?
+		fileMenu.save (adrDatabase)}
+	else {
+		fileMenu.save ()}; //save the root
+	return (true)}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.re.split
+
+on split (cp, s, maxSplits = infinity) {
+	kernel (re.split)}
+
+

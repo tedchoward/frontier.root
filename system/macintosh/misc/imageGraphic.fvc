@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.misc.imageGraphic
+
+on imageGraphic (appID, graphic, format, antialiasing = nil, dithering = nil, rotate = nil, scale = nil, translation = nil, flipHorizontal = nil, flipVertical = nil, quality = nil, structuredGraphic = nil) { «Convert a graphic from one format to another
+	return (appleEvent (appID, 'misc', 'imgr', '----', graphic, 'kren', string4 (format), 'anta', boolean (antialiasing), 'gdit', boolean (dithering), 'kdrt', rotate, 'ksca', scale, 'ktra', point (translation), 'kfho', boolean (flipHorizontal), 'kfvt', boolean (flipVertical), 'gqua', quality, 'toog', boolean (structuredGraphic)))}
+
+

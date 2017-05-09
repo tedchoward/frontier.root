@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.testing.setupRpc
+
+on setupRpc () {
+	«Changes
+		«6/21/11; 8:12:42 AM by DW
+			«Created.
+	user.betty.rpchandlers.dnsApi2 = @s3.route53.testing.rpcHandlers};
+bundle { //test code
+	setupRpc ()}
+
+

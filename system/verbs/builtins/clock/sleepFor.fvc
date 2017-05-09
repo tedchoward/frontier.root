@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.clock.sleepFor
+
+on sleepFor (countseconds) {
+	kernel (clock.sleepfor)}
+
+

@@ -1,0 +1,47 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.stripSgmlComments
+
+on stripSgmlComments (s) {
+	«Strips comments (<!-- ... -->) from SGML text.
+		«Returns the uncommented string.
+	
+	local {
+		openCommentPattern = "<!--";
+		closeCommentPattern = "--( |\t|\r|\n)*>";
+		openCommentPatRef = 0;
+		closeCommentPatRef = 0;
+		start = 1;
+		openCommentPos = 0;
+		closeCommentPos = 0;
+		matchInfo};
+	
+	try {
+		openCommentPatRef = regex.compile (openCommentPattern);
+		closeCommentPatRef = regex.compile (closeCommentPattern);
+		
+		loop {
+			«Search of openCommentPattern
+			if (regex.search (openCommentPatRef, @s, @matchInfo)) {
+				openCommentPos = matchInfo.matchOffset;
+				if (regex.search (closeCommentPatRef, @s, @matchInfo, matchInfo.matchOffset + matchInfo.matchLength)) {
+					s = string.delete (s, openCommentPos, matchInfo.matchOffset + matchInfo.matchLength - openCommentPos)}
+				else {
+					s = string.delete (s, openCommentPos, infinity);
+					break}}
+			else {
+				break}};
+		
+		regex.free (openCommentPatRef);
+		regex.free (closeCommentPatRef)}
+	else {
+		regex.free (openCommentPatRef);
+		regex.free (closeCommentPatRef);
+		scriptError (tryError)};
+	
+	return (s)};
+
+«bundle //test code
+	«local (html = stripSgmlComments (string (regex.examples.data.html)))
+	«wp.newTextObject (html, @temp.html)
+	«edit (@temp.html)
+
+

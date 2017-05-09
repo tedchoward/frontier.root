@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.app.printWindow
+
+on printWindow () {
+	return (appleEvent (app.id, 'app1', 'pwin'))}
+
+

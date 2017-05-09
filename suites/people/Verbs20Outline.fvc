@@ -1,0 +1,100 @@
+FrontierVcsFile:3:optx:suites.people.["Verbs Outline"]
+
+User Verbs
+	people.newUser
+		Create a new user on the system.
+	people.deleteUser
+		Delete a user from the system.
+	people.userExists
+		Does a user exist at all on the system?
+	people.getUserPassword
+		Get a user's password.
+	people.getUserEmailAddress
+		Get a user's email address.
+	people.setUserPassword
+		Set a user's password.
+	people.setUserEmailAddress
+		Set a user's email address.
+	people.getUsersList
+		Get a list of all users on the system.
+Group Verbs
+	people.newGroup
+		Create a new group.
+	people.deleteGroup
+		Remove a group.
+	people.groupExists
+		Does a group exist?
+	people.addUserToGroup
+		Add a user to a group.
+	people.removeUserFromGroup
+		Remove a user from a group.
+	people.getGroupMembers
+		Get the members (users) of a group.
+	people.userIsGroupMember
+		Is a user a member of a specific group?
+	people.getUserGroups
+		Get all the groups a user is a member of.
+	people.getGroupsList
+		Get a list of all the groups on the system.
+Services Verbs
+	people.newService
+		Create a new service.
+	people.serviceExists
+		Does a service exist?
+	people.deleteService
+		Delete a service.
+	people.getServicesList
+		Get a list of all services.
+	people.attachServiceToUser
+		Give a user access to a service.
+	people.attachServiceToGroup
+		Give a group access to a service.
+	people.detachServiceFromUser
+		Take a service away from a user.
+	people.detachServiceFromGroup
+		Take a service away from a group.
+	people.getUserServiceTable
+		Get the address of the data table for this user that the service maintains.
+	people.getGroupServiceTable
+		Get the address of the data table for this group that the service maintains.
+	people.serviceIsAttachedToUser
+		Does a user have access to a specific service?
+	people.serviceIsAttachedToGroup
+		Does a group have access to a specific service?
+	people.getUserServices
+		Get a list of all services a given user has access to.
+	people.getGroupServices
+		Get a list of all services a given group has access to.
+	people.getServiceUsersList
+		Get the users of a specific service.
+		Expand groups into individual users, remove duplicates.
+		Return false if the service doesn't exist.
+	people.countServiceUsers (serviceName)
+		Returns the number of users of a given service.
+		Groups are expanded into individual users,
+		and duplicates are removed,
+		so an accurate count is returned.
+Authentication verbs
+	people.checkPassword
+		Make sure a username/password pair is correct.
+	people.authenticateUser
+		Authenticate a user in the context of a service.
+		User is authenticated if...
+			1) The passwords match,
+			2) The service exists, and
+			3) The service is enabled for this user or this user's group.
+		Return the address of the data table if authentic, false otherwise.
+Iterators
+	people.visitAllUsers
+		Iterate through all users on the system.
+	people.visitAllGroups
+		Iterate through all groups on the system.
+	people.visitServiceUsers
+		Iterate through all the users of a specific service.
+	people.visitServiceGroups
+		Iterate through all the groups of a specific service.
+	people.visitServices
+		Iterate through all the services on the system.
+
+
+

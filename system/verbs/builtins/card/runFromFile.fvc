@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.runFromFile
+
+on runFromFile (path) {
+	local (x);
+	card.import (@x, path);
+	card.run (@x);
+	return (true)}
+
+

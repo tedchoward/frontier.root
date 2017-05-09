@@ -1,0 +1,49 @@
+FrontierVcsFile:3:optx:system.verbs.apps.uBASE.examples.oneLiners
+
+ubase.launch ()
+	// true
+ubase.examples.stressBase () Çcreates the stress database
+	// true
+ubase.appInfo.path
+	// UserLand:New Releases:uBASE:uBASE 1.0b1:uBASE
+scratchpad.path = file.folderFromPath (ubase.appInfo.path) + "Stress Database"
+	// UserLand:New Releases:uBASE:uBASE 1.0b1:Stress Database
+ubase.countFiles ()
+	// 0
+ubase.openFile (scratchpad.path)
+	// 1
+ubase.countFiles ()
+	// 1
+ubase.nthFile (1)
+	// 1
+ubase.nthFile (2)
+	// 0
+ubase.getFilePath (1)
+	// UserLand:New Releases:uBASE:uBASE 1.0b1:Stress Database
+ubase.validateFile (1)
+	// The database is consistent.
+ubase.countRecords (1)
+	// 43
+scratchpad.x = ubase.getFirstRecord (1)
+	// Montana
+scratchpad.x = ubase.getNextRecord (1, scratchpad.x) Çcmd-/ several times
+	// Wyoming
+scratchpad.x = ubase.getLastRecord (1)
+	// Wisconsin
+scratchpad.x = ubase.getPrevRecord (1, scratchpad.x)
+	// Florida
+uBASE.getField (1, uBASE.getFirstRecord (1), 'long')
+	// 23477
+uBASE.getField (1, uBASE.getLastRecord (1), 'date')
+	// 1/1/4; 7:17:50 AM
+uBASE.getField (1, "missing", 'bool')  Ç  Error because the record isn't there
+uBASE.getField (1, scratchpad.x, 'none')  Ç  Error because no such field
+ubase.deleteRecord (1, "California")
+	// true
+ubase.countRecords (1)
+	// 42
+ubase.closefile (1)
+	// true
+
+
+

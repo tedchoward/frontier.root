@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.core.print
+
+on print (appID, obj) { «Print an object
+	return (appleEvent (appID, 'aevt', 'pdoc', '----', obj))}
+
+

@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.everyNight
+
+on everyNight () {
+	«Changes
+		«10/6/10; 9:52:10 PM by DW
+			«Created. Over time we should migrate nightly functionality for opmlEditor layer to this routine.  
+	opmlEditor.init ();
+	bundle { //nightly backup of open databases
+		if user.opmlEditor.prefs.flNightlyBackupOpenDatabases {
+			fileMenu.saveCopyOpenDatabases (user.opmlEditor.prefs.nightlyBackupFolder, 60, flsafecopy:true)}}};
+bundle { //test code
+	everyNight ()}
+
+

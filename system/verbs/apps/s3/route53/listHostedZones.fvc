@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.listHostedZones
+
+on listHostedZones (adrtable) {
+	«Changes
+		«6/20/11; 5:25:17 PM by DW
+			«Returns up to 100 zones. Since we're not doing this to manipulate zones, I didn't spend time to flesh this out, but it would be straightforward to do so.
+	local (xmltext);
+	new (tabletype, adrtable);
+	xmltext = s3.route53.httpClient ("/2011-05-05/hostedzone");
+	xml.compile (xmltext, @xstruct);
+	«s3.route53.xstruct = xstruct
+	
+	local (adrlishostedzoneresponse = xml.getaddress (@xstruct, "ListHostedZonesResponse"));
+	local (adrhostedzones = xml.getaddress (adrlishostedzoneresponse, "HostedZones"), adr);
+	for adr in adrhostedzones {
+		if nameof (adr^) endswith "HostedZone" {
+			local (id = xml.getvalue (adr, "Id"));
+			local (adrsub = @adrtable^.[string.lastfield (id, "/")]);
+			new (tabletype, adrsub);
+			adrsub^.name = xml.getvalue (adr, "Name");
+			adrsub^.callerReference = xml.getvalue (adr, "CallerReference")}}};
+bundle { //test code
+	local (tc = clock.ticks ());
+	listHostedZones (@s3.route53.zones);
+	dialog.alert (clock.ticks () - tc)}
+
+

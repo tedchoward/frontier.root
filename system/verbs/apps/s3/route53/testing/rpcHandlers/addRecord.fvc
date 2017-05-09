@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.testing.rpcHandlers.addRecord
+
+on addRecord (domainname, name, value, type) {
+	«Changes
+		«6/21/11; 8:06:16 AM by DW
+			«Imitate the dnsApi.root interface.
+	local (atts);
+	s3.route53.createRecord (domainname, name, value, type, adrresponse:@atts);
+	return (atts)};
+bundle { //test code
+	addRecord ("blorkmark.net", "test21", "twitter.com", "CNAME")}
+
+

@@ -1,0 +1,30 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.staticText.init
+
+on init (adrdata=nil) {
+	«Changes
+		«9/13/11; 10:21:51 AM by DW
+			«Init flFileNaturalFilesystemPaths pref false. If it's true, filesystem paths use the local syntax. The first version of staticText had filepath chars encoded as slashes. This showed through to users, and I didn't want to try to explain why they had to do it. So we set this pref true, and it's observed in statictext.write. Keeps things simple for the users. Good.
+		«3/16/11; 10:53:15 AM by DW
+			«Created. 
+	if adrdata == nil {
+		adrdata = @config.staticText};
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)};
+		if not defined (adrdata^.prefs.enabled) {
+			adrdata^.prefs.enabled = false};
+		if not defined (adrdata^.prefs.flFileNaturalFilesystemPaths) {
+			adrdata^.prefs.flFileNaturalFilesystemPaths = false}};
+	bundle { //locations
+		if not defined (adrdata^.locations) {
+			new (tabletype, @adrdata^.locations)}};
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)}};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

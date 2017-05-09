@@ -1,0 +1,80 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.viewMenu
+
+on viewMenu () {
+	«Changes
+		«6/17/12; 7:14:09 PM by DW
+			«Non-admin users should not see commands they can't use.
+		«4/24/12; 5:02:38 PM by DW
+			«Change the name of the product from OPML Editor to OPML Server.
+		«Prior to 4/24/12
+			«4/11/12; 11:31:49 AM by DW
+				«The Prefs command comes first. New User moves immediately after Users. (Eventually it'll go on the Users page.) 
+			«3/30/12; 10:39:35 AM by DW
+				«Change the status message to omit the program name, just include the version number.
+			«3/30/12; 9:16:30 AM by DW
+				«Change the "brand" on the menu to "opmlEditor" from "OPML Editor" to save a few pixels.
+			«3/21/12; 3:56:47 PM by DW
+				«New command names for Sign-in and Sign-out.
+			«3/15/12; 1:58:52 PM by DW
+				«Change the Databases command to DBs to create more room in the menubar. The menu became too wide because I increased the size of the fonts.
+			«2/16/12; 12:12:19 PM by DW
+				«Add new Domains stats page.
+			«11/14/11; 4:02:43 PM by DW
+				«Add command to view the HTTP log page.
+			«9/23/11; 11:32:59 AM by DW
+				«Move Prefs nearer to the beginning of the menu.
+			«9/21/11; 10:35:37 AM by DW
+				«Add a status message to the menu showing the program name and version, and the name the user is logged on as. 
+			«9/18/11; 9:10:29 AM by DW
+				«Add Log command.
+			«9/9/11; 10:58:56 AM by DW
+				«Add Users command.
+			«9/9/11; 9:40:30 AM by DW
+				«Add New User command.
+			«9/7/11; 11:42:21 AM by DW
+				«Added Databases command, shows all open databases, sizes, etc.
+			«9/7/11; 10:14:11 AM by DW
+				«Provide the urlHome parameter to webapp.viewmenu. 
+			«9/2/11; 6:01:11 PM by DW
+				«Factored to work with webapp.viewmenu.
+			«8/28/11; 11:07:02 AM by DW
+				«Created.
+	local (pta = html.getpagetableaddress (), menutable, flhascookie, fladmin, username);
+	«scratchpad.opmlmenuparams = pta^
+	new (tabletype, @menutable);
+	on additem (title, pagename) {
+		local (adritem = @menutable.[string.padwithzeros (sizeof (menutable), 5)]);
+		new (tabletype, adritem);
+		adritem^.title = title;
+		adritem^.pagename = pagename};
+	bundle { //set flhascookie, fladmin
+		fladmin = false;
+		if defined (pta^.flLocalAdminUser) and pta^.flLocalAdminUser {
+			flhascookie = true;
+			fladmin = true}
+		else {
+			flhascookie = opmlEditor.member.checkCookie ("", @username, false);
+			if flhascookie {
+				fladmin = opmlEditor.isUserAdminLike (username)}}}; //11/19/11 by DW
+	if flhascookie {
+		if fladmin { //6/17/12 by DW
+			additem ("Prefs", "prefs");
+			additem ("Users", "users"); //9/9/11 by DW 
+			additem ("New User", "newUser"); //9/9/11 by DW
+			additem ("Tools", "catalog");
+			additem ("DBs", "databases");
+			additem ("Log", "log"); //9/18/11 by DW
+			additem ("HTTP", "httpLog"); //11/14/11 by DW
+			additem ("Domains", "statsDomains")}; //2/16/12 by DW
+		additem (webApp.data.signOutCommand, "signout")}
+	else {
+		opmlEditor.member.addSignInCommands (@menutable)}; //6/11/12 by DW
+		«additem (webApp.data.signInCommand, "signin") 
+	
+	«local (statusmsg = frontier.getprogramname () + "; " + username)
+	local (statusmsg = "v" + opmlEditor.data.version + "; " + username);
+	return (webapp.viewmenu (opmlEditor.data.websiteName, @menutable, statusmsg, urlHome:"index"))}
+«bundle //test code
+	«viewMenu ()
+
+

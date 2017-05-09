@@ -1,0 +1,44 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.buttons.archive.["00004000\tRSS+"]
+
+thread.callscript (@opmlEditor.worldOutline.addToRSS, {});
+return;
+
+
+«Changes
+	«2/11/12; 4:55:48 PM by DW
+		«Call opmlEditor.worldOutline.getServerInfo to get username, password.
+	«1/9/12; 11:39:55 AM by DW
+		«If you hold down the Shift key while clicking the RSS+ button, the feed opens in the browser.
+	«1/9/12; 11:20:00 AM by DW
+		«Add the URL of the feed as an attribute to the headline. That way we can easily see that it's already been added to the feed. 
+	«1/6/12; 6:33:09 AM by DW
+		«Created. 
+local (adrdata = opmlEditor.worldOutline.init ());
+if kb.shiftkey () {
+	if defined (adrdata^.stats.feedUrl) {
+		webbrowser.openurl (adrdata^.stats.feedUrl);
+		webbrowser.bringtofront ()}
+	else {
+		scripterror ("Can't view the feed because you haven't added anything to it from this machine.")}}
+else {
+	local (lt = op.getlinetext (), feedurl);
+	if dialog.confirm ("Add item \"" + lt + "\" to the feed?") {
+		local (adroutline = window.frontmost (), url, firstline);
+		local (server, username, password, now = clock.now (), startticks = clock.ticks ());
+		if not opmlEditor.worldOutline.getServerInfo (@server, @username, @password, adroutline) { //2/11/12 by DW
+			return};
+		bundle { //set url
+			url = opmlEditor.worldOutline.getHeadlineUrl ()};
+		bundle { //set firstline
+			local (lo = adroutline^, oldtarget = target.set (@lo));
+			if op.go (right, 1) {
+				firstline = op.getlinetext ()}
+			else {
+				firstline = ""}};
+		target.set (adroutline);
+		feedurl = [server].worldOutline.addFeedItem (username, password, lt, url, firstline);
+		op.attributes.setone ("feedUrl", feedurl); //1/9/12 by DW
+		adrdata^.stats.feedUrl = feedurl;
+		speaker.beep ()}}
+
+

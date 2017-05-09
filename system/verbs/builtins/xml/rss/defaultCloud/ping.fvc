@@ -1,0 +1,22 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.rss.defaultCloud.ping
+
+on ping (urlFeed) {
+	«Changes
+		«8/11/09; 11:06:32 AM by DW
+			«Created. Before we start propogating code that pings all over the place, centralize it, so if we want to move clouds, it's easy to do.
+	local (adrdata = xml.rss.defaultCloud.init (), now = clock.now (), startticks = clock.ticks ());
+	["xmlrpc://rpc.rsscloud.org:5337/RPC2"].rssCloud.ping (urlFeed);
+	adrdata^.stats.ctPings++;
+	adrdata^.stats.whenLastPing = now;
+	adrdata^.stats.ctTicksLastPing = clock.ticks () - startticks;
+	bundle { //feed-level stats
+		local (adrfeedstats = @adrdata^.stats.feeds.[urlFeed]);
+		if not defined (adrfeedstats^) {
+			new (tabletype, adrfeedstats);
+			adrfeedstats^.ctPings = 0};
+		adrfeedstats^.ctPings++;
+		adrfeedstats^.whenLastPing = now}};
+bundle { //test code
+	ping ("http://scripting.com/rss.xml")}
+
+

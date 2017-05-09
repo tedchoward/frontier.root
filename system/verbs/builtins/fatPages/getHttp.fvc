@@ -1,0 +1,32 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fatPages.getHttp
+
+on getHttp (url, adr=nil, adradrobject=nil) {
+	«Changes
+		«2/11/12; 12:43:37 AM by DW
+			«Fix coding error on call to fatPages.noObjectError. (Also testing listings2.root code.)
+		«1/22/12; 1:45:47 PM by DW
+			«New optional parameter, adradrobject -- if not nil, we copy the address we got from the file into the address pointed to by the parameter. Used in worldoutline code object display.
+		«4/8/02; 12:55:16 PM by DW
+			«Created. Load a fatpage file over HTTP. 
+			«If the address is not supplied, load the object into the address specified in the fatpage file; if it is specified, load it into that location.
+			«I found I was writing this code over and over. Paving a cowpath.
+	local (s = tcp.httpReadUrl (url));
+	local (atts);
+	if not fatPages.getPageAtts (@s, @atts) {
+		fatPages.noObjectError (url:url)}; //2/11/12 by DW
+	if not defined (atts.pageData) {
+		fatPages.noObjectError (url:url)};
+	if adr == nil {
+		adr = atts.adrPageData};
+	fatPages.unpackOdbObject (@atts, adr, flEdit:false);
+	bundle { //return a display-friendly version of the address, if asked to -- 1/22/12 by DW
+		if adradrobject != nil {
+			local (s = atts.adrPageData, ix = string.patternMatch ("\"].", s));
+			if ix > 0 {
+				s = string.delete (s, 1, ix + 2)};
+			adradrobject^ = s}};
+	return (adr)}
+«bundle //test code
+	«getHttp ("http://nyt.weblogs.com/homepage.fttb", @scratchpad.nytHeadlines)
+
+

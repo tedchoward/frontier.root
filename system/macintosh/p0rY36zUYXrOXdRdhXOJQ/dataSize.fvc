@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.core.dataSize
+
+on dataSize (appID, obj, as = nil) { «Return the size in bytes of an object
+	return (appleEvent (appID, 'core', 'dsiz', '----', objspec (obj), 'rtyp', string4 (as)))}
+
+

@@ -1,0 +1,31 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.photos.getSizes
+
+on getSizes (id, adrinfo=nil) {
+	«Changes
+		«11/11/07; 10:05:32 AM by DW
+			«Send along the authorization token, if the user has authorized us.
+		«8/22/07; 4:48:45 PM by DW
+			«Created.
+			«http://www.flickr.com/services/api/flickr.photos.getSizes.html
+	local (mystruct);
+	new (tabletype, @mystruct);
+	mystruct.api_key = user.flickr.prefs.apiKey;
+	mystruct.photo_id = id;
+	if defined (user.flickr.prefs.token) {
+		mystruct.auth_token = user.flickr.prefs.token;
+		Flickr.signStruct (@mystruct)};
+	local (s = [user.flickr.prefs.server].flickr.photos.getSizes (mystruct), xstruct);
+	s = string.replaceall (s, "&quot;", "\"");
+	xml.compile (s, @xstruct);
+	«scratchpad.sizesstruct = xstruct
+	if adrinfo != nil {
+		local (adrsizes = xml.getaddress (@xstruct, "sizes"), adrsize);
+		new (tabletype, adrinfo);
+		for adrsize in adrsizes {
+			if nameof (adrsize^) endswith "size" {
+				local (adratts = @adrsize^.["/atts"]);
+				adrinfo^.[adratts^.label] = adratts^}}}};
+bundle { //test code
+	getSizes ("1166257196", adrinfo:@scratchpad.picturesizeinfo)}
+
+

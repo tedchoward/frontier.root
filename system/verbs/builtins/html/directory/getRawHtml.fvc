@@ -1,0 +1,86 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.directory.getRawHtml
+
+on getRawHtml (adrhtmlnode, adrhtmltext, flProcessPoundDirectives=true, ctLineEnds=1, lineEndChars="\r\n") {
+	«Changes
+		«12/30/14; 11:31:33 AM by DW
+			«New optional param, lineEndChars. If you're generating code to run on Unix it should be "\n".
+		«12/25/14; 11:22:01 AM by DW
+			«New optional params, 1. flProcessPoundDirectives, default true. In nodeEditor, we want to let them pass through without processing if the file is Markdown text. 2. ctLineEnds, for markdown text this should be 2.
+		«1/29/13; 5:02:07 PM by DW
+			«Correctly handle lines that have a curly brace but end with a // comment.
+		«1/29/13; 8:51:32 AM by DW
+			«Add support for "javascript" nodetype. 
+				«http://worknotes.scripting.com/january2013/12913ByDw/newJavascriptNodetype
+		«1/11/13; 9:20:03 AM by DW
+			«Process # directives.
+				«http://worknotes.scripting.com/january2013/11113ByDw/directivesInHtmlNodes
+		«1/8/13; 7:51:15 PM by DW
+			«Don't include comments.
+				«http://worknotes.scripting.com/january2013/1813ByDw/commentsInHtmlNodes
+		«12/20/12; 11:51:42 AM by DW
+			«Add a linefeed after the return in add routine, so view-source listings are readable in Chrome.
+		«8/27/11; 5:20:05 AM by DW
+			«Upload to S3 if node attributes are set up for it.
+		«8/27/11; 4:08:38 AM by DW
+			«Use faster form of "add" routine.
+		«7/28/11; 1:58:27 PM by DW
+			«I'm going crazy with no carriage returns or indentation. I added them back. 
+		«7/21/11; 6:05:30 PM by DW
+			«If it's "raw" html, why are we adding tabs and return characters? (We shouldn't be.) Turns out for some applications it matters. (If you want to test for equality.)
+		«5/4/11; 1:14:18 PM by DW
+			«Renders the text for nodes of type HTML. The simplest rendering possible. Just concatenate all the headlines, indented and return.
+	local (htmltext = "", indentlevel = 0, directives);
+	new (tabletype, @directives); //1/11/13 by DW
+	on add (s) {
+		htmltext = htmltext + (string.filledstring ("\t", indentlevel) + s + string.filledstring (lineEndChars, ctLineEnds));
+		return (0)}; //8/27/11 by DW
+	on hassubs (adrx) {
+		local (adr);
+		for adr in adrx {
+			if nameof (adr^) endswith "outline" { //contains at least one sub
+				return (true)}};
+		return (false)};
+	on dolevel (adrlevel, fljavascript=false) {
+		local (adr);
+		if not fljavascript {
+			local (adrt = @adrlevel^.["/atts"].type);
+			if defined (adrt^) and (string.lower (adrt^) == "javascript") {
+				fljavascript = true}};
+		for adr in adrlevel {
+			if nameof (adr^) endswith "outline" {
+				local (adratts = @adr^.["/atts"], text);
+				if defined (adratts^.isComment) and adratts^.isComment { //1/8/13 by DW
+					continue};
+				text = xml.entitydecode (adratts^.text, flAlphaEntities:true);
+				if (text beginswith "#") and flProcessPoundDirectives { //process # directives, 1/11/13 by DW
+					local (name, value);
+					if string.getdirectivevalue (text, @name, @value) {
+						directives.[name] = value}}
+				else {
+					if hassubs (adr) {
+						if fljavascript {
+							local (ix = string.patternmatch ("//", text));
+							if ix > 0 {
+								text = string.insert (" { ", text, ix)}
+							else {
+								text = text + " { "}};
+						add (text);
+						indentlevel++;
+						dolevel (adr, fljavascript);
+						if fljavascript {
+							add ("}")};
+						indentlevel--}
+					else {
+						local (semicolon = "");
+						if fljavascript {
+							semicolon = ";"};
+						add (text + semicolon)}}}}};
+	dolevel (adrhtmlnode);
+	adrhtmltext^ = htmltext;
+	bundle { //upload to S3 if node attributes are set up for it, 8/27/11 by DW
+		try {
+			worldOutlineSuite.uploadToS3 (@adrhtmlnode^.["/atts"], adrhtmltext)}}}
+«bundle //test code
+	«getRawHtml ()
+
+

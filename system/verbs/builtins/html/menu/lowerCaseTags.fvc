@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.menu.lowerCaseTags
+
+if html.menu.useLowerCaseTags () {
+	return ("!Use Lowercase Tags")};
+return ("Use Lowercase Tags")
+
+

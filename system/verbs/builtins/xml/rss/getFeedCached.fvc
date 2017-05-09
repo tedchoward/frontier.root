@@ -1,0 +1,22 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.rss.getFeedCached
+
+on getFeedCached (url, adradrcache) {
+	«Changes
+		«5/17/12; 9:57:18 AM by DW
+			«Created.
+				«http://worknotes.scripting.com/may2012/51712ByDw/cachingRssReads
+	local (adrtable, adrxstruct, adrcache);
+	op.getNetOutline (url, @adrtable, flAskForOpml:false);
+	xml.thread.accessStruct (@adrtable^.struct, @adrxstruct);
+	adrcache = @adrxstruct^.feedCache;
+	if not defined (adrcache^) {
+		new (tabletype, adrcache);
+		new (tabletype, @adrcache^.feedInfo);
+		new (tabletype, @adrcache^.items);
+		xml.rss.getFeedItems (url, @adrcache^.items, @adrcache^.feedInfo, adrxstruct:adrxstruct)};
+	adradrcache^ = adrcache;
+	return (true)};
+bundle { //test code
+	getFeedCached ("http://scripting.com/rss.xml", @scratchpad.myfeedcache)}
+
+

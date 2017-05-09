@@ -1,0 +1,13 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.userland.readmeSite.setFrontierStackSize
+
+#title "About SetFrontierStackSize"
+#realFile "Macintosh HD:New Releases:Frontier 4.2:Misc Stuff:About SetFrontierStackSize"
+This desktop script allows you to set Frontier¹s minimum stack size. The default is 32K; to accomodate especially deep script recursion, try increasing it by 4K at a time until stack overflow is no longer encountered.
+
+If you¹ve never encountered a stack overflow error, you don¹t need to run this script.
+
+UserLand Software<br>
+May, 1993
+
+
+

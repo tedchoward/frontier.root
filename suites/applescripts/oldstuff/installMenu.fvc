@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.applescripts.oldstuff.installMenu
+
+on installMenu () {
+	return (menu.install (@applescripts.menu))}
+
+

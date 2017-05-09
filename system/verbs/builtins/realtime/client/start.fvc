@@ -1,0 +1,37 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.client.start
+
+on start (name, server, username, password, adrcallback) {
+	«Changes
+		«8/7/10; 3:45:33 AM by DW
+			«Added new name and callback parameters. Let the caller also provide us with his callback for handling incoming realtime events. We need a unique name for each application, this allows once instance of the OPML app to listen to more than one realtime event server. These are not optional parameters so the API breaks with this change. Violates Rule 1, but at this stage I'm almost 100 percent sure I'm the only person working in this area. If this broke you please let me know: dave.winer@gmail.com.
+		«7/20/10; 5:41:23 AM by DW
+			«Be sure the realtime thread is running. If not, launch it.
+	local (adrdata = realtime.init ());
+	if adrdata^.client.prefs.enabled {
+		local (flstart = true, adrserver = @system.temp.realtime.client.servers.[name]);
+		if not defined (adrserver^) {
+			new (tabletype, adrserver)};
+		if not defined (adrserver^.stats) {
+			new (tabletype, @adrserver^.stats);
+			adrserver^.stats.ctThreadStarts = 0;
+			adrserver^.stats.ctConsecutiveErrors = 0;
+			adrserver^.stats.ctErrors = 0;
+			adrserver^.stats.ctLoops = 0;
+			adrserver^.stats.ctUpdates = 0};
+		if not defined (adrserver^.callbacks) {
+			new (tabletype, @adrserver^.callbacks);
+			adrserver^.callbacks.["001"] = adrcallback}; //add more if you want to catch other updates from this server
+		adrserver^.server = server;
+		adrserver^.username = username;
+		adrserver^.password = password;
+		if defined (adrserver^.idthread) {
+			flstart = not thread.exists (adrserver^.idthread)};
+		if flstart {
+			thread.callscript (@realtime.client.getUpdates, {adrserver})}}};
+		«bundle //old code
+			«if defined (system.temp.realtime.stats.idRealtimeThread)
+				«flstart = not thread.exists (system.temp.realtime.stats.idRealtimeThread)
+bundle { //test code
+	start ()}
+
+

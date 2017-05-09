@@ -1,0 +1,34 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.thread.newVersion
+
+on newVersion (adrtable, xmltext) {
+	«Changes
+		«6/10/11; 7:23:40 AM by DW
+			«Created.
+	local (t, now = clock.now ());
+	new (tabletype, @t);
+	new (tabletype, @t.threadIds);
+	bundle { //stats table
+		new (tabletype, @t.stats);
+		t.stats.ctGarbageCollectVisits = 0;
+		t.stats.ctAccesses = 0;
+		t.stats.whenCreated = now};
+	xml.compile (xmltext, @t.struct);
+	
+	xml.thread.initStruct (adrtable);
+	local (nameversion = string.padwithzeros (adrtable^.stats.serialnum++, 5));
+	local (adrversion = @adrtable^.versions.[nameversion]);
+	adrversion^ = t;
+	
+	«bundle //old code
+		«local (adrversion = @adrtable^.versions.[nameversion])
+		«new (tabletype, adrversion)
+		«new (tabletype, @adrversion^.threadIds)
+		«adrversion^.struct = adrxstruct^
+		«adrversion^.when = now
+	
+	adrtable^.stats.whenLastNewStruct = now;
+	return (adrversion)};
+bundle { //test code
+	newVersion (@scratchpad.daveOutline, scratchpad.xmltext)}
+
+

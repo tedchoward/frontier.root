@@ -1,0 +1,5 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.localization.languages.english.strings.security.httpIllegalFieldError
+
+The request could not be processed by the server because the Authorization header contained an illegal field [[field]].
+
+

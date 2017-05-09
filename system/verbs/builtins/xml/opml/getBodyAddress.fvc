@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.opml.getBodyAddress
+
+on getBodyAddress (adrxstruct) {
+	«Changes
+		«5/12/12; 7:43:09 PM by DW
+			«Code I got tired of writing over and over.
+	return (xml.getaddress (xml.getaddress (adrxstruct, "opml"), "body"))}
+«bundle //test code
+	«getBodyAddress ()
+
+

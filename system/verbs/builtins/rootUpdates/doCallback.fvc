@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.rootUpdates.doCallback
+
+on doCallback (adrpart, changenote, adrcallbackstable) {
+	«Changes
+		«9/17/10; 9:43:41 AM by DW
+			«Call the callbacks in the indicated table. I wanted this in a separate code object so it would be easy to debug without taking a chance on breaking the rootupdates process. Have to be really careful about that. :-)
+	local (adrscript);
+	for adrscript in adrcallbackstable {
+		while typeof (adrscript^) == addresstype {
+			adrscript = adrscript^};
+		try {adrscript^ (adrpart, changenote)}}}
+«bundle //test code
+	«doCallback (this, "Fixed a bug.", @user.rootUpdates.callbacks.afterInstallPart)
+
+

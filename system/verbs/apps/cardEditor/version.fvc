@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.version
+
+on version () {
+	return (file.getVersion (cardEditor.appinfo.path))}
+
+

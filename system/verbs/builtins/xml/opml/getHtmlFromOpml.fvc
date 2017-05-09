@@ -1,0 +1,53 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.opml.getHtmlFromOpml
+
+on getHtmlFromOpml (opmltext, flStartWithLevel2=false) {
+	«Changes
+		«7/23/13; 3:02:18 PM by DW
+			«New optional param, flStartWithLevel2. If true, we skip the top level, and start generating with the second level. Reason -- when Trex returns OPML for a blog post, we get the title and the subs. This results in badly formatted HTML in the Scripting News feed. Check in threadsSuite.utilities.buildScriptingFeed for the call.
+		«10/10/12; 1:55:47 PM by DW
+			«The text must be returned decoded, because we're adding HTML elements to the text, and it's a mix of encoded and not encoded, which no matter what is a mistake. 
+		«10/10/12; 11:43:01 AM by DW
+			«Created. Give me some opmltext and I'll give you some HTML.
+				«http://worknotes.scripting.com/october2012/101012ByDw/fixUpScriptingNewsFeed
+	local (xstruct, htmltext = "", indentlevel = 0);
+	wp.newtextobject (opmltext, @scratchpad.damnopml);
+	xml.compile (opmltext, @xstruct);
+	on add (s) {
+		htmltext = htmltext + (string.filledstring ("\t", indentlevel) + s + "\r\n");};
+	on decode (s) {
+		return (xml.entitydecode (s, true))};
+	on textatt (adrx) {
+		local (adratts = @adrx^.["/atts"]);
+		if defined (adratts^) and defined (adratts^.text) {
+			return (decode (adratts^.text))}
+		else {
+			return ("")}};
+	on hassubs (adrx) {
+		local (adr);
+		for adr in adrx {
+			if nameof (adr^) endswith "outline" { //contains at least one sub
+				return (true)}};
+		return (false)};
+	on dolevel (adrparent, pgfopen="<p>", pgfclose="</p>") {
+		local (adrsub);
+		for adrsub in adrparent {
+			if nameof (adrsub^) endswith "outline" {
+				add (pgfopen + textatt (adrsub) + pgfclose);
+				if hassubs (adrsub) {
+					add ("<ul>"); indentlevel++;
+					dolevel (adrsub, "<li>", "</li>");
+					add ("</ul>"); indentlevel--}}}};
+	local (adrtop = xml.opml.getBodyAddress (@xstruct));
+	if flStartWithLevel2 { //7/23/13 by DW
+		local (adr);
+		for adr in adrtop {
+			if nameof (adr^) endswith "outline" {
+				adrtop = adr;
+				break}}};
+	dolevel (adrtop);
+	return (htmltext)}
+«bundle //test code
+	«wp.newtextobject (tcp.httpreadurl ("http://threads2.scripting.com/2012/october/outlineYourTwitterConversations?format=opml"), @scratchpad.myopml)
+	«webbrowser.displaytext (getHtmlFromOpml (string (scratchpad.myopml)))
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.controlPanel.rpc
+
+#title "Most Recent XML-RPC Requests"
+{mainResponder.log.rpcServerBrowser (50, {logAlternateColor, bgcolor})}
+{addLegend ("rpc")}
+
+

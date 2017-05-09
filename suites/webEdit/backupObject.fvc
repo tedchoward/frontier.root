@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:suites.webEdit.backupObject
+
+on backupObject (adr) {
+	«Changes
+		«6/14/12; 9:36:27 AM by DW
+			«Create a backup copy of the object, before it gets over-written by a webedit operation. Copied from the webEditServer function.
+	local (suffix = Frontier.getFileSuffix (typeof (adr^), true), adrparent = parentof (adr^), now = clock.now ());
+	if sizeof (suffix) > 0 {
+		suffix = "." + suffix};
+	webEdit.init ();
+	local (fname = nameof (adr^) + "." + user.webEdit.stats.checkoutSerialnum++);
+	if adrParent != nil {
+		if (not table.inguestdatabase (adr)) or (adrparent != table.getrootaddress (adr)) {
+			local (dottedname = nameOf (adrParent^) + '.' + fname);
+			if (sizeof (dottedname) + sizeof (suffix) + 1) < (32 - sizeof (suffix)) {
+				fname = dottedname}}};
+	local (f = user.webEdit.prefs.backupFolder + file.getdatepath () + fname + suffix);
+	file.surefilepath (f);
+	export.sendobject (adr, f);
+	user.webEdit.stats.whenLastFileBackup = now;
+	user.webEdit.stats.lastFileBackup = f};
+bundle { //test code
+	backupObject (@file.copy)}
+
+

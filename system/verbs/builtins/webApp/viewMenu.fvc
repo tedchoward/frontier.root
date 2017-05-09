@@ -1,0 +1,258 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webApp.viewMenu
+
+on viewMenu (menuname, adrmenutable, statusmsg=nil, urlHome="/", flEnableDropdown=true, flMenuVisible=true, flToggleable=true, extraItems=nil) {
+	«Changes
+		«9/24/12; 11:04:28 PM by DW
+			«Add a newline after a carriage return in the add function so when you view source in Chrome it doesn't look like crap.
+		«9/8/12; 10:16:41 AM by DW
+			«We can save some space in the menus by putting the Sign-out command in the dropdown menu instead of in the menubar. I always look for it there anyway.
+				«http://worknotes.scripting.com/september2012/9812ByDw/signOutCommandInDropdown
+		«8/27/12; 12:36:20 PM by DW
+			«Allow for the possibility that the installation of Radio2 does not have a domain pref.
+				«http://worknotes.scripting.com/august2012/82712ByDw/changeInRadio2Setup
+		«5/9/12; 2:13:20 PM by DW
+			«New optional param, extraItems. If non-nil, we add this text after the main (not dropdown) menu items.
+		«5/4/12; 6:11:56 PM by DW
+			«In the default statusmsg (new feature earlier today) instead of using a slash to separate the version number and the username, use a semicolon. This is consistent with how we do it elsewhere, and it looks better. :-)
+		«5/4/12; 9:03:49 AM by DW
+			«If statusmsg is nil, and the dropdown is enabled, use the username in place of the statusmsg as the label on the dropdown menu.
+		«4/24/12; 5:12:25 PM by DW
+			«Change name of the OPML Editor command in the dropdown menu to OPML Server. Instead of using the opmlEditor address, use opmlServer.
+		«Before 4/24/12 by DW
+			«4/19/12; 8:52:12 PM by DW
+				«New optional param, flToggleable. If false we don't include the icon which allows you to flip the menu up or down.
+			«4/14/12; 4:41:17 PM by DW
+				«Handle case where Radio2 is accessed through its natural URL and not its own domain.
+			«4/11/12; 6:27:56 PM by DW
+				«All signed-in users get the dropdown menu. Only admin-like users see the OPML Editor menu item. New item for member settings.
+			«4/9/12; 1:07:11 PM by DW
+				«New optional param, flMenuVisible, defaults true. 
+			«4/9/12; 10:08:53 AM by DW
+				«Menus flipped down by default.
+					«http://worknotes.scripting.com/april2012/4912ByDw/menusFlippedDownByDefault/
+			«3/27/12; 2:22:06 PM by DW
+				«Omit the style element on the main div if the menu is visible, that's the default.
+			«3/21/12; 11:22:32 AM by DW
+				«Add support for Bootstrap 2.0 modal dialogs linked to menu commands. Append /modal to the pagename. We'll strip it off, and link to a modal from the menu item.
+			«3/15/12; 3:09:41 PM by DW
+				«Commented out "Blork" in the dropdown menu. I want people to use Radio2 and River2. Not planning on updating beaut.root.
+			«3/13/12; 12:43:30 PM by DW
+				«Converting to Bootstrap 2.0.
+			«12/22/11; 7:39:04 PM by DW
+				«The menu defaults to being *not* visible. 
+			«12/16/11; 9:22:32 AM by DW
+				«Per abetam's advice on the Bootstrap list, I changed the collapse icon to an uparrow, and the expand icon to a downarrow. The analogy is pushing the menu up into the top of the window, or pulling it down from under the top of the window. 
+					«http://groups.google.com/group/twitter-bootstrap/msg/28eab131cbf7ef01
+			«12/14/11; 8:34:06 PM by DW
+				«Fix bug that would sometimes cause the cookie not to be found.
+			«12/14/11; 2:16:38 PM by DW
+				«Add a cookie that says whether the menu is visible or not.
+			«12/14/11; 11:36:23 AM by DW
+				«Now you can toggle the display of the menu by clicking on an icon.
+			«11/19/11; 5:38:37 PM by DW
+				«In the dropdown menu, use the domain name in the config.radio2.prefs, if it's defined and non-empty.
+			«11/7/11; 5:36:05 PM by DW
+				«If Radio2 is installed, it gets a spot in the dropdown menu.
+			«9/30/11; 8:24:11 AM by DW
+				«New optional param, flEnableDropdown, default true. Only set it false when building a static page. Also fully spell out "Server Monitor" in the dropdown. We were calling it "Servers" and it was confusing. 
+			«9/27/11; 3:25:16 PM by DW
+				«If ServerMonitor is installed on this server include it in the dropdown menu.
+			«9/23/11; 1:17:59 PM by DW
+				«Add worldOutline.root to the dropdown menu.
+			«9/20/11; 7:11:37 PM by DW
+				«Convert to Bootstrap v1.30. If the user is local or admin, show a dropdown menu.
+			«9/9/11; 10:03:58 AM by DW
+				«Fixed bug where if the pagename had an uppercase character in its name it wouldn't get highlighted as active in the menu.
+			«9/7/11; 10:03:26 AM by DW
+				«A better default for urlHome is / -- which might work in some circumstances as-is. The empty string, which is what its value was, never works. 
+			«9/7/11; 9:56:20 AM by DW
+				«New optional param, urlHome. Points to the home page of the site whose menu we're displaying.
+			«9/6/11; 9:40:22 AM by DW
+				«Allow for "onclick" attributes for links. Makes it possible for commands in Blork to open the popup editing window.
+			«9/3/11; 10:31:09 AM by DW
+				«Provide for a status message (a place to show version numbers, username). New corresponding class, divOpmlMenubarStatus.
+			«9/2/11; 12:33:08 PM by DW
+				«Wrap the menubar in divOpmlMenubar.
+			«9/1/11; 6:41:24 PM by DW
+				«Created.
+	local (pta = html.getpagetableaddress (), htmltext = "\r\r", indentlevel = 0, adritem, fldropdown, username = nil, cookiename = "flMenuVisible");
+	local (thispagename = string.lower (nameof (pta^.adrobject^)), idmenubar = "mainMenuBar", initialExpansionState, displayStyle, t, signoutPagename = "");
+	local (lowersignoutcommand = string.lower (webApp.data.signOutCommand)); //9/11/12 by DW
+	«scratchpad.viewmenuparams = pta^
+	bundle { //initial setup of t
+		new (tabletype, @t);
+		t.cookieText = "";
+		t.cookieval = "no value"};
+	on add (s) {
+		htmltext = htmltext + (string.filledstring ("\t", indentlevel) + s + "\r\n");}; //9/24/12 by DW
+	on finddomain (adrwebsite, menuitem) {
+		local (adrdomain);
+		for adrdomain in @config.mainresponder.domains {
+			if typeof (adrdomain^) == addresstype {
+				try {
+					if adrdomain^ == adrwebsite {
+						add ("<li><a href=\"http://" + nameof (adrdomain^) + "/\">" + menuitem + "</a></li>");
+						break}}}}};
+	bundle { //set flmenuvisible, 12/14/11 by DW
+		if defined (pta^.requestheaders.cookie) {
+			local (s = pta^.requestheaders.cookie, ctcookies = string.countfields (s, ";"), i);
+			t.cookieText = s;
+			local (lowercookiename = string.lower (cookiename));
+			for i = 1 to ctcookies {
+				cookie = string.nthfield (s, ";", i);
+				if string.lower (string.trimwhitespace (string.nthfield (cookie, "=", 1))) == lowercookiename {
+					local (cookieval = string.nthfield (cookie, "=", 2));
+					flmenuvisible = boolean (number (cookieval));
+					t.cookieval = cookieval;
+					break}}};
+		if flmenuvisible {
+			initialExpansionState = ""}
+		else {
+			initialExpansionState = "none"}};
+	bundle { //set displayStyle, 3/27/12 by DW
+		if flmenuvisible {
+			displayStyle = ""}
+		else {
+			 displayStyle = " style=\"display: none;\""}};
+	bundle { //add expand/collapse icon, 12/14/11 by DW
+		if flToggleable { //4/19/12 by DW
+			«t.expandIconUrl = "http://scripting.com/images/2011/11/11/wedgeRight.gif"
+			«t.collapseIconUrl = "http://scripting.com/images/2011/12/14/downWedge.gif"
+			
+			t.expandIconUrl = "http://scripting.com/images/2011/12/16/downWedge.gif"; //12/16/11 by DW
+			t.collapseIconUrl = "http://scripting.com/images/2011/12/16/upWedge.gif"; //12/16/11 by DW
+			
+			t.idMenuBar = idmenubar;
+			t.flMenuVisible = flmenuvisible;
+			bundle { //set t.initialIconUrl
+				if flmenuvisible {
+					t.initialIconUrl = t.collapseIconUrl}
+				else {
+					t.initialIconUrl = t.expandIconUrl}};
+			add (string.multiplereplaceall (string (webApp.data.menuScripts), @t, false, "<%", "%>"))}};
+	add ("<div class=\"divOpmlMenubar\" id=\"" + idmenubar + "\"" + displayStyle + ">"); indentlevel++;
+	add ("<div class=\"topbar-wrapper\" style=\"z-index: 5;\">"); indentlevel++;
+	add ("<div class=\"navbar\" data-dropdown=\"dropdown\" >"); indentlevel++;
+	add ("<div class=\"navbar-inner\">"); indentlevel++;
+	add ("<div class=\"container\">"); indentlevel++;
+	
+	bundle { //add the menu name, linked to the home page
+		add ("<a class=\"brand\" href=\"" + urlHome + "\"><white>" + menuname + "</white></a>")};
+	add ("<div class=\"nav-collapse\">"); indentlevel++;
+	add ("<ul class=\"nav\">"); indentlevel++;
+	for adritem in adrmenutable {
+		local (class = "", onclick = "", pagename, datatoggle = "");
+		if thispagename == string.lower (adritem^.pagename) {
+			class = " class=\"active\""};
+		if defined (adritem^.onclick) {
+			onclick = " onclick=\"" + adritem^.onclick + "\""};
+		bundle { //set pagename, datatoggle
+			pagename = adritem^.pagename;
+			if pagename contains "/" {
+				if string.nthfield (pagename, "/", 2) == "modal" {
+					datatoggle = " data-toggle=\"modal\"";
+					pagename = string.nthfield (pagename, "/", 1)}}};
+		
+		if string.lower (adritem^.title) == lowersignoutcommand { //9/8/12 by DW
+			signoutPagename = pagename}
+		else {
+			add ("<li" + class + " class=\"divOpmlMenuItem\"><a href=\"" + pagename + "\"" + onclick + datatoggle + ">" + adritem^.title + "</a></li>")}};
+	if extraItems != nil { //5/9/12 by DW
+		add (extraItems)};
+	add ("</ul>"); indentlevel--;
+	add ("</div>"); indentlevel--;
+	
+	bundle { //set fldropdown
+		fldropdown = false;
+		if flEnableDropdown {
+			if defined (pta^.flLocalAdminUser) and pta^.flLocalAdminUser {
+				fldropdown = true}
+			else {
+				if opmlEditor.member.checkCookie ("", @username, false) {
+					fldropdown = true}}}}; //opmlEditor.isUserAdminLike (username) //4/11/12 by DW
+	bundle { //add the dropdown menu, 9/20/11 by DW
+		if fldropdown {
+			on findWebsiteDomain (adrwebsite) {
+				local (adrdomain);
+				for adrdomain in @config.mainresponder.domains {
+					if typeof (adrdomain^) == addresstype {
+						try {
+							if adrdomain^ == adrwebsite {
+								return (nameof (adrdomain^))}}}};
+				return ("")};
+			local (menuname = "Dropdown");
+			add ("<ul class=\"nav pull-right\">"); indentlevel++;
+			add ("<li class=\"dropdown\">"); indentlevel++;
+			if statusmsg != nil {
+				menuname = statusmsg}
+			else {
+				if username != nil { //5/4/12 by DW
+					menuname = "v" + opmleditor.data.version + "; " + username}};
+			add ("<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">" + menuname + "&nbsp;<b class=\"caret\"></b></a>");
+			add ("<ul class=\"dropdown-menu\">"); indentlevel++;
+			if defined (river2suite) {
+				add ("<li><a href=\"/river2/\">River2</a></li>")};
+			if defined (worldoutlinesuite) {
+				local (domain = findWebsiteDomain (@worldoutlinewebsite));
+				if domain != "" {
+					add ("<li><a href=\"http://" + domain + "/\">World Outline</a></li>")}};
+			«if defined (beautSuite)
+				«finddomain (@beautwebsite, "Blork")
+				«local (adrdomain)
+				«for adrdomain in @config.mainresponder.domains
+					«if typeof (adrdomain^) == addresstype
+						«try
+							«if adrdomain^ == @beautwebsite
+								«add ("<li><a href=\"http://" + nameof (adrdomain^) + "/\">Blork</a></li>")
+								«break
+			if defined (radio2Suite) {
+				if (not defined (config.radio2)) or (not defined (config.radio2.prefs.domain)) or (sizeof (config.radio2.prefs.domain) == 0) { //4/14/12 and 8/27/12 by DW
+					add ("<li><a href=\"/radio2/\">Radio2</a></li>")}
+				else {
+					local (flsearch = true);
+					try { //11/19/11 by DW
+						local (domain = config.radio2.prefs.domain);
+						if sizeof (domain) > 0 {
+							add ("<li><a href=\"http://" + domain + "/\">Radio2</a></li>");
+							flsearch = false}};
+					if flsearch {
+						finddomain (@radio2website, "Radio2")}}};
+			if defined (servermonitorsuite) { //9/27/11 by DW
+				add ("<li><a href=\"/serverMonitor/\">Server Monitor</a></li>")};
+			«if statusmsg != nil
+				«add ("<li>" + statusmsg + "</li>")
+				«add ("<li class=\"divider\"></li>")
+			
+			add ("<li class=\"divider\"></li>");
+			add ("<li><a href=\"/opmlEditor/settings\">Settings</a></li>");
+			if opmlEditor.isUserAdminLike (username) {
+				add ("<li class=\"divider\"></li>");
+				add ("<li><a href=\"/opmlServer/\">" + opmlEditor.data.websiteName + "</a></li>")}; //4/24/12 by DW
+			bundle { //sign-out command, 9/8/12 by DW
+				add ("<li class=\"divider\"></li>");
+				if sizeof (signoutPagename) > 0 { //9/8/12 by DW
+					add ("<li><a href=\"" + signoutPagename + "\">" + webApp.data.signOutCommand + "</a></li>")}
+				else {
+					add ("<li><a href=\"/signout\">" + webApp.data.signOutCommand + "</a></li>")}};
+			
+			add ("</ul>"); indentlevel--;
+			add ("</li>"); indentlevel--;
+			add ("</ul>"); indentlevel--}
+		else { //add status message,  9/3/11 by DW
+			if statusmsg != nil {
+				add ("<div class=\"divOpmlMenubarStatus\">" + statusmsg + "</div>")}}};
+	
+	add ("</div>"); indentlevel--;
+	add ("</div>"); indentlevel--;
+	add ("</div>"); indentlevel--;
+	add ("</div>"); indentlevel--;
+	add ("</div>"); indentlevel--;
+	
+	return (htmltext)};
+bundle { //test code
+	local (menutable);
+	new (tabletype, @menutable);
+	html.setpagetableaddress (@scratchpad.viewmenuparams);
+	viewMenu ("Hello World", @menutable)}
+
+

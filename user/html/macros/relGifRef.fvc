@@ -1,0 +1,51 @@
+FrontierVcsFile:3:scpt:user.html.macros.relGifRef
+
+on relGifRef (gifname, explanation = "", hspace = "", align = "", usemap = "") { «4.2
+	«macro that generates an IMG tag to a GIF file
+		«the gif file must be in the Images directory at the top level of the site
+		«you can modify the script for different placement
+	local (sourceimagefolder = user.bbsite.prefs.imagesfolder);
+	
+	local (htmltext = "");
+	on add (s) {
+		htmltext = htmltext + s};
+	
+	if explanation == "" {
+		explanation = gifname + " Picture"};
+	
+	local (destimagefolder = html.data.page.ftpsite^.folder + "images:");
+	local (url);
+	bundle { «figure out what the URL for the gif is, relative to this page
+		«assume the site has an #ftpsite directive
+		«assume the gifs directory is at the same level as the table that has the #ftpsite
+		url = "";
+		local (adr = html.data.page.adrobject);
+		loop {
+			adr = parentOf (adr^);
+			if adr == parentOf (html.data.page.ftpsite^) {
+				break};
+			url = "../" + url};
+		url = url + "images/"};
+	
+	local (f = sourceimagefolder + gifname + ".gif");
+	if not file.exists (f) { «error
+		scriptError ("Can't locate the GIF file named " + gifname + ".")};
+	add ("<img src=\"" + url + gifname + ".gif\" border=0 alt=\"" + explanation + "\"");
+	local (hwlist = html.getGifHeightWidth (f));
+	add (" height=" + hwlist [1] + " width=" + hwlist [2]);
+	«file.setmodified (f, clock.now ()) «so we can tell which ones we are using
+	if hspace != "" {
+		add (" hspace=" + hspace)};
+	if align != "" {
+		add (" align=" + align)};
+	if usemap != "" {
+		add (" usemap=\"#" + usemap + "\"")};
+	add (">");
+	local (destfile = destimagefolder + file.filefrompath (f));
+	file.surefilepath (destfile);
+	file.copy (f, destfile);
+	return (htmltext)};
+bundle { «test code
+	dialog.alert (relGifRef ("bbediticon"))}
+
+

@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.grep
+
+local (theList = {"aa", "aab", "a", "ab", ""});
+on tt (as) {
+	if (as^ beginsWith "aa") {
+		return (true)}
+	else {
+		return (false)}};
+dialog.notify (regex.grep ("^aa", @theList));
+dialog.notify (regex.grep ("", @theList, false));
+dialog.notify (regex.grep (@tt, @theList));
+dialog.notify (regex.grep (@tt, @theList, false))
+
+

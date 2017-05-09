@@ -1,0 +1,34 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.aggregator.rpcTesting.testItems
+
+local (username = aggregatorData.prefs.security.username);
+local (password = string (aggregatorData.prefs.security.password));
+local (url = "http://static.userland.com/gems/backend/rssTwoExample2.xml");
+local (endpoint = "xmlrpc://127.0.0.1:5337/RPC2" );
+bundle { //aggregator.getRecentItems
+	scratchpad.recentItems = [endpoint].aggregator.getRecentItems (10, username, password);
+	edit (@scratchpad.recentItems)};
+bundle { //aggregator.getRecentItemsForSub
+	scratchpad.recentItemsForSub = [endpoint].aggregator.getRecentItemsForSub (url, 10, username, password);
+	edit (@scratchpad.recentItemsForSub)};
+bundle { //aggregator.getItem
+	local (t = scratchpad.recentItems[1]);
+	local (itemId = t.itemId);
+	scratchpad.oneItem = [endpoint].aggregator.getItem (itemId, username, password);
+	edit (@scratchpad.oneItem)};
+bundle { //aggregator.deleteItem
+	local (t = scratchpad.recentItems[1]);
+	local (itemId = t.itemId);
+	scratchpad.returnValue = [endpoint].aggregator.deleteItem (itemId, username, password);
+	edit (@scratchpad.returnValue)};
+bundle { //aggregator.deleteItems
+	local (itemIdArray = {});
+	bundle { //build itemIdArray
+		local (i);
+		for i = 1 to sizeOf (scratchpad.recentItems) {
+			local (t = scratchpad.recentItems[i]);
+			local (itemId = t.itemId);
+			itemIdArray = itemIdArray + itemId}};
+	scratchpad.returnValue = [endpoint].aggregator.deleteItems (itemIdArray, username, password);
+	edit (@scratchpad.returnValue)}
+
+

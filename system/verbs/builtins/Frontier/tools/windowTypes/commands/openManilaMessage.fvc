@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.windowTypes.commands.openManilaMessage
+
+on openManilaMessage (siteurl, msgnum, adradrwindow=nil) {
+	
+	local (adrtype);
+	if Frontier.tools.windowTypes.findWindowType ("manilaMessage", @adrtype) {
+		return (adrtype^.openMessage (siteurl, msgnum, adradrwindow:adradrwindow))};
+	
+	return (false)}
+
+

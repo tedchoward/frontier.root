@@ -1,0 +1,53 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.clickers.typeTEXT
+
+on typeTEXT (path) { //Open a file of type TEXT in a wp-text window
+	«Changes
+		«4/19/12; 9:36:26 AM by DW
+			«Try to parse the file as OPML, if it works, open it as an outline. I would like to depend on the size of the window from the OPML, but if there are lots of times when it isn't set, and if so the window looks awful.
+				«http://worknotes.scripting.com/april2012/41912ByDw/openingAFileOfUnknownType
+		«11/6/05; 7:52:06 AM by DW
+			«On the Mac, if the file name ends in .opml, open it as an OPML file.
+		«12/15/00; 7:12:05 PM by PBS
+			«When a text file has been double-clicked in the Finder, call Radio's standard file opening script.
+		«Wed, Oct 15, 1997 at 3:31:20 PM by PBS
+			«Created.
+	if system.environment.isMac { //11/6/05 by DW
+		if string.lower (path) endswith ".opml" {
+			return (Frontier.clickers.typeOPML (path))}};
+	
+	bundle { //4/19/12 by DW
+		try {
+			local (adrtable = @system.temp.Frontier.clickers);
+			if not defined (adrtable^) {
+				new (tabletype, adrtable)};
+			local (adroutline = @adrtable^.[path]);
+			op.xmltooutline (file.readwholefile (path), adroutline);
+			edit (adroutline);
+			op.firstsummit (); //otherwise cursor ends up at end of outline
+			return}};
+	
+	local (s, adr, w = file.fileFromPath (path), tw, pw);
+	if defined ([path]) {
+		«Don't try to re-open the file if it's already open.
+			«Sat, May 23, 1998 at 2:57:30 PM by PBS
+		window.bringToFront (path);
+		return (true)};
+	if fatPages.fileIsFat (path) { //is this a fat page?
+		return (Frontier.clickers.typeFATP (path))};
+	if system.environment.isPike {
+		Frontier.finderToFront = false;
+		«return (pike.commands.open (path))
+		return (Frontier.tools.windowTypes.commands.open (path))};
+	s = string (file.readWholeFile (path));
+	s = string.replaceall (s, cr + lf, cr);
+	s = string.replaceAll (s, lf, cr);
+	wp.newTextObject (s, @tw);
+	pack (tw, @tw);
+	unpackWindow (@tw, path);
+	window.open (@[path]);
+	window.setTitle (@[path], w);
+	frontier.finderToFront = false;
+	wp.go (up, infinity);
+	return (true)}
+
+

@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.unregisterUrlEcho
+
+on unregisterUrlEcho (x) { «cancels URL echo
+	case sys.os () {
+		"MacOS" {
+			pack (x, @x);
+			setbinarytype (@x, 'sign');
+			return (appleEvent (user.webBrowser.currentid, 'WWW!', 'UNRU', '----', x))}}}
+
+

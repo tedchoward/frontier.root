@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.xmlutils.pushScope
+
+on pushScope (adrmsg, adrelement=nil) {
+	local (adrtable = @adrmsg^.scopestack);
+	local (adr = @adrtable^.[string.padWithZeros (sizeOf (adrtable^), 4)]);
+	new (tableType, adr);
+	new (tableType, @adr^.namespaces);
+	if adrelement != nil {
+		soap.xmlutils.namespaceCollectDefinitions (adrmsg, adrelement)};
+	return}
+
+

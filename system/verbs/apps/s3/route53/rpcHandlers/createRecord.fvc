@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.rpcHandlers.createRecord
+
+on createRecord (domainname, name, value, type) {
+	«Changes
+		«7/12/11; 11:26:19 AM by DW
+			«Created.
+	local (adrdata = s3.route53.init (), response);
+	if not adrdata^.prefs.flRpcEnabled {
+		scripterror ("Can't create the record because the Route 53 API is not enabled on the server.")};
+	s3.route53.createRecord (domainname, name, value, type, adrresponse:@response);
+	return (response)};
+bundle { //test code
+	createRecord ()}
+
+

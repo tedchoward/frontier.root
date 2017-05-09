@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.getTableLine
+
+on getTableLine (itemlist) {
+	local (s = "<tr>", item);
+	for item in itemlist {
+		s = s + "<td>" + item + "</td>"};
+	s = s + "\r";
+	return (s)}
+
+

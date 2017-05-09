@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.buttons.oldbuttons.["00003500\tBlorkmark"]
+
+«Changes
+	«1/9/12; 11:58:17 AM by DW
+		«Added to archive windows.
+	«6/7/11; 8:58:16 AM by DW
+		«Created. 
+thread.callscript (@opmlEditor.worldOutline.markHeadline, {})
+
+

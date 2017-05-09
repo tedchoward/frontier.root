@@ -1,0 +1,30 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.authPage
+
+on authPage (flconfirm=true) {
+	«Changes
+		«6/9/11; 10:02:53 AM by DW
+			«New optional param, flconfirm, determines whether we add a confirmation prompt.
+		«11/13/07; 6:20:35 PM by DW
+			«Add a delay before getting the token and try up to six times to get it.
+		«11/12/07; 9:26:46 AM by DW
+			«Factored out url-creating code.
+		«6/10/07; 6:09:05 AM by DW
+			«Created.
+	local (flauth);
+	bundle { //set flauth
+		if flconfirm {
+			flauth = dialog.confirm ("Open Flickr site to authenticate?")}
+		else {
+			flauth = true}};
+	if flauth {
+		local (frob, i);
+		webbrowser.openurl (Flickr.authPageUrl (@frob));
+		for i = 1 to 6 {
+			clock.waitseconds (10);
+			try {
+				flickr.api.auth.getToken (frob);
+				break}}}};
+bundle { //test code
+	authPage ()}
+
+

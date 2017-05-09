@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinResponders.blogger.methods.post
+
+on post (driverName, screenname, message) {
+	local (retVal);
+	message = string.trimWhiteSpace (string.delete (message, 1, sizeof ("blogger post")));
+	with user.im.responders.blogger.prefs {
+		retVal = blogger.newPost (message, username, string (password), blogId, flPublish, @siteInfo)};
+	return ("Posted successfully. PostID: " + retVal)}
+
+

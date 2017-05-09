@@ -1,0 +1,275 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.date.readMe.eventSummary
+
+options
+	copyright
+		/*© copyright 1992, UserLand Software, Inc.*/
+	ucmd
+		true
+	file
+		UserLand:Programming:UCMDs & XCMDs:Calendar Ops:calwires.c
+	preamble
+		#include "calops.h"
+	apptable
+		system.verbs.builtins.date
+	appid
+		----
+	applet toolkit
+		false
+messages
+	abbrevString
+		token
+			abst
+		params
+			dateType
+		code
+			IUDateString (param1, abbrevDate, returnedValue);
+		returns
+			stringType
+		sysevent
+			true
+	dayOfWeek
+		token
+			daow
+		params
+			dateType
+		locals
+			DateTimeRec dtr;
+		code
+			Secs2Date (param1, &dtr);
+			
+			fixdate (&dtr);
+			
+			returnedValue = dtr.dayofweek;
+		returns
+			shortType
+		sysevent
+			true
+	daysInMonth
+		token
+			dsim
+		params
+			dateType
+		locals
+			DateTimeRec dtr;
+		code
+			Secs2Date (param1, &dtr);
+			
+			fixdate (&dtr);
+			
+			returnedValue = daysinmonth (dtr.month, dtr.year);
+		returns
+			shortType
+		sysevent
+			true
+	firstOfMonth
+		token
+			firm
+		params
+			dateType
+		locals
+			DateTimeRec dtr;
+		code
+			Secs2Date (param1, &dtr);
+			
+			firstofmonth (&dtr, dtr.month, dtr.year);
+			
+			Date2Secs (&dtr, &returnedValue);
+		returns
+			dateType
+		sysevent
+			true
+	lastOfMonth
+		token
+			lasm
+		params
+			dateType
+		locals
+			DateTimeRec dtr;
+		code
+			Secs2Date (param1, &dtr);
+			
+			lastofmonth (&dtr, dtr.month, dtr.year);
+			
+			Date2Secs (&dtr, &returnedValue);
+		returns
+			dateType
+		sysevent
+			true
+	longString
+		token
+			lnst
+		params
+			dateType
+		code
+			IUDateString (param1, longDate, returnedValue);
+		returns
+			stringType
+		sysevent
+			true
+	nextMonth
+		token
+			nxtm
+		params
+			dateType
+		locals
+			DateTimeRec dtr;
+		code
+			Secs2Date (param1, &dtr);
+			
+			nextmonth (&dtr);
+			
+			Date2Secs (&dtr, &returnedValue);
+		returns
+			dateType
+		sysevent
+			true
+	nextWeek
+		token
+			nxtw
+		params
+			dateType
+		locals
+			DateTimeRec dtr;
+		code
+			Secs2Date (param1, &dtr);
+			
+			nextweek (&dtr);
+			
+			Date2Secs (&dtr, &returnedValue);
+		returns
+			dateType
+		sysevent
+			true
+	nextYear
+		token
+			nxty
+		params
+			dateType
+		locals
+			DateTimeRec dtr;
+		code
+			Secs2Date (param1, &dtr);
+			
+			nextyear (&dtr);
+			
+			Date2Secs (&dtr, &returnedValue);
+		returns
+			dateType
+		sysevent
+			true
+	prevMonth
+		token
+			prvm
+		params
+			dateType
+		locals
+			DateTimeRec dtr;
+		code
+			Secs2Date (param1, &dtr);
+			
+			prevmonth (&dtr);
+			
+			Date2Secs (&dtr, &returnedValue);
+		returns
+			dateType
+		sysevent
+			true
+	prevWeek
+		token
+			prvw
+		params
+			dateType
+		locals
+			DateTimeRec dtr;
+		code
+			Secs2Date (param1, &dtr);
+			
+			prevweek (&dtr);
+			
+			Date2Secs (&dtr, &returnedValue);
+		returns
+			dateType
+		sysevent
+			true
+	prevYear
+		token
+			prvy
+		params
+			dateType
+		locals
+			DateTimeRec dtr;
+		code
+			Secs2Date (param1, &dtr);
+			
+			prevyear (&dtr);
+			
+			Date2Secs (&dtr, &returnedValue);
+		returns
+			dateType
+		sysevent
+			true
+	shortString
+		token
+			shst
+		params
+			dateType
+		code
+			IUDateString (param1, shortDate, returnedValue);
+		returns
+			stringType
+		sysevent
+			true
+	tomorrow
+		token
+			tmrw
+		params
+			dateType
+		locals
+			DateTimeRec dtr;
+		code
+			Secs2Date (param1, &dtr);
+			
+			tomorrow (&dtr);
+			
+			Date2Secs (&dtr, &returnedValue);
+		returns
+			dateType
+		sysevent
+			true
+	weeksInMonth
+		token
+			wkim
+		params
+			dateType
+		locals
+			DateTimeRec dtr;
+		code
+			Secs2Date (param1, &dtr);
+			
+			fixdate (&dtr);
+			
+			returnedValue = weeksinmonth (dtr.month, dtr.year);
+		returns
+			shortType
+		sysevent
+			true
+	yesterday
+		token
+			ystd
+		params
+			dateType
+		locals
+			DateTimeRec dtr;
+		code
+			Secs2Date (param1, &dtr);
+			
+			yesterday (&dtr);
+			
+			Date2Secs (&dtr, &returnedValue);
+		returns
+			dateType
+		sysevent
+			true
+
+
+

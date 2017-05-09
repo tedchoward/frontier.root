@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.buttons.archive.["00004000\tView"]
+
+«Changes
+	«1/6/12; 6:22:32 AM by DW
+		«Just call opmlEditor.worldOutline.viewHeadline which has been adapted to handle this case.
+			«local (domain)
+			«window.attributes.getone ("domain", @domain)
+			«thread.callscript (@webbrowser.openurl, {"http://" + domain + "/"})
+			«webbrowser.bringtofront ()
+	«12/30/11; 4:25:11 PM by DW
+		«Created. 
+thread.callscript (@opmlEditor.worldOutline.viewHeadline, {})
+
+

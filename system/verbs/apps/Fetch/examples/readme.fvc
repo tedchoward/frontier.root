@@ -1,0 +1,16 @@
+FrontierVcsFile:3:wptx:system.verbs.apps.Fetch.examples.readme
+
+Good morning!
+
+Here's a preliminary install file for Fetch 3.0. I just tweaked up a version of the glue table produced by the Commercial Developer's suite. Fetch also supports menu sharing, if you want a starter menu, check out system.menubars.FTCh.
+
+I finally got file uploading to work! Thanks to face@Arizona.EDU and mgh3@PO.CWRU.EDU for providing sample code. See Fetch.examples.uploadFolder for an example script. I also tweaked up Fetch.store to get this all smoothed out.
+
+My experience: Fetch is the most reliable FTP software on the Macintosh. Anarchie has trouble talking to sites that Fetch can communicate with. But the Apple Event support in Fetch is hard to figure out. Contributions to the Fetch.examples table will be appreciated.
+
+Hope you like it!
+
+Dave Winer
+12/7/95
+
+

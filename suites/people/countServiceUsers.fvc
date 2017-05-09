@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:suites.people.countServiceUsers
+
+on countServiceUsers (serviceName) {
+	«Count all the users of a service.
+	local (serviceUsers = people.getServiceUsersList (serviceName));
+	if serviceUsers == false {
+		return (false)};
+	return (sizeOf (serviceUsers))}
+
+

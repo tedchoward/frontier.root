@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.mustBeOutline
+
+«Called from the commands in the Outliner menu
+	«12/1/97 at 6:22:48 AM by DW
+
+local (okTypes = {scriptType, outlineType, tableType, menubarType});
+local (w = window.frontmost ());
+if okTypes contains window.getType (w) {
+	return (true)}
+else {
+	local (s = "Can't perform the operation because ");
+	if w == nil {
+		scriptError (s + "no window is open.")}
+	else {
+		scriptError (s + "\"" + w + "\" doesn't contain an outline.")}}
+
+

@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.xml.examples.["!pathological"].tableStructure.["0001\tcomment"]
+
+This contains a bunch of pathological XML examples that are designed to trip up the compiler.
+
+

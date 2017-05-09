@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.core.move
+
+on move (appID, obj, moveTo) { «Move an object
+	return (appleEvent (appID, 'core', 'move', '----', objspec (obj), 'insh', moveTo))}
+
+

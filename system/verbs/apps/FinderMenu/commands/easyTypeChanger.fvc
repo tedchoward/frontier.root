@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FinderMenu.commands.easyTypeChanger
+
+on easyTypeChanger (type, creator) {
+	local (f);
+	for f in FinderMenu.getSelectionList () {
+		try {
+			file.setType (f, type);
+			file.setCreator (f, creator);
+			Finder.update (f)}}}
+
+

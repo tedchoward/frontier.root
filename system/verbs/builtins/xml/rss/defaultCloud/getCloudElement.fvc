@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.rss.defaultCloud.getCloudElement
+
+on getCloudElement () {
+	«Changes
+		«8/11/09; 10:57:30 AM by DW
+			«Created. Before we start propogating cloud elements all over the place, centralize the code, so if we want to move clouds, it's easy to do.
+	local (adrdata = xml.rss.defaultCloud.init (), s);
+	with adrdata^.prefs {
+		s ="<cloud domain=\"" + server + "\" port=\"" + port + "\" path=\"" + path + "\" registerProcedure=\"" + registerProcedure + "\" protocol=\"" + protocol + "\" />"};
+	return (s)};
+bundle { //test code
+	dialog.alert (getCloudElement ())}
+
+

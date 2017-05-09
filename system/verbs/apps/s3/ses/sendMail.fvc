@@ -1,0 +1,69 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.ses.sendMail
+
+on sendMail (recipient, subject, message, sender, flRichMessage=false, adrMessageId=nil, adrErrorMessage=nil) {
+	«Changes
+		«8/31/12; 11:19:00 AM by DW
+			«Don't call searchengine.stripmarkup on plain text versions, this converts linefeeds and probably other characters. If you want to use the plaintext version, don't include markup. Also do the full url-encoding, not partial. 
+		«8/29/12; 9:29:00 AM by DW
+			«Add simple stats.
+		«8/28/12; 8:43:08 PM by DW
+			«Send an email. Return true if it worked. If adrMessageId is non-nil, return the message id. If there's an error, return the message if adrErrorMessage is non-nil. If flRichMessage is true, the contents of the message parameter is HTML.
+				«http://worknotes.scripting.com/august2012/82912ByDw/glueForAmazonSes
+	local (adrdata = s3.ses.init (), s = "", now = clock.now ());
+	on encode (s) {
+		return (string.urlencode (s, true))};
+	bundle { //build s, the body of the post
+		s = s + "&AWSAccessKeyId=" +  encode (user.s3.accounts.default.AWSAccessKeyId);
+		s = s + "&Action=SendEmail";
+		s = s + "&Destination.ToAddresses.member.1=" + encode (recipient);
+		
+		bundle { //add the message text
+			if flRichMessage {
+				s = s + "&Message.Body.Html.Data=" + encode (message)};
+			s = s + "&Message.Body.Text.Data=" + encode (message)};
+			«s = s + "&Message.Body.Text.Data=" + encode (searchengine.stripmarkup (message))
+		
+		s = s + "&Message.Subject.Data=" + encode (subject);
+		s = s + "&Source=" + encode (sender);
+		s = s + "&Timestamp=" + encode (date.dateToIso8601String (now))};
+	bundle { //sent the request to Amazon
+		local (httpresult, xstruct);
+		httpresult = s3.ses.httpClient ("POST", s);
+		«wp.newtextobject (httpresult, @scratchpad.myfreakingresult)
+		xml.compile (httpresult, @xstruct);
+		adrdata^.stats.ctSendMails++;
+		adrdata^.stats.whenLastSendMail = now;
+		«s3.ses.testing.goodResponse = xstruct
+		bundle { //return false if we find an error response
+			try {
+				local (adrerrorresponse = xml.getaddress (@xstruct, "ErrorResponse"));
+				if adrErrorMessage != nil {
+					try {
+						local (adrerror = xml.getaddress (adrerrorresponse, "Error"));
+						adrErrorMessage^ = xml.getvalue (adrerror, "Message")}
+					else {
+						adrErrorMessage^ = "Error sending mail."}};
+				adrdata^.stats.ctSendMailErrors++;
+				adrdata^.stats.whenLastSendMailError = now;
+				return (false)}}; //there was an error
+		bundle { //return message id, if called for
+			if adrMessageId != nil {
+				try {
+					local (adrsendemailresponse = xml.getaddress (@xstruct, "SendEmailResponse"));
+					local (adrsendemailresult = xml.getaddress (adrsendemailresponse, "SendEmailResult"));
+					adrMessageId^ = xml.getvalue (adrsendemailresult, "MessageId")}
+				else {
+					adrMessageId^ = ""}}};
+		return (true)}}
+«bundle //test code
+	«local (recipient = "bullmancuso@gmail.com")
+	«local (subject = clock.now ())
+	«local (message = string (s3.ses.testing.messagetext))
+	«local (flRichMessage = true)
+	«local (sender = "dave.winer@gmail.com")
+	«if sendMail (recipient, subject, message, sender, flRichMessage, @scratchpad.messageid, @scratchpad.errormessage)
+		«dialog.alert (scratchpad.messageid)
+	«else
+		«dialog.alert (scratchpad.errormessage)
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.data.virginResponders.rpi.condition
+
+on condition (screenname, message) {
+	return (tcp.im.builtinResponders.rpi.condition (screenname, message))}
+
+

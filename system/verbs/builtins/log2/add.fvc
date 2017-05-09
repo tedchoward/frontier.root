@@ -1,0 +1,60 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.log2.add
+
+on add (source, eventtype, htmltext, startticks=clock.ticks (), imghtml="", adreventdata=nil) {
+	«Changes
+		«12/7/10; 7:17:51 PM by DW
+			«Use string.formatdouble to display seconds.
+		«9/19/10; 10:16:45 PM by DW
+			«Call callbacks.
+		«6/3/09; 9:58:02 AM by DW
+			«Give startticks a default value of clock.ticks.
+		«5/18/09; 10:38:39 AM by DW
+			«New logging code, cribbed from photoFan.root.
+			«First parameter is a string, the source of the logging event. It should be the name of the tool it's being called from, however if it's not a tool, it could be some other name. 
+		«1/20/08; 7:41:57 AM by DW
+			«Convert to calendar-based structure.
+		«11/21/07; 6:01:54 AM by DW
+			«Add an optional parameter for image html.
+		«11/20/07; 12:01:40 PM by DW
+			«Fixed a mistake in formatting the duration string.
+		«11/19/07; 7:29:24 PM by DW
+			«Created.
+	local (adrdata = log2.init ());
+	if adrdata^.prefs.enabled {
+		local (secs);
+		bundle { //set secs
+			«local (s = string (double (clock.ticks () - startticks) / 60))
+			«local (lod = string.nthfield (s, ".", 1))
+			«local (rod = string.nthfield (s, ".", 2) + "00")
+			«if sizeof (rod) > 3
+				«rod = string.mid (rod, 1, 3)
+			«secs = lod + "." + rod
+			secs = string.formatdouble (double (clock.ticks () - startticks) / 60)};
+		local (adrcal = @adrdata^.calendar, now = clock.now ());
+		local (adrtable = mainresponder.calendar.getdayaddress (adrcal, now, true));
+		adrtable = xml.addtable (adrtable, string (now));
+		adrtable^.source = source;
+		adrtable^.eventtype = eventtype;
+		adrtable^.htmltext = htmltext;
+		adrtable^.imghtml = imghtml;
+		adrtable^.secs = secs;
+		if adreventdata != nil {
+			adrtable^.data = adreventdata^};
+		bundle { //clear the cache
+			if defined (system.temp.log2.viewLogCache) {
+				delete (@system.temp.log2.viewLogCache)}};
+		bundle { //call the callbacks
+			local (adrscript);
+			for adrscript in @adrdata^.callbacks.afterAdd {
+				while typeof (adrscript^) == addresstype {
+					adrscript = adrscript^};
+				try {adrscript ^ (source, eventtype, htmltext, startticks, imghtml, adreventdata)}}}}}
+«bundle //test code
+	«local (i, startticks, ctloops = 10)
+	«for i = 1 to ctloops
+		«msg (i)
+		«startticks = clock.ticks ()
+		«clock.waitsixtieths (ctloops - i + 1)
+		«add ("log2", "Test code", i + ". I am just testing this mofo. " + states.nthstate (random (1, 50)) + ".", startticks)
+
+

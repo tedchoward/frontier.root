@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.server.rpcHandlers.getOutlines
+
+on getOutlines (username, password, updateStruct=nil) {
+	«Changes
+		«9/9/10; 3:00:25 PM by DW
+			«Pass username to io.server.getoutlines.
+		«7/26/10; 3:42:37 PM by DW
+			«Add optional parameter, updateStruct.
+		«7/17/10; 1:55:41 PM by DW
+			«Created. 
+	io.server.validatePassword (username, password);
+	return (io.server.getoutlines (username, updateStruct))}
+
+

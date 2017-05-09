@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.uBASE.addRecord
+
+on addRecord (fnum, key, adrTable) {
+	return (systemEvent ('ubas', 'addr', 'fref', short (fnum), 'key ', string (key), adrTable^))}
+
+

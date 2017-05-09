@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:user.webserver.responders.RPC2.condition
+
+(string.upper (path) equals "/RPC2")
+
+

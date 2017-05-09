@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.db.setValue
+
+on setValue (f, path, val) {
+	kernel (db.setValue)}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BarChart.setBarCount
+
+on setBarCount (ctbars) { «reset the number of bars frontmost BC window
+	return (appleEvent (BarChart.id, 'BARC', 'scnt', '----', short (ctbars)))}
+
+

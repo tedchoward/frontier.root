@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.iso8859encode
+
+on iso8859encode (s, adrtable) {
+	kernel (string.iso8859encode)}
+«bundle //test code
+	«dialog.alert (iso8859encode ("© Copyright 1996-97 UserLand Software", @html.data.iso8859.win))
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webserver.data.cgis.samples.runtimeError
+
+on runtimeError (adrParams) {
+	return (string (12 / 0))}
+
+

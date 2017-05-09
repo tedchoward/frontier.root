@@ -1,0 +1,38 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.menuCommands.archiveSubOutline
+
+on archiveSubOutline () {
+	«Changes
+		«8/28/10; 10:57:17 AM by DW
+			«Created. 
+	local (adrdata = io.init (), now = clock.now ());
+	local (adroutline = address (window.frontmost ()), linetext = op.getlinetext ());
+	if op.countsubs (1) == 0 {
+		scripterror ("Can't archive this sub-outline because it doesn't have any subheads.")};
+	if dialog.confirm ("Archive \"" + linetext + "\" sub-outline?") {
+		local (lo = adroutline^);
+		local (oldtarget = target.set (@lo));
+		op.reorg (left, infinity);
+		op.reorg (up, infinity);
+		if op.go (down, 1) {
+			op.demote ();
+			op.deleteline ()};
+		op.promote ();
+		op.deleteline ();
+		window.settitle (@lo, "Archive of \"" + linetext + "\"");
+		local (opmltext = op.outlinetoxml (@lo));
+		wp.newtextobject (opmltext, @scratchpad.lotext);
+		target.set (oldtarget);
+		local (username = adrdata^.client.prefs.username);
+		local (password = string (adrdata^.client.prefs.password));
+		local (server = string (adrdata^.client.prefs.server));
+		local (url = [server].io.archiveOutline (username, password, opmltext));
+		op.deletesubs ();
+		new (tabletype, @atts);
+		atts.type = "link";
+		atts.url = url;
+		op.attributes.addgroup (@atts);
+		return (url)}};
+bundle { //test code
+	dialog.alert (archiveSubOutline ())}
+
+

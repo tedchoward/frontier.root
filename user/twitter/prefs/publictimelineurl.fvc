@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:user.twitter.prefs.publictimelineurl
+
+http://api.twitter.com/1/statuses/public_timeline.xml
+
+

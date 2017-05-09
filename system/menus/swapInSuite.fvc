@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.menus.swapInSuite
+
+on swapInSuite (adrsuite) { //Called from scripts in the Suites sub-menu
+	«Swap in a suite's menu in the menu bar.
+		«Changes:
+			«9/23/99; 3:11:39 PM by PBS
+				«The suite may be an address in the suites table. The suite may not be in Frontier.root, but in a guest database. If so, open the guest database if needed.
+	
+	if defined (system.menus.data.currentSuite^.menu) {
+		try {menu.remove (@system.menus.data.currentSuite^.menu)}};
+	
+	if typeOf (adrSuite^) == addressType { //PBS 9/23/99
+		if not defined (adrSuite^^) {
+			if table.inGuestDatabase (string (adrSuite^)) {
+				local (addressList = string.parseAddress (string (adrSuite^)));
+				local (f = addressList [1]);
+				fileMenu.open (f, true)}};
+		adrSuite = adrSuite^};
+	
+	if defined (adrSuite^.installMenu) {
+		adrSuite^.installMenu ()}
+	else {
+		menu.install (@adrsuite^.menu)};
+	
+	system.menus.data.currentSuite = adrsuite}
+
+

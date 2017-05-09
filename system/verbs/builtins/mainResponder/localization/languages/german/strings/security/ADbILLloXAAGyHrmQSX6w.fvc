@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.german.strings.security.httpUnsupportedDigestAlgorithm
+
+Der Request konnte vom Server nicht verarbeitet werden, weil ein unbekannter Digest-Algorithmus im Authorization-Header spezifiziert wurde.
+
+

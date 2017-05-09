@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.thread.script
+
+on script () {
+	«Changes
+		«10/3/12; 1:32:04 PM by DW
+			«Created.
+	loop {
+		try {opmlEditor.watchFolder ()};
+		thread.sleepSweet (10)}};
+bundle { //test code
+	script ()}
+
+

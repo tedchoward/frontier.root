@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.httpGetTypeLength
+
+on httpGetTypeLength (url, adrtype, adrlength, ctFollowRedirects=0) {
+	«Changes
+		«7/19/09; 10:36:04 AM by DW
+			«Add optional ctFollowRedirects parameter. 
+		«6/5/08; 12:49:08 PM by DW
+			«The RSS 2.0 spec says that the type and length attributes of enclosures are required and must be correct, yet some feeds don't have the correct info. It's easy to get and therefore easy to fix. 
+	local (urllist = string.urlSplit (url), server = urllist [2], path = urllist [3], headers);
+	string.httpResultSplit (tcp.httpClient (server:server, path:path, flJustHeaders:true, ctFollowRedirects:ctFollowRedirects), @headers);
+	adrtype^ = headers.["Content-Type"];
+	adrlength^ = number (headers.["Content-Length"]);
+	return (true)}
+«bundle //test code
+	«httpGetTypeLength ("http://a.media.abcnews.com/podcasts/080604_ntl.mp3", @scratchpad.type, @scratchpad.length)
+
+

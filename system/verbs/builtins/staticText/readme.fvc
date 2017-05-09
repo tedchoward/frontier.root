@@ -1,0 +1,11 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.staticText.readme
+
+// 3/16/11; 12:37:13 PM by DW
+	This code has been popping up all over the place, and usually there are lots of bugs in it, and finally I see the pattern and understand why it's everywhere, so wtf, let's build a builtin for it, and yes it is sweet.
+	Here's the deal. I want the text to flow to S3 and to FTP and sometimes to the local file system.
+	So you set up config.staticText that way, and just call staticText.write instead of cooking your own. If later on you don't care about FTP anymore, just disable it. 
+	And if you need to have multiple sets of policies for different apps, no problemmo, just create the data table for staticText over in your space, call statictext.init on it, and pass it around. 
+	It's one of these simplifiers that you had to fuck around with for a while before it became totally apparent what you really needed. 
+
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.outliner.sendDirectMessage
+
+local (recipient = op.getlinetext ());
+if dialog.ask ("Direct message to " + recipient + "?", @user.twitter.prefs.lastDirectMessage) {
+	twitter.newDirectMessage (recipient, user.twitter.prefs.lastDirectMessage)}
+
+

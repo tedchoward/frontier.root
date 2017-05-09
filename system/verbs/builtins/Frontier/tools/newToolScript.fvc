@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.newToolScript
+
+on newToolScript (adrsource, adrdest, toolname) {
+	«Changes
+		«11/30/12; 6:41:59 PM by DW
+			«Expand the window fully, zoom it.
+				«http://worknotes.scripting.com/november2012/113012ByDw/newToolImprovements
+		«5/26/09; 9:47:05 AM by DW
+			«Create a script in a new tool from a template. 
+	local (s = string (adrsource^), t);
+	new (tabletype, @t);
+	t. toolname = toolname;
+	t.now = clock.now ();
+	t.initials = user.prefs.initials;
+	s = string.multiplereplaceall (s, @t, false, "<%", "%>");
+	script.newscriptobject (s, adrdest);
+	bundle { //full expand, cursor on first summit
+		local (oldtarget = target.set (adrdest));
+		op.firstsummit ();
+		op.fullExpand ();
+		target.set (oldtarget);
+		window.zoom (adrdest)}};
+bundle { //test code
+	newToolScript (@Frontier.tools.data.scripts.init, @workspace.tempscript, "podcaster");
+	edit (@workspace.tempscript)}
+
+

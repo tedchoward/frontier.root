@@ -1,0 +1,27 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.testing.testparams.request
+
+GET /resources/icons/folder HTTP/1.1
+
+Accept: */*
+
+Referer: http://pebbles.userland.com/testing/
+
+Accept-Language: en-us
+
+Accept-Encoding: gzip, deflate
+
+If-Modified-Since: Sun, 08 Nov 1998 14:56:31 GMT
+
+User-Agent: Mozilla/4.0 (compatible; MSIE 5.0b2; Windows NT)
+
+Host: pebbles.userland.com
+
+Connection: Keep-Alive
+
+Cookie: firstDiscussionGroup=dave@userland.com%09VOCTZTQLBKAM; secondDiscussionGroup=dave@userland.com%09INXMCYMSNMHY; testForMicrosoft=abcdefghijklmnopqrstuvwxyz; developers.root=dave@userland.com%09ZZWVHMSESYUD
+
+
+
+
+
+

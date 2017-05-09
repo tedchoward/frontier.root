@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.clickers.typeSTAK
+
+on typeSTAK (path) {
+	return (Frontier.clickers.typersrc (path))}
+
+

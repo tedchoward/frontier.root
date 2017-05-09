@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.utilities.backupFrontOutline
+
+on backupFrontOutline (folder=nil) {
+	«Changes
+		«12/24/11; 8:09:47 AM by DW
+			«Created.
+	local (adroutline = address (window.frontmost ()), f);
+	local (s = op.outlinetoxml (adroutline));
+	if folder == nil {
+		folder = frontier.getsubfolder ("/ops/backups/outlines/")};
+	if not defined (user.prefs.outlineBackupSerialnum) {
+		user.prefs.outlineBackupSerialnum = 1};
+	window.attributes.getone ("f", @f, adroutline);
+	local (fname = file.filefrompath (f));
+	fname = string.popsuffix (fname) + "." + user.prefs.outlineBackupSerialnum++ + ".opml";
+	f = folder + fname;
+	if dialog.confirm ("Backup front outline to " + folder) {
+		file.surefilepath (f);
+		file.writewholefile (f, s)}};
+bundle { //test code
+	backupFrontOutline ()}
+
+

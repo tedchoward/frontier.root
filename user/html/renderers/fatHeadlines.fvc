@@ -1,0 +1,39 @@
+FrontierVcsFile:3:scpt:user.html.renderers.fatHeadlines
+
+on fatHeadlines (adrOutline) {
+	local (pta = html.getPageTableAddress ());
+	local (flBoldLevel0 = not defined (pta^.flDisableBoldLevel0));
+	local (ctLevel0 = 0);
+	op.setDisplay (false);
+	op.firstsummit ();
+	op.fullexpand ();
+	local (level = 0);
+	local (htmltext = "", indentlevel = 0);
+	on add (s) {
+		htmltext = htmltext + string.filledString ("\t", indentlevel) + s + "\r"};
+	on visit () {
+		loop {
+			local (hassubs = op.countSubs (1) > 0);
+			local (linetext = op.getlinetext ());
+			if level > 1 { //indent 20 pixels per level
+				local (pixels = 20 * (level - 1));
+				add ("<p><table><tr><td valign=\"center\" width=\"" + pixels + "\">&nbsp;</td><td>" + linetext + "</td></tr></table>")}
+			else {
+				if level == 0 {
+					linetext = "<a name=\"mainHead" + ++ctLevel0 + "\">" + linetext + "</a>";
+					if flBoldLevel0 {
+						linetext = "<b>" + linetext + "</b>"}};
+				add ("<p>" + linetext + "<br>")};
+			if hassubs {
+				op.go (right, 1);
+				level++;
+				visit ();
+				level--;
+				op.go (left, 1)};
+			if not op.go (down, 1) {
+				break}}};
+	visit ();
+	op.setDisplay (true);
+	return (htmlText)}
+
+

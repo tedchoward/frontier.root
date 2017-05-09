@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.databases
+
+on databases () {
+	«Changes
+		«9/7/11; 11:25:58 AM by DW
+			«Created.
+	local (pta = html.getpagetableaddress ());
+	pta^.title = "Databases";
+	return (opmlEditor.viewOpenDatabases ())};
+bundle { //test code
+	databases ()}
+
+

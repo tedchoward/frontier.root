@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.misc.cut
+
+on cut (appID) { «Cut an object to the clipboard
+	return (appleEvent (appID, 'misc', 'cut '))}
+
+

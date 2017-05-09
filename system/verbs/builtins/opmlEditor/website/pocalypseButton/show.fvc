@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.pocalypseButton.show
+
+on show () {
+	«Changes
+		«3/28/12; 5:17:14 PM by DW
+			«Created.
+	local (adrdata = opmleditor.worldoutline.init (), pta = html.getpagetableaddress (), t);
+	
+	scratchpad.myshowparams = pta^;
+	
+	new (tabletype, @t);
+	webserver.parseargs (pta^.searchargs, @t);
+	bundle { //set t.hiddenFields
+		local (s = "", adr);
+		for adr in @t {
+			s = s + "<input type=\"hidden\" name=\"" + nameof (adr^) + "\" value=\"" + adr^ + "\">"};
+		t.hiddenFields = s};
+	s = string.multiplereplaceall (string (opmlEditor.website.pocalypseButton.["#form"]), @t, false, "<%", "%>");
+	wp.newtextobject (s, @scratchpad.mywptext);
+	return (html.buildJavascriptInclude (s))};
+bundle { //test code
+	html.setpagetableaddress (@scratchpad.myshowparams);
+	show ()}
+
+

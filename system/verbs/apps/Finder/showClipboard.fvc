@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Finder.showClipboard
+
+on showClipboard () {
+	«For compatibility.  With Scriptable Finder, suggest
+		«with objectModel, Finder {open (clipboard)}
+	if not finderEvent (Finder.id, Finder.class, 'shcl') {
+		return (false)};
+	return (Finder.bringToFront ())}
+
+

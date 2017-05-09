@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webApp.viewButton
+
+on viewButton (id=nil, name=nil, value="Submit", type="submit", meaning="primary") {
+	«Changes
+		«3/13/12; 6:00:33 PM by DW
+			«Bootstrap changed the classes on buttons in 2.0, so we clearly need a routine to interface for us, in case these change again, makes the transition easier. Value is the text that appears in the button when it's displayed. Meaning is where you control the color of the button, the others are documented on the Bootstrap site. They are info, success, warning, danger, inverse.
+				«http://twitter.github.com/bootstrap/base-css.html#buttons
+	if id != nil {
+		id = " id=\"" + id + "\""};
+	if name != nil {
+		name = " name=\"" + name + "\""};
+	return ("<input" + id + name + " type=\"" + type + "\" class=\"btn btn-" + meaning + "\" style=\"padding-top: 6px; padding-bottom: 6px;\" value=\"" + value + "\" />")};
+bundle { //test code
+	viewButton ()}
+
+

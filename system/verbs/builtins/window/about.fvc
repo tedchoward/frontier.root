@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.window.about
+
+on about () {
+	kernel (window.about)}
+
+

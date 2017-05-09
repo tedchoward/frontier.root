@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.parseSgml
+
+on parseSgml (s) {
+	«A low-tech SGML parser.
+		«Separates tags from ordinary text and puts everything on a list.
+		«No further tag processing is done.
+	
+	local (theList);
+	
+	s = regex.examples.stripSGMLComments (s);
+	
+	theList = regex.split ("(<[^>]*>)", @s);
+	
+	return (theList)};
+
+«bundle //test code
+	«local (sgml = "", sgmlList, i)
+	«sgmlList = parseSgml (string (regex.examples.data.html))
+	«for i = 1 to sizeof (sgmlList)
+		«sgml = sgml + sgmlList [i] + cr
+	«wp.newTextObject (sgml, @temp.sgml)
+	«edit(@temp.sgml)
+
+

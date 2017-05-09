@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.data.odbc_startup
+
+on odbc_startup () {
+	«Script called from the user.callbacks.startup table
+		«The original is in extensions.odbc.data.odbc_startup
+		«load the odbc dll once for the whole session
+		«Thu, Apr 16, 1998 at 4:37:21 PM by HA
+	try {
+		dll.load(user.prefs_odbc.dllpath)}}
+
+

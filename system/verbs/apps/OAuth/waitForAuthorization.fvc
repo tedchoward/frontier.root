@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.OAuth.waitForAuthorization
+
+on waitForAuthorization (adrapp, flPromptForPin) {
+	«Changes
+		«7/31/12; 11:42:11 AM by DW
+			«Get username and userId from the server, store in the app table.
+				«http://worknotes.scripting.com/july2012/73112ByDw/gettingTwitterUsername
+		«3/27/11; 12:46:03 AM by DW
+			«Called at the end of the appDance in its own thread, so the caller can redirect the user to the authorization page on the server site.
+	local (i);
+	for i = 1 to 60 {
+		try {
+			local (verifier = nil); //1/1/10 by DW
+			if flPromptForPin {
+				verifier = adrapp^.pin};
+			OAuth.getAccessToken (adrapp^.accessTokenUrl, adrapp^.consumerkey, adrapp^.consumersecret, adrapp^.token, adrapp^.tokensecret, verifier, @adrapp^.accessToken, @adrapp^.accessTokenSecret, @adrapp^.userId, @adrapp^.username);
+			if sizeof (adrapp^.accessToken) > 0 {
+				break}};
+		«else
+			«scratchpad.tryerror = tryerror
+		clock.waitseconds (2)}};
+bundle { //test code
+	waitForAuthorization (scratchpad.adrapp, scratchpad.flPromptForPin)}
+
+

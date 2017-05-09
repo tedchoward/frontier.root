@@ -1,0 +1,58 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.pocalypse.openWorkspace
+
+on openWorkspace (url, responder, title, username) {
+	«Changes
+		«4/4/12; 9:42:28 PM by DW
+			«If it's a new story, check with the server to see if we have any reviews for the user. If so, start with those. This is a way of getting the latest comments on a laptop, for example. It doesn't protect you from overwriting what's on the server.
+				«http://worknotes.scripting.com/april2012/4412ByDw/pocalypseOnALaptop/
+		«3/29/12; 1:36:14 PM by DW
+			«Created.
+	local (adrdata = opmlEditor.pocalypse.init (), adroutline = @adrdata^.workspace, mynodetype = "pocalink");
+	bundle { //set up workspace
+		local (oldtarget = target.set (adroutline), ct = 0, flfound = false);
+		bundle { //search top-level heads, set flfound and ct if found
+			local (opmltext = op.outlinetoxml (adroutline), xstruct);
+			xml.compile (opmltext, @xstruct);
+			local (adropml = xml.getaddress (@xstruct, "opml"));
+			local (adrbody = xml.getaddress (adropml, "body"));
+			for adr in adrbody {
+				if nameof (adr^) endswith "outline" {
+					local (adratts = @adr^.["/atts"]);
+					if defined (adratts^.type) {
+						if adratts^.type == mynodetype {
+							if adratts^.url == url {
+								flfound = true;
+								break}}};
+					ct++}}};
+		if flfound {
+			op.firstsummit ();
+			op.go (down, ct);
+			op.setlinetext (title)}
+		else {
+			local (suboutline);
+			op.firstsummit ();
+			op.insert (title, up);
+			bundle { //set node atts
+				local (atts);
+				new (tabletype, @atts);
+				atts.type = mynodetype;
+				atts.url = url;
+				atts.responder = responder;
+				atts.title = title;
+				atts.username = username;
+				op.attributes.addgroup (@atts)};
+			if opmlEditor.pocalypse.getReview (responder, url, username, @suboutline) { //4/4/12 by DW
+				op.insertoutline (@suboutline, right);
+				op.go (right, 1)}
+			else {
+				op.insert ("", right);
+				wp.settextmode (true)}};
+		target.set (oldtarget);
+		if not window.isopen (adroutline) {
+			edit (adroutline, "Pocalypse Workspace", false, @opmlEditor.pocalypse.buttons)}
+		else {
+			window.bringtofront (adroutline)}}};
+bundle { //test code
+	openWorkspace (scratchpad.t.url, scratchpad.t.responder, scratchpad.t.title, scratchpad.t.username)}
+
+

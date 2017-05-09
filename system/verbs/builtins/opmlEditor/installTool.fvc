@@ -1,0 +1,50 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.installTool
+
+on installTool (toolname) {
+	«Changes
+		«1/4/12; 7:07:35 PM by DW
+			«When moving domains off GoDaddy, codecasting.org wasn't configured properly. URLs into that domain stopped working. A simple string substitution put things right. Also, allow for redirects, might be helpful in the future.
+		«8/10/08; 8:02:09 PM by DW
+			«If the tool being installed has a script in its #installer table called onInstall, run it after the user dismisses the dialog.
+		«8/9/08; 4:07:17 PM by DW
+			«Handle a #installer table at the top level of the database. Per http://howto.opml.org/dave/editorOpmlOrg/toolInstallFormat.html
+		«8/4/08; 12:56:02 PM by DW
+			«Display a dialog when the tool has been installed. If the tool already exists, confirm replacement, and try to close the file if it's open.
+		«7/29/08; 11:23:44 AM by DW
+			«Created. 
+	local (adrtoolsInfo = opmlEditor.getToolsInfo (), downloadUrl);
+	local (adrtool = @adrtoolsInfo^.[toolname]);
+	local (f = frontier.getsubfolder ("apps") + "Tools" + file.getpathchar () + nameof (adrtool^));
+	
+	bundle { //set downloadUrl -- 1/4/12 by DW
+		downloadUrl = string.replace (adrtool^.downloadUrl, "codecasting.org", "codecasting.org.s3.amazonaws.com")};
+	
+	local (filetext = tcp.httpreadurl (downloadUrl, 3, false));
+	file.surefilepath (f);
+	if file.exists (f) {
+		if not dialog.confirm ("Replace the \"" + toolname + "\" tool?") {
+			return (true)};
+		try {filemenu.close (@[f])}};
+	file.writewholefile (f, filetext);
+	frontier.tools.install (f);
+	
+	local (adrinstallscript = nil);
+	bundle { //check for #installer at top level of root, 8/9/08 by DW
+		local (adrinstaller = @[f].["#installer"]);
+		if defined (adrinstaller^) {
+			if defined (adrinstaller^.flUpdate) {
+				if adrinstaller^.flUpdate {
+					opmlEditor.addToolToUpdates (adrinstaller)}};
+			if defined (adrinstaller^.prefs) {
+				opmlEditor.addOutlineToPrefs (@adrinstaller^.prefs)};
+			if defined (adrinstaller^.onInstall) { //8/10/08 by DW
+				adrinstallscript = @adrinstaller^.onInstall}}};
+	
+	dialog.notify ("The \"" + toolname + "\" tool has been installed.");
+	if adrinstallscript != nil {
+		thread.callscript (adrinstallscript, {})};
+	return (true)};
+bundle { //test code 
+	installtool ("river2.root")}
+
+

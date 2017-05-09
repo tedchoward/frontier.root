@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.examples.returnLists
+
+local { « enter your datasource name, userid, password, and sql statement
+	dsn = "MyDataSource";
+	uid = "";
+	pwd = "";
+	sqlstr = "select * from guests";
+	result;
+	labeledResult = {};
+	i};
+new (outlineType, @scratchpad.odbcOutline);
+result = odbc.execute (dsn, uid, pwd, sqlstr, "lists");
+odbc.disconnect (dsn);
+for i = 1 to sizeOf (result) {
+	labeledResult [0] = i;
+	labeledResult [0] = result [i]};
+edit (@scratchpad.odbcOutline);
+op.listToOutline (labeledResult, @scratchpad.odbcOutline)
+
+

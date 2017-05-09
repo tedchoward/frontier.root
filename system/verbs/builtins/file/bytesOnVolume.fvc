@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.bytesOnVolume
+
+on bytesOnVolume (path) {
+	return (file.volumeSize (path) - file.freeSpaceOnVolume (path))}
+
+

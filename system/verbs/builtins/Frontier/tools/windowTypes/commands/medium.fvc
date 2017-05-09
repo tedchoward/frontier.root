@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.windowTypes.commands.medium
+
+on medium () {
+	«Run the "medium" Common Styles command.
+		«09/29/00; 5:58:41 PM by PBS
+	menus.scripts.styleCommand ("medium")}
+
+

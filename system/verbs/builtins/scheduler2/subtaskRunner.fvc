@@ -1,0 +1,66 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.scheduler2.subtaskRunner
+
+on subtaskRunner (adrscript, nameLogSubtable) {
+	«Changes
+		«10/4/12; 12:47:03 PM by DW
+			«If the log table for the task has a boolean flKillDuplicate, and it's true, then we just kill a previous instance of the script and go ahead and launch a new one.
+				«http://worknotes.scripting.com/october2012/10412ByDw/schedulerFeature
+		«3/6/09; 11:01:51 AM by DW
+			«If the script doesn't exist, handle the error gracefully.
+		«12/5/08; 9:43:29 AM by DW
+			«If the last instance of the scheduled task is still running, return.
+		«5/25/08; 12:09:50 PM by DW
+			«Created. A shell that runs one of the subtasks in a special thread, so we can keep rudimentary logging info to find problems.
+	local (adrlog = @user.scheduler2.stats.log.[nameLogSubtable], adrid);
+	if not defined (adrlog^) {
+		new (tabletype, adrlog)};
+	adrlog = @adrlog^.[nameof (adrscript^)];
+	if not defined (adrlog^) {
+		new (tabletype, adrlog)};
+	if not defined (adrlog^.ctDuplicates) { //number of times we've quit because another instance was already running
+		adrlog^.ctDuplicates = 0};
+	bundle { //if the last instance is still running, return -- 12/5/08 by DW
+		adrid = @system.temp.scheduler2.threadIDs.[nameLogSubtable + "." + nameof (adrscript^)];
+		if defined (adrid^) {
+			if thread.exists (adrid^) {
+				local (flkill = false);
+				if defined (adrlog^.flKillDuplicate) {
+					flkill = adrlog^.flKillDuplicate};
+				if flkill {
+					thread.kill (adrid^);
+					if defined (adrlog^.ctKills) {
+						adrlog^.ctKills++}
+					else {
+						adrlog^.ctKills = 1};
+					adrlog^.whenLastKill = clock.now ()}
+				else {
+					adrlog^.ctDuplicates++;
+					adrlog^.whenLastDuplicate = clock.now ();
+					return}}};
+		adrid^ = thread.getCurrentID ()}; //fall through
+	if not defined (adrlog^.ct) {
+		adrlog^.ct = 0};
+	if not defined (adrlog^.ctErrors) {
+		adrlog^.ctErrors = 0};
+	if not defined (adrlog^.ctTicksTotal) {
+		adrlog^.ctTicksTotal = 0};
+	adrlog^.ct++;
+	adrlog^.whenLastRun = clock.now ();
+	try {delete (@adrlog^.ticksLastRun)};
+	try {
+		local (tc = clock.ticks ());
+		while typeof (adrscript^) == addresstype { //3/6/09 by DW -- moved inside the try.
+			adrscript = adrscript^};
+		adrlog^.lastReturn = adrscript^ ();
+		adrlog^.ctTicksLastRun = clock.ticks () - tc;
+		adrlog^.ctTicksTotal = adrlog^.ctTicksTotal + adrlog^.ctTicksLastRun;
+		adrlog^.lastError = ""}
+	else {
+		adrlog^.lastError = tryerror;
+		adrlog^.whenLastError = clock.now ();
+		adrlog^.ctErrors++};
+	try {delete (adrid)}} //12/5/08 by DW
+«bundle //test code
+	«subtaskRunner (@workspace.isTwitterDown.script)
+
+

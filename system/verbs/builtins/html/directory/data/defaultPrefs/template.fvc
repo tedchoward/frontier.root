@@ -1,0 +1,33 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.html.directory.data.defaultPrefs.template
+
+<table border="0" cellspacing="0" cellpadding="0">
+
+	<tr>
+
+		<td>
+
+			<table border="0" cellspacing="0" cellpadding="0" width="549">
+
+				<tr><td class=\"breadcrumbsCell\"><font size="-1">{breadcrumbs}</font></td></tr>
+
+				<tr><td height="7">&nbsp;</td></tr>
+
+				<tr><td><blockquote>{directory}</blockquote></td></tr>
+
+				<tr><td class=\"directoryFooter\"><br /><br /><font size="-1" color="black">Editor: {editor}; Updated: {lastModDate}; {hits} reads. {subItems} items. {suggestLink}</font></td></tr>
+
+				</table>
+
+			</td>
+
+		<td valign="top">
+
+			<a class="directorySourceLink" href="{opmlUrl}" title="Click on this icon to view the OPML source text for this directory. More info: http://www.opml.org/spec."><img src="http://www.scripting.com/images/xmlIcon2.gif" height="14" width="36" border="0"></a>
+
+			</td>
+
+		</tr>
+
+	</table>
+
+

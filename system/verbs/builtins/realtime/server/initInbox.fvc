@@ -1,0 +1,40 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.server.initInbox
+
+on initInbox (username, ipaddress, randomString=nil) {
+	«Changes
+		«8/12/10; 6:26:51 AM by DW
+			«Add randomString param. See comment at head of realtime.server.getupdates.
+		«7/20/10; 6:27:52 AM by DW
+			«On initUser call, allow it to create a new user table, because we've already validated the username and password.
+		«7/19/10; 9:57:34 AM by DW
+			«Created. 
+	local (adruser = realtime.server.initUser (username, true), now = clock.now (), inboxname);
+	bundle { //set inboxname
+		inboxname = ipaddress;
+		if randomstring != nil {
+			inboxname = inboxname + "." + randomstring}};
+	local (adrinbox = @adruser^.inboxes.[inboxname]);
+	if not defined (adrinbox^) {
+		new (tabletype, adrinbox)};
+	if not defined (adrinbox^.queue) {
+		new (tabletype, @adrinbox^.queue)};
+	bundle { //stats
+		if not defined (adrinbox^.stats) {
+			new (tabletype, @adrinbox^.stats)};
+		if not defined (adrinbox^.stats.ctPushes) {
+			adrinbox^.stats.ctPushes = 0};
+		if not defined (adrinbox^.stats.ctChecks) {
+			adrinbox^.stats.ctChecks = 0};
+		if not defined (adrinbox^.stats.ctTimeouts) {
+			adrinbox^.stats.ctTimeouts = 0};
+		if not defined (adrinbox^.stats.ctNonTimeouts) {
+			adrinbox^.stats.ctNonTimeouts = 0};
+		if not defined (adrinbox^.stats.ctLoops) {
+			adrinbox^.stats.ctLoops = 0};
+		if not defined (adrinbox^.stats.whenCreated) {
+			adrinbox^.stats.whenCreated = now};
+		if not defined (adrinbox^.stats.whenLastCheck) {
+			adrinbox^.stats.whenLastCheck = date (0)}};
+	return (adrinbox)}
+
+

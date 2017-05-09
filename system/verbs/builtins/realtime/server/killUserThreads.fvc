@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.server.killUserThreads
+
+on killUserThreads (username, ipaddress, randomstring, idthread) {
+	«Changes
+		«8/15/10; 7:47:56 PM by DW
+			«Created. Kill threads waiting for the user on this ipaddress with this randomstring. Designed to be called from its own thread, so we aren't killing threads from within an rpc-handler.
+	local (adrlongpolls = @system.temp.realtime.server.longpolls, i, adrtemp);
+	for i = sizeof (adrlongpolls^) downto 1 {
+		adrtemp = @adrlongpolls^ [i];
+		try {
+			if (adrtemp^.username == username) and (adrtemp^.ipaddress == ipaddress) and (adrtemp^.randomstring == randomstring) {
+				local (id = adrtemp^.idthread);
+				if id != idthread { //don't kill the thread that's starting up! :-)
+					if thread.exists (id) {
+						thread.kill (id)};
+					delete (adrtemp)}}}}};
+bundle { //test code
+	killUserThreads ("davewiner", "69.203.2.19", "kGEiL2HXqCZKVEI")}
+
+

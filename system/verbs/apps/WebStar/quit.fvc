@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.quit
+
+on quit (appID = WebStar.id) {
+	return (required.quitApplication (appID))}
+
+

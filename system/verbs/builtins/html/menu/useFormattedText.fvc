@@ -1,0 +1,5 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.menu.useFormattedText
+
+return (user.html.menu.formatText)
+
+

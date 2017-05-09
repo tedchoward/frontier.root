@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.extensions.crypto.hashMD2
+
+on hashMD2 (s, flTranslate = true) {
+	return (string (dll.call (crypto.data.getPath (), "MD2_verb", string (s), boolean (flTranslate))))}
+
+

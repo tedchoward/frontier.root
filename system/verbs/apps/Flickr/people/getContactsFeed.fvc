@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.people.getContactsFeed
+
+on getContactsFeed (username) {
+	«Changes
+		«11/27/07; 8:38:13 AM by DW
+			«Given a username, return the url of a feed of his or her contacts' photos.
+	local (url = "http://api.flickr.com/services/feeds/photos_friends.gne?display_all=1&lang=en-us&format=rss_200");
+	url = url + "&user_id=" + Flickr.people.findByUsername (username);
+	return (url)}
+«bundle //test code
+	«webbrowser.openurl (getContactsFeed ("fetching"))
+
+

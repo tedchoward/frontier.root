@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.getFileDialog
+
+on getFileDialog (prompt, adr, type) {
+	kernel (file.getfiledialog)}
+
+

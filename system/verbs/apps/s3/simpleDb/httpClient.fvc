@@ -1,0 +1,75 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.simpleDb.httpClient
+
+on httpClient (action, adrparams=nil, adrerrorstring=nil, adrxstruct=nil) {
+	«Changes
+		«1/4/08; 3:59:25 PM by DW
+			«Created. Factored from createDomain. A template for all the calls to SimpleDb.
+				«http://docs.amazonwebservices.com/AmazonSimpleDB/2007-11-07/DeveloperGuide/
+	on hmac (data, key) {
+		«Changes
+			«3/27/06; 5:57:47 PM by LMO
+				«Initial implementation, stolen from Digest::HMAC in Perl
+		local (BLOCK_SIZE=64);
+		on sha1 (data) {
+			«See: http://www.spicynoodles.net/projects/crypto.html
+			return (crypto.hashSHA1(data, false))};
+		local(k_ipad, k_opad, i);
+		if string.length (key) > BLOCK_SIZE {
+			key = sha1 (key)};
+		for i = 0 to BLOCK_SIZE-1 {
+			if i < string.length(key) {
+				«XOR characters of the key
+				k_char = string.nthChar(key, i+1);
+				k_ipad = k_ipad + char(bit.logicalXor(k_char, char(0x36)));
+				k_opad = k_opad + char(bit.logicalXor(k_char, char(0x5c)))}
+			else {
+				«Pad out the rest of the block size length
+				k_ipad = k_ipad + char(0x36);
+				k_opad = k_opad + char(0x5c)}};
+		return (sha1 (k_opad + sha1 (k_ipad + data)))};
+	local (sigtable, paramstring = "");
+	new (tabletype, @sigtable);
+	on pushparam (name, value) {
+		sigtable.[name] = value;
+		paramstring = paramstring + name + "=" + string.urlencode (value, true) + "&"};
+	pushparam ("Action",  action);
+	pushparam ("AWSAccessKeyId",  user.s3.accounts.default.AWSAccessKeyId);
+	if adrparams != nil {
+		local (adr);
+		for adr in adrparams {
+			pushparam (nameof (adr^), string (adr^))}};
+	pushparam ("SignatureVersion",  1);
+	pushparam ("Timestamp",  s3.simpleDb.getTimeStamp (clock.now ()));
+	pushparam ("Version",  "2007-11-07");
+	local (sigstring = "");
+	bundle { //set sigstring
+		local (adr);
+		for adr in @sigtable {
+			sigstring = sigstring + nameof (adr^) + string (adr^)}};
+	paramstring = paramstring + "Signature=" + string.urlencode (base64.encode (hmac (sigstring, user.s3.accounts.default.SecretAccessKey), 0), true);
+	local (url = "https://sdb.amazonaws.com/?" + paramstring);
+	scratchpad.url = url;
+	«url = string.replaceall (url, "&", "\\&")
+	«local (xmltext = sys.unixshellcommand ("curl " + url))
+	local (xmltext = tcp.httpreadurl (url, flMessages:false));
+	xml.compile (xmltext, @xstruct);
+	scratchpad.xstruct = xstruct;
+	try {
+		local (adrresponse = xml.getaddress (@xstruct, "Response"));
+		local (adrerrors = xml.getaddress (adrresponse, "Errors"));
+		local (adrerror = xml.getaddress (adrerrors, "Error"));
+		local (errorstring = xml.getvalue (adrerror, "Message"));
+		if adrerrorstring != nil {
+			adrerrorstring^ = errorstring};
+		return (false)};
+	if adrxstruct != nil {
+		adrxstruct^ = xstruct};
+	return (true)}; //no error return
+bundle { //test code
+	local (t, errorstring);
+	new (tabletype, @t);
+	t.DomainName = "Iowa";
+	if not httpClient ("CreateDomain", @t, @errorstring) {
+		dialog.alert (errorstring)}}
+
+

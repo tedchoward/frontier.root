@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.launch
+
+on launch () {
+	return (app.startWithDocument ("Fetch", ""))}
+
+

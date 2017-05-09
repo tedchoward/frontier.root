@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.wp.setTextMode
+
+on setTextMode (bool) {
+	kernel (wp.settextmode)}
+
+

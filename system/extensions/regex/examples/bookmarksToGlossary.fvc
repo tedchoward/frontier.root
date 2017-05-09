@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.bookmarksToGlossary
+
+on bookmarksToGlossary (s, adrTable) {
+	«Converts a bookmarks file to a glossary table.
+	
+	local (i, x);
+	x = regex.examples.extractBookmarks (s);
+	
+	new (tableType, adrTable);
+	for (i = 1 to sizeof (x)) {
+		local (title = string.mid (x [i] [1], 1, 32));
+		adrTable^ [title] = x [i] [2]};
+	
+	return (true)};
+
+«bundle //test code
+	«bookmarksToGlossary (string (regex.examples.data.bookmarks), @temp.glossary)
+	«edit(@temp.glossary)
+
+

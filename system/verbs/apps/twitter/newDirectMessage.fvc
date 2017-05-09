@@ -1,0 +1,32 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.newDirectMessage
+
+on newDirectMessage (recipient, text, username=nil, password=nil, msgurl=nil) {
+	«Changes
+		«4/4/07; 10:25:21 AM by DW
+			«Created.
+	twitter.init ();
+	bundle { //set defaults
+		if username == nil {
+			username = user.twitter.prefs.username};
+		if password == nil {
+			password = string (user.twitter.prefs.password)};
+		if msgurl == nil {
+			msgurl = user.twitter.prefs.newdirectmessageurl}};
+	local (urllist = string.urlsplit (msgurl));
+	local (path = urllist [3] + "?user=" + string.urlencode (recipient) + "&text=" + string.urlencode (text));
+	try {
+		local (tc = clock.ticks (), timeoutticks = 60 * user.twitter.prefs.timeOutSecs);
+		local (s = string.httpResultSplit (tcp.httpClient (server:urllist [2], path:path, username:username, password:password,  method:"POST", timeoutticks:timeoutticks, flmessages:false)));
+		«wp.newtextobject (s, @scratchpad.twitterresult)
+		user.twitter.stats.whenLastPost = clock.now ();
+		user.twitter.stats.ctPosts++;
+		user.twitter.stats.ctSecsLastPost = double (clock.ticks () - tc) / 60;
+		user.twitter.stats.lastPostError = "";
+		return (true)}
+	else {
+		user.twitter.stats.lastPostError = tryerror;
+		return (false)}};
+bundle { //test code
+	newDirectMessage ("bullmancuso", "Test message sent by twitter.newDirectMessage at " + date.timestring () + " Pacific.")}
+
+

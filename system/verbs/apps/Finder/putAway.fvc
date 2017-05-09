@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Finder.putAway
+
+on putAway (obj) { «Put away the specified object(s)
+	if Finder.isScriptable () {
+		return (appleEvent (Finder.id, 'fndr', 'ptwy', '----', Finder.finderSpec (obj)))}
+	else {
+		return (Finder.folderVerb ('sput', obj))}}
+
+

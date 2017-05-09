@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.callbacks.systemTrayIcon2Click
+
+on systemTrayIcon2Click () {
+	«Changes
+		«6/15/05; 2:23:18 PM by DW
+			«Also call Frontier.showApplication.
+		«6/8/05; 11:08:12 AM by DW
+			«If OPML editor, bring it to the front when the user 2clicks on the system tray icon.
+	if not defined (user.callbacks.systemTrayIcon2Click) {
+		new (tabletype, @user.callbacks.systemTrayIcon2Click)};
+	local (i);
+	for i = 1 to sizeof (user.callbacks.systemTrayIcon2Click) {
+		try {
+			local (adrScript = @user.callbacks.systemTrayIcon2Click [i]);
+			while typeOf (adrScript^) == addressType {
+				adrScript = adrScript^};
+			adrScript^ ()}};
+	if system.environment.isOpmlEditor { //6/8/05; 11:08:12 AM by DW
+		Frontier.showApplication ();
+		Frontier.bringToFront ()};
+	return (true)}
+
+

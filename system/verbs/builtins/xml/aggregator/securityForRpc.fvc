@@ -1,0 +1,22 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.aggregator.securityForRpc
+
+on securityForRpc (client, username, password) {
+	«Changes
+		«1/11/06; 4:25:12 AM by DW
+			«Moved the initialization code into xml.aggregator.init; otherwise you'd have to do an RPC call to initialize the security prefs, which makes it hard for the user. ;->
+		«11/3/02; 3:27:26 PM by JES
+			«Created.
+	if system.environment.isRadio {
+		radio.weblog.bloggerApi.checkUser (client, true, username, password);
+		return (true)}
+	else { //Frontier or the OPML Editor, security prefs are in aggregatorData.root
+		local (adrdata = xml.aggregator.init ());
+		if adrdata^.prefs.security.flRpcInterfaceEnabled {
+			if string.lower (username) == string.lower (adrdata^.prefs.security.username) {
+				if string (password) == string (adrdata^.prefs.security.password) {
+					return (true)}}};
+		scriptError ("Access Denied.")}}
+«bundle //test code
+	«securityForRpc ("127.0.0.1", aggregatorData.prefs.security.username, aggregatorData.prefs.security.password)
+
+

@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.radio.prefs.browseSystemPrefs
+
+on browseSystemPrefs () {
+	«Changes
+		«11/23/01; 11:30:09 AM by DW
+			«Created. Hard-wired to browse the prefs in English. Later when language is an option this can be beefed-up.
+	return (radio.prefs.browser (@radio.data.localization.languages.english.outlines.prefs))}
+
+

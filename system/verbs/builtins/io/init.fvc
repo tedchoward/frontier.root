@@ -1,0 +1,109 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.init
+
+on init () {
+	«Changes
+		«11/27/12; 11:18:47 AM by DW
+			«Remove the nodetype's right-click menu. It's now being implemented via callback.
+				«http://worknotes.scripting.com/november2012/112612ByDw/refreshButtonInIoWindow
+		«5/9/11; 7:11:30 PM by DW
+			«Callbacks for buddy updating on client.
+		«9/1/10; 6:34:41 PM by DW
+			«Init prefs and callbacks for following.
+		«8/30/10; 7:05:06 PM by DW
+			«Init prefs and stats for server-side archving of outlines.
+		«8/13/10; 7:29:42 AM by DW
+			«Init prefs that control local backup of outline.
+		«8/6/10; 9:52:51 AM by DW
+			«Created. 
+	local (adrdata = @config.io);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //client
+		if not defined (adrdata^.client) {
+			new (tabletype, @adrdata^.client)};
+		if not defined (adrdata^.client.buddies) {
+			if defined (scripting2data.editor.buddies) {
+				adrdata^.client.buddies = scripting2data.editor.buddies}
+			else {
+				new (tabletype, @adrdata^.client.buddies)}};
+		if not defined (adrdata^.client.buddies.outline) {
+			new (outlinetype, @adrdata^.client.buddies.outline)};
+		if not defined (adrdata^.client.buddies.users) {
+			new (tabletype, @adrdata^.client.buddies.users)};
+		bundle { //prefs
+			if not defined (adrdata^.client.prefs) {
+				new (tabletype, @adrdata^.client.prefs)};
+			if not defined (adrdata^.client.prefs.enabled) {
+				adrdata^.client.prefs.enabled = true};
+			if not defined (adrdata^.client.prefs.username) {
+				adrdata^.client.prefs.username = ""};
+			if not defined (adrdata^.client.prefs.password) {
+				adrdata^.client.prefs.password = ""};
+			if not defined (adrdata^.client.prefs.server) { //8/7/10 by DW
+				adrdata^.client.prefs.server = "xmlrpc://instant.opml.org:5337/RPC2"};
+			if not defined (adrdata^.client.prefs.flBeepOnBuddyUpdate) {
+				adrdata^.client.prefs.flBeepOnBuddyUpdate = true};
+			if not defined (adrdata^.client.prefs.flBackupMyOutlineLocally) { //8/13/10 by DW
+				adrdata^.client.prefs.flBackupMyOutlineLocally = true};
+			if not defined (adrdata^.client.prefs.backupFolder) { //8/13/10 by DW
+				local (pc = file.getpathchar ());
+				adrdata^.client.prefs.backupFolder = frontier.pathstring + "Instant Outliner" + pc + "backups" + pc}};
+		bundle { //stats
+			if not defined (adrdata^.client.stats) {
+				new (tabletype, @adrdata^.client.stats)};
+			if not defined (adrdata^.client.stats.ctRealtimeEvents) {
+				adrdata^.client.stats.ctRealtimeEvents = 0};
+			if not defined (adrdata^.client.stats.ctOutlineUpdates) {
+				adrdata^.client.stats.ctOutlineUpdates = 0}};
+		bundle { //callbacks, 5/9/11 by DW
+			if not defined (adrdata^.client.callbacks) {
+				new (tabletype, @adrdata^.client.callbacks)};
+			if not defined (adrdata^.client.callbacks.buddyUpdated) {
+				new (tabletype, @adrdata^.client.callbacks.buddyUpdated)}}};
+	bundle { //server
+		if not defined (adrdata^.server) {
+			new (tabletype, @adrdata^.server)};
+		if not defined (adrdata^.server.users) {
+			new (tabletype, @adrdata^.server.users)};
+		bundle { //prefs
+			if not defined (adrdata^.server.prefs) {
+				new (tabletype, @adrdata^.server.prefs)};
+			if not defined (adrdata^.server.prefs.enabled) {
+				adrdata^.server.prefs.enabled = false};
+			if not defined (adrdata^.server.prefs.archiveDomain) { //8/28/10 by DW
+				adrdata^.server.prefs.archiveDomain = ""}; //the address of the website that serves archived outlines
+			if adrdata^.server.prefs.archiveDomain != "" {
+				local (adrconfig = @config.mainresponder.domains.[adrdata^.server.prefs.archiveDomain]);
+				if not defined (adrconfig^) {
+					adrconfig^ = @io.server.archiveWebsite}};
+			if not defined (adrdata^.server.prefs.defaultFollows) { //9/1/10 by DW
+				new (tabletype, @adrdata^.server.prefs.defaultFollows)}};
+		bundle { //stats
+			if not defined (adrdata^.server.stats) {
+				new (tabletype, @adrdata^.server.stats)}}};
+	bundle { //misc
+		if not defined (user.betty.rpcHandlers.io) {
+			user.betty.rpcHandlers.io = @io.server.rpcHandlers};
+		if not defined (system.temp.io) {
+			new (tabletype, @system.temp.io)};
+		if not defined (user.scheduler.threads.io) {
+			user.scheduler.threads.io = @io.thread};
+		if not defined (user.tools.nodeTypes.v4BuddyOutlineElement) {
+			user.tools.nodeTypes.v4BuddyOutlineElement = @io.client.nodeTypes.v4BuddyOutlineElement};
+		if defined (io.client.nodeTypes.v4BuddyOutlineElement.rightClickMenu) { //11/26/12; 11:18:08 AM by DW
+			delete (@io.client.nodeTypes.v4BuddyOutlineElement.rightClickMenu)}};
+		«try
+			«if not defined (realtimeData.client.callbacks.handleUpdate.io)
+				«realtimeData.client.callbacks.handleUpdate.io = @io.client.incomingUpdate
+	bundle { //init realtime
+		local (adrrealtimedata = realtime.init ());
+		if adrdata^.server.prefs.enabled {
+			if not defined (adrrealtimedata^.server.callbacks.validatePassword.io) {
+				adrrealtimedata^.server.callbacks.validatePassword.io = @io.server.validatePassword};
+			if not defined (adrrealtimedata^.server.callbacks.userFollows.io) { //9/1/10 by DW
+				adrrealtimedata^.server.callbacks.userFollows.io = @io.server.userFollows}}};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

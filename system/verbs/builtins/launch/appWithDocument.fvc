@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.launch.appWithDocument
+
+on appWithDocument (appPath, docPath) {
+	kernel (launch.appWithDocument)}
+
+

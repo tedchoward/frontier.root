@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.inResponder
+
+on inResponder (adrPageTable) {
+	«Are we running from within the website framework responder?
+	if string.lower (html.getPref ("responder", adrPageTable)) == "websiteframework" {
+		return (true)};
+	return (false)}
+
+

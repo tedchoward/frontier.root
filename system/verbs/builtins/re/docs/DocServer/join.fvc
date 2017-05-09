@@ -1,0 +1,24 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.re.docs.DocServer.join
+
+#title "re.join"
+#renderOutlineWIth "docServerRenderer"
+Syntax
+	re.join (s, strList)
+Params
+	s is a string param containing the delimiter to be used.
+	strList is a list param to be concatenated.
+Action
+	Joins all items in strList into a delimited string object, using s as the delimiter between list items.
+Returns
+	String of concatenated list items.
+Examples
+	local (myList = {"a", "b", "c"})
+	re.join ("|", myList)
+		// "a|b|c"
+Notes
+	This verb does the opposite of "re.split".
+See Also
+	"re.split"
+
+
+

@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.findNextCommand
+
+local (found);
+if kb.shiftkey () { «find next occurence of selection
+	found = search.find (wp.getseltext ())}
+else {
+	found = search.findNext ()};
+if not found {
+	speaker.beep ()}
+
+

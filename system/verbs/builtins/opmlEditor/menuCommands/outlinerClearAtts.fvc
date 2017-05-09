@@ -1,0 +1,34 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.outlinerClearAtts
+
+on outlinerClearAtts () {
+	«Changes
+		«10/24/12; 2:23:22 PM by DW
+			«Created.
+				«http://worknotes.scripting.com/october2012/102412ByDw/newCommandClearsAtts
+	local (atts, adr, flhasatts = false, ctatts = 0);
+	on noatts () {
+		scripterror ("Can't clear atts because this node doesn't have any.")};
+	if not op.attributes.getall (@atts) {
+		noatts ()};
+	if sizeof (atts) == 0 {
+		noatts ()};
+	for adr in @atts {
+		local (name = nameof (adr^));
+		if (name != "created") and (name != "pgfnum") {
+			flhasatts = true;
+			ctatts++}};
+	if not flhasatts {
+		noatts ()};
+	if dialog.confirm ("Delete " + ctatts + " atts?") {
+		local (newatts);
+		new (tabletype, @newatts);
+		if defined (atts.created) {
+			newatts.created = atts.created};
+		if defined (atts.pgfnum) {
+			newatts.pgfnum = atts.pgfnum};
+		op.attributes.makeEmpty ();
+		op.attributes.addGroup (@newatts)}};
+bundle { //test code
+	outlinerClearAtts ()}
+
+

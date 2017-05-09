@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.globals.string4
+
+on string4 (val) {
+	kernel (lang.string4)}
+
+

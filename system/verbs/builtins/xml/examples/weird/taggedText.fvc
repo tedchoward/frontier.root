@@ -1,0 +1,38 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.xml.examples.weird.taggedText
+
+<?XML VERSION="1.0"?>
+<!--This file tests strange cases and boundary conditions-->
+<funnyStuff>
+	<bases count="4"/>
+	<state capital="Sacramento">California</state>
+	<baseballTeam league="National">
+		<name>San Francisco Giants</name><!--This is a comment-->
+		</baseballTeam>
+	<thisSpaceReserved></thisSpaceReserved>
+	<thisSpaceToo/>
+	<someSpecialTypes>
+		<domedStadium>
+			<boolean>false</boolean>
+			</domedStadium>
+		<averageBeersPerUser>
+			<double>2.30208</double>
+			</averageBeersPerUser>
+		<aVerySmallNumber>
+			<i1>254</i1>
+			</aVerySmallNumber>
+		<stadiumCapacity>
+			<i2>30000</i2>
+			</stadiumCapacity>
+		<stadiumCapacity>
+			<i4>60000</i4>
+			</stadiumCapacity>
+		</someSpecialTypes>
+	<baseballTeam league="American">
+		<name>Angels</name>
+		</baseballTeam>
+	<vacation place="Hawaii" when="2002" cost="$2098">Nice!</vacation>
+	</funnyStuff>
+	<!--This is a comment-->
+
+
+

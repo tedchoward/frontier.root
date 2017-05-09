@@ -1,0 +1,5 @@
+FrontierVcsFile:3:scpt:system.macintosh.globals.getEventSender
+
+return (getEventAttribute ('addr'))
+
+

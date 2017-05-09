@@ -1,0 +1,60 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.directory.init
+
+on init () {
+	«Changes
+		«5/31/12; 11:46:53 AM by DW
+			«Init walk callback table.
+		«5/20/12; 1:31:47 PM by DW
+			«Init viewNodetype callback table.
+		«7/20/11; 11:03:48 AM by DW
+			«Init system.temp.htmlDirectory.
+		«5/15/11; 9:38:04 PM by DW
+			«Init flags table, for maintenence code.
+		«5/13/11; 7:10:39 PM by DW
+			«Init new pref that says whether or not the hyphen is a special character in titles. 
+		«5/6/11; 8:02:34 AM by DW
+			«Init callbacks.
+		«4/19/11; 2:56:27 PM by DW
+			«Init adrdata^.prefs.flSuggestALinkEnabled, adrdata^.prefs.flCoffeeMugs false.
+		«4/18/11; 9:58:33 AM by DW
+			«Created. Now we can have persistent prefs and stats for directories.
+	local (adrdata = @config.htmlDirectory);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)};
+		if not defined (adrdata^.prefs.flUseCache) {
+			adrdata^.prefs.flUseCache = false};
+		if not defined (adrdata^.prefs.flSuggestALinkEnabled) {
+			adrdata^.prefs.flSuggestALinkEnabled = false};
+		if not defined (adrdata^.prefs.flCoffeeMugs) {
+			adrdata^.prefs.flCoffeeMugs = false};
+		if not defined (adrdata^.prefs.flHyphenIsSpecial) { //5/13/11 by DW
+			adrdata^.prefs.flHyphenIsSpecial = false}};
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)};
+		if not defined (adrdata^.stats.ctViewDirectories) {
+			adrdata^.stats.ctViewDirectories = 0}};
+	bundle { //callbacks, 5/6/11 by DW
+		if not defined (adrdata^.callbacks) {
+			new (tabletype, @adrdata^.callbacks)};
+		if not defined (adrdata^.callbacks.getNodeText) {
+			new (tabletype, @adrdata^.callbacks.getNodeText)};
+		if not defined (adrdata^.callbacks.viewNodetype) { //4/30/12 by DW
+			new (tabletype, @adrdata^.callbacks.viewNodetype)};
+		if not defined (adrdata^.callbacks.walk) { //5/31/12 by DW
+			new (tabletype, @adrdata^.callbacks.walk)}};
+	bundle { //misc
+		if not defined (adrdata^.hits) {
+			new (tabletype, @adrdata^.hits)};
+		if not defined (adrdata^.flags) { //5/15/11 by DW
+			new (tabletype, @adrdata^.flags)};
+		if not defined (system.temp.htmlDirectory) { //7/20/11 by DW
+			new (tabletype, @system.temp.htmlDirectory)}};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.simpleDb.testing.createListDelete
+
+local (i);
+for i = 1 to 10 {
+	local (d = states.nthstate (random (1, 50)));
+	msg ("Creating domain \"" + d + ".\"");
+	s3.simpleDb.createDomain (d)};
+local (domains, d);
+s3.simpleDb.listDomains (@domains); scratchpad.domains = domains;
+for d in domains {
+	msg ("Deleting domain \"" + d + ".\"");
+	s3.simpleDb.deleteDomain (d)}
+
+

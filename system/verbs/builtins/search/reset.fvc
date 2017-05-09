@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.search.reset
+
+on reset () {
+	kernel (search.reset)}
+
+

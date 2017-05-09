@@ -1,0 +1,37 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.server.getOutlines
+
+on getOutlines (username, updateStruct=nil) {
+	«Changes
+		«9/9/10; 3:05:53 PM by DW
+			«Add username parameter. Only return outlines for people the user follows.
+		«8/18/10; 7:13:08 PM by DW
+			«Offset the time calculation by date.getcurrenttimezone ().
+		«7/26/10; 3:42:37 PM by DW
+			«Add optional parameter, updateStruct. It had one entry for each user that the caller knows about, and the time they last updated as far as they're concerned. We only return outlines for those users who have updated since their last update. 
+		«7/17/10; 1:57:38 PM by DW
+			«Return a table containing all the instant outlines for this workgroup. 
+	local (adrdata = io.init (), texttable, adruser, t);
+	bundle { //set up t
+		new (tabletype, @t);
+		t.type = "instantOutline"};
+	«scratchpad.updatestruct = updateStruct
+	new (tabletype, @texttable);
+	for adruser in @adrdata^.server.users {
+		if realtime.server.userFollows (username, nameof (adruser^), @t) {
+			local (adrtext = @adruser^.opmltext);
+			if sizeof (adrtext^) > 0 {
+				local (flcopy = true, nameuser = nameof (adruser^));
+				if updateStruct != nil { //7/26/10 by DW
+					if defined (updateStruct.[nameuser]) {
+						local (when = adruser^.stats.whenLastSave - date.getcurrenttimezone ());
+						if when <= updateStruct.[nameuser] {
+							flcopy = false}}};
+				if flcopy {
+					texttable.[nameof (adruser^)] = adrtext^}}}};
+	return (texttable)};
+bundle { //test code
+	local (tc = clock.ticks ());
+	scratchpad.texttable = getOutlines (scratchpad.updatestruct);
+	dialog.notify (clock.ticks () - tc)}
+
+

@@ -1,0 +1,3331 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.xml.testing.data.siteChangesText
+
+<?XML VERSION="1.0"?>
+
+<site>
+
+	<url>http://www.scripting.com/</url>
+
+	<version>1</version>
+
+	<docs>http://www.scripting.com/frontier5/xml/siteChangesApp.html</docs>
+
+	<webmaster>dave@scripting.com</webmaster>
+
+	<update>
+
+		<time>Sat, 11 Apr 1998 07:00:08 GMT</time>
+
+		<serialNum>58</serialNum>
+
+		<file>
+
+			<url>98/04/stories/javaIsAMonster.html</url>
+
+			<modDate>Fri, 10 Apr 1998 14:20:52 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>davenet/98/04/xmlBecomesInvisible.html</url>
+
+			<modDate>Fri, 10 Apr 1998 18:27:32 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>davenet/default.html</url>
+
+			<modDate>Fri, 10 Apr 1998 18:28:36 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Sat, 11 Apr 1998 00:28:37 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Fri, 10 Apr 1998 07:16:53 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Fri, 10 Apr 1998 07:19:38 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/default.html</url>
+
+			<modDate>Fri, 10 Apr 1998 15:36:03 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980410.html</url>
+
+			<modDate>Sat, 11 Apr 1998 01:40:59 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Sat, 11 Apr 1998 06:01:19 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Fri, 10 Apr 1998 07:00:06 GMT</time>
+
+		<serialNum>57</serialNum>
+
+		<file>
+
+			<url>davenet/1998.html</url>
+
+			<modDate>Thu, 09 Apr 1998 14:01:50 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>davenet/default.html</url>
+
+			<modDate>Thu, 09 Apr 1998 14:25:53 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Fri, 10 Apr 1998 01:06:21 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Thu, 09 Apr 1998 07:19:20 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/default.html</url>
+
+			<modDate>Thu, 09 Apr 1998 19:22:47 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/rootUpdates.html</url>
+
+			<modDate>Thu, 09 Apr 1998 09:21:24 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/siteSource.html</url>
+
+			<modDate>Thu, 09 Apr 1998 07:18:57 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Thu, 09 Apr 1998 07:17:49 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/default.html</url>
+
+			<modDate>Thu, 09 Apr 1998 21:06:03 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980409.html</url>
+
+			<modDate>Thu, 09 Apr 1998 21:39:57 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980409x.html</url>
+
+			<modDate>Thu, 09 Apr 1998 17:56:13 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Fri, 10 Apr 1998 06:01:18 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Thu, 09 Apr 1998 07:00:05 GMT</time>
+
+		<serialNum>56</serialNum>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Wed, 08 Apr 1998 23:38:43 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Wed, 08 Apr 1998 07:17:39 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Wed, 08 Apr 1998 07:18:22 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Thu, 09 Apr 1998 06:01:15 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Wed, 08 Apr 1998 07:00:00 GMT</time>
+
+		<serialNum>55</serialNum>
+
+		<file>
+
+			<url>davenet/1998.html</url>
+
+			<modDate>Mon, 06 Apr 1998 16:19:27 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>davenet/default.html</url>
+
+			<modDate>Mon, 06 Apr 1998 16:27:37 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Wed, 08 Apr 1998 02:17:31 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>directory/default.html</url>
+
+			<modDate>Mon, 06 Apr 1998 23:25:22 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Tue, 07 Apr 1998 07:18:02 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Tue, 07 Apr 1998 07:21:49 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/default.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:58:56 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail971106.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:58:41 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail971107.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:58:30 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail971110.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:58:13 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail971114.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:57:57 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail971121.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:57:41 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail971128.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:57:25 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail971208.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:57:09 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail971223.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:56:56 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980101.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:56:35 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980105.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:56:13 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980113.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:55:59 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980121.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:55:44 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980122.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:55:30 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980124.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:55:01 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980129.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:04:14 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980131.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:54:17 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980202.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:54:04 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980205.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:53:48 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980207.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:53:30 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980208.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:05:23 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980210.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:05:32 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980211.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:05:46 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980213.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:05:57 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980218.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:06:04 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980223.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:06:14 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980227.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:06:24 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980302.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:06:30 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980304.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:06:38 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980306.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:06:48 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980308.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:06:56 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980310.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:07:04 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980312.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:07:15 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980317.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:07:23 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980329.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:07:32 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980402.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:07:44 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980406.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:07:56 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/startNewPage.html</url>
+
+			<modDate>Wed, 08 Apr 1998 01:08:02 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Wed, 08 Apr 1998 06:01:16 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>thea/default.html</url>
+
+			<modDate>Tue, 07 Apr 1998 23:34:11 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Mon, 06 Apr 1998 08:00:08 GMT</time>
+
+		<serialNum>53</serialNum>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Mon, 06 Apr 1998 02:33:55 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/outline.html</url>
+
+			<modDate>Sun, 05 Apr 1998 22:29:59 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Mon, 06 Apr 1998 08:16:43 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/websites/bettyDynamicSite.html</url>
+
+			<modDate>Sun, 05 Apr 1998 22:31:51 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/websites/default.html</url>
+
+			<modDate>Sun, 05 Apr 1998 22:29:41 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/betty/bettyNewParts.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:38:13 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/betty/changeNotes.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:37:33 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/betty/testing.html</url>
+
+			<modDate>Sun, 05 Apr 1998 20:33:47 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/default.html</url>
+
+			<modDate>Mon, 06 Apr 1998 02:16:24 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/default.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:13:20 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/fatPages/default.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:13:45 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/fatPages/developpement.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:14:06 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/fatPages/fatPages.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:14:14 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/fatPages/questions.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:17:04 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/fatPages/source.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:19:12 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/Presentation.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:22:28 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/AlAiseTable.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:22:51 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/AproposDeLintro.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:23:01 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/AproposDesSitesWeb.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:23:11 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/CommentUne.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:23:20 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/Confortable.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:23:31 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/Convertir.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:23:42 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/DautresAutom.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:23:54 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/default.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:24:05 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/DefineEtDirectives.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:24:19 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/Explorer.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:24:30 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/FrontierHTML.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:24:43 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/Glossaires.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:24:58 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/ImagesTravail.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:28:01 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/Includes.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:28:10 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/indexSite.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:28:22 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/Modeles.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:28:31 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/OuAller.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:28:45 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/OutlineFor.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:28:55 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/OutlineSite.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:29:08 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/PourCommencer.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:29:19 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/PourquoiFrontier.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:29:31 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/Publier.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:29:45 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/RefRelative.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:29:58 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/francais/tutorials/web/VotrePremSite.html</url>
+
+			<modDate>Mon, 06 Apr 1998 01:30:17 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/outline.html</url>
+
+			<modDate>Mon, 06 Apr 1998 02:15:06 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/siteSource.html</url>
+
+			<modDate>Mon, 06 Apr 1998 02:19:21 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/changes.html</url>
+
+			<modDate>Sun, 05 Apr 1998 13:40:31 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/default.html</url>
+
+			<modDate>Sun, 05 Apr 1998 17:49:54 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/odb.html</url>
+
+			<modDate>Sun, 05 Apr 1998 18:13:57 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/odbExample2.html</url>
+
+			<modDate>Sun, 05 Apr 1998 18:13:45 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/odbExample3.html</url>
+
+			<modDate>Sun, 05 Apr 1998 18:13:34 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/remoteProcedureCalls.html</url>
+
+			<modDate>Sun, 05 Apr 1998 17:35:42 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/richTableStructure.html</url>
+
+			<modDate>Sun, 05 Apr 1998 13:45:51 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/rpc.html</url>
+
+			<modDate>Sun, 05 Apr 1998 19:39:58 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/rpcExample1.html</url>
+
+			<modDate>Sun, 05 Apr 1998 18:26:10 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/rpcExample2.html</url>
+
+			<modDate>Sun, 05 Apr 1998 18:27:02 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/rpcExample3.html</url>
+
+			<modDate>Sun, 05 Apr 1998 18:28:03 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/xmlDatabase.html</url>
+
+			<modDate>Sun, 05 Apr 1998 14:06:50 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/default.html</url>
+
+			<modDate>Sun, 05 Apr 1998 17:53:01 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/experiments/default.html</url>
+
+			<modDate>Sun, 05 Apr 1998 17:52:04 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/outline.html</url>
+
+			<modDate>Sun, 05 Apr 1998 18:15:44 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/plan.html</url>
+
+			<modDate>Sun, 05 Apr 1998 13:34:37 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/siteSource.html</url>
+
+			<modDate>Mon, 06 Apr 1998 08:16:40 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/updates/march12.html</url>
+
+			<modDate>Sun, 05 Apr 1998 13:26:13 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Sun, 05 Apr 1998 08:08:35 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Mon, 06 Apr 1998 07:01:27 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Sun, 05 Apr 1998 08:00:00 GMT</time>
+
+		<serialNum>52</serialNum>
+
+		<file>
+
+			<url>davenet/1998.html</url>
+
+			<modDate>Sat, 04 Apr 1998 20:00:01 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>davenet/default.html</url>
+
+			<modDate>Sat, 04 Apr 1998 20:00:42 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Sun, 05 Apr 1998 01:11:12 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Sat, 04 Apr 1998 08:17:05 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Sat, 04 Apr 1998 08:16:19 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980402.html</url>
+
+			<modDate>Sat, 04 Apr 1998 13:08:42 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Sun, 05 Apr 1998 07:01:25 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Sat, 04 Apr 1998 08:00:02 GMT</time>
+
+		<serialNum>51</serialNum>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Sat, 04 Apr 1998 02:41:01 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>directory/default.html</url>
+
+			<modDate>Sat, 04 Apr 1998 00:27:21 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>directory/defaultx.html</url>
+
+			<modDate>Sat, 04 Apr 1998 00:26:16 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Fri, 03 Apr 1998 08:17:32 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/com/default.html</url>
+
+			<modDate>Fri, 03 Apr 1998 21:18:54 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/com/interface.html</url>
+
+			<modDate>Fri, 03 Apr 1998 21:18:58 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/default.html</url>
+
+			<modDate>Fri, 03 Apr 1998 21:25:55 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/siteSource.html</url>
+
+			<modDate>Fri, 03 Apr 1998 08:16:44 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Fri, 03 Apr 1998 08:20:30 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980402.html</url>
+
+			<modDate>Fri, 03 Apr 1998 19:07:53 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Sat, 04 Apr 1998 07:01:24 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Fri, 03 Apr 1998 08:00:04 GMT</time>
+
+		<serialNum>50</serialNum>
+
+		<file>
+
+			<url>98/03/default.html</url>
+
+			<modDate>Tue, 31 Mar 1998 08:16:36 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>98/04/default.html</url>
+
+			<modDate>Thu, 02 Apr 1998 08:16:20 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>98/04/stories/prestonOnTheSocalfugMeetin.html</url>
+
+			<modDate>Wed, 01 Apr 1998 15:16:37 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>98/04/stories/simpleCrossNetworkScript.html</url>
+
+			<modDate>Fri, 03 Apr 1998 01:57:20 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>98/04/stories/simpleCrossNetworkScriptin.html</url>
+
+			<modDate>Fri, 03 Apr 1998 00:00:57 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>98/04/stories/userlandAndStandards.html</url>
+
+			<modDate>Thu, 02 Apr 1998 23:24:45 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>98/04/stories/whatWouldShakespeareThink.html</url>
+
+			<modDate>Thu, 02 Apr 1998 01:26:28 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/changeNotes.html</url>
+
+			<modDate>Tue, 31 Mar 1998 08:48:47 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/default.html</url>
+
+			<modDate>Tue, 31 Mar 1998 08:49:03 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/download.html</url>
+
+			<modDate>Tue, 31 Mar 1998 08:48:55 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/managingWriters.html</url>
+
+			<modDate>Wed, 01 Apr 1998 18:27:25 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>davenet/1998.html</url>
+
+			<modDate>Thu, 02 Apr 1998 17:38:54 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>davenet/98/04/whatWouldShakespeare.html</url>
+
+			<modDate>Thu, 02 Apr 1998 19:25:08 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>davenet/default.html</url>
+
+			<modDate>Thu, 02 Apr 1998 19:24:25 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Fri, 03 Apr 1998 01:51:29 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Thu, 02 Apr 1998 08:16:52 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/archives/Mar1998.html</url>
+
+			<modDate>Thu, 02 Apr 1998 09:43:08 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/com/default.html</url>
+
+			<modDate>Fri, 03 Apr 1998 07:12:19 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/default.html</url>
+
+			<modDate>Fri, 03 Apr 1998 07:06:04 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/appChangeNotes.html</url>
+
+			<modDate>Fri, 03 Apr 1998 06:08:41 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/default.html</url>
+
+			<modDate>Fri, 03 Apr 1998 06:08:55 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/rootUpdates.html</url>
+
+			<modDate>Wed, 01 Apr 1998 09:41:57 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/changes.html</url>
+
+			<modDate>Wed, 01 Apr 1998 19:05:16 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/siteSource.html</url>
+
+			<modDate>Thu, 02 Apr 1998 08:16:34 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Thu, 02 Apr 1998 08:16:23 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/default.html</url>
+
+			<modDate>Thu, 02 Apr 1998 19:37:07 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980402.html</url>
+
+			<modDate>Fri, 03 Apr 1998 00:52:52 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Fri, 03 Apr 1998 07:01:24 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Tue, 31 Mar 1998 08:00:02 GMT</time>
+
+		<serialNum>49</serialNum>
+
+		<file>
+
+			<url>contentServer/managingWriters.html</url>
+
+			<modDate>Tue, 31 Mar 1998 05:51:29 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Mon, 30 Mar 1998 21:35:40 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Mon, 30 Mar 1998 08:17:14 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Mon, 30 Mar 1998 08:19:40 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Tue, 31 Mar 1998 07:01:21 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Mon, 30 Mar 1998 08:00:01 GMT</time>
+
+		<serialNum>48</serialNum>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Sun, 29 Mar 1998 23:59:57 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>dwiner/historyOfFrontier.html</url>
+
+			<modDate>Sun, 29 Mar 1998 17:17:34 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Sun, 29 Mar 1998 08:17:02 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Sun, 29 Mar 1998 08:10:48 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/default.html</url>
+
+			<modDate>Sun, 29 Mar 1998 15:35:13 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980329.html</url>
+
+			<modDate>Sun, 29 Mar 1998 15:37:32 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Mon, 30 Mar 1998 07:01:21 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>thea/More.html</url>
+
+			<modDate>Mon, 30 Mar 1998 03:27:16 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>thea/Showcase.html</url>
+
+			<modDate>Mon, 30 Mar 1998 03:25:30 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Sun, 29 Mar 1998 08:00:01 GMT</time>
+
+		<serialNum>47</serialNum>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Sun, 29 Mar 1998 04:03:31 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Sat, 28 Mar 1998 08:17:48 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/default.html</url>
+
+			<modDate>Sat, 28 Mar 1998 19:54:14 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/default.html</url>
+
+			<modDate>Sun, 29 Mar 1998 03:37:23 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/siteSource.html</url>
+
+			<modDate>Sat, 28 Mar 1998 08:17:34 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Sat, 28 Mar 1998 08:19:27 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Sun, 29 Mar 1998 07:01:15 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Sat, 28 Mar 1998 08:00:00 GMT</time>
+
+		<serialNum>46</serialNum>
+
+		<file>
+
+			<url>contentServer/changeNotes.html</url>
+
+			<modDate>Fri, 27 Mar 1998 23:34:14 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/download.html</url>
+
+			<modDate>Fri, 27 Mar 1998 23:34:08 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Fri, 27 Mar 1998 21:58:45 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Fri, 27 Mar 1998 08:18:03 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/default.html</url>
+
+			<modDate>Fri, 27 Mar 1998 23:36:42 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/rootUpdates.html</url>
+
+			<modDate>Fri, 27 Mar 1998 22:29:37 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/rootUpdatesxx.html</url>
+
+			<modDate>Fri, 27 Mar 1998 22:29:25 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/changes.html</url>
+
+			<modDate>Fri, 27 Mar 1998 14:36:01 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/default.html</url>
+
+			<modDate>Fri, 27 Mar 1998 14:30:39 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/listings.html</url>
+
+			<modDate>Fri, 27 Mar 1998 13:04:41 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/siteSource.html</url>
+
+			<modDate>Fri, 27 Mar 1998 08:17:45 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Fri, 27 Mar 1998 08:22:12 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Sat, 28 Mar 1998 07:01:14 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Fri, 27 Mar 1998 08:00:01 GMT</time>
+
+		<serialNum>45</serialNum>
+
+		<file>
+
+			<url>contentServer/changeNotes.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:25:57 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/customizing/callbacks.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:26:48 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/customizing/default.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:26:50 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/customizing/fileReaders.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:26:53 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/customizing/importers.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:26:56 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/customizing/loopers.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:26:58 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/customizing/notifiers.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:27:01 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/customizing/sandboxes.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:27:04 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/default.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:25:59 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/download.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:26:02 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/examples/EIMS.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:27:17 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/examples/NetPresenz.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:27:20 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/mail.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:26:08 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/managingGraphics.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:26:11 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/managingTemplates.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:26:13 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/managingWriters.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:26:16 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/openFolders.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:26:19 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/pointers.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:26:22 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/sandboxes.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:26:25 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>contentServer/settingUp.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:26:28 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Thu, 26 Mar 1998 21:19:57 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Thu, 26 Mar 1998 08:18:41 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/default.html</url>
+
+			<modDate>Fri, 27 Mar 1998 01:30:42 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/appChangeNotes.html</url>
+
+			<modDate>Thu, 26 Mar 1998 22:05:26 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/default.html</url>
+
+			<modDate>Thu, 26 Mar 1998 08:47:51 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/rootUpdates.html</url>
+
+			<modDate>Thu, 26 Mar 1998 20:50:17 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/siteSource.html</url>
+
+			<modDate>Thu, 26 Mar 1998 08:17:55 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Thu, 26 Mar 1998 08:30:00 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Fri, 27 Mar 1998 07:01:10 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Thu, 26 Mar 1998 08:00:00 GMT</time>
+
+		<serialNum>44</serialNum>
+
+		<file>
+
+			<url>davenet/1998.html</url>
+
+			<modDate>Wed, 25 Mar 1998 14:05:23 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>davenet/default.html</url>
+
+			<modDate>Wed, 25 Mar 1998 14:09:32 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Thu, 26 Mar 1998 00:33:08 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/cgis/dynamicServerPages.html</url>
+
+			<modDate>Mon, 23 Mar 1998 00:15:01 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/outline.html</url>
+
+			<modDate>Mon, 23 Mar 1998 00:13:50 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Wed, 25 Mar 1998 08:17:32 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/betty/bettyNewParts.html</url>
+
+			<modDate>Mon, 23 Mar 1998 15:37:03 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/betty/changeNotes.html</url>
+
+			<modDate>Mon, 23 Mar 1998 15:35:08 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/betty/developing/lifeOfARequest.html</url>
+
+			<modDate>Mon, 23 Mar 1998 17:09:29 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/betty/outline.html</url>
+
+			<modDate>Mon, 23 Mar 1998 19:45:57 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/betty/stories/default.html</url>
+
+			<modDate>Mon, 23 Mar 1998 19:45:37 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/betty/stories/responderScreenShot.html</url>
+
+			<modDate>Mon, 23 Mar 1998 17:11:14 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/default.html</url>
+
+			<modDate>Wed, 25 Mar 1998 19:38:00 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/rootUpdates.html</url>
+
+			<modDate>Wed, 25 Mar 1998 08:54:01 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/people/default.html</url>
+
+			<modDate>Mon, 23 Mar 1998 21:17:48 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/changes.html</url>
+
+			<modDate>Wed, 25 Mar 1998 12:24:52 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/default.html</url>
+
+			<modDate>Wed, 25 Mar 1998 12:24:28 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/example2.html</url>
+
+			<modDate>Sun, 22 Mar 1998 18:31:21 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/example3.html</url>
+
+			<modDate>Mon, 23 Mar 1998 05:22:30 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/richTableStructure.html</url>
+
+			<modDate>Sun, 22 Mar 1998 18:31:28 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/siteChangesReport.html</url>
+
+			<modDate>Sun, 22 Mar 1998 19:17:03 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/storage.html</url>
+
+			<modDate>Sun, 22 Mar 1998 18:31:35 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/technology.html</url>
+
+			<modDate>Sun, 22 Mar 1998 16:08:11 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/verbs.html</url>
+
+			<modDate>Wed, 25 Mar 1998 12:29:27 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/code/xmlCompileListing.html</url>
+
+			<modDate>Sun, 22 Mar 1998 18:01:59 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/community.html</url>
+
+			<modDate>Sun, 22 Mar 1998 18:31:41 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/default.html</url>
+
+			<modDate>Tue, 24 Mar 1998 22:52:33 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/experiments/default.html</url>
+
+			<modDate>Sun, 22 Mar 1998 18:31:47 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/experiments/guestbook.html</url>
+
+			<modDate>Sun, 22 Mar 1998 18:31:50 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/experiments/scriptingNews.html</url>
+
+			<modDate>Sun, 22 Mar 1998 18:31:56 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/experiments/siteChangesApp.html</url>
+
+			<modDate>Sun, 22 Mar 1998 18:32:10 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/outline.html</url>
+
+			<modDate>Sun, 22 Mar 1998 18:32:14 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/plan.html</url>
+
+			<modDate>Sun, 22 Mar 1998 19:35:27 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/pointers.html</url>
+
+			<modDate>Tue, 24 Mar 1998 22:55:22 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/screenShots/980319.html</url>
+
+			<modDate>Sun, 22 Mar 1998 16:15:56 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/siteSource.html</url>
+
+			<modDate>Wed, 25 Mar 1998 08:17:19 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/updates/march12.html</url>
+
+			<modDate>Sun, 22 Mar 1998 18:33:25 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Wed, 25 Mar 1998 08:21:41 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Tue, 24 Mar 1998 03:01:07 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Sun, 22 Mar 1998 08:00:08 GMT</time>
+
+		<serialNum>40</serialNum>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Sun, 22 Mar 1998 01:36:13 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/betty/bettyNewParts.html</url>
+
+			<modDate>Sun, 22 Mar 1998 02:34:27 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/default.html</url>
+
+			<modDate>Sun, 22 Mar 1998 00:01:41 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/appChangeNotes.html</url>
+
+			<modDate>Sat, 21 Mar 1998 23:21:40 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/default.html</url>
+
+			<modDate>Sat, 21 Mar 1998 23:23:02 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/rootUpdates.html</url>
+
+			<modDate>Sat, 21 Mar 1998 23:57:20 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Sat, 21 Mar 1998 19:03:25 GMT</time>
+
+		<serialNum>39</serialNum>
+
+		<file>
+
+			<url>98/03/default.html</url>
+
+			<modDate>Sat, 21 Mar 1998 08:18:21 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>98/03/stories/applescript.html</url>
+
+			<modDate>Sat, 21 Mar 1998 15:18:45 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>98/03/stories/beOsintelShips.html</url>
+
+			<modDate>Thu, 19 Mar 1998 18:28:39 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>98/03/stories/dougsTcpQuery.html</url>
+
+			<modDate>Fri, 20 Mar 1998 22:07:06 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>98/03/stories/planForNextWeek.html</url>
+
+			<modDate>Fri, 20 Mar 1998 17:34:30 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>98/03/stories/status502.html</url>
+
+			<modDate>Fri, 20 Mar 1998 19:52:26 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Sat, 21 Mar 1998 17:39:08 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>dwiner/demos/privateToBrian.html</url>
+
+			<modDate>Thu, 19 Mar 1998 22:18:32 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>dwiner/outlinersProgramming.html</url>
+
+			<modDate>Sat, 21 Mar 1998 14:58:07 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Sat, 21 Mar 1998 08:19:31 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Sat, 21 Mar 1998 08:20:26 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Sat, 21 Mar 1998 08:00:00 GMT</time>
+
+		<serialNum>38</serialNum>
+
+		<file>
+
+			<url>98/03/default.html</url>
+
+			<modDate>Fri, 20 Mar 1998 08:17:17 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>98/03/stories/beOsintelShips.html</url>
+
+			<modDate>Thu, 19 Mar 1998 18:28:39 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>98/03/stories/dougsTcpQuery.html</url>
+
+			<modDate>Fri, 20 Mar 1998 22:07:06 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>98/03/stories/planForNextWeek.html</url>
+
+			<modDate>Fri, 20 Mar 1998 17:34:30 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>98/03/stories/status502.html</url>
+
+			<modDate>Fri, 20 Mar 1998 19:52:26 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Sat, 21 Mar 1998 01:29:54 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Fri, 20 Mar 1998 08:18:19 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Fri, 20 Mar 1998 08:25:50 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Fri, 20 Mar 1998 08:00:00 GMT</time>
+
+		<serialNum>37</serialNum>
+
+		<file>
+
+			<url>98/03/default.html</url>
+
+			<modDate>Thu, 19 Mar 1998 08:18:49 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>98/03/stories/beOsintelShips.html</url>
+
+			<modDate>Thu, 19 Mar 1998 18:28:39 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Fri, 20 Mar 1998 07:28:20 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Thu, 19 Mar 1998 08:19:55 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Thu, 19 Mar 1998 08:20:05 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Thu, 19 Mar 1998 08:00:06 GMT</time>
+
+		<serialNum>36</serialNum>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Thu, 19 Mar 1998 03:25:15 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/agents/botherBetty.html</url>
+
+			<modDate>Thu, 19 Mar 1998 03:06:14 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/agents/default.html</url>
+
+			<modDate>Thu, 19 Mar 1998 03:06:52 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/outline.html</url>
+
+			<modDate>Thu, 19 Mar 1998 02:28:19 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Wed, 18 Mar 1998 08:19:10 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/suites/default.html</url>
+
+			<modDate>Thu, 19 Mar 1998 02:29:05 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Wed, 18 Mar 1998 08:24:02 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Wed, 18 Mar 1998 08:00:01 GMT</time>
+
+		<serialNum>35</serialNum>
+
+		<file>
+
+			<url>davenet/1998.html</url>
+
+			<modDate>Tue, 17 Mar 1998 18:16:07 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>davenet/default.html</url>
+
+			<modDate>Tue, 17 Mar 1998 18:15:40 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Wed, 18 Mar 1998 02:38:41 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>dwiner/pebblesSource.html</url>
+
+			<modDate>Tue, 17 Mar 1998 21:11:11 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Tue, 17 Mar 1998 08:18:32 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/betty/bettyNewParts.html</url>
+
+			<modDate>Tue, 17 Mar 1998 23:48:32 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/default.html</url>
+
+			<modDate>Wed, 18 Mar 1998 03:51:47 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/appChangeNotes.html</url>
+
+			<modDate>Wed, 18 Mar 1998 01:50:18 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/default.html</url>
+
+			<modDate>Wed, 18 Mar 1998 03:48:19 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/community.html</url>
+
+			<modDate>Tue, 17 Mar 1998 22:01:16 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/default.html</url>
+
+			<modDate>Tue, 17 Mar 1998 22:01:18 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/experiments/default.html</url>
+
+			<modDate>Tue, 17 Mar 1998 22:01:21 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/experiments/guestbook.html</url>
+
+			<modDate>Tue, 17 Mar 1998 22:01:25 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/experiments/scriptingNews.html</url>
+
+			<modDate>Tue, 17 Mar 1998 22:01:30 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/experiments/siteChangesApp.html</url>
+
+			<modDate>Tue, 17 Mar 1998 22:01:43 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/outline.html</url>
+
+			<modDate>Tue, 17 Mar 1998 22:01:47 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/plan.html</url>
+
+			<modDate>Tue, 17 Mar 1998 22:01:50 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/pointers.html</url>
+
+			<modDate>Tue, 17 Mar 1998 22:01:53 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/siteSource.html</url>
+
+			<modDate>Tue, 17 Mar 1998 22:02:11 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/updates/march12.html</url>
+
+			<modDate>Tue, 17 Mar 1998 22:02:57 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Tue, 17 Mar 1998 08:23:25 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/default.html</url>
+
+			<modDate>Tue, 17 Mar 1998 14:53:43 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980317.html</url>
+
+			<modDate>Wed, 18 Mar 1998 00:59:05 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Tue, 17 Mar 1998 19:00:59 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Tue, 17 Mar 1998 08:00:08 GMT</time>
+
+		<serialNum>34</serialNum>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Tue, 17 Mar 1998 00:54:01 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Mon, 16 Mar 1998 08:18:15 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Mon, 16 Mar 1998 08:11:04 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Tue, 17 Mar 1998 07:00:58 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>thea/Spotlight.html</url>
+
+			<modDate>Mon, 16 Mar 1998 16:33:23 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Mon, 16 Mar 1998 08:00:00 GMT</time>
+
+		<serialNum>33</serialNum>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Mon, 16 Mar 1998 03:37:47 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Sun, 15 Mar 1998 08:18:06 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/betty/bettyNewParts.html</url>
+
+			<modDate>Sun, 15 Mar 1998 22:13:38 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/betty/changeNotes.html</url>
+
+			<modDate>Sun, 15 Mar 1998 22:09:03 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/default.html</url>
+
+			<modDate>Sun, 15 Mar 1998 22:16:57 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/siteSource.html</url>
+
+			<modDate>Sun, 15 Mar 1998 08:17:49 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Sun, 15 Mar 1998 08:14:38 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Mon, 16 Mar 1998 07:00:55 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Sun, 15 Mar 1998 08:00:01 GMT</time>
+
+		<serialNum>32</serialNum>
+
+		<file>
+
+			<url>davenet/1998.html</url>
+
+			<modDate>Sat, 14 Mar 1998 17:14:24 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>davenet/default.html</url>
+
+			<modDate>Sat, 14 Mar 1998 17:15:04 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Sun, 15 Mar 1998 00:54:59 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Sat, 14 Mar 1998 08:25:55 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/default.html</url>
+
+			<modDate>Sun, 15 Mar 1998 05:03:09 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980312.html</url>
+
+			<modDate>Sun, 15 Mar 1998 05:02:59 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Sun, 15 Mar 1998 07:00:54 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Sat, 14 Mar 1998 08:00:00 GMT</time>
+
+		<serialNum>31</serialNum>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Sat, 14 Mar 1998 01:42:42 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Fri, 13 Mar 1998 08:17:56 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/default.html</url>
+
+			<modDate>Fri, 13 Mar 1998 23:21:49 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/appChangeNotes.html</url>
+
+			<modDate>Fri, 13 Mar 1998 10:01:08 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/default.html</url>
+
+			<modDate>Fri, 13 Mar 1998 10:01:19 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/whatIsFrontier.html</url>
+
+			<modDate>Fri, 13 Mar 1998 22:08:43 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/siteSource.html</url>
+
+			<modDate>Fri, 13 Mar 1998 08:17:41 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Fri, 13 Mar 1998 08:38:36 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980312.html</url>
+
+			<modDate>Fri, 13 Mar 1998 23:39:17 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Sat, 14 Mar 1998 07:00:53 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Fri, 13 Mar 1998 08:00:07 GMT</time>
+
+		<serialNum>30</serialNum>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Fri, 13 Mar 1998 02:08:16 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Thu, 12 Mar 1998 08:18:15 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/default.html</url>
+
+			<modDate>Thu, 12 Mar 1998 20:02:53 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/plan.html</url>
+
+			<modDate>Thu, 12 Mar 1998 19:43:06 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/siteSource.html</url>
+
+			<modDate>Thu, 12 Mar 1998 08:17:48 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/updates/march12.html</url>
+
+			<modDate>Thu, 12 Mar 1998 19:38:09 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Thu, 12 Mar 1998 08:15:47 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>mail/mail980312.html</url>
+
+			<modDate>Fri, 13 Mar 1998 01:28:57 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Fri, 13 Mar 1998 04:00:49 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	<update>
+
+		<time>Thu, 12 Mar 1998 08:00:00 GMT</time>
+
+		<serialNum>29</serialNum>
+
+		<file>
+
+			<url>default.html</url>
+
+			<modDate>Thu, 12 Mar 1998 07:06:59 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>fatpages/siteSource.html</url>
+
+			<modDate>Wed, 11 Mar 1998 13:09:06 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/default.html</url>
+
+			<modDate>Thu, 12 Mar 1998 05:19:04 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/fasttrack/rootUpdates.html</url>
+
+			<modDate>Thu, 12 Mar 1998 05:17:32 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>frontier5/xml/siteSource.html</url>
+
+			<modDate>Wed, 11 Mar 1998 13:08:50 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>logDigest.html</url>
+
+			<modDate>Wed, 11 Mar 1998 08:27:14 GMT</modDate>
+
+			</file>
+
+		<file>
+
+			<url>system/schedulerLog.html</url>
+
+			<modDate>Thu, 12 Mar 1998 07:00:51 GMT</modDate>
+
+			</file>
+
+		</update>
+
+	</site>
+
+
+
+

@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.setObjectJustification
+
+on setObjectJustification (name, justification) {
+	new (tableType, @atts);
+	atts.just = number (justification);
+	return (cardEditor.setObjectAttributes (name, @atts))}
+
+

@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.data.scripts.everyMinute
+
+on everyMinute () {
+	«Changes
+		«<%now%> by <%initials%>
+			«Created. 
+	local (adrdata = <%toolname%>Suite.init ());
+	adrdata^.stats.ctMinutes++};
+bundle { //test code
+	everyMinute ()}
+
+

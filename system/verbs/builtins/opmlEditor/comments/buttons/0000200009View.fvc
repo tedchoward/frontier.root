@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.comments.buttons.["00002000\tView"]
+
+«Changes
+	«9/17/12; 1:10:06 PM by DW
+		«Created. 
+			«http://worknotes.scripting.com/september2012/91712ByDw/viewButtonOnCommentWorkspace
+local (adrdata = opmleditor.comments.init (), lo = window.frontmost ()^, atts, url);
+target.set (@lo);
+op.go (left, infinity);
+op.attributes.getall (@atts);
+url = atts.url + "#" + string.innercasename (adrdata^.prefs.username);
+webbrowser.openurl (url);
+webbrowser.bringtofront ()
+
+

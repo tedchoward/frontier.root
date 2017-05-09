@@ -1,0 +1,28 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.opml.xstructToIndentedText
+
+on xstructToIndentedText (adrxstruct) {
+	«Changes
+		«4/30/12; 3:13:25 PM by DW
+			«Created.
+	local (s = "", level = 0);
+	on decode (s) {
+		return (xml.entitydecode (s, true))};
+	on addlevel (adrlevel) {
+		local (adr, indent = string.filledstring ("\t", level));
+		for adr in adrlevel {
+			if nameof (adr^) endswith "outline" {
+				local (adratts = @adr^.["/atts"]);
+				s = s + (indent + decode (adratts^.text) + "\r");;
+				level++;
+				addlevel (adr);
+				level--}}};
+	addlevel (adrxstruct);
+	return (s)};
+bundle { //test code
+	local (xstruct, adropml, adrbody);
+	xml.compile (op.outlinetoxml (@worldOutlineSuite.data.templates.main), @xstruct);
+	adropml = xml.getaddress (@xstruct, "opml");
+	adrbody = xml.getaddress (adropml, "body");
+	wp.newtextobject (xstructToIndentedText (adrbody), @scratchpad.myindentedtext)}
+
+

@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.deleteTemplate
+
+on deleteTemplate () {
+	«Changes
+		«3/7/12; 6:06:43 PM by DW
+			«Created.
+	local (adrdata = opmlEditor.worldOutline.init (), adroutline = address (window.frontmost ()), nodetype = nameof (adroutline^));
+	if dialog.confirm ("Delete template for \"" + nodetype + "?\"") {
+		local (server, username, password);
+		opmlEditor.worldOutline.getServerInfo (@server, @username, @password);
+		[server].worldOutline.DeleteTemplate (username, password, nodetype);
+		window.close (adroutline)}}
+«bundle //test code
+	«deleteTemplate ()
+
+

@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:suites.ftpClient.bringToFront
+
+on bringToFront () {
+	if not ftpClient.launch () {
+		return (false)};
+	return (sys.bringAppToFront (ftpClient.data.currentid))}
+
+

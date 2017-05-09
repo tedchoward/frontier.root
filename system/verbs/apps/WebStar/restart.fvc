@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.restart
+
+on restart (appID = WebStar.id) {
+	if WebStar.isRunning () {
+		WebStar.quit ()};
+	while WebStar.isRunning () {};
+	WebStar.launch ()}
+
+

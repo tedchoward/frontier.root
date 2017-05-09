@@ -1,0 +1,20 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.mainResponder.localization.languages.english.strings.setupFrontier.portForward
+
+Because you use MacOS X, Frontier needs to configure your system for port-forwarding, which requires your MacOS X administrator password.</p>
+<p>Frontier can optionally remember this password for you, so that you don't have to re-enter it each time Frontier is launched. This is recommended, especially if you plan to run Frontier on an unattended computer.</p>
+<form method="POST">
+	<table border="0" cellspacing="1" cellpadding="5">
+		<tr>
+			<td align="left" valign="top">Administrator password:</td>
+			<td valign="top" colspan="1"><input type="password" name="password" size="25" maxlength="100" value="[[adminPassword]]"><br><br></td>
+			</tr>
+		<tr>
+			<td colspan="2"><input type="checkbox" name="enabled" value=xxx [[rememberAdminPassword]]>&nbsp;Check this box if you want Frontier to remember your administrator password.<br><br></td>
+			</tr>
+		<tr><td><input type="submit" name="portForward" value="Submit"></td><td></td></tr>
+		</table>
+	</form>
+<p>Note: If you choose to have Frontier remember your administrator password, it will be stored in Frontier's object database. When your server's screen is not locked, it's possible for someone to open Frontier, and find your administrator password.  If you choose this option, make sure that physical access to your server is restricted.</p>
+
+
+

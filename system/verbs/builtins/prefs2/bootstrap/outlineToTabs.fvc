@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.prefs2.bootstrap.outlineToTabs
+
+on outlineToTabs (adroutline) {
+	«Changes
+		«3/15/12; 11:18:12 AM by DW
+			«Update for Bootstrap 2.0.
+		«1/12/12; 11:35:40 AM by DW
+			«Give me an outline, and I return Bootstrap-compatible code for a tabbed structure. 
+	local (opmltext = op.outlinetoxml (adroutline), xstruct);
+	local (htmltext = "", indentlevel = 0);
+	on add (s) {
+		htmltext = htmltext + (string.filledstring ("\t", indentlevel) + s + "\r");};
+	xml.compile (opmltext, @xstruct);
+	local (adropml = xml.getaddress (@xstruct, "opml"));
+	local (adrbody = xml.getaddress (adropml, "body"));
+	scratchpad.xstructprefsindex = xstruct;
+	add (string (prefs2.bootstrap.stylesAndScripts));
+	add ("<form method=\"POST\">"); indentlevel++;
+	add (prefs2.bootstrap.xstructToTabs (adrbody, flFieldSet:true));
+	
+	add (webApp.viewButton ()); //3/15/12 by DW
+	«add ("<button type=\"submit\" class=\"btn primary\">Submit</button>")
+	
+	add ("</form>"); indentlevel--;
+	return (htmltext)};
+bundle { //test code
+	op.newoutlineobject (outlineToTabs (@worldoutlinesuite.data.prefsforroot), @prefs2.bootstrap.demotext)}
+
+

@@ -1,0 +1,53 @@
+FrontierVcsFile:3:scpt:user.webserver.responders.websiteFramework.condition
+
+on condition (pta) {
+	«Changes
+		«8/28/12; 1:09:21 PM by DW
+			«If the path is / or the empty string, we claim it. Otherwise there would be no way to access the OPML Server site. 
+		«8/28/12; 12:00:21 PM by DW
+			«If the host is in config.mainresponder.domains and it's a file path, return false. We assume it's a static file. 
+		«10/26/05; 8:27:59 PM by DW
+			«The condition for Frontier was wrong in the OPML Editor. 
+		«8/1/02; 3:00:49 AM by JES
+			«Condition returns false if the request is on the port specified by user.inetd.config.http2, and we're running in Frontier.
+		«1/19/01; 12:17:09 PM by PBS
+			«New condition script for the website framework responder.
+				«.wsf requests are always handled by the website framework responder.
+				«But also -- if the first part of a path matches a name in the docTree, then that request is handled by this responder. This allows for paths like /xxx/. Previously you always had to do /xxx/index.wsf.
+	«bundle //debugging code
+		«if (pta^.host contains "shreveport.really") and (not (pta^.path contains "favico"))
+			«scratchpad.params123 = pta^
+	bundle { //return false if it's in domains table and it's a string -- 8/28/12 by DW
+		if (pta^.path != "/") and (pta^.path != "") {
+			local (adrdomain = @config.mainresponder.domains.[pta^.host]);
+			if defined (adrdomain^) {
+				if typeof (adrdomain^) == stringtype {
+					return (false)}}}};
+	local (flFrontier = true);
+	if system.environment.isRadio {
+		flFrontier = false}
+	else {
+		if defined (system.environment.isOpmlEditor) {
+			if system.environment.isOpmlEditor {
+				flFrontier = false}}};
+	
+	if flFrontier {
+		if defined (user.inetd.config.http2.port) {
+			if pta^.port == user.inetd.config.http2.port {
+				return (false)}}};
+	
+	if pta^.path endsWith ".wsf" {
+		return (true)};
+	
+	local (normalPath = string.popLeading (pta^.path, '/'));
+	local (firstPart = string.nthField (normalPath, '/', 1));
+	local (adrResponder = parentOf (this^));
+	local (adrDocTree = @adrResponder^.data.docTree);
+	if defined (adrDocTree^.[firstPart]) { //does the first part of the path exist in the docTree?
+		return (true)};
+	
+	return (false)}
+«bundle //test code
+	«condition (@scratchpad.params123)
+
+

@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.identica.getReplies
+
+on getReplies (adrreplies, username=user.identica.prefs.username, password=user.identica.prefs.password, server="identi.ca") {
+	«Changes
+		«3/12/09; 5:27:25 AM by DW
+			«New optional param, server, allows you to post to another instance of Laconica.
+		«7/17/08; 9:54:13 PM by DW
+			«Created. Returns the 20 most recent @replies (status updates prefixed with @username) for the authenticating user.
+	local (url = "http://" + server + "/api/statuses/replies.xml");
+	return (twitter.getReplies (adrreplies, username, password, url))};
+bundle { //test code
+	getReplies (@scratchpad.identicareplies, server:"home.smallpicture.com")}
+
+

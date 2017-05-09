@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:user.im.responders.state.condition
+
+on condition (screenname, message) {
+	return (tcp.im.builtinResponders.state.condition (screenname, message))}
+
+

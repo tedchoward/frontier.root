@@ -1,0 +1,166 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.log2.view
+
+on view (when=clock.now (), source=nil, maxitems=100, flHeaderFooter=false, flSingleDay=true, flNestedTable=true, tableClassName="logTable") {
+	«Changes:
+		«6/26/12; 6:33:57 PM by DW
+			«Tweaks to the look of log tables based on what I've learned about CSS in the last year. 
+		«11/27/11; 9:58:27 AM by DW
+			«Bring zebra-striping back to log tables.
+		«9/25/11; 6:23:49 PM by DW
+			«Embed the table in a div of class divLogPage. Makes it easy to get rid of the funky borders that don't belong there.
+		«Before 9/17/11
+			«9/17/11; 9:46:30 AM by DW
+				«On <td> elements eliminate the align and valign attributes. These are taken care of in the stylesheet. Change the class name fuzzyDate to logDate. It was the only class without "log" at the beginning of its name. No good reason for that.
+			«9/5/11; 7:24:27 AM by DW
+				«Add <thead> and <tbody> elements. Eliminate the "oddrow" class on every other row. This can be done in the stylesheet (and is). If the cache is turned off don't store the text in the log item.
+			«9/3/11; 11:25:16 AM by DW
+				«Lots of changes to make it work with the new webapp framework...
+					«flNestedTable param stays, but is ignored. We always only generate a single-level table. The nested table was used to give each cell a border. There are better ways to do this now. 
+					«Took out the <center> element. If you want to center the table do that through stylesheets.
+					«New optional parameter, tableClassName, defaults to "logTable," which is the class name for the table prior to this update. We let the caller specify what class should control the rendering of the table. This allows us to hook it into the framework we're using now. 
+			«8/27/11; 5:53:48 AM by DW
+				«Faster "add" function.
+			«8/24/11; 9:40:40 AM by DW
+				«Add class "logTable" to the inner table. Callers should call with flNestedTable false from now on. Every other row has a class attribute of "oddRow" -- which you can use to shade or not shade the row, for example. 
+			«5/17/11; 2:34:27 PM by DW
+				«Added class names to all the table elements.
+			«3/24/11; 11:43:55 PM by DW
+				«New optional param, flNestedTable. If true, we display the table inside another table so there is a solid line betw cells. If it's false, you get a single table. 
+			«9/12/10; 12:12:32 AM by DW
+				«Call new verb, date.viewDate to display the time/date of the log item.
+			«9/4/10; 3:12:20 PM by DW
+				«When displaying the time/date of the update, if it happened today, show the time -- if it happened before today, show the date.
+			«8/28/09; 10:13:46 AM by DW
+				«Add optional param, flSingleDay, default true. If false we go back into previous days if there are less than "maxitems" entries today.
+			«7/17/09; 8:28:40 AM by DW
+				«Turn off cache, for debugging. (Not clear it helps perf much.
+			«7/17/09; 8:02:31 AM by DW
+				«Add an optional parameter, flHeaderFooter, default false. If true, we display a navigation header and footer for the log readout.
+			«7/16/09; 2:25:05 PM by DW
+				«Remove dependencies on photoFanSuite.
+			«7/16/09; 1:27:37 PM by DW
+				«Add source param. If non-nil, we only include log elements from that source. Add maxitems param.  Make the cache really work.
+			«2/5/08; 12:32:18 PM by DW
+				«Handle the case where there is no previous day (i.e. when you first install the software).
+			«1/20/08; 5:28:03 AM by DW
+				«Overhaul for new calendar-based event log. Accept a parameter that says what date to display events for.
+			«11/25/07; 6:27:10 PM by DW
+				«Relocate the cache to system.temp.photoFan.cache.viewEventsLog.
+			«11/25/07; 6:23:46 PM by DW
+				«Remove various FlickrRivr dependencies.
+			«11/25/07; 5:15:03 PM by DW
+				«Ported from FlickrRivr.
+	local (adrdata = log2.init (), adrcal = @adrdata^.calendar, now = clock.now ());
+	local (htmltext = "\r\r", indentlevel = 0, navtable, flusecache = false, adrcache = @system.temp.log2.viewLogCache);
+	if flusecache {
+		if not defined (adrcache^) {
+			new (tabletype, adrcache)};
+		if source == nil {
+			adrcache = @adrcache^.["nil"]}
+		else {
+			adrcache = @adrcache^.[string (source)]};
+		if defined (adrcache^) {
+			return (adrcache^)}};
+	on add (s) {
+		htmltext = htmltext + (string.filledstring ("\t", indentlevel) + s + "\r");};
+	bundle { //add next/prev links
+		if flHeaderFooter {
+			local (prevlink = "Previous", nextlink = "Next");
+			bundle { //set prevlink
+				local (nomad = when);
+				loop {
+					nomad = date.yesterday (nomad);
+					if date.sameday (nomad, mainresponder.calendar.getfirstday (adrcal)) {
+						break};
+					try {
+						local (adrtable = mainresponder.calendar.getdayaddress (adrcal, nomad, false));
+						if defined (adrtable^) {
+							local (day, month, year, hour, minute, second);
+							date.get (nomad, @day, @month, @year, @hour, @minute, @second);
+							month = string.padwithzeros (month, 2);
+							day = string.padwithzeros (day, 2);
+							prevlink = "<a href=\"" + pta^.uri + "?d=" + year + "/" + month + "/" + day + "\">" + prevlink + "</a>";
+							break}}
+					else {
+						break}}};
+			bundle { //set nextlink
+				local (nomad = when);
+				loop {
+					if date.sameday (nomad, now) {
+						break};
+					nomad = date.tomorrow (nomad);
+					local (adrtable = mainresponder.calendar.getdayaddress (adrcal, nomad, false));
+					if defined (adrtable^) {
+						local (day, month, year, hour, minute, second);
+						date.get (nomad, @day, @month, @year, @hour, @minute, @second);
+						month = string.padwithzeros (month, 2);
+						day = string.padwithzeros (day, 2);
+						nextlink = "<a href=\"" + pta^.uri + "?d=" + year + "/" + month + "/" + day + "\">" + nextlink + "</a>";
+						break}}};
+			navtable = "<table border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tr><td>" + date.longstring (when) + "</td><td align=\"right\">" + prevlink + " / " + nextlink + "</td></tr></table>";
+			add (navtable + "<br>")}};
+	add ("<div class=\"divLogPage\">"); indentlevel++; //9/25/11 by DW
+	bundle { //add the <table> element, 9/3/11 by DW
+		local (class = "");
+		if tableClassName != nil {
+			class = " class=\"" + tableClassName + "\""};
+		«add ("<table class=\"" + webApp.data.tableClass + "\" class=\"" + tableClassName + "\" border=\"0\" cellspacing=\"0\" cellpadding=\"5\">"); indentlevel++
+		add ("<table  class=\"" + webApp.data.tableClass + "\" cellpadding=\"5\">"); indentlevel++};
+	bundle { //add header
+		add ("<thead>"); indentlevel++;
+		add ("<tr>"); indentlevel++;
+		add ("<th class=\"logEvent\"><b>Event</b></th>");
+		add ("<th class=\"logDescription\"><b>What Happened</b></th>");
+		add ("<th class=\"logDate\"><b>When</b></th>");
+		add ("<th class=\"logSeconds\"><b>Seconds</b></th>");
+		add ("</tr>"); indentlevel--;
+		add ("</thead>"); indentlevel--};
+	add ("<tbody>"); indentlevel++;
+	local (ct = 0);
+	on doOneItem (adritem) {
+		if source != nil { //7/16/09 by DW
+			if adritem^.source != source {
+				continue}};
+		if flusecache and defined (adritem^.cache) {
+			add (adritem^.cache)}
+		else {
+			local (s, class = "");
+			s = s + "<tr>";
+			s = s + "<td nowrap class=\"logEvent\">" + adritem^.eventType + "&nbsp;</td>";
+			bundle { //add htmltext
+				local (htt = adritem^.htmlText);
+				htt = string.replaceall (htt, "/frimg/", "/pfi/");
+				s = s + "<td class=\"logDescription\">" + htt + "</td>"};
+			«bundle //imghtml, you can simplify this tomorrow,  //11/23/07 by DW -- disabled
+				«if defined (adritem^.imghtml)
+					«s = s + "<td vertical-align=\"top\"><center>" + adritem^.imghtml + "</center></td>"
+				«else
+					«s = s + "<td vertical-align=\"top\">&nbsp;</td>"
+			local (when = date (xml.convertToDisplayName (nameof (adritem^))));
+			s = s + "<td nowrap class=\"logDate\">" + date.viewDate (when) + "</td>";
+			s = s + "<td nowrap class=\"logSeconds\">" + adritem^.secs + "</td>";
+			s = s + "</tr>";
+			if flusecache {
+				adritem^.cache = s};
+			add (s)};
+		return (++ct < maxitems)};
+	if flSingleDay {
+		local (adrday = mainresponder.calendar.getdayaddress (adrcal, when), i);
+		for i = sizeof (adrday^) downto 1 {
+			if not doOneItem (@adrday^ [i]) {
+				break}}}
+	else {
+		mainresponder.calendar.visitReverseChronologic (adrcal, @doOneItem)};
+	add ("</tbody>"); indentlevel--;
+	add ("</table>"); indentlevel--;
+	add ("</div>"); indentlevel--;
+	if flHeaderFooter {
+		add ("<br>" + navtable)};
+	filemenu.savemyroot (adrcal);
+	if flusecache {
+		adrcache^ = htmlText};
+	return (htmlText)};
+bundle { //test code
+	webbrowser.displaytext (view (source:"river2"))}
+
+

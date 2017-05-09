@@ -1,0 +1,19 @@
+FrontierVcsFile:3:optx:websites.samples.UserLand.["#styleSheets"].default
+
+p, li, td, .bodyText, h1, h2, h3, h4, h5, h6
+	font-family
+		Arial
+		Verdana
+		Helvetica
+		Geneva
+pre, code, .navbarText, .footerText, div.navbarText p, div.footerText p
+	font-family
+		Verdana
+		Geneva
+		Arial
+		Helvetica
+	font-size
+		10pt
+
+
+

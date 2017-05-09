@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.redirect
+
+on redirect (url) { //call this from a page being rendered, in a macro, to tell respond to redirect
+	«Changes
+		«11/4/09; 3:43:48 PM by DW
+			«If this doesn't do what you want, take a look at webserver.redirect.
+		«6/22/09; 4:22:31 PM by DW
+			«If the responderAttributes table doesn't exist, create it.
+	local (pta = html.getPageTableAddress ());
+	if not defined (pta^.responderAttributes) { //6/22/09 by DW
+		new (tabletype, @pta^.responderAttributes)};
+	pta^.responderAttributes.redirectUrl = url}
+	«scratchpad.urlwatcher = url
+
+

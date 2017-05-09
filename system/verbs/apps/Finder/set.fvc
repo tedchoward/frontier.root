@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Finder.set
+
+on set (obj, setTo) { «Set an object's data
+	return (appleEvent (Finder.id, 'core', 'setd', '----', Finder.finderSpec (obj), 'data', setTo))}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.launch
+
+on launch () {
+	return (app.startWithDocument ("Filemaker", ""))}
+
+

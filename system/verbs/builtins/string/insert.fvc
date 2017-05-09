@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.insert
+
+on insert (source, dest, ix) {
+	kernel (string.insert)}
+
+

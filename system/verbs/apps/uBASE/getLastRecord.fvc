@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.uBASE.getLastRecord
+
+on getLastRecord (fnum) {
+	return (systemEvent ('ubas', 'recl', 'fref', short (fnum)))}
+
+

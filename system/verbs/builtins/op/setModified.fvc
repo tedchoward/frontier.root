@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.setModified
+
+on setModified () { //7.0b17
+	kernel (op.setmodified)}
+
+

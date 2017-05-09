@@ -1,0 +1,30 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.addPeriodToSentence
+
+on addPeriodToSentence (s) {
+	«Changes
+		«9/27/11; 12:55:08 PM by DW
+			«Don't add a period to a string like this: "It is not possible to run for president as a Repub these days without having to become a parody of yourself." (Also handle single-quotes.)
+		«2/23/11; 10:50:17 PM by DW
+			«Don't add a period at the end of the sentence if there is already one there.
+		«5/20/10; 8:13:24 AM by DW
+			«Ending with a punctuation mark is not the right test -- a sentence that ends with a right-square-bracket still needs a period. So we narrow the test to a small set of characters.
+		«5/20/10; 7:01:54 AM by DW
+			«Created. It looks stupid to add a period at the end of a sentence that already ends with a punctuation mark. So we only add one if the last character is not a punctuation mark.
+	local (sizes, ch);
+	s = string.trimwhitespace (s);
+	sizes = sizeof (s);
+	if sizes > 0 {
+		ch = s [sizes];
+		if (ch != '!') and (ch != '?') and (ch != '.') and (not (s endswith ".\"")) and (not (s endswith ".'")) {
+			s = s + ". "}
+		else {
+			s = s + " "}};
+	return (s)}
+«bundle //test code
+	«dialog.alert (addPeriodToSentence ("Oh the buzzing of the bees"))
+	«dialog.alert (addPeriodToSentence ("Oh the buzzing of the bees!"))
+	«dialog.alert (addPeriodToSentence ("Oh the buzzing of the bees]"))
+	«dialog.alert (addPeriodToSentence ("\"A parody of yourself.\""))
+	«dialog.alert (addPeriodToSentence ("'A parody of yourself.'"))
+
+

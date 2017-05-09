@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.search.replaceAll
+
+on replaceAll () {
+	kernel (search.replaceall)}
+
+

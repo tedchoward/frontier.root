@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.newer
+
+on newer (f1, f2) { «new in 4.0b7
+	return (file.modified (f1) > file.modified (f2))}
+
+

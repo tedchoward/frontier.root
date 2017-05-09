@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.netEvents.myAddress
+
+on myAddress () {
+	return (appleEvent(netEvents.id, 'WAPI', 'MYIP'))}
+
+

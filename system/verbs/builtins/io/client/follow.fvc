@@ -1,0 +1,22 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.follow
+
+on follow () {
+	«Changes
+		«9/15/10; 12:44:50 PM by DW
+			«Re-releasing the part released yesterday. Apparently some people missed the update? Just being sure.
+		«9/14/10; 8:54:23 AM by DW
+			«The remote call for following no longer returns an update table.
+		«9/3/10; 8:37:52 AM by DW
+			«Created. 
+	if dialog.ask ("Name of user to follow?", @config.io.client.prefs.lastFollow) {
+		local (name = config.io.client.prefs.lastFollow, update);
+		local (adrdata = io.init (), now = clock.now ());
+		local (username = adrdata^.client.prefs.username);
+		local (password = string (adrdata^.client.prefs.password));
+		local (server = string (adrdata^.client.prefs.server));
+		update = [server].io.follow (username, password, name)}};
+		«io.client.updateUser (@update)
+bundle { //test code
+	follow ()}
+
+

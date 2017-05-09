@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.point.set
+
+on set (h, v) {
+	kernel (point.set)}
+
+

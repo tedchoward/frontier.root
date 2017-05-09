@@ -1,0 +1,56 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.boldenBuddy
+
+on boldenBuddy (name) {
+	«Changes
+		«9/14/10; 4:48:24 PM by DW
+			«There was a stray call to "beep" in the body of the loop, removed.
+		«9/12/10; 5:16:08 PM by DW
+			«Move the beeping code out of this routine.
+		«7/15/10; 11:09:21 AM by DW
+			«Cribbed from instantOutline.root.
+		«7/21/08; 8:58:41 AM by DW
+			«Beep on each update, subject to pref.
+			«Also fixed bug, atts.bold wasn't being set for an already-existing user. Wasn't calling op.attributes.addgroup.
+		«7/19/08; 2:10:42 PM by DW
+			«Insert new buddies at the bottom, not the top.
+		«7/19/08; 2:01:51 PM by DW
+			«Handle empty buddy outline (startup).
+		«7/19/08; 9:22:55 AM by DW
+			«Created. Add the user to the buddy outline if not already there, bolden if there.
+	local (adrdata = io.init ());
+	local (oldtarget = target.set (@adrdata^.client.buddies.outline));
+	local (oldcursor = op.getcursor (), flfound = false, atts);
+	op.firstsummit ();
+	loop {
+		op.attributes.getall (@atts);
+		if defined (atts.name) {
+			if atts.name == name {
+				flfound = true;
+				if not atts.bold {
+					op.setlinetext ("<b>" + op.getlinetext () + "</b>");
+					atts.bold == true;
+					op.attributes.addgroup (@atts); //7/21/08 by DW
+					io.client.beep ()};
+				break}};
+		if not op.go (down, 1) {
+			break}};
+	if not flfound {
+		«op.firstsummit ()
+		bundle { //insert the new line
+			local (s = "<b>" + name + "</b>");
+			if op.getrefcon () == 0 { //no atts
+				op.setlinetext (s)}
+			else {
+				op.insert (s, down)}};
+		new (tabletype, @atts);
+		atts.name = name;
+		atts.type = "v4BuddyOutlineElement";
+		atts.bold = true;
+		op.attributes.addgroup (@atts);
+		io.client.beep ()}; //9/12/10 by DW
+	op.setcursor (oldcursor);
+	target.set (oldtarget)};
+bundle { //test code
+	boldenBuddy ("davewiner")}
+
+

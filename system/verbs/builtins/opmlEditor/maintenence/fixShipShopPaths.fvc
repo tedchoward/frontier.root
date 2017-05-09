@@ -1,0 +1,18 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.maintenence.fixShipShopPaths
+
+«Changes
+	«10/31/09; 11:30:48 AM by DW
+		«When we shipped opml.root we left some things pointing to places on the shipping computer's hard drive that can cause problems for people. This patch fixes them.
+local (badpath = "Macintosh HD:Users:davewiner:Documents:OPML Ship Shop:OPML:Guest Databases:www:");
+if config.mainresponder.domains.default == badpath {
+	config.mainresponder.domains.default = frontier.getsubfolder ("www")};
+local (adrtable = @user.webserver.responders.websiteFramework.data.docTree, i, adr);
+for i = sizeof (adrtable^) downto 1 {
+	adr = @adrtable^ [i];
+	if typeof (adr^) == addresstype { //it points to an address
+		local (adr2 = adr^);
+		msg (adr2);
+		if not defined (adr2^) { //what it points to doesn't exist
+			delete (adr)}}}
+
+

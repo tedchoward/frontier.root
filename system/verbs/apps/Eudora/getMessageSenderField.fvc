@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.getMessageSenderField
+
+on getMessageSenderField (msgObj) {
+	with objectModel, Eudora, eventInfo {
+		return (core.get (id, msgObj.field ["Sender"]) - "Sender: ")}}
+
+

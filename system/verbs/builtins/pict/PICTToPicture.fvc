@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.pict.PICTToPicture
+
+on PICTToPicture (adrBinary, adrPicture) {
+	if not defined (adrPicture^) {
+		new (picturetype, adrPicture)};
+	target.set (adrPicture);
+	pict.setPicture (adrBinary);
+	target.clear ();
+	return (true)}
+
+

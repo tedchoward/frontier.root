@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BarChart.update
+
+on update () { «refresh the target window
+	return (appleEvent (BarChart.id, 'BARC', 'updt'))}
+
+

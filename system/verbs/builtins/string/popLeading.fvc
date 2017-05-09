@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.popLeading
+
+on popLeading (s, ch) {
+	kernel (string.popleading)}
+
+

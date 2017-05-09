@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.rez.getNthResource
+
+on getNthResource (path, type, n, adrname, adrdata) {
+	kernel (rez.getnthresource)}
+
+

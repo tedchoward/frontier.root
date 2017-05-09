@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.easySearch
+
+local (matchInfo, sr);
+sr = regex.easySearch("[0-9]+", "a 123 four", @matchInfo);
+dialog.notify(sr);
+sr = regex.easySearch("(bo){1,2}", "be bobop", @matchInfo);
+dialog.notify(sr)
+
+

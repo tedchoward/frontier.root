@@ -1,0 +1,121 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.saveWorkspace
+
+on saveWorkspace () {
+	«Changes
+		«2/12/12; 3:36:04 PM by DW
+			«New way of getting server info.
+		«12/22/11; 10:45:58 AM by DW
+			«When you save the outline we maintain an archive copy of the outline in the archive folder. 
+		«9/19/11; 8:54:18 PM by DW
+			«Get the user's prefs before saving, so we have access to the user's domain. Use that in building the feed. 
+		«7/17/11; 2:12:45 PM by DW
+			«Generate RSS as we save the OPML, send it to the server to flow it to the S3 store. 
+		«7/4/11; 8:34:24 AM by DW
+			«Allow a glossary to be an inclusion. Makes it possible to share glossaries.
+				«http://worknotes.scripting.com/july2011/7411ByDw/sharingGlossaries
+		«7/3/11; 9:49:24 PM by DW
+			«Remove debugging code. Support for glossary.
+		«6/14/11; 8:35:19 AM by DW
+			«Make sure the password is a string.
+		«6/6/11; 9:56:17 AM by DW
+			«Created.
+	local (adrdata = opmlEditor.worldOutline.init (), now = clock.now ());
+	opmlEditor.worldOutline.getUserPrefs (@adrdata^.stats.userPrefs); //9/19/11 by DW
+	
+	local (opmltext = op.outlinetoxml (@adrdata^.workspace), domains, glossary, changes, rsstext, server, username, password);
+	opmlEditor.worldOutline.getServerInfo (@server, @username, @password); //2/11/12 by DW
+	
+	on decode (s) {
+		return (xml.entitydecode (s, flAlphaEntities:true))};
+	
+	bundle { //build domains, glossary tables
+		local (xstruct);
+		xml.compile (opmltext, @xstruct);
+		on addSubToGloss (adrx, adrglossary) {
+			local (adrsub);
+			bundle { //if it's an include node, point adrx to the body of its opml
+				local (adratts = @adrx^.["/atts"]);
+				if defined (adratts^.type) {
+					if adratts^.type == "include" {
+						local (adrtable, adrxstruct, adropml);
+						op.getnetoutline (adratts^.url, @adrtable);
+						xml.thread.accessStruct (@adrtable^.struct, @adrxstruct);
+						adropml = xml.getaddress (adrxstruct, "opml");
+						adrx = xml.getaddress (adropml, "body")}}};
+			for adrsub in adrx {
+				if nameof (adrsub^) endswith "outline" {
+					local (glossname = decode (adrsub^.["/atts"].text));
+					if sizeof (glossname) > 0 {
+						local (adrdef, glossdef = "");
+						for adrdef in adrsub {
+							if nameof (adrdef^) endswith "outline" {
+								glossdef = glossdef + decode (adrdef^.["/atts"].text)}};
+						if sizeof (glossdef) > 0 {
+							adrglossary^.[glossname] = glossdef}}}}};
+		on visit (adrx) {
+			local (adratts = @adrx^.["/atts"]);
+			if defined (adratts^) {
+				if defined (adratts^.domain) {
+					domains.[adratts^.domain] = true};
+				if defined (adratts^.text) { //might be a glossary
+					if string.lower (adratts^.text) == "glossary" {
+						addSubToGloss (adrx, @glossary)}};
+				if defined (adratts^.type) { //might be added to changes table
+					local (lowertype = string.lower (adratts^.type));
+					if (lowertype == "blogpost") or (lowertype == "howto") {
+						if defined (adratts^.created) {
+							local (adrchange = @changes.[string.padwithzeros (sizeof (changes) + 1, 5)]);
+							new (tabletype, adrchange);
+							adrchange^.atts = adratts^;
+							bundle { //set adrchange^.url
+								local (path = "", nomad = adrx);
+								«scratchpad.atts = adratts^
+								loop {
+									if defined (nomad^.["/atts"].domain) {
+										if path endswith "/" {
+											path = string.mid (path, 1, sizeof (path) - 1)};
+										adrchange^.url = "http://" + nomad^.["/atts"].domain + "/" + path;
+										break};
+									path = html.directory.getcanonicalname (nomad^.["/atts"].text) + "/" + path;
+									nomad = parentof (nomad^);
+									if nameof (nomad^) endswith "body" {
+										if path endswith "/" {
+											path = string.mid (path, 1, sizeof (path) - 1)};
+										adrchange^.url = "http://" + user.opmlEditor.worldOutline.stats.userPrefs.domain + "/" + path;
+										break}}};
+							bundle { //add adrchange^.firstSubText
+								local (adrsub);
+								for adrsub in adrx {
+									if nameof (adrsub^) endswith "outline" {
+										adrchange^.firstSubText = decode (adrsub^.["/atts"].text);
+										break}};
+								if not defined (adrchange^.firstSubText) {
+									adrchange^.firstSubText = ""}}}}}};
+			return (false)}; //keep searching
+		new (tabletype, @domains);
+		new (tabletype, @glossary);
+		new (tabletype, @changes);
+		xml.opml.search (@xstruct, @visit);
+		scratchpad.changes = changes};
+	«bundle //run the opmltext through replacetable, 7/17/11 by DW
+		«opmltext = string.multiplereplaceall (opmltext, @opmlEditor.data.worldOutline.replacetable, false)
+	bundle { //set rsstext, 7/17/11 by DW
+		rsstext = opmlEditor.worldOutline.buildRss (@changes)};
+	bundle { //save outline in local archive, 12/22/11 by DW
+		if adrdata^.prefs.flArchivedOutlinesLocally {
+			local (serialnum, f);
+			bundle { //set serialnum
+				if not defined (adrdata^.stats.whenLastSave) {
+					adrdata^.stats.whenLastSave = date (0)};
+				if not date.sameday (now, adrdata^.stats.whenLastSave) {
+					adrdata^.stats.saveSerialnum = 1};
+				serialnum = string.padwithzeros (adrdata^.stats.saveSerialnum++, 3)};
+			f = adrdata^.prefs.folderLocalArchive + file.getdatepath () + "workspace" + serialnum + ".opml";
+			file.surefilepath (f);
+			file.writewholefile (f, opmltext)};
+		adrdata^.stats.whenLastSave = now};
+	adrdata^.stats.serverAtts = [server].worldOutline.saveUserRoot (username, password, opmltext, domains, glossary, rsstext)};
+bundle { //test code
+	saveWorkspace ()}
+
+

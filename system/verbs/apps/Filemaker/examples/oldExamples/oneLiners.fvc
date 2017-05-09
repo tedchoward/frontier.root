@@ -1,0 +1,132 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Filemaker.examples.oldExamples.oneLiners
+
+// Notes:
+	Claris ships a nice database named “FileMaker Events and Objects” with FileMaker Pro.
+	You will probably refer to this database often while working on scripts which operate FileMaker.
+	Claris has now uploaded a revised “FileMaker and Apple Events” database to CompuServe
+	and perhaps other services.  This revised database is a considerable improvement over 
+	the original “FileMaker Events and Objects”, and should be used if you have access to it.
+	
+	
+	Objects
+		FileMaker defines several types of objects.  The ones you will use most often
+		are records and cells.  If you don’t say otherwise, the record or cell you designate
+		is assumed to be in the frontmost window that FileMaker has open.
+		The database “FileMaker and Apple Events” shows all the available objects, and indicates
+		which kinds of objects each other object can contain.
+	// Object Properties
+		Object specifiers like this — window ["State Capitals"].index — are specifiers of properties
+			In this example, we ask for the index of the window named "State Capitals".
+			A window’s index counts from 1 for the front window
+		Some properties can only be examined, others can be examined or changed.
+		For information on what properties FileMaker Pro makes available for what objects and
+		which ones you can change, see the “FileMaker and Apple Events” database.
+
+FileMaker.launchWithDocument (Frontier.pathstring + "Extras:FileMaker & Frontier:State Capitals")
+	// true
+with objectModel, FileMaker {get (window [1].name)} «get the name of the first window
+	// "State Capitals"
+with FileMaker {count (layout [1], record)} «counts the number of records in the database
+	// 3
+with objectModel, FileMaker {create (record, "Nevada" + tab + "Carson City", 0, 0)} «add a record to the database
+	// true
+with FileMaker {count (layout [1], record)} «seems to count the number of records in the database
+	// 4
+FileMaker.examples.reportStates () «build a list of states and their capitals from the database
+	// true
+// 
+// NOTE:  FileMaker Pro 2.0 returned the following as a tab-delimited string.  Version 2.1 returns it as a list
+with FileMaker {get (field[1])}      « could also say "column[1]", field["Name"], column["name"], etc
+	// {"California", "Illinois", "New York", "Nevada"}
+// NOTE:  FileMaker will notify you by flashing the application menu that it wants to come to the front, if
+	// the sort verb is used when it is not.  There seems to be no good reason for this, but the example complies.      
+with objectModel, FileMaker {bringToFront(); sort (database[1], field["Name"], ascending); Frontier.bringToFront()}
+	// true
+// NOTE:  If you want the tab-delimited string, you can ask for it.  [Note that the sort did change the order.]
+with objectModel, FileMaker {get (column["Name"], stringType)} « gives us the data in the column as tab-delimited string
+	// "California\tIllinois\tNevada\tNew York"
+// 
+// Select those records which have "City" in the name of the state capital:
+with objectModel, FileMaker {show (record[cell["Capital"] contains "City"])}
+	// true
+with FileMaker {count (layout [1], record)} «  count() actually counts the SHOWN records
+	// 1
+with objectModel, FileMaker {delete (record [all])} «delete all the SHOWN records in the database
+	// true
+with FileMaker {count (layout [1], record)}  « deleting all shown records implicitly shows all the rest
+	// 3
+with objectModel, FileMaker {delete (record[2])} « delete the second shown record
+	// true
+with FileMaker {count (layout [1], record)} «counts the number of records in the database
+	// 2
+with objectModel, FileMaker {delete (record[3])} « ERROR...there is no third record any more
+with objectModel, FileMaker {delete (record [all])} «delete all the records in the database, since all are now shown
+	// true
+with FileMaker {count (layout [1], record)}  « it’s empty now
+	// 0
+FileMaker.examples.addStates () «adds 50 states and their capitals, cmd-2click to view the script
+	// true
+with FileMaker {count (layout [1], record)} «counts the number of records in the database
+	// 50
+with objectModel, FileMaker {get (layout [1].name)} «get the name of the first layout
+	// "Plain"
+with objectModel, FileMaker {get (layout [2].name)} «get the name of the second layout
+	// "Fancy"
+with FileMaker {show (layout [1])} «set the current layout to the first layout
+	// true
+with FileMaker {show (layout ["Fancy"])}
+	// true
+with FileMaker {get (record [1])} «value of the first record
+	// {"Alabama", "Montgomery"}
+// record[-1] is the last, record[-2] is next-to-last, etc
+with FileMaker {get (record [-1], stringType)} « you can get a tab-delimited string if you prefer.
+	// "Wyoming\tCheyenne"
+with objectModel, FileMaker {get (record [any]) }  « Ask for a random record
+	// {"Delaware", "Dover"}
+with objectModel, FileMaker {get (record [1].cell [2])} «value of cell 2 in record 1
+	// "Montgomery"
+with objectModel, FileMaker {get (record [3].cell ["Name"])} «value of the "Name" cell in record 3
+	// "Arizona"
+with objectModel, FileMaker {get (record [28].cell ["Capital"])} «get capital of state 28
+	// "Carson City"
+with objectModel, FileMaker {set (record [28].cell ["Capital"], "Reno")} «change the capital of state 28 to Reno
+	// true
+with objectModel, FileMaker {set (record [28].cell ["Capital"], "Carson City")} «change it back to Carson City
+	// true
+with objectModel, FileMaker {show (record [cell [1] == "California"])} «select records whose field 1 value is "California"
+	// true
+with objectModel, FileMaker {show (record [cell ["Name"] beginsWith "New"])} «states whose name begins with "New"
+	// true
+with objectModel, FileMaker {show (record [cell [2] contains "City"])} «states whose capital contain "City"
+	// true
+with objectModel, FileMaker {show (record [cell ["Capital"] == "Albany"])} «select records whose capital is Albany
+	// true
+with objectModel, FileMaker {show (record [all])} «select all records
+	// true
+with objectModel, FileMaker {get (window [1].bounds)}
+	// {64,40,300,600}
+with objectModel, FileMaker {set (window [1].bounds, rect ("64, 40, 300, 600"))}
+	// true
+with objectModel, FileMaker {get (window ["State Capitals"].index)} « position among the windows
+	// 1
+with objectmodel, FileMaker {get (menu ["Select"].menuItem ["Browse"].checked)}
+	// true
+with objectmodel, FileMaker {domenu (menu ["Select"].menuItem ["Browse"])}
+	// true
+FileMaker.examples.addAndDemoMenus()  « Shows how you can add menus which run Frontier scripts
+	// true
+FileMaker.examples.removeMenus()
+	// true
+
+// Restore the States Database to its starting contents.  Note the compound test.
+with objectModel, FileMaker {show (record [cell ["Name"] == "California" || cell ["Name"] == "Illinois" || cell["Name"] == "New York"])}
+	// true
+with objectModel, FileMaker { doMenu (menu["Select"].menuItem["Find Omitted"]) }
+	// true
+with objectModel, FileMaker { delete (record[all]) }
+	// true
+FileMaker.quit()
+	// true
+
+
+

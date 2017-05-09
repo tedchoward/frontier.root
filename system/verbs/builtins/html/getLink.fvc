@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.getLink
+
+on getLink (linetext, url) {
+	if url == "" {
+		return (linetext)}
+	else {
+		return ("<a href=\"" + url + "\">" + linetext + "</a>")}}
+
+

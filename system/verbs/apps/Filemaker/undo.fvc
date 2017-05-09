@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.undo
+
+on undo () { «Undo the action of the previous event or user interaction
+	return (appleEvent (Filemaker.id, 'misc', 'undo'))}
+
+

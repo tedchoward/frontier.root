@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.data.virginResponders.blogger.script
+
+on script (driverName, screenname, message) {
+	return (tcp.im.builtinResponders.blogger.script (driverName, screenname, message))}
+
+

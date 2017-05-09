@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.protocols.otherhandlers.ftp
+
+on ftp (url) {
+	if Fetch.launch () {
+		Fetch.bringToFront ();
+		Fetch.getURL (url)}
+	else {
+		return (false)}}
+
+

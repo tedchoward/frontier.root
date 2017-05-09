@@ -1,0 +1,184 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Filemaker.ChangesFromParsedTable
+
+Filemaker 3.0 glue by Preston Holmes and Brent Simmons 3/10/96
+Added
+	UniqueID, value 'ID  '
+	isLayout, value enum ('VIEW')
+		It was this way in the old glue.
+		Better to use 'view' which has the same value.
+	readOnly, value enum ('nmod')
+	Examples from Preston Holmes
+	ReadMe from Preston Holmes
+Changed
+	Find (obj) - Added setEventInteraction (false) to prevent errors when 0 records found
+	eventInfo() becomes getEventInfo()
+		This to allow the new eventInfo table
+	All of the enumerator or string4 event info from JB's table have been copied into the eventInfo table
+	Index, value enum ('indx'), becomes keyIndex - for backwards compatibility
+	average, becomes summarizeAverage, value enum ('AVRG')
+	count1, becomes summarizeCount, value enum ('CONT')
+	create1, becomes canCreate, enum (8)
+	delete1, becomes canDelete, enum (16)
+	id2, becomes keyID,  value enum ('id  ')
+	maximum, becomes summarizeMaximum, value enum ('MAX ')
+	mean, becomes summarizeMean, value enum ('MEAN')
+	minimum, becomes summarizeMinimum, value enum ('MIN ')
+	read/write, becomes readAndWrite, value enum ('modf')
+	read/write/update, becomes readWriteUpdate, value enum (7)
+	read/write1, becomes readWrite, value enum (3)
+	read/create becomes readAndCreate
+	read/create/delete becomes readCreateDelete, value enum(25)
+	read/delete becomes readAndDelete
+	read/update becomes readUpdate
+	read/update/create becomes readUpdateCreate
+	read/update/delete becomes readUpdateDelete
+	read/write/create becomes readWriteCreate
+	read/write/delete becomes readWriteDelete
+	update/create becomes updateAndCreate
+	update/create/delete becomes updateCreateDelete
+	update/delete becomes updateAndDelete
+	write/create becomes WriteAndCreate
+	write/create/delete becomes WriteCreateDelete
+	write/delete becomes WriteAndDelete
+	write/delete1 becomes WriteAndDelete1
+	write/update becomes WriteAndUpdate
+	write/update/create becomes writeUpdateCreate
+	write/update/delete becomes writeUpdateDelete
+	standardDeviation, becomes summarizeStandardDeviation, value enum ('STDV')
+	sum, becomes summarizeSum, value enum ('TOTL')
+	table, becomes isTable, value enum ('TABL')
+	classInfo ()...change second parameter name from classInfoIn to wrCode
+	doScript ()
+		insert setEventInteraction (false) before the appleEvent call
+		do not coerce the parameter to string, because it can be an
+		object specifier of a fileMakerScript object (eg, filemakerScript["foo"])
+	eventInfo ()...change second parameter name from classInfoIn to wrCode
+	getData () becomes get ()
+		but getData () still exists so as not break current scripts.
+		Use get () in the future, as getData () is redundant.
+	open () and openDocument () are the same verb
+		Same as in old Filemaker glue
+		Inserted a FileMaker.bringToFront (), needed to avoid the Notification Manager
+	openDocument ()
+		1.  Insert fileMaker.bringToFront (), because it is needed
+			(Perhaps because Frontier sends with kAEAlwaysInteract)
+		2.  add the optional withPassword parameter
+			this parameter specifies the password with which a document (or a list
+			of documents) is to be opened.  If it is wrong, FileMaker will put up a dialog
+			asking for the right one.  If no password is needed, this parameter is
+			silently ignored.
+		3.  If the first parameter is a list and the password parameter is present,
+			FileMaker applies the password to each document specified in the list
+			which requires a password
+			(If different documents need different passwords, use more than one
+			openDocument () call
+	save ()  
+		Since FileMaker saves as it goes along (although you can modify this in preferences),
+		using this verb is usually not useful (or harmful). It remains for now anyway.
+	setData () becomes set ()
+		but setData () still exists so as not break current scripts.
+		Use set () in the future, as setData () is redundant.
+NOTES:
+	summarizeXXX enumerators
+		Don't like renaming the maximum, minimum, etc enumerators.  But...
+		1.  that's how the old glue was
+		2.  there is a collision with the count verb (count is one of the summarize enums)
+		3.  I haven't found a use for them anyhow
+	xxx/xxx and xxx/xxx/xxx 
+		The parsed version and renamed version exists in the eventInfo table.
+		There is redundancy, but hopefully scripts won't break.
+Most of the changes are the same changes for the Filemaker 2 glue.
+	Complete list of J. Baxter changes from 3;June 1994
+		Deleted
+			id1, value 'ID  '
+			openApplication ()
+		Added
+			cursor, value enum ('CURS'), because it was there
+			formulasProtected, value enum ('fpro')
+			keyIndex, value enum ('indx')
+			keyNamed, value enum ('name'), because it was there (in 5/93 Extras)
+			linkset, value enum ('LINK'), because it was there
+			readOnly, value enum ('nmod')
+			dataSizeAs (), a clone of dataSize (), because it was there
+			getAs ()
+			launchWithDocument (), because of strangeness in FileMaker Pro 2.1v2
+				1.  app.startWithDocument ("FileMaker", theDocPath) is imperfect, because
+					FileMaker will launch, then demand to come to the front.
+				2.  app.startWithDocument (), even if it worked OK, would not permit providing
+					a password for the document.
+				Note that any of the things which can be passed to FileMaker.openDocument can
+				be passed to this FileMaker.launchWithDocument ()
+			uniqueID, value 'pID '
+		Changed
+			average, becomes summarizeAverage, value enum ('AVRG')
+			count1, becomes summarizeCount, value enum ('CONT')
+			create1, becomes canCreate, enum (8)
+			delete1, becomes canDelete, enum (16)
+			id2, becomes keyID,  value enum ('id  ')
+			layout1, becomes isLayout, value enum ('VIEW')
+			maximum, becomes summarizeMaximum, value enum ('MAX ')
+			mean, becomes summarizeMean, value enum ('MEAN')
+			minimum, becomes summarizeMinimum, value enum ('MIN ')
+			read/write, becomes readAndWrite, value enum ('modf')
+			read/write/update, becomes readWriteUpdate, value enum (7)
+			read/write1, becomes readWrite, value enum (3)
+			standardDeviation, becomes summarizeStandardDeviation, value enum ('STDV')
+			sum, becomes summarizeSum, value enum ('TOTL')
+			table, becomes isTable, value enum ('TABL')
+			classInfo ()...change second parameter name from classInfoIn to wrCode
+			create ()...order the parameters as in the Extras 5/93 glue, and
+				mark each parameter optional except the first (the class to create)
+				call  core.create, to obtain the Frontier 2.0 handling of zero
+					as an omitted optional parameter.
+			doMenu ()  remove second parameter "menuNamed = nil"
+				If someone can convince me that ANY usage of this parameter
+				does anything other than create an error, I'll put it back
+			doScript ()
+				insert setEventInteraction (false) before the appleEvent call
+				do not coerce the parameter to string, because it can be an
+				object specifier of a fileMakerScript object (eg, filemakerScript["foo"])
+			eventInfo ()...change second parameter name from classInfoIn to wrCode
+			getData () becomes get ()
+			open () kept because it is found in the Extras 5/93 glue
+				Compared with the parser version, the coercion to object was removed
+				fromt the direct object.
+				Inserted a FileMaker.bringToFront (), needed to avoid the Notification Manager
+				This verb is now simply a synonym for openDocument () (or vice versa)
+			openDocument ()
+				1.  Insert fileMaker.bringToFront (), because it is needed
+					(I think because Frontier sends with kAEAlwaysInteract)
+				2.  add the optional withPassword parameter
+					this parameter specifies the password with which a document (or a list
+					of documents) is to be opened.  If it is wrong, FileMaker will put up a dialog
+					asking for the right one.  If no password is needed, this parameter is
+					silently ignored.
+				3.  Remove coercion the first (file) parameter in the glue.  FileMaker
+					accepts a pathname string, an alias, a filespec, or a list of those (the list
+					may mix the forms:  {"HD:foo", alias ("HD:bar"), fileSpec ("HD:baz")} is legal
+					as the first parameter).
+				4.  If the first parameter is a list and the password parameter is present,
+					FileMaker applies the password to each document specified in the list
+					which requires a password
+					(If different documents need different passwords, use more than one
+					openDocument () call
+			save ()  remove the saveIn and as optional parameters...FileMaker doesn't accept them
+				Since FileMaker saves as it goes along (although you can modify this in preferences),
+				using this verb is usually not useful (or harmful)
+			setData () becomes set ()
+		NOTES:
+			summarizeXXX enumerators
+				I don't like renaming the maximum, minimum, etc enumerators.  But...
+				1.  that's how the old glue was
+				2.  there is a collision with the count verb (count is one of the summarize enums)
+				3.  I haven't found a use for them anyhow
+			propertyID constant removed
+				Value was 'pID '.  This value appears nowhere in the FileMaker Pro 2.1v2 'aete'
+				resource nor in the 'aeut'
+			Very old scripts
+				Several constants which at one time were in the FileMaker table have moved to
+				the objectModel table.  A few very old scripts may break as a result.  Scripts which
+				worked with the FileMaker glue shipped in the Frontier Extras 5/93 package should
+				be fine.
+
+
+

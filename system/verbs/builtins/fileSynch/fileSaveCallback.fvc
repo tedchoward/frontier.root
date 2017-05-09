@@ -1,0 +1,22 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fileSynch.fileSaveCallback
+
+on fileSaveCallback (f) {
+	«Changes
+		«1/2/12; 10:23:36 AM by DW
+			«Make sure the filetable exists. Could be saving a file for the first time. 
+		«1/1/12; 8:33:36 PM by DW
+			«The file is being saved. If it's one of ours, upload it fast. Called from Frontier.tools.data.windowTypes.outlinerFile.save.
+	local (adr);
+	for adr in @user.filesynch.synchpoints {
+		fileSynch.initSynchPoint (nameof (adr^));
+		if adr^.prefs.enabled {
+			if f beginswith adr^.prefs.folder {
+				local (path = string.delete (f, 1, sizeof (adr^.prefs.folder)));
+				local (adrfile = @adr^.files.[path]);
+				fileSynch.initFileTable (adrfile); //1/2/12 by DW
+				filesynch.uploadfile (adrfile)}}}}
+«bundle //test code
+	«local (f = "Macintosh HD:Users:davewiner:Dropbox:Public:Outlines:woRootTemplateV1.opml")
+	«fileSaveCallback (f)
+
+

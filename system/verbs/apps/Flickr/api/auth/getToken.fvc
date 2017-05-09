@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.api.auth.getToken
+
+on getToken (frob) {
+	local (mystruct);
+	new (tabletype, @mystruct);
+	mystruct.api_key = user.flickr.prefs.apiKey;
+	mystruct.frob = frob;
+	Flickr.signStruct (@mystruct);
+	local (s = [user.flickr.prefs.server].flickr.auth.getToken (mystruct));
+	s = xml.entityDecode (s, true);
+	xml.compile (s, @xstruct);
+	scratchpad.xstruct = xstruct;
+	local (adrauth = xml.getaddress (@xstruct, "auth"));
+	user.flickr.prefs.token = xml.getvalue (adrauth, "token");
+	local (adruser = xml.getaddress (adrauth, "user"));
+	user.flickr.prefs.fullname = adruser^.["/atts"].fullname;
+	user.flickr.prefs.nsid = adruser^.["/atts"].nsid;
+	user.flickr.prefs.username = adruser^.["/atts"].username;
+	return (user.flickr.prefs.token)};
+bundle { //test code
+	local (frob = Flickr.api.auth.getFrob ());
+	dialog.alert (getToken (frob))}
+
+

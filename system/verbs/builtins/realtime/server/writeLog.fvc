@@ -1,0 +1,21 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.server.writeLog
+
+on writeLog () {
+	«Changes
+		«8/11/10; 3:37:34 PM by DW
+			«Created. 
+	local (adrdata = realtime.init ());
+	if adrdata^.server.prefs.log.enabled {
+		local (t);
+		new (tabletype, @t);
+		t. logTable = log2.view (source:realtime.server.data.log.source, flSingleDay:false);
+		t.now = clock.now ();
+		t.title = "Realtime Log";
+		local (s = string.multiplereplaceall (string (realtime.server.data.log.template), @t, false, "<%", "%>"));
+		local (f = adrdata^.server.prefs.log.f);
+		file.surefilepath (f);
+		file.writewholefile (f, s)}};
+bundle { //test code
+	writeLog ()}
+
+

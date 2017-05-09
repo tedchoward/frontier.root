@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fileSynch.init
+
+«Changes
+	«7/7/06; 7:05:19 PM by DW
+		«Created.
+if not defined (user.fileSynch) {
+	new (tabletype, @user.fileSynch)};
+if not defined (user.fileSynch.synchPoints) {
+	new (tabletype, @user.fileSynch.synchPoints)};
+if not defined (user.scheduler.threads.fileSynch) {
+	user.scheduler.threads.fileSynch = @fileSynch.thread};
+if not defined (system.temp.fileSynch) {
+	new (tabletype, @system.temp.fileSynch)};
+if not defined (system.temp.fileSynch.trash) {
+	new (tabletype, @system.temp.fileSynch.trash)}
+
+

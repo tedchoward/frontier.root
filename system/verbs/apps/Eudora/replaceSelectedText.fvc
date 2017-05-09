@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.replaceSelectedText
+
+on replaceSelectedText (newtext) {
+	with objectModel, Eudora, eventInfo {
+		try {
+			core.set (id, selectedText, newtext)}
+		else {
+			if tryError == "³Eudora² reported the following error:  ³The specified object wasn¹t found.²." {
+				return (true)}
+			else {
+				scriptError (tryError)}}}}
+
+

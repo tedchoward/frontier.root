@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.commercial.newTable.isRunning
+
+on isRunning () {
+	return (sys.appIsRunning (Sample.id))}
+
+

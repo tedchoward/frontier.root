@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.people.webAdmin.["#tools"].getArgs
+
+on getArgs () {
+	return (html.getPageTableAddress ()^.searchArgs)}
+
+

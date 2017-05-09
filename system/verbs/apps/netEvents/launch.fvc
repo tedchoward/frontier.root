@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.netEvents.launch
+
+on launch () { «Set up netEvents data in Frontier and launch the applet.
+	netEvents.init ();
+	return (app.startWithDocument ("NetEvents", ""))}
+
+

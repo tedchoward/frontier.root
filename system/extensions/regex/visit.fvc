@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.visit
+
+on visit (pattern, adrObject, callBack, caseSensitive=false, makeGroups=false, maxRuns=infinity) {
+	local (patternRef = 0);
+	local (matchInfo);
+	local (start = 1, ctruns = 0);
+	try {
+		patternRef = regex.compile (pattern, caseSensitive);
+		loop {
+			if (ctruns > maxRuns) {
+				break};
+			rollBeachBall ();
+			if (regex.search (patternRef, adrObject, @matchInfo, start, 0, makeGroups)) {
+				if not callBack^ (@matchInfo) {
+					regex.free (patternRef);
+					return (false)};
+				start = matchInfo.matchOffset + matchInfo.matchLength;
+				if matchInfo.matchLength == 0 { // prevent infinite looping
+					start++};
+				ctruns++}
+			else {
+				break}};
+		regex.free (patternRef)}
+	else {
+		regex.free (patternRef);
+		scriptError (tryError)};
+	return (true)}
+
+

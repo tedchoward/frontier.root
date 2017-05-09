@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:user.im.responders.metaWeblog.script
+
+on script (driverName, screenname, message) {
+	return (tcp.im.builtinResponders.metaWeblog.script (driverName, screenname, message))}
+
+

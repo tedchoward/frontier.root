@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.save
+
+on save (obj) { «Save an object
+	return (appleEvent (Filemaker.id, 'core', 'save', '----', objspec (obj)))}
+
+

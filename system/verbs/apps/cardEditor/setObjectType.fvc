@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.setObjectType
+
+on setObjectType (name, type) {
+	new (tableType, @atts);
+	atts.type = number (type);
+	return (cardEditor.setObjectAttributes (name, @atts))}
+
+

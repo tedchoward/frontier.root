@@ -1,0 +1,47 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.visitReverseChronologic
+
+on visitReverseChronologic (s3path, adrvisit) {
+	«Changes
+		«3/14/14; 1:05:30 PM by DW
+			«Parallel to mainresponder.calendar.visitReverseChronologic.
+	local (structuretable, bucketname, pathinbucket, adrobj, localtable, adrtable = @localtable);
+	bundle { //set bucketname, pathinbucket
+		local (s = s3path);
+		if s beginswith "/" {
+			s = string.delete (s, 1, 1)};
+		bucketname = string.nthfield (s, "/", 1);
+		pathinbucket = string.delete (s, 1, sizeof (bucketname) + 1)};
+	bundle { //make the call to AWS
+		s3.getBucket (s3path, @structuretable)};
+	bundle { //sort the table into a structure
+		new (tabletype, adrtable);
+		for adrobj in @structuretable {
+			local (path = string.delete (nameof (adrobj^), 1, sizeof (pathinbucket)), nomad = adrtable, i);
+			for i = 1 to string.countfields (path, "/") {
+				step = string.nthfield (path, "/", i);
+				nomad = @nomad^.[step];
+				if not defined (nomad^) {
+					new (tabletype, nomad)}};
+			nomad^ = adrobj^}};
+	bundle { //do the visiting
+		on visittable (adrtable, s3path) {
+			local (adr, dir = right);
+			if s3path endswith "/" {
+				s3path = string.delete (s3path, sizeof (s3path), 1)};
+			for adr in adrtable {
+				local (name = nameof (adr^), mypath = s3path + "/" + name);
+				adrvisit^ (adr, mypath);
+				if not defined (adr^.etag) {
+					visittable (adr, mypath)}}};
+		visittable (adrtable, s3path)}}
+«bundle //test code
+	«local (adrmytable = @scratchpad.myfunkydori)
+	«on visit (adrtable, path)
+		«if defined (adrtable^.etag)
+			«adrmytable^.[path] = adrtable^
+		«return (true)
+	«new (tabletype, adrmytable)
+	«visitReverseChronologic ("/beta.fargo.io/users/scripting/", @visit)
+	«edit (adrmytable)
+
+

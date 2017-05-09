@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.target.get
+
+on get () {
+	kernel (target.get)}
+
+

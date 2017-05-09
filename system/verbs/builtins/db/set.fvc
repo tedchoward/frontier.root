@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.db.set
+
+on set (celladdress, value) {
+	celladdress^ = value}
+
+

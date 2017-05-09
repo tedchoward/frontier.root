@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.view
+
+on view (obj) { «open a remote text file for viewing
+	return (appleEvent (Fetch.id, 'FTCh', 'VwFi', '----', objspec (obj)))}
+
+

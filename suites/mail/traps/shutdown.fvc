@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:suites.mail.traps.shutdown
+
+local (i);
+for i = 1 to sizeof (mail.drivers) {
+	try {mail.drivers [i].setNotification (false)}}
+
+

@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.buttons.instantOutline.["00003000\tBuddies"]
+
+«Changes
+	«7/15/10; 12:00:19 PM by DW
+		«Created. 
+thread.callScript (@io.client.openBuddyOutline, {})
+
+

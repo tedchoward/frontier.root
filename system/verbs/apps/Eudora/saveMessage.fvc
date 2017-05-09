@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.saveMessage
+
+on saveMessage (msgObj) { «Save a message
+	with objectModel, Eudora, eventInfo {
+		return (core.save (id, msgObj))}}
+
+

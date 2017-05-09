@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BarChart.getBarValue
+
+on getBarValue (n) { «returns the value of the indicated bar
+	return (appleEvent (BarChart.id, 'BARC', 'gval', '----', short (n)))}
+
+

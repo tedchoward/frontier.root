@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.identica.getFollowers
+
+on getFollowers (adrfollowers, username=user.identica.prefs.username, password=user.identica.prefs.password, server="identi.ca") {
+	«Changes
+		«3/12/09; 5:27:25 AM by DW
+			«New optional param, server, allows you to post to another instance of Laconica.
+		«7/19/08; 10:56:36 AM by DW
+			«Works now, no longer under construction.
+		«7/17/08; 10:17:31 PM by DW
+			«Doesn't work, identi.ca returns API method under construction..
+	local (url = "http://" + server + "/api/statuses/followers.xml");
+	return (twitter.getfriends (adrfollowers, username, password, url, flFollowers:true))}
+«bundle //test code
+	«getFollowers (@scratchpad.identicaFollowers, server:"home.smallpicture.com")
+
+

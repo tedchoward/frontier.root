@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.daveNetMassager
+
+on daveNetMassager (indent, macWidth, text) {
+	kernel (string.daveNetMassager)}
+
+

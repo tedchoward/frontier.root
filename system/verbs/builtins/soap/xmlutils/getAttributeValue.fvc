@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.xmlutils.getAttributeValue
+
+on getAttributeValue (adrelement, name) {
+	if defined (adrelement^.["/atts"].[name]) {
+		return (adrelement^.["/atts"].[name])};
+	return (false)}
+
+

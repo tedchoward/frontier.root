@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.globals.long
+
+on long (val) {
+	kernel (lang.long)}
+
+

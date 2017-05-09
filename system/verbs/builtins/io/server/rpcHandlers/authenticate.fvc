@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.server.rpcHandlers.authenticate
+
+on authenticate (username, password) {
+	«Changes
+		«8/8/10; 5:26:26 AM by DW
+			«Created. Throw an error if the username and password aren't valid, otherwise return true.
+	io.server.validatePassword (username, password);
+	return (true)}
+
+

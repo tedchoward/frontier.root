@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.sendNow
+
+on sendNow (msgObj) {
+	with Eudora, eventInfo {
+		queue (msgObj);
+		connect (sendMail:true, wait:false)}}
+		«No longer supported by current Eudoras
+			«return (appleEvent (id, kEudoraSuite, kEuQueue, '----', msgObj, keyEuQueue, kEuSendNow))
+
+

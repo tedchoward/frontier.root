@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.getDatePath
+
+on getDatePath (chseparator=file.getpathchar (), theDate=clock.now (), flLastSeparator=true) {
+	«Changes
+		«5/18/11; 11:48:28 AM by DW
+			«Believe it or not, it doesn't work if chseparator is a character. So we coerce it to a string upfront in case anyone calls it with a character.
+		«1/4/09; 6:37:24 PM by DW
+			«New optional param, flLastSeparator, default true. If false, we don't include the last separator character. In some cases the days don't represent folders, they are files, so you don't want the separator character at the end.
+		«6/15/07; 5:09:26 PM by DW
+			«This code has been replicated for years in dozens of places.
+	local (day, month, year, hour, minute, second);
+	date.get (theDate, @day, @month, @year, @hour, @minute, @second);
+	month = string.padwithzeros (month, 2);
+	day = string.padwithzeros (day, 2);
+	local (sep = string (chseparator)); //5/18/11 by DW
+	if flLastSeparator {
+		return (year + sep + month + sep + day + sep)}
+	else {
+		return (year + sep + month + sep + day)}}
+«bundle //test code
+	«dialog.alert (getDatePath ('/'))
+
+

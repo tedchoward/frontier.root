@@ -1,0 +1,34 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.OAuth.authenticatedCall
+
+on authenticatedCall (endpoint, adrparams, consumerkey, consumersecret, token, tokensecret, adrresult, method="GET") {
+	«Changes
+		«3/26/11; 10:11:38 AM by DW
+			«New optional parameter, method, default GET.
+		«3/6/09; 9:43:02 AM by DW
+			«Commented debugging code.
+		«2/12/09; 12:36:18 PM by DW
+			«Created. Herein lies the crux of the biscuit. The Raison d'etre. The piece de resistance. The purpose of our enterprise. Here, dear reader, is why we have been dancing as long as we have been, so we can make a call as we used to, before OAuth, one that doesn't involve sending a password in the clear. Hall Ay Loooooo Yah!! 
+			«You load up the params table with all the crap you want to send to the server. We'll add some of our own crap and a signature, and call the stinking server on your behalf. If the stinker decides to respond, we'll shoot the shit back atcha.
+			«http://term.ie/oauth/example/echo_api.php?oauth_version=1.0&oauth_nonce=556b569f1b04dffcc1c8784b954e3bf1&oauth_timestamp=1234469657&oauth_consumer_key=key&method=foo%2520bar&bar=baz&oauth_token=accesskey&oauth_signature_method=HMAC-SHA1&oauth_signature=XqxPk9YgcKs42%2BjzPisH1SbE%2F8Q%3D
+	adrparams^.oauth_version = "1.0";
+	adrparams^.oauth_nonce = OAuth.getNonce ();
+	adrparams^.oauth_timestamp = OAuth.getTimeStamp ();
+	adrparams^.oauth_consumer_key = consumerKey;
+	adrparams^.oauth_signature_method = "HMAC-SHA1";
+	adrparams^.oauth_token = token;
+	«scratchpad.requestparams = adrparams^
+	adrparams^.oauth_signature = OAuth.getSignature (adrparams, endpoint, consumersecret, tokenSecret, method);
+	local (s = OAuth.httpClient (endpoint, adrparams, method));
+	«wp.newtextobject (s, @scratchpad.authenticatedcallresult); edit (@scratchpad.authenticatedcallresult)
+	adrresult^ = s;
+	return (true)}
+«bundle //test code
+	«local (endpoint = "http://term.ie/oauth/example/echo_api.php", params)
+	«new (tabletype, @params)
+	«params.method = "dickhead"
+	«params.bar = "mcgee"
+	«params.killer = "kowalski"
+	«local (consumerkey = "key", consumersecret = "secret")
+	«authenticatedCall (endpoint, @params, consumerkey, consumersecret, scratchpad.accesstoken, scratchpad.accesstokensecret, @scratchpad.result)
+
+

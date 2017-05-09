@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.re.testing.match
+
+local (patternRef);
+patternRef = re.compile ("([a-z]+)");
+dialog.notify (re.match (patternRef, "Hello World!"))
+
+

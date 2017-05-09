@@ -1,0 +1,66 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.mainResponder.adminSite.website.["#homeTemplate"]
+
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" style="background-image: url('/mainResponderResources/adminSite/headerBackground'); background-repeat: no-repeat;">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr> 
+			<td colspan="2">
+				<table width="100%" cellpadding="0" border="0" cellspacing="0"><tr>
+					<td width="1"><img src="/mainResponderResources/adminSite/shim" width="1" height="36"></td>
+					<td align="center"><%menu ("white")%></td>
+					</tr></table>
+				</td>
+			</tr>
+		<tr> 
+			<td width="175"><img src="/mainResponderResources/adminSite/shim" width="175" height="45" border="0" usemap="#header"><map name="header"><area shape="rect" href="http://frontier.userland.com/" coords="13, 7, 166, 29" /></map></td>
+			<td align="right"><a href="http://www.userland.com/"><img src="/mainResponderResources/adminSite/userlandLogo" width="140" height="20" border="0"></a></td>
+			</tr>
+		</table>
+	<div align="center">
+		<table width="90%" border="0" cellspacing="0" cellpadding="4">
+			<tr>
+				<td valign="top">
+					<table border="0" width="100%" cellspacing="12" cellpadding="0">
+						<tr>
+							<td valign="top">
+								<p><font size="+1"><b><%viewPageTitle ()%></b></font></p>
+								{bodytext}
+								</td>
+							<td width="30">&nbsp;</td>
+							<td width="160" valign="top"> 
+								<div align="center"><%mainResponder.adminSite.macros.search ()%></div>
+								<table width="160" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td width="11"><img src="/mainResponderResources/adminSite/box/topLeft" width="11" height="12"></td>
+										<td background="/mainResponderResources/adminSite/box/top"><img src="/mainResponderResources/adminSite/box/top" width="5" height="12"></td>
+										<td width="15"><img src="/mainResponderResources/adminSite/box/topRight" width="15" height="12"></td>
+										</tr>
+									<tr>
+										<td width="11" background="/mainResponderResources/adminSite/box/left"><img src="/mainResponderResources/adminSite/box/left" width="11" height="4"></td>
+										<td bgcolor="#EEEEEE"><%mainResponder.adminSite.macros.statusCenter ()%></td>
+										<td width="15" background="/mainResponderResources/adminSite/box/right"><img src="/mainResponderResources/adminSite/box/right" width="15" height="6"></td>
+										</tr>
+									<tr>
+										<td width="11"><img src="/mainResponderResources/adminSite/box/bottomLeft" width="11" height="16"></td>
+										<td background="/mainResponderResources/adminSite/box/bottom"><img src="/mainResponderResources/adminSite/box/bottom" width="4" height="16"></td>
+										<td width="15"><img src="/mainResponderResources/adminSite/box/bottomRight" width="15" height="16"></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+	<br /><br /><br />
+	<hr width="95%" size="1">
+	<br />
+	<div align="center">
+		&copy; Copyright 2001-<%date.year ()%> <a href="http://www.userland.com/">UserLand Software, Inc</a>.<br />
+		<font size="-1"><i>Last update: <%timeModified (adrobject)%>.</i></font><br />
+		</div>
+	</body>
+</html>
+
+
+

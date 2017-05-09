@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.test.tst1
+
+on tst1 () { «see the Testing suite for a call to this trap
+	«it's in the "Test Frontier on Net" script
+		«select UserLand Testing Suite from the Suites menu
+		«we just return the user's name from this root
+	return (user.name)}
+
+

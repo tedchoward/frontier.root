@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.["DDE "].Iack
+
+on Iack (rInfo, sInfo, topic, name) {
+	«msg ("Received Iack: " + rinfo + ", " + sInfo + ", " + topic)
+	if not DDE.waitingForIack {
+		return (false)};
+	if DDE.senderInfo != rInfo { «not the ack we're waiting for
+		return (false)};
+	DDE.waitingForIack = false; «we're done waiting
+	DDE.transactionID = system.verbs.traps.trapTransaction; «this event's transaction ID
+	DDE.receiverInfo = sInfo;
+	return (true)}
+
+

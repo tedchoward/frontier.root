@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.extractUserInfo
+
+on extractUserInfo (adrstatus, adrtable, flnewtable=true) {
+	«Changes
+		«5/21/09; 3:19:18 PM by DW
+			«Created. This code was being replicated, so I factored it.
+	local (adruser = xml.getaddress (adrstatus, "user"));
+	if flnewtable {
+		new (tabletype, adrtable)};
+	adrtable^.userId = xml.getvalue (adruser, "id");
+	adrtable^.userName = xml.getvalue (adruser, "name");
+	adrtable^.userScreenName = xml.getvalue (adruser, "screen_name");
+	adrtable^.userLocation = xml.getvalue (adruser, "location");
+	adrtable^.userDescription = xml.getvalue (adruser, "description");
+	adrtable^.userProfileImageUrl = xml.getvalue (adruser, "profile_image_url");
+	adrtable^.userUrl = xml.getvalue (adruser, "url");
+	adrtable^.userFollowedBy = number (xml.getvalue (adruser, "followers_count")); //5/9/09 by DW
+	adrtable^.userFollows = number (xml.getvalue (adruser, "friends_count")); //5/9/09 by DW
+	adrtable^.userCtStatuses = number (xml.getvalue (adruser, "statuses_count")); //5/9/09 by DW
+	adrtable^.flProtected = xml.getvalue (adruser, "protected")} //12/8/07 by DW
+«bundle //test code
+	«extractUserInfo (@scratchpad.xstructusertimeline.["00002000\tstatuses"].["00002000\tstatus"], @scratchpad.userinfo)
+
+

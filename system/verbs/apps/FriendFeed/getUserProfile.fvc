@@ -1,0 +1,56 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FriendFeed.getUserProfile
+
+on getUserProfile (username, adrtable) {
+	«Changes
+		«12/24/08; 10:18:24 AM by DW
+			«Allow for the possibility of an empty nickname. atul had one in his profile. 
+				«http://friendfeed.com/api/user/atul/profile?format=xml
+		«7/21/08; 6:17:27 AM by DW
+			«Created.
+	local (url = "http://friendfeed.com/api/user/" + username + "/profile?format=xml");
+	new (tabletype, adrtable);
+	new (tabletype, @adrtable^.subscriptions);
+	new (tabletype, @adrtable^.rooms);
+	new (tabletype, @adrtable^.services);
+	local (xmltext = tcp.httpreadurl (url, flmessages:false), xstruct, adr);
+	xml.compile (xmltext, @xstruct);
+	local (adruser = xml.getaddress (@xstruct, "user"));
+	«scratchpad.xstruct = xstruct
+	adrtable^.status = xml.getvalue (adruser, "status");
+	adrtable^.name = xml.getvalue (adruser, "name");
+	adrtable^.profileUrl = xml.getvalue (adruser, "profileUrl");
+	adrtable^.nickname = xml.getvalue (adruser, "nickname");
+	adrtable^.id = xml.getvalue (adruser, "id");
+	for adr in adruser { //subscriptions
+		if nameof (adr^) endswith "subscription" {
+			local (nickname = xml.getvalue (adr, "nickname"));
+			local (adrsub = @adrtable^.subscriptions.[nickname]);
+			if sizeof (nickname) > 0 { //12/24/08 by DW
+				new (tabletype, adrsub);
+				adrsub^.profileUrl = xml.getvalue (adr, "profileUrl");
+				adrsub^.id = xml.getvalue (adr, "id");
+				adrsub^.name = xml.getvalue (adr, "name")}}};
+	for adr in adruser { //rooms
+		if nameof (adr^) endswith "room" {
+			local (nickname = xml.getvalue (adr, "nickname"));
+			local (adrsub = @adrtable^.rooms.[nickname]);
+			new (tabletype, adrsub);
+			adrsub^.url = xml.getvalue (adr, "url");
+			adrsub^.id = xml.getvalue (adr, "id");
+			adrsub^.name = xml.getvalue (adr, "name")}};
+	for adr in adruser { //services
+		if nameof (adr^) endswith "service" {
+			local (size = sizeof (adrtable^.services));
+			local (adrsub = @adrtable^.services.[string.padwithzeros (size+1, 3)]);
+			new (tabletype, adrsub);
+			adrsub^.url = xml.getvalue (adr, "url");
+			adrsub^.iconUrl = xml.getvalue (adr, "iconUrl");
+			adrsub^.id = xml.getvalue (adr, "id");
+			adrsub^.name = xml.getvalue (adr, "name");
+			try {adrsub^.profileUrl = xml.getvalue (adr, "profileUrl")};
+			try {adrsub^.username = xml.getvalue (adr, "username")}}}};
+bundle { //testcode
+	getUserProfile ("atul", @scratchpad.userprofile);
+	edit (@scratchpad.userprofile)}
+
+

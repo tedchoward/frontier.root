@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.danish.strings.members.checkMembershipWrongEmailAddress
+
+Can't send you the cookie for [[mailaddress]] because there is no user with that email address.
+
+

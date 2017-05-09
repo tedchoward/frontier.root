@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.join
+
+on join (exprStr, adrList) {
+	return (dll.call (regex.data.getPath (), "regjoinverb", string (exprStr), list (adrList^)))}
+
+

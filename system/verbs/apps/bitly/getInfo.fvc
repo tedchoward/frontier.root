@@ -1,0 +1,30 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.bitly.getInfo
+
+on getInfo (shortUrl, adrtable) {
+	«Changes
+		«7/8/08; 12:29:42 PM by DW
+			«Created.
+	local (id = string.lastfield (shorturl, "/"));
+	local (url = "http://bit.ly/feed.php?id=" + id);
+	local (xmltext = tcp.httpreadurl (url), xstruct);
+	xml.compile (xmltext, @xstruct);
+	«scratchpad.xstruct = xstruct
+	new (tabletype, adrtable);
+	local (adrtop = xml.getaddress (@xstruct, "shortenedUrl"));
+	adrtable^.longUrl = xml.getvalue (adrtop, "long");
+	adrtable^.shortUrl = xml.getvalue (adrtop, "short");
+	adrtable^.mirrorUrl = xml.getvalue (adrtop, "mirror");
+	local (adrthumbnails = xml.getaddress (adrtop, "thumbnails"));
+	adrtable^.thumbSmall = xml.getvalue (adrthumbnails, "small");
+	adrtable^.thumbMedium = xml.getvalue (adrthumbnails, "medium");
+	adrtable^.thumbLarge = xml.getvalue (adrthumbnails, "large");
+	adrtable^.clicks = xml.getvalue (adrtop, "clicks");
+	local (adrreferrers = xml.getaddress (adrtop, "referrers"), adr);
+	new (tabletype, @adrtable^.referrers);
+	for adr in adrreferrers {
+		if nameof (adr^) endswith "referrer" {
+			adrtable^.referrers.[xml.getvalue (adr, "source")] = xml.getvalue (adr, "clicks")}}};
+bundle { //test code
+	getinfo ("http://bit.ly/19C5VS", @scratchpad.urlinfo)}
+
+

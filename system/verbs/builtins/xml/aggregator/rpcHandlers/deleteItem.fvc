@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.aggregator.rpcHandlers.deleteItem
+
+on deleteItem (itemId, username, password) {
+	«Changes
+		«11/6/02; 1:53:34 PM by JES
+			«Created. Delete an item.
+	xml.aggregator.securityForRpc (client, username, password);
+	local (adrdata = xml.aggregator.init ());
+	local (adrstories = @adrdata^.stories);
+	local (adritem = @adrstories^.[string.padWithZeros (itemId, 8)] );
+	if not defined (adritem^) {
+		scriptError ("Can't delete the item because there is no item with an id of \"" + itemId + "\".")};
+	adrdata^.trash.[nameOf (adritem^)] = adritem^;
+	delete (adritem);
+	return (true)}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.duplicate
+
+on duplicate (obj, duplicateTo = nil) { «Duplicate an object
+	return (core.duplicate (Fetch.id, obj, duplicateTo))}
+
+

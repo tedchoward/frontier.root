@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.rpcHandlers.subscriptions.["#security"]
+
+if not config.mainresponder.prefs.flSubscriptions {
+	scriptError ("The Subscriptions service is not enabled on this server.")}
+
+

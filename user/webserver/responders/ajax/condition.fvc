@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:user.webserver.responders.ajax.condition
+
+(string.lower (path) beginswith "/ajaxResponder/")
+
+

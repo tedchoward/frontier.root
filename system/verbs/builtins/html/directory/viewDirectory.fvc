@@ -1,0 +1,410 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.directory.viewDirectory
+
+on viewDirectory (adrxstruct, path="", opmlUrl="", commentTemplate="", foldericon="", linkicon="", miniXmlIcon="", adrHtmlText=nil, ctsteps=0, flFolderIcons=true) {
+	«Changes
+		«10/23/12; 11:48:25 AM by DW
+			«Set the value of pta^.adrdirectoryitem even if we're returning because adrHtmlText has already been set by a callback. This gets the Atts debugging popup to work again.
+				«http://worknotes.scripting.com/october2012/102312ByDw/workingOnStatsAtts
+		«5/15/12; 2:55:49 AM by DW
+			«Allow the user to override the display of directory nodes. This allows "directory" to be another nodetype, and treated exactly the same as all the others. The only difference is that it's the default nodetype. If a node doesn't have a type, it's treated as if it had a type of directory.
+		«4/26/12; 9:22:40 AM by DW
+			«Simplify crumbstring creation, include pta^.directoryAtts.breadcrumbs in a div, don't include last element.
+				«http://worknotes.scripting.com/april2012/42612ByDw/crumbTrailHasOneTooManyEntriesInIt
+		«4/24/12; 9:24:55 AM by DW
+			«Removed the rules array. It wasn't being used, yet its address was being passed to the walk routine.
+		«4/19/12; 9:52:14 AM by DW
+			«If you add a ?format=opml at the end of a url, you get back the OPML version of the page.
+				«http://worknotes.scripting.com/april2012/41912ByDw/xmlIconsSpecific
+		«4/17/12; 11:38:44 AM by DW
+			«If an item in a directory has a domain attribute, link to that instead of linking through the hierarchy.
+		«3/11/12; 6:03:37 PM by DW
+			«Two new directory attributes, urlNext and urlPrev, used in the Prev/Next macro.
+		«3/9/12; 10:36:27 AM by DW
+			«Hot-up any node that has a nodetype. Assume there's something to display when the user clicks on it.
+				«http://worknotes.scripting.com/march2012/3912ByDw/nodesWithTypesInDirectories/
+		«1/6/12; 9:42:49 AM by DW
+			«Implement nodetype-like templates for directories.
+		«1/4/12; 9:31:10 AM by DW
+			«New optional param, flFolderIcons, defaults true.
+		«10/6/11; 9:02:29 AM by DW
+			«When returning OPML, set pta^.directoryAtts.flProcessHtmlText false so the caller doesn't try to do macro substitutions.
+		«9/28/11; 6:58:22 PM by DW
+			«If you would display a single element in the crumb trail, don't display anything at all. A single-element crumbtrail gives no information and it's just annoying.. 
+		«9/23/11; 9:48:25 AM by DW
+			«No id attribute on directory items.
+		«8/27/11; 4:08:38 AM by DW
+			«Use faster form of "add" routine.
+		«7/28/11; 1:17:39 PM by DW
+			«If there are params on the HTTP request, they are copied into the atts table. 
+		«7/21/11; 6:14:52 PM by DW
+			«If an item has a "visible" attribute and it's false, don't display it in the list. Useful for putting special files for Google Webmaster Tools. They don't have to appear in a listing of the directory, but a direct request to them has to work.
+		«7/20/11; 10:54:29 AM by DW
+			«Switch hitcount code to just call new routine, html.directory.bumpHitCount. 
+		«7/19/11; 9:20:10 AM by DW
+			«Text of link nodes are linked to the place the node points to. 
+		«7/17/11; 12:30:43 PM by DW
+			«Don't assume there is an Accept header, check first. When a request comes in via a script it might not have an Accept header. Google's Webmaster Tools verifier doesn't have it, nor did my test script. 
+		«7/5/11; 2:43:01 PM by DW
+			«Remove miniXmlCoffeeMugIcon param, it wasn't being used for anything.
+		«7/1/11; 7:01:46 PM by DW
+			«Support for the new experimental "redirect" nodetype.
+		«7/1/11; 4:32:56 PM by DW
+			«Undefined nodetypes appear as text comments. Nodetypes with no explicit code here but with getNodeText handlers installed, appear as folders. You can click on them, and view the content they contain or describe.
+		«6/30/11; 6:20:49 PM by DW
+			«Fixed up display of link nodetypes, and got rid of valign="top" where it appeared.
+		«6/30/11; 3:04:33 PM by DW
+			«Core routine totally rebuilt. Reduced to a minimal subset that works, and will be easily maintained. There had been years of accumulated special code grafted on, all of it done ten years ago. 
+	local (adrdata = html.directory.init (), pta = html.getpagetableaddress (), now = clock.now (), urlForLink, flSkipLeadingComment = false);
+	local (ctpagehits = 0, ownername, owneremail, modified, created, crumblist = {}, adrlastxstruct, flAllLevels=false, args);
+	on titleToId (title) {
+		local (id = title, i, ch);
+		for i = sizeof (id) downto 1 {
+			ch = id [i];
+			if (not string.isalpha (ch)) and (not string.isnumeric (ch)) and (ch != ' ') {
+				id = string.delete (id, i, 1)}};
+		id = string.innerCaseName (id);
+		«scratchpad.id = id
+		return (id)};
+	on shortdate (d) {
+		local (day, month, year, hour, minute, second);
+		date.get (date (d), @day, @month, @year, @hour, @minute, @second);
+		return (month + "/" + day + "/" + string.mid (year, 3, 2))};
+	«bundle //save off debugging values, 6/29/11 by DW
+		«if  string.lower (pta^.host) contains "fontdemo"
+			«if not defined (scratchpad.vdstuff)
+				«new (tabletype, @scratchpad.vdstuff)
+			«scratchpad.vdstuff.params = pta^
+			«scratchpad.vdstuff.adrxstruct = adrxstruct
+			«scratchpad.vdstuff.remainingPath = path
+			«scratchpad.vdstuff.opmlUrl = opmlUrl
+			«scratchpad.vdstuff.ctsteps = ctsteps
+	«scratchpad.vdparams = pta^
+	bundle { //maintenence flags, 5/15/11 by DW
+		if not defined (adrdata^.flags.resetHits) { //5/15/11 by DW
+			new (tabletype, @adrdata^.hits);
+			adrdata^.flags.resetHits = now}};
+	bundle { //stats
+		adrdata^.stats.ctViewDirectories++;
+		adrdata^.stats.whenLastViewDirectory = now};
+	bundle { //bump hit counter for page
+		ctpagehits = html.directory.bumpHitCount (pta)}; //7/20/11 by DW
+		«old code
+			«local (adrhost = @adrdata^.hits.[pta^.host], adrhit)
+			«if not defined (adrhost^)
+				«new (tabletype, adrhost)
+			«adrhit = @adrhost^.[string.urldecode (pta^.uri)]
+			«if not defined (adrhit^)
+				«new (tabletype, adrhit)
+				«adrhit^.ct = 0
+			«adrhit^.whenLastAccess = now
+			«ctpagehits = ++adrhit^.ct
+		«bundle //stack dump
+			«if not defined (adrdata^.dumps)
+				«new (tabletype, @adrdata^.dumps)
+			«if not defined (adrdata^.stats.ctstackdumps)
+				«adrdata^.stats.ctstackdumps = 0
+			«local (adrtable = @adrdata^.dumps.[string.padwithzeros (adrdata^.stats.ctstackdumps++, 5)])
+			«thread.getstackdump (adrtable)
+			«adrtable^.idthread = thread.getCurrentID ()
+			«adrtable^.params = pta^
+	bundle { //set defaults for optional parameters
+		if commentTemplate == "" {
+			commentTemplate = html.directory.data.defaultPrefs.commentTemplate};
+		if (foldericon == "") and flFolderIcons {
+			foldericon = html.directory.data.defaultPrefs.foldericon};
+		if linkicon == "" {
+			linkicon = html.directory.data.defaultPrefs.linkicon};
+		if miniXmlIcon == "" {
+			miniXmlIcon = html.directory.data.defaultPrefs.miniXmlIcon}};
+	bundle { //parse HTTP args into atts table, 7/28/11 by DW
+		if defined (pta^.searchargs) {
+			if sizeof (pta^.searchargs) > 0 {
+				local (adrarg);
+				new (tabletype, @args);
+				webserver.parseargs (pta^.searchargs, @args);
+				for adrarg in @args {
+					pta^.directoryAtts.[nameof (adrarg^)] = adrarg^}}}};
+	bundle { //convert an OPML accept header into a format param, 5/16/12 by DW
+		if defined (pta^.requestHeaders.Accept) {
+			local (acceptHeader = pta^.requestHeaders.Accept);
+			if acceptHeader contains "text/x-opml" {
+				pta^.directoryAtts.format = "opml"}}};
+	pta^.directoryAtts.ctsteps = ctsteps; //5/4/12 by DW
+	
+	local (adritem = html.directory.walk (adrxstruct, path, @crumblist, @adrlastxstruct, @opmlUrl, adrHtmlText, @pta^.directoryAtts));
+	
+	bundle { //return early if adrHtmlText has been set, 5/4/11 by DW
+		if adrHtmlText != nil {
+			if sizeof (adrHtmlText^) > 0 {
+				if not pta^.directoryAtts.flProcessHtmlText {
+					pta^.responseHeaders.["Content-Type"] = "text/html";
+					
+					pta^.adrdirectoryitem = adritem; //10/23/12 by DW
+					
+					return}}}};
+	bundle { //get ownername, owneremail, etc
+		local (adropml = xml.getaddress (adrlastxstruct, "opml"));
+		local (adrhead = xml.getaddress (adropml, "head"));
+		bundle { //set ownername
+			try {
+				ownername = xml.getvalue (adrhead, "ownerName")}
+			else {
+				ownername = user.prefs.name}};
+		bundle { //set owneremail
+			try {
+				 owneremail = xml.getvalue (adrhead, "ownerEmail")}
+			else {
+				owneremail = user.prefs.mailaddress}};
+		bundle { //set modified
+			try {
+				modified = shortdate (xml.getvalue (adrhead, "dateModified"))}
+			else {
+				modified = shortdate (now)}};
+		bundle { //set created
+			try {
+				created = shortdate (xml.getvalue (adrhead, "dateCreated"))}
+			else {
+				created = shortdate (now)}}};
+	bundle { //look for OPML request -- simplified -- 5/16/12 by DW
+		if defined (pta^.directoryAtts.format) and (string.lower (pta^.directoryAtts.format) == "opml") {
+			adrHtmlText^ = html.directory.buildOpmlReturn (adritem, ownername, owneremail);
+			pta^.responseHeaders.["Content-Type"] = "text/x-opml";
+			pta^.directoryAtts.flProcessHtmlText = false; //10/6/11 by DW
+			return}};
+		«local (flopml = false)
+		«if defined (args.format) and (string.lower (args.format) == "opml") //4/19/12 by DW
+			«flopml = true
+		«else
+			«if defined (pta^.requestHeaders.Accept) //7/17/11 by DW
+				«local (acceptHeader = pta^.requestHeaders.Accept)
+				«if acceptHeader contains "text/x-opml"
+					«flopml = true
+		«if flopml
+			«adrHtmlText^ = html.directory.buildOpmlReturn (adritem, ownername, owneremail)
+			«pta^.responseHeaders.["Content-Type"] = "text/x-opml"
+			«pta^.directoryAtts.flProcessHtmlText = false //10/6/11 by DW
+			«return
+	bundle { //add info to pta about the directory, 6/14/11 by DW
+		pta^.adrdirectoryitem = adritem};
+	bundle { //look for allLevels attribute, 6/16/11 by DW
+		if defined (adritem^.["/atts"].allLevels) {
+			flAllLevels = adritem^.["/atts"].allLevels}};
+	bundle { //set the page title, the last item in the crumblist
+		local (sizecrumblist = sizeof (crumblist));
+		if sizecrumblist > 0 {
+			pta^.title = crumblist [sizecrumblist]} //6/23/11 by DW
+		else {
+			pta^.title = "Top"}};
+	bundle { //set pta^.directoryAtts.breadcrumbs, 4/26/12 by DW
+		local (crumbstring = "");
+		if sizeof (crumblist) != ctsteps {
+			crumbstring = "<div class=\"divBreadCrumbs\">" + html.directory.getBreadcrumbString (crumblist, pta^.uri, true, ctsteps, false) + "</div>"};
+		pta^.directoryAtts.breadcrumbs = crumbstring};
+	bundle { //next-prev, 3/11/12 by DW
+		pta^.directoryAtts.urlNext = "";
+		pta^.directoryAtts.urlPrev = "";
+		if defined (pta^.directoryAtts.adrdirectoryparent) and (pta^.directoryAtts.adrdirectoryparent != nil) {
+			local (adrp = pta^.directoryAtts.adrdirectoryparent, ix = indexof (adritem^), adrprev, adrnext, sizep = sizeof (adrp^), urlparent);
+			bundle { //set urlparent
+				local (url = pta^.uri);
+				if url endswith "/" {
+					url = string.mid (url, 1, sizeof (url) - 1)};
+				loop {
+					if (sizeof (url) == 0) or (url [sizeof (url)] == "/") {
+						break};
+					url = string.mid (url, 1, sizeof (url) - 1)};
+				urlparent = url};
+			on geturl (ix) {
+				local (adr);
+				if (ix < 1) or (ix > sizep) {
+					return ("")};
+				adr = @adrp^ [ix];
+				try {
+					return (urlparent + html.directory.getcanonicalname (adr^.["/atts"].text))};
+				return ("")};
+			pta^.directoryAtts.urlPrev = geturl (ix - 1);
+			pta^.directoryAtts.urlNext = geturl (ix + 1)}};
+	«bundle //bump hit counter for page
+		«ctpagehits = html.directory.bumpHitCount (pta) //7/20/11 by DW
+		«old code
+			«local (adrhost = @adrdata^.hits.[pta^.host], adrhit)
+			«if not defined (adrhost^)
+				«new (tabletype, adrhost)
+			«adrhit = @adrhost^.[string.urldecode (pta^.uri)]
+			«if not defined (adrhit^)
+				«new (tabletype, adrhit)
+				«adrhit^.ct = 0
+			«adrhit^.whenLastAccess = now
+			«ctpagehits = ++adrhit^.ct
+		«bundle //stack dump
+			«if not defined (adrdata^.dumps)
+				«new (tabletype, @adrdata^.dumps)
+			«if not defined (adrdata^.stats.ctstackdumps)
+				«adrdata^.stats.ctstackdumps = 0
+			«local (adrtable = @adrdata^.dumps.[string.padwithzeros (adrdata^.stats.ctstackdumps++, 5)])
+			«thread.getstackdump (adrtable)
+			«adrtable^.idthread = thread.getCurrentID ()
+			«adrtable^.params = pta^
+	bundle { //set initial directoryAtts, maybe exit if we don't need to render directory
+		«pta^.directoryAtts.breadcrumbs = crumbstring
+		pta^.directoryAtts.editor = ownername;
+		pta^.directoryAtts.lastModDate = modified;
+		pta^.directoryAtts.hits = ctpagehits;
+		pta^.directoryAtts.opmlUrl = opmlUrl;
+		«pta^.directoryAtts.id = titleToId (pta^.title) //9/23/11 by DW -- commented
+		pta^.directoryAtts.suggestLink = ""; //some templates refer to this, 6/29/11 by DW
+		if adrHtmlText != nil {
+			if sizeof (adrHtmlText^) > 0 { //no need to render the directory, it's been over-ridden by a nodetype
+				pta^.directoryAtts.directory = adrHtmlText^;
+				if not defined (pta^.directoryAtts.subItems) { //nodetype code should set this, if applicable
+					pta^.directoryAtts.subItems = 1};
+				return}}};
+	
+	bundle { //if there's a directory template defined in the user's templates outline, use that instead
+		if worldOutlineSuite.viewNodetype (adritem, @pta^.directoryAtts, adrhtmltext, "directory") {
+			return}};
+	
+	bundle { //build the directory page body in pta^.directoryAtts.directory
+		local (htmltext = "", indentlevel = 0, flAtLeastOneLink = false, ctsubitems = 0);
+		on add (s) {
+			htmltext = htmltext + (string.filledstring ("\t", indentlevel) + s + "\r");
+			return (0)};
+		on addItem (adr) {
+			local (adrsub, adratts = @adr^.["/atts"], url = "", icon = "", flfolder = false, type = "text", thumbnail = "", linktitle = "");
+			local (text = xml.entityDecode (adratts^.text, flAlphaEntities:true), canonicalname = html.directory.getcanonicalname (text));
+			«local (itemid = "id=\"id_directoryItem_" + titleToId (text) + "\"")
+			local (itemid = "", folderurl, flhassubs, flcomment);
+			
+			bundle { //if it has "visible" attribute and it's false, exit, 7/21/11 by DW
+				if defined (adratts^.visible) {
+					if not adratts^.visible {
+						return}}};
+			bundle { //if comment, add it and return (bump ctsubitems)
+				flcomment = false;
+				if defined (adratts^.isComment) {
+					if adratts^.isComment {
+						local (s);
+						if flSkipLeadingComment {
+							flSkipLeadingComment = false;
+							return};
+						s = string.replace (commentTemplate, "{comment}", text);
+						add ("<li class=\"directoryComment\"" + itemid + ">" + s + "</li>");
+						ctsubitems++;
+						return}};
+				ctsubitems++};
+			bundle { //set folderurl, the url to use if the node can be displayed on its own directory page
+				if defined (adratts^.domain) { //4/17/12 by DW
+					folderurl = "http://" + adratts^.domain + "/"}
+				else {
+					folderurl = pta^.uri;
+					if not (folderurl beginswith "/") {
+						folderurl = "/" + folderurl};
+					if not (folderurl endswith "/") {
+						folderurl = folderurl + "/"};
+					folderurl = folderurl + canonicalname}};
+			bundle { //set flhassubs, if first sub is comment, set linktitle
+				local (adrsub);
+				flhassubs = false;
+				for adrsub in adr {
+					if nameof (adrsub^) endswith "outline" {
+						local (adrsubatts = @adrsub^.["/atts"]);
+						if defined (adrsubatts^.isComment) {
+							if adrsubatts^.isComment {
+								linktitle = " title=\"" + adrsubatts^.text + "\""}};
+						flhassubs = true;
+						break}}};
+			on addfolder (xmlUrl="", thumbnail="") {
+				local (xmllink = "");
+				if sizeof (xmlurl) > 0 {
+					xmlLink = "&nbsp;<a href=\"" + xmlurl + "\" class=\"directoryXmlIcon\" title=\"Click to view the XML source for &quot;" + string.replaceAll (text, "\"", "&quot;") + "&quot;.\">" + miniXmlIcon + "</a>"};
+				add ("<li class=\"directoryItem\" " + itemid + ">"  + "<a class=\"directoryLink\" href=\"" + folderurl + "\"" + linktitle + ">" + foldericon + text + "</a>" + thumbnail + xmlLink + "</li>")};
+			on addlink (theLink) {
+				local (icon = html.getFavIconHtml (theLink));
+				local (linkedtext = "<a href=\"" + theLink + "\">" + text + "</a>"); //7/19/11 by DW
+				local (s = "<li class=\"directoryComment\" " + itemid + ">" + icon + "&nbsp;&nbsp;" + linkedtext + "</li>");
+				add (s)};
+			bundle { //if there's a type on the node, do what's called for
+				if defined (adratts^.type) {
+					case adratts^.type {
+						"include" {
+							addfolder ();
+							return};
+						"link" {
+							if string.lower (adratts^.url) endswith ".opml" {
+								addfolder ()}
+							else {
+								addlink (adratts^.url)};
+							return};
+						"rss" {
+							addfolder (adratts^.xmlurl);
+							return};
+						"photo" {
+							addfolder ();
+							return};
+						"redirect" {
+							addfolder (); //7/1/11 by DW
+							return};
+						"blogpost" {
+							addfolder ();
+							return};
+						"code" {
+							addfolder ();
+							return}}
+					else {
+						addfolder (); //3/9/12 by DW
+						return;
+						}}};
+						«local (adrcallback = @adrdata^.callbacks.getNodeText.[adratts^.type])  //7/1/11 by DW
+						«if defined (adrcallback^)
+							«addfolder ()
+							«return
+			bundle { //if we're still here, it's either a head with subs, or a head
+				if flhassubs {
+					addfolder ();
+					return ("folder")} //last bit of crud
+				else {
+					add ("<li class=\"directoryComment\" " + itemid + ">" + text + "</li>");
+					return}}};
+		
+		add ("<ul class=\"ulDirectory\">"); indentlevel++;
+		if flAllLevels { //add this level and all sub-levels
+			on addlevel (adrparent) {
+				local (adr);
+				for adr in adrparent {
+					if nameof (adr^) endswith "outline" {
+						if addItem (adr) == "folder" {
+							add ("<ul class=\"ulDirectory\">");
+							addlevel (adr);
+							add ("</ul>")}}}};
+			addlevel (adritem)}
+		else { //add only items at this level
+			local (adr);
+			for adr in adritem {
+				if nameof (adr^) endswith "outline" {
+					addItem (adr)}}};
+		add ("</ul>"); indentlevel--;
+		
+		bundle { //run the html text through a template as if it were a nodetype, 1/5/12 by DW
+			if defined (worldOutlineSuite.viewDirectoryCallback) {
+				worldOutlineSuite.viewDirectoryCallback (adritem, @pta^.directoryAtts, @htmltext);
+				}};
+		
+		pta^.directoryAtts.directory = htmltext;
+		pta^.directoryAtts.subItems = ctsubitems};
+	bundle { //send the attributes back through pta^.directoryAtts
+		if adrHtmlText != nil {
+			if sizeof (adrHtmlText^) > 0 {
+				pta^.directoryAtts.directory = adrHtmlText^}}}};
+bundle { //test code
+	html.setpagetableaddress (@scratchpad.vdstuff.params);
+	viewDirectory (scratchpad.vdstuff.adrxstruct, scratchpad.vdstuff.remainingPath, scratchpad.vdstuff.opmlUrl, adrHtmlText: @scratchpad.vdstuff.htmltext, ctsteps:scratchpad.vdstuff.ctsteps);
+	}
+	«local (t); new (tableType, @t); html.setPageTableAddress (@t)
+	«bundle //set up pagetable
+		«t.uri = "/foo/testDirectory/directoriesAtUserland"
+		«t.method = "GET"
+	«local (adroutline = @system.temp.windowTypes.windows[1].window)
+	«webBrowser.displayText (viewDirectory (adroutline, "http://localhost/foo/testDirectory", "directoriesAtUserland/radioUserland", title:"Test directory"))
+	«html.deletePageTableAddress ()
+
+

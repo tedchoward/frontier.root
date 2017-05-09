@@ -1,0 +1,30 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.buttons.archive.["00004000\tNew Post"]
+
+«Changes
+	«11/7/12; 6:17:32 PM by DW
+		«If there's a window attribute named newPostType create a node of that type.
+			«http://worknotes.scripting.com/november2012/11712ByDw/theNewPostButton
+	«10/6/12; 12:01:41 PM by DW
+		«If you hold down the Shift key and click on the New Post button, we apply the default type to the current headline. If you hold down the Option key, a dialog appears asking what the default type should be. 
+			«http://worknotes.scripting.com/october2012/10612ByDw/modifierKeysAndNewPost
+	«10/5/12; 1:16:03 PM by DW
+		«Created. 
+local (adrdata = opmleditor.worldoutline.init (), dir = down, now = clock.now (), theType);
+bundle { //set theType -- 11/7/12 by DW
+	if not window.attributes.getOne ("newPostType", @theType) {
+		theType = adrdata^.prefs.newPostType}};
+if kb.shiftkey () {
+	op.attributes.setone ("type", theType);
+	speaker.beep ()}
+else {
+	if kb.optionkey () {
+		dialog.ask ("Type for New Post button?", @theType)}
+	else {
+		if op.subsexpanded () {
+			dir = right};
+		op.insert ("", dir);
+		op.attributes.setone ("type", theType);
+		op.attributes.setone ("created", date.netstandardstring (now));
+		wp.settextmode (true)}}
+
+

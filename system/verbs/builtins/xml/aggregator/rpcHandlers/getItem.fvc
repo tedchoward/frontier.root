@@ -1,0 +1,26 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.aggregator.rpcHandlers.getItem
+
+on getItem (itemId, username, password) {
+	«Changes
+		«11/6/02; 1:27:12 PM by JES
+			«Created. Return a struct with info about the item specified by itemId. The struct contains:
+				«itemId -- the id of the item
+				«itemText -- the contents of the item
+				«channelTitle -- the title of the channel which contains the item
+				«url -- the url of the RSS feed which contains the item
+				«when -- the date/time the item was read by the aggregator
+	xml.aggregator.securityForRpc (client, username, password);
+	local (adrdata = xml.aggregator.init ());
+	local (adrstories = @adrdata^.stories);
+	local (adritem = @adrstories^.[string.padWithZeros (itemId, 8)] );
+	if not defined (adritem^) {
+		scriptError ("Can't get the item because there is no item with an id of \"" + itemId + "\".")};
+	local (t); new (tableType, @t); //the struct to return
+	t.itemId = nameOf (adritem^);
+	t.itemText = adritem^.storytext;
+	t.channelTitle = adritem^.channeltitle;
+	t.url = adritem^.url;
+	t.when = adritem^.time;
+	return (t)}
+
+

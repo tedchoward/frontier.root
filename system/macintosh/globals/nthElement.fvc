@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.globals.nthElement
+
+on nthElement (class, n, container) {
+	return (setObj (class, container, formPosition, n))}
+
+

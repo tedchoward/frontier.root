@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.server.archiveWebsite.["#objectnotfoundhandler"]
+
+on ["#objectnotfoundhandler"] () {
+	«Changes
+		«8/28/10; 2:18:35 PM by DW
+			«The elements of the pagetable are globals when we're called.
+			«remainingPath is something like this: davewiner/2010/08/28/002.opml
+	local (s = remainingPath);
+	local (username = string.nthfield (s, "/", 1));
+	local (adruser = io.server.initUser (username));
+	local (year = string.nthfield (s, "/", 2));
+	local (month = string.nthfield (s, "/", 3));
+	local (day = string.nthfield (s, "/", 4));
+	local (docname = string.nthfield (s, "/", 5)); //002.opml
+	docname = string.nthfield (docname, ".", 1);
+	local (adrtable = @adruser^.calendar.[year].[month].[day].[docname]);
+	responseHeaders.["Content-Type"] = "text/xml";
+	return (adrtable^.opmltext)}
+
+

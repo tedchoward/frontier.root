@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.serverMenuItem
+
+if inetd.isDaemonRunning (@user.inetd.config.http) {
+	return ("Stop")};
+return ("Start")
+
+

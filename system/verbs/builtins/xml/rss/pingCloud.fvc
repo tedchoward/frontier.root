@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.rss.pingCloud
+
+on pingCloud (urlRss) {
+	«Changes
+		«7/19/11; 11:10:26 AM by DW
+			«Read the feed, get the cloud element, and ping the server. We're assuming this is one of our servers, set-up to receive xml-rpc-based pings. If not, well -- I guess it'll fail. :-)
+	local (items, info, server);
+	new (tabletype, @info);
+	new (tabletype, @items);
+	xml.rss.getFeedItems (urlRss, @items, @info);
+	server = "xmlrpc://" + info.cloud.domain + ":" + info.cloud.port + "/RPC2";
+	[server].rssCloud.ping (urlRss)};
+bundle { //test code
+	pingCloud ("http://static.reallysimple.org/worldoutline/dave/rss.xml")}
+
+

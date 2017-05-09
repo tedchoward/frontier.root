@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.turnNotificationOn
+
+on turnNotificationOn (appPath=nil, whatEvent=nil) {
+	if (appPath == nil) {
+		appPath = Frontier.getProgramPath()}; « use Frontier
+	with Eudora, eventInfo {
+		return (appleEvent (id, kEudoraSuite, kEuStartNotifying, '----', alias (appPath), when, whatEvent))}}
+
+

@@ -1,0 +1,15 @@
+FrontierVcsFile:3:wptx:system.extensions.odbc.queryTool.QueryResult
+
+
+
+---------------------------------- NEW QUERY ----------------------------------
+QUERY STRING:
+-------------
+select * from guests
+-------------
+
+1	George	Jones	iam@drunk.com	NULL	
+
+
+
+

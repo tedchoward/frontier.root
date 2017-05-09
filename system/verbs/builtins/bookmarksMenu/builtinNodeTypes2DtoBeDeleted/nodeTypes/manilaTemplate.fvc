@@ -1,0 +1,18 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.bookmarksMenu.["builtinNodeTypes-toBeDeleted"].nodeTypes.manilaTemplate
+
+on manilaTemplate (adrLogic, adrTitle) {
+	local (url);
+	if op.attributes.getOne ("siteUrl", @url) {
+		local (templateType);
+		if op.attributes.getOne ("manilaType", @templateType) {
+			adrLogic^ = "playlist.manila.openTemplateForEditing (\"" + url + "\", \"" + templateType + "\")";
+			if not op.attributes.getOne ("displaySiteName", @title) {
+				adrTitle^ = op.getlinetext ()}
+			else {
+				op.attributes.getOne ("displaySiteName", adrTitle);
+				if defined (user.playlist.manila.sites.[adrTitle^].displaySiteName) {
+					adrTitle^ = user.playlist.manila.sites.[adrTitle^].displaySiteName};
+				adrTitle^ = adrTitle^ + ": " + op.getLineText ()}}};
+	return (true)}
+
+

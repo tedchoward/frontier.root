@@ -1,0 +1,52 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FriendFeed.getRoomProfile
+
+on getRoomProfile (roomname, adrtable, username=nil, remotekey=nil) {
+	«Changes
+		«2/27/09; 9:41:49 AM by DW
+			«Commented debugging code.
+		«1/18/09; 9:01:36 AM by DW
+			«New glue script. Get the profile of the room. The username and remotekey are optional, they must be provided if it's a private room and they must apply to a member of the room.
+	local (url = "http://friendfeed.com/api/room/" + roomname + "/profile?format=xml");
+	«clipboard.putvalue (url) //2/27/09 by DW -- commented
+	new (tabletype, adrtable);
+	new (tabletype, @adrtable^.members);
+	new (tabletype, @adrtable^.administrator);
+	
+	local (xmltext, xstruct, adr);
+	bundle { //make HTTP call
+		if username != nil {
+			xmltext = tcp.httpreadurl (url, flmessages:false, username:username, password:remotekey)}
+		else {
+			xmltext = tcp.httpreadurl (url, flmessages:false)}};
+	xml.compile (xmltext, @xstruct);
+	«scratchpad.xroomstruct = xstruct
+	
+	local (adrroom = xml.getaddress (@xstruct, "room"));
+	adrtable^.status = xml.getvalue (adrroom, "status");
+	adrtable^.description = xml.getvalue (adrroom, "description");
+	adrtable^.url = xml.getvalue (adrroom, "url");
+	adrtable^.nickname = xml.getvalue (adrroom, "nickname");
+	adrtable^.id = xml.getvalue (adrroom, "id");
+	adrtable^.name = xml.getvalue (adrroom, "name");
+	
+	local (adradministrator = xml.getaddress (adrroom, "administrator"));
+	adrtable^.administrator.profileUrl = xml.getvalue (adradministrator, "profileUrl");
+	adrtable^.administrator.nickname = xml.getvalue (adradministrator, "nickname");
+	adrtable^.administrator.id = xml.getvalue (adradministrator, "id");
+	adrtable^.administrator.name = xml.getvalue (adradministrator, "name");
+	
+	bundle { //members
+		local (adrmember);
+		for adrmember in adrroom {
+			if nameof (adrmember^) endswith "member" {
+				local (nickname = xml.getvalue (adrmember, "nickname"));
+				local (adrsub = @adrtable^.members.[nickname]);
+				new (tabletype, adrsub);
+				adrsub^.profileUrl = xml.getvalue (adrmember, "profileUrl");
+				adrsub^.id = xml.getvalue (adrmember, "id");
+				adrsub^.name = xml.getvalue (adrmember, "name")}}}}
+«bundle //test code
+	«getRoomProfile ("instant-outline-beta", @scratchpad.roomprofile, user.friendfeed.prefs.username, user.friendfeed.prefs.remotekey)
+	«edit (@scratchpad.roomprofile)
+
+

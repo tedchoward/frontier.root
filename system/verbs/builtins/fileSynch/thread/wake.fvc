@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fileSynch.thread.wake
+
+«Changes
+	«7/8/06; 3:27:10 PM by DW
+		«Called from Frontier.tools.data.windowTypes.outlinerFile.save.
+local (adr);
+for adr in @user.filesynch.synchpoints {
+	adr^.stats.whenNextCheck = date (0)};
+if thread.isSleeping (system.temp.filesynch.idThread) {
+	thread.wake (system.temp.filesynch.idThread)}
+
+

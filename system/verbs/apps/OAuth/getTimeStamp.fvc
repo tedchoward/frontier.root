@@ -1,0 +1,18 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.OAuth.getTimeStamp
+
+on getTimeStamp () {
+	«Changes
+		«2/11/09; 8:53:17 PM by DW
+			«In GMT!
+		«2/11/09; 7:20:16 PM by DW
+			«Created. Return a Unix timestamp, the number of seconds since January 1, 1970.
+	local (now = clock.now () - date.getcurrenttimezone ());
+	return (number (now - date.set (1, 1, 1970, 0, 0, 0)))};
+bundle { //test code
+	local (i);
+	window.about ();
+	for i = 1 to 10 {
+		msg (gettimestamp ());
+		clock.waitseconds (1)}}
+
+

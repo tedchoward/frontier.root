@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FinderClassic.getInfo
+
+on getInfo (path) { «open the Get Info window for the indicated file
+	if not Finder.folderVerb ('sinf', path) {
+		return (false)};
+	return (Finder.bringToFront ())}
+
+

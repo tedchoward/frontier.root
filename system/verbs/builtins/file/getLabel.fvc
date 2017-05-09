@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.getLabel
+
+on getLabel (path) {
+	kernel (file.getLabel)}
+
+

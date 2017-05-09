@@ -1,0 +1,45 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.downloadSubBucket
+
+on downloadSubBucket (bucketname, subpath, bucketfolder, flSkipIfCurrent=true, flLog=false) {
+	«Changes
+		«5/6/07; 9:22:37 AM by DW
+			«Add boolean, flSkipIfCurrent, if true, we check if the file already exists locally and has a current mod date -- if so, we don't download.
+			«Add boolean, flLog, if true, we log file downloads and errors.
+		«5/6/07; 8:46:42 AM by DW
+			«Don't put the bucketname at the beginning of the file path, because it's already included in the path that Amazon reports, resulting in the bucketname being repeated. 
+		«5/5/07; 8:10:23 PM by DW
+			«Comment out debugging code. Set modification and creation date on files.
+		«5/5/07; 10:59:23 AM by DW
+			«WIthin the indicated bucket, download all the elements whose name begins with subpath.
+	«file.openfolder (bucketfolder)
+	local (structuretable, adr, objectpath, f, bits, relpath);
+	if not (subpath beginswith "/") {
+		subpath = "/" + subpath};
+	s3.getBucket (bucketname + subpath, @structuretable);
+	«scratchpad.structuretable = structuretable
+	for adr in @structuretable {
+		local (fldownload = true, name = nameof (adr^), startticks = clock.ticks ());
+		local (relpath = xml.entitydecode (name, true), objectpath = bucketname + "/" + relpath);
+		local (f = bucketfolder + string.replaceall (relpath, "/", file.getpathchar ()));
+		if flSkipIfCurrent {
+			if file.exists (f) {
+				if file.modified (f) == adr^.modified {
+					fldownload = false}}};
+					«log.addtooutline ("Skip: " + objectpath)
+		if fldownload {
+			file.surefilepath (f);
+			try {
+				bits = s3.getobject (objectpath, flmessages:true);
+				file.writewholefile (f, bits);
+				file.setmodified (f, adr^.modified);
+				file.setcreated (f, adr^.modified);
+				local (sizestring = string.megabytestring (file.size (f)));
+				if fllog {
+					log.addtooutline ("Download: " + objectpath + " (" + sizestring + ")",  startticks:startticks)}}
+			else {
+				if fllog {
+					log.addtooutline ("Download error: " + objectpath + " (" + tryerror + ")",  startticks:startticks)}}}}};
+bundle { //test code
+	downloadSubBucket ("scripting", "/backups/", "Macintosh HD:S3 Structure:scripting:")}
+
+

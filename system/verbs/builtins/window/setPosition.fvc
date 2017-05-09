@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.window.setPosition
+
+on setPosition (adr, horiz, vert) {
+	kernel (window.setposition)}
+
+

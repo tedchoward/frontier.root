@@ -1,0 +1,7 @@
+FrontierVcsFile:3:wptx:suites.people.webAdmin.deleteUser
+
+#title "Delete User"
+{deleteUser ()}
+{goBack ()}
+
+

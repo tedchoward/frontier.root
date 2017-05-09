@@ -1,0 +1,26 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.init
+
+on init () {
+	«Changes
+		«2/15/12; 11:45:10 AM by DW
+			«Now that we're rendering here, we have a need for prefs and stats. 
+	local (adrdata = @config.op);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)};
+		if not defined (adrdata^.prefs.flRenderCache) {
+			adrdata^.prefs.flRenderCache = true}};
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)};
+		if not defined (adrdata^.stats.ctRenderCacheRefs) {
+			adrdata^.stats.ctRenderCacheRefs = 0};
+		if not defined (adrdata^.stats.ctRenderCacheStores) {
+			adrdata^.stats.ctRenderCacheStores = 0}};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

@@ -1,0 +1,31 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.mainResponder.controlPanel.["#tools"].defaultForm
+
+<form method="POST" action="newSite">
+	[errormessage]
+	<b>Site name:</b>
+	<p>
+	The site name becomes part of the URL, as in [baseUrl]xYz/.
+	<p>
+	<input size="30" maxlength="25" name="siteName" value="[siteName]">
+	<p>
+	<b>Managing editor name:</b>
+	<p>
+	<input size="30" name="sysopName" value="[sysopName]">
+	<p>
+	<b>Managing editor email address:</b>
+	<p>
+	<input size="30" name="sysopEmailAddress" value="[sysopEmail]">
+	<p>
+	<b>Managing editor password:</b>
+	<p>
+	<input size="30" name="sysopPassword" type="password"  value="[sysopPassword]">
+	<p>
+	<b>Confirm password:</b>
+	<p>
+	<input size="30" name="confirmSysopPassword" type="password" value="[sysopPassword]">
+	<p>
+	<input type="submit" value="Create Site">
+	</form>
+
+
+

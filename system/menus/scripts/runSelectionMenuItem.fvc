@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.runSelectionMenuItem
+
+case sys.os () {
+	"MacOS" {
+		return ("Run Selection")}}
+else {
+	return ("&Run Selection")}
+
+

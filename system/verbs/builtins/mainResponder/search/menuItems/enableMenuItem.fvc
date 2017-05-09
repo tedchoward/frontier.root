@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.search.menuItems.enableMenuItem
+
+if config.mainResponder.prefs.flSearchEngine {
+	return ("Disable Search Engine")};
+return ("Enable Search Engine")
+
+

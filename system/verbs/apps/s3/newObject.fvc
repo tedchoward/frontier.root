@@ -1,0 +1,31 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.newObject
+
+on newObject (relpath, data, type=nil, adrmeta=nil, acl="public-read") {
+	«Changes
+		«5/11/13; 10:31:59 AM by DW
+			«If the type is not specified, and the extension is .opml, and there is no entry for that type in the ext2MIME table, use the type "text/xml".
+		«4/12/06; 4:37:34 AM by DW
+			«If type is nil, try to get the type from user.webserver, based on the extension.
+		«4/11/06; 9:33:36 AM by DW
+			«Created.
+	local (response);
+	local (adrdata = s3.init ());
+	local (apiUrl = adrdata^.accounts.[adrdata^.currentaccount].apiurl);
+	if type == nil {
+		local (extension = string.nthfield (relpath, ".", string.countfields (relpath, ".")));
+		local (adrtype = @user.webserver.prefs.ext2MIME.[extension]);
+		if defined (adrtype^) {
+			type = adrtype^}
+		else {
+			if string.lower (extension) == "opml" { //5/11/13 by DW
+				type = "text/xml"}
+			else {
+				type = "text/plain"}}};
+	response = s3.httpClient ("PUT", relpath, content:data, adrMeta:adrmeta, content_type:type, acl:acl);
+	«scratchpad.response = response
+	return (apiUrl + relpath)};
+bundle { //test code
+	local (i, filetext = string.filledstring ("123456789 ", 1000));
+	webbrowser.openurl (newObject ("/dwiner/tesxxxt" + 1 + ".txt", clock.now () + string (this^), nil))}
+
+

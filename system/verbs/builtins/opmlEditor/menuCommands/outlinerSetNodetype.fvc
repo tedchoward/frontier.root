@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.outlinerSetNodetype
+
+on outlinerSetNodetype () {
+	«Changes
+		«5/8/11; 7:38:53 PM by DW
+			«Code for the Set nodetype command in the Outliner menu.
+	local (type);
+	op.attributes.getone ("type", @type);
+	if dialog.ask ("Type attribute for this headline?", @type) {
+		op.attributes.setone ("type", type)}};
+bundle { //test code
+	outlinerSetNodetype ()}
+
+

@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.catalog
+
+«Changes
+	«7/29/08; 10:44:06 AM by DW
+		«Created. 
+local (pta = html.getpagetableaddress ());
+pta^.title = "Tool Catalog";
+return (opmlEditor.viewCatalog ())
+
+

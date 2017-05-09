@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.adminSite.website.["#tools"].viewPageTitle
+
+on viewPageTitle () {
+	local (pta = html.getpagetableaddress (), fltitleonpage = true);
+	if defined (pta^.flTitleOnPage) {
+		fltitleonpage = pta^.flTitleOnPage};
+	if fltitleonpage {
+		return (pta^.title)}
+	else {
+		return ("")}}
+
+

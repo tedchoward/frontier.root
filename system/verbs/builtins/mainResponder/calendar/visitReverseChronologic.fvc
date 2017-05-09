@@ -1,0 +1,41 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.calendar.visitReverseChronologic
+
+on visitReverseChronologic (adrcal, adrvisit, flDayLevel=false, maxDays=nil) {
+	«Changes
+		«3/24/11; 9:31:57 AM by DW
+			«Add optional param, maxDays. If non-nil, limits the number of days we're willing to go back in time. Used in River2.
+		«6/1/08; 10:29:09 AM by DW
+			«Add optional param, flDayLevel, if true, we don't dive into the days, we just visit the days themselves. Useful if you want do an HTML rendering of an archive on a day level.
+		«5/31/08; 7:51:41 PM by DW
+			«We were mistakenly calling the local test "visit" instead of the parameter.
+		«5/31/08; 7:20:23 PM by DW
+			«Created. Visit the elements of a calendar in reverse-chronologic order.
+	local (i, j, k, adryear, adrmonth, adrday, ctdays = 0);
+	for i = sizeof (adrcal^) downto 1 {
+		adryear = @adrcal^ [i];
+		for j = sizeof (adryear^) downto 1 {
+			adrmonth = @adryear^ [j];
+			for k = sizeof (adrmonth^) downto 1 {
+				adrday = @adrmonth^ [k];
+				if flDayLevel {
+					if not adrvisit^ (adrday) {
+						return}}
+				else {
+					local (l, adritem);
+					for l = sizeof (adrday^) downto 1 {
+						adritem = @adrday^ [l];
+						if not adrvisit^ (adritem) {
+							return}}};
+				if maxDays != nil { //3/24/11 by DW
+					if ++ctdays >= maxDays {
+						return}}}}}}
+«bundle //test code
+	«local (ct = 0)
+	«on visit (adr)
+		«msg (ct++)
+		«scratchpad.adr = adr
+		«return (true)
+	«window.about ()
+	«visitReverseChronologic (@config.river2.river, @visit, maxdays:5)
+
+

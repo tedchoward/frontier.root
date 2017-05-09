@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.getObjectSeeThru
+
+on getObjectSeeThru (name) {
+	local (atts);
+	if not card.getObjectAttributes (name, @atts) {
+		return ("")};
+	return (atts.tran)}
+
+

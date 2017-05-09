@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.code.util.prepareRepl
+
+for i = 0 to 255 {
+	tcp.im.builtinDrivers.aim.code.util.repl.[char(i)] = "\\x"+ string.mid(string.hex(i),5,2);
+	}
+
+

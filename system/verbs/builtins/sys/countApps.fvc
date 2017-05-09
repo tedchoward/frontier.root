@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.sys.countApps
+
+on countApps () {
+	kernel (sys.countapps)}
+
+

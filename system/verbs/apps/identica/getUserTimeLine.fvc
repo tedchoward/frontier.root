@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.identica.getUserTimeLine
+
+on getUserTimeLine (screenname, adrtable, server="identi.ca") {
+	«Changes
+		«3/12/09; 5:55:17 AM by DW
+			«New optional param, server, allows you to post to another instance of Laconica.
+		«7/17/08; 10:10:26 PM by DW
+			«Created.
+	local (url = "http://" + server + "/api/statuses/user_timeline/[[screenname]].xml");
+	return (twitter.getUserTimeLine (screenname, adrtable, url))};
+bundle { //test code
+	getUserTimeLine ("dave", @scratchpad.dwtimeline, "home.smallpicture.com")}
+
+

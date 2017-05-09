@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.installTool
+
+«Changes
+	«7/29/08; 11:28:18 AM by DW
+		«Created. 
+local (pta = html.getpagetableaddress (), args);
+new (tabletype, @args);
+webserver.parseargs (pta^.searchargs, @args);
+«scratchpad.args = args; edit (@scratchpad.args)
+frontier.bringtofront ();
+if dialog.confirm ("Install \"" + args.name + "\"?") {
+	thread.callscript (@opmlEditor.installTool, {args.name})};
+bundle { //redirect
+	local (url = opmlEditor.data.urls.toolCatalogPage);
+	pta^.code = 302; //temporary redirect
+	pta^.responseBody = webserver.util.buildErrorPage ("302 FOUND", "Found the page.");
+	pta^.responseHeaders.location = url;
+	pta^.responseHeaders.URI = url}
+
+

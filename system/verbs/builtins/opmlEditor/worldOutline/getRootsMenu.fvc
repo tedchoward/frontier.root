@@ -1,0 +1,32 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.getRootsMenu
+
+on getRootsMenu (adrmenubar, menuname) {
+	«Changes
+		«2/12/12; 3:32:06 PM by DW
+			«New way of getting server info.
+		«1/21/12; 1:46:14 PM by DW
+			«Run this utility script to get a menu object with all your roots as commands.
+				«http://worknotes.scripting.com/january2012/12412ByDw/yourRootsInAMenu/
+	local (adrdata = opmlEditor.worldOutline.init (), adrroot, rootstable);
+	local (server, username, password);
+	opmlEditor.worldOutline.getServerInfo (@server, @username, @password); //2/11/12 by DW
+	bundle { //make the XML-RPC call, fill rootstable
+		rootstable = [server].worldoutline.getrootlist (username, password)};
+		«scratchpad.rootstable = rootstable
+	bundle { //init the new menubar object
+		new (menubartype, adrmenubar);
+		target.set (adrmenubar);
+		op.setlinetext (menuname)};
+	for adrroot in @rootstable {
+		local (title = adrroot^.defaultAtts.outlineTitle, url = nameof (adrroot^));
+		local (logic = "opmlEditor.worldOutline.openArchivedOutline (\"" + url + "\", \"" + title + "\")");
+		menu.addMenuCommand (adrmenubar, menuname, title, logic)};
+	bundle { //neaten up the menu
+		op.firstsummit ();
+		editmenu.setfontsize (14);
+		window.zoom (adrmenubar)}};
+bundle { //test code
+	getRootsMenu (@scratchpad.testmenu, "My Roots");
+	edit (@scratchpad.testmenu)}
+
+

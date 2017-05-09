@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.getAttributeValue
+
+on getAttributeValue (adrtable, name) { //return the value of the attribute with the indicated name
+	kernel (xml.getAttributeValue)}
+
+

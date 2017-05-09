@@ -1,0 +1,47 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.pikeRenderer.sample
+
+#renderOutlineWith "pikeRenderer"
+#pikeRendererDriver "html"           
+<rules>
+	<rule level="1" to="1">
+		<textStyle>bold</textStyle>
+		<textColor>navy</textColor>
+		<textFace>jokerman</textFace>
+		<textSize>largest</textSize>
+		<labeling>numeric</labeling>
+		</rule>
+	<rule>
+		<outlineSpacing>1.5</outlineSpacing>
+		</rule>
+	<rule level="2" to="infinity">
+		<textFace>georgia</textFace>
+		<leftIndent>25</leftIndent>
+		</rule>
+	</rules>
+This is an outline rendered by the Pike Renderer
+	Each of the top-level items is bold, and the text underneath is plain.
+	<rules><rule><textColor>green</textColor><textStyle>italic</textStyle></rule></rules>
+	This is done with MORE-like "rules" that are specified in XML.
+This is a top-level item
+	This is some text underneath the top-level item.
+A single-spaced list
+	<rules><rule><outlineSpacing>1</outlineSpacing></rule></rules>
+	West
+		California
+		Oregon
+		Washington
+		Nevada
+	Mid-Atlantic
+		Delaware
+		New Jersey
+		New York
+		Pennsylvania
+	Southwest
+		Arizona
+		New Mexico
+		Utah
+		Colorado
+		Texas
+
+
+

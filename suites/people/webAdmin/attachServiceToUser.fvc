@@ -1,0 +1,7 @@
+FrontierVcsFile:3:wptx:suites.people.webAdmin.attachServiceToUser
+
+#title "Attach Service To User"
+{attachServiceToUser ()}
+{goBack ()}
+
+

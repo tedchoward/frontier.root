@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.neuterMacros
+
+on neuterMacros (s, adrTable) { //6.1
+	kernel (html.neutermacros)}
+
+

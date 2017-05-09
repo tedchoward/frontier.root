@@ -1,0 +1,24 @@
+FrontierVcsFile:3:optx:system.extensions.regex.docServer.quoteRE
+
+#title "regex.quoteRE"
+#renderOutlineWIth "docServerRenderer"
+Syntax
+	regex.quoteRE (s)
+Params
+	s is a string.
+Action
+	Quotes all  metacharacters in s.
+Returns
+	The quoted string.
+Examples
+	regex.quoteRE ("Hello?")
+		// "Hello\\?"
+Notes
+	Escaping a metacharacter tells the regex engine to treat any metacharacters in a pattern as literals, rather than as metacharacters.
+	
+	This verb allows you to test a string to see if there are any metacharacters that need escaping.
+	
+	Alternatively, if you automatically generate a pattern, you may not want any characters in the pattern to be treated as metacharcters.
+
+
+

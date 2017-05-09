@@ -1,0 +1,49 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.client.init
+
+on init (adrdata) {
+	«Changes
+		«8/12/10; 6:20:30 AM by DW
+			«Init randomString.
+		«8/8/10; 10:55:13 AM by DW
+			«The stats, prefs and callbacks are stored in the system table now. 
+		«7/21/10; 11:47:14 AM by DW
+			«Init adrdata^.client.stats.ctConsecutiveErrors.
+		«7/19/10; 3:35:54 PM by DW
+			«Created. 
+	if not defined (adrdata^.client) {
+		new (tabletype, @adrdata^.client)};
+	bundle { //prefs
+		if not defined (adrdata^.client.prefs) {
+			new (tabletype, @adrdata^.client.prefs)};
+		if not defined (adrdata^.client.prefs.enabled) {
+			adrdata^.client.prefs.enabled = true};
+		if not defined (adrdata^.client.prefs.randomString) {
+			adrdata^.client.prefs.randomString = string.getrandompassword (15, false)}};
+		«if not defined (adrdata^.client.prefs.server)
+			«adrdata^.client.prefs.server = "xmlrpc://127.0.0.1:5337/RPC2"
+		«if not defined (adrdata^.client.prefs.username)
+			«adrdata^.client.prefs.username = ""
+		«if not defined (adrdata^.client.prefs.password)
+			«adrdata^.client.prefs.password = ""
+	bundle { //stats
+		if not defined (adrdata^.client.stats) {
+			new (tabletype, @adrdata^.client.stats)}}};
+		«if not defined (adrdata^.client.stats.ctRealtimeThreadStarts)
+			«adrdata^.client.stats.ctRealtimeThreadStarts = 0
+		«if not defined (adrdata^.client.stats.ctRealtimeLoops)
+			«adrdata^.client.stats.ctRealtimeLoops = 0
+		«if not defined (adrdata^.client.stats.ctErrors)
+			«adrdata^.client.stats.ctErrors = 0
+		«if not defined (adrdata^.client.stats.ctUpdates)
+			«adrdata^.client.stats.ctUpdates = 0
+		«if not defined (adrdata^.client.stats.ctConsecutiveErrors) //7/21/10 by DW
+			«adrdata^.client.stats.ctConsecutiveErrors = 0
+	«bundle //callbacks
+		«if not defined (adrdata^.client.callbacks)
+			«new (tabletype, @adrdata^.client.callbacks)
+		«if not defined (adrdata^.client.callbacks.handleUpdate)
+			«new (tabletype, @adrdata^.client.callbacks.handleUpdate)
+bundle { //test code
+	init (@realtimeData)}
+
+

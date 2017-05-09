@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.setModalTimeout
+
+on setModalTimeout (timeout) {
+	kernel (dialog.setModalCardTimeout)}
+
+

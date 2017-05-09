@@ -1,0 +1,31 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.rss.defaultCloud.init
+
+on init () {
+	local (adrdata = @config.defaultCloud);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)};
+		if not defined (adrdata^.prefs.server) {
+			adrdata^.prefs.server = "rpc.rsscloud.org"};
+		if not defined (adrdata^.prefs.port) {
+			adrdata^.prefs.port = 5337};
+		if not defined (adrdata^.prefs.path) {
+			adrdata^.prefs.path = "/rsscloud/pleaseNotify"};
+		if not defined (adrdata^.prefs.protocol) {
+			adrdata^.prefs.protocol = "http-post"};
+		if not defined (adrdata^.prefs.registerProcedure) {
+			adrdata^.prefs.registerProcedure = ""}};
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)};
+		if not defined (adrdata^.stats.ctPings) {
+			adrdata^.stats.ctPings = 0};
+		if not defined (adrdata^.stats.feeds) {
+			new (tabletype, @adrdata^.stats.feeds)}};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

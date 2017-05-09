@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FinderClassic.pageSetup
+
+on pageSetup (windowpath) {
+	if not Finder.windowVerb ('pgsu', windowpath) {
+		return (false)};
+	return (Finder.bringToFront ())}
+
+

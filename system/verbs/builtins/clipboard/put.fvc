@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.clipboard.put
+
+on put (type, adr) {
+	kernel (clipboard.put)}
+
+

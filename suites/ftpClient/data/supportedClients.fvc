@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.ftpClient.data.supportedClients
+
+«this is a script instead of a constant so it can become smarter if it needs to
+return ({Fetch.id, Anarchie.id})
+
+

@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.["#tools"].homePageAddress
+
+on homePageAddress (linetext) {
+	«Changes
+		«7/28/08; 11:53:59 AM by DW
+			«Created. Used in the prefs, it links back to the home page of the OPML Editor prefs system.
+	local (url = "http://" + tcp.dns.getmydottedid () + ":5337/opmlEditor/prefs");
+	return ("<a href=\"" + url + "\">" + linetext + "</a>")}
+
+

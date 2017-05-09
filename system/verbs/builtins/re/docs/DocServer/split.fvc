@@ -1,0 +1,39 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.re.docs.DocServer.split
+
+#title "re.split"
+#renderOutlineWith "docServerRenderer"
+Syntax
+	re.split (cp, s, maxSplits)
+Params
+	cp is a binary param containing the compiled pattern that was returned by a call to "re.compile".
+	s is a string param containing the target string.
+	maxSplits is an optional number param specifying the upper limit on the number of splits to be performed on the target string. Default is infinity.
+Action
+	Attempts to match the compiled pattern against successive character positions in the target string, using the pattern as a delimiter to split the target string into fields.
+Returns
+	A list of strings containing the 
+Examples
+	local (s = "www.userland.com")
+	re.split (re.compile ("\\."), s)
+		// {"www", "userland", "com"}
+	re.split (re.compile ("\\."), s, maxSplits: 2)
+		// {"www", "userland.com"}
+	local (s2 = ".www.scripting.com")
+	re.split(re.compile ("(\\.)"), s2)
+		// {"", ".", "www", ".", "userland", ".", "com"}
+Errors
+	An error will be generated if the cp param is not a valid byte-code representation of a regular expression.
+Notes
+	re.split returns the parts of the target string between successive matches of the compiled pattern, unlike most other verbs which return the matched parts themselves in some form.
+	If parentheses are used to create numbered or named groups in the pattern, the returned list will also contain any substrings matched by the groups in the same order as they appear in the pattern.
+	If the pattern matches at the beginning or end of the target string, an empty string will be inserted at the beginning or end of the result list, respectively. If a match is followed by another match with no unmatched characters between them, an empty string will be added to the list.
+	maxSplits puts an upper limit on the number of splits to be performed on the target string.
+	The kernel implementation of the re verbs is based on the Perl Compatible Regular Expressions (PCRE) library. This is the same library used by Python, Apache, and PHP. Mandatory excerpt from the PCRE license:
+		Regular expression support is provided by the PCRE library package, which is open source software, written by Philip Hazel, and copyright by the University of Cambridge, England.
+		The source code for the PCRE library is available for download from ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/
+See Also
+	"re.compile"
+	"re.join"
+
+
+

@@ -1,0 +1,36 @@
+FrontierVcsFile:3:scpt:user.webserver.responders.ajax.methods.any
+
+on any (pta) {
+	«Changes
+		«3/20/2012; 11:34:21 AM by DW
+			«Created.
+	local (returnstring = "", startticks = clock.ticks ());
+	case string.lower (pta^.path) {
+		"/ajaxResponder/membervalidate" {
+			local (flvalid, args, startticks = clock.ticks ());
+			«scratchpad.ajaxmemberparams = pta^
+			bundle { //set args, flvalid
+				flvalid = false;
+				new (tabletype, @args);
+				webserver.parseargs (pta^.searchargs, @args);
+				if defined (args.username) and defined (args.password) {
+					flvalid = opmlEditor.member.validate (args.username, args.password)}};
+			bundle { //set returnstring
+				«local (xstruct)
+				«new (tabletype, @xstruct)
+				«xml.addvalue (@xstruct, "valid", string (flvalid))
+				«xml.addvalue (@xstruct, "serialnum", string (random (0, infinity)))
+				«xml.addvalue (@xstruct, "ticks", string (clock.ticks () - startticks))
+				«xml.addvalue (@xstruct, "adrresponder", string (this))
+				«returnstring = args.callback + " (" + json.decompile (@xstruct) + ")"
+				«returnstring = args.callback + "({\"valid\": \"" + string (flvalid) + "\"})"
+				returnstring = args.callback + " (\"" + string (flvalid) + "\")";
+				scratchpad.ajaxreturn = returnstring}}};
+	pta^.responseHeaders.["Content-Type"] = "application/json";
+	pta^.responseBody = returnstring;
+	pta^.code = 200;
+	return (true)};
+bundle { //test code
+	any (@scratchpad.ajaxparams)}
+
+

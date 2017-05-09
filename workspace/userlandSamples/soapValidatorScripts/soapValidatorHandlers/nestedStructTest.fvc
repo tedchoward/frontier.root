@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:workspace.userlandSamples.soapValidatorScripts.soapValidatorHandlers.nestedStructTest
+
+on nestedStructTest (myStruct) {
+	local (adrmoelarrycurly = @myStruct.["year2000"].["month04"].["day01"]);
+	return (adrmoelarrycurly^.moe + adrmoelarrycurly^.larry + adrmoelarrycurly^.curly)}
+
+

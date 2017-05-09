@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.rez.getStringResource
+
+on getStringResource (path, id, adr) {
+	local (s);
+	if not rez.getresource (path, 'STR ', id, @s) {
+		return (false)};
+	adr^ = string.mid (s, 2, short (string.nthChar (s, 1)));
+	return (true)}
+
+

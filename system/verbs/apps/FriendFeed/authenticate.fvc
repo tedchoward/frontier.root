@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FriendFeed.authenticate
+
+on authenticate (username, remotekey) {
+	«Changes
+		«8/6/08; 8:06:36 AM by DW
+			«Validates the username/remotekey combination. Cribbed from builtins.identica.
+	local (url = "http://friendfeed.com/api/validate", adrcache);
+	bundle { //check the cache
+		adrcache = @system.temp.friendFeedAuthentications;
+		if not defined (adrcache^) {
+			new (tabletype, adrcache)};
+		adrcache = @adrcache^.[username];
+		if defined (adrcache^) {
+			if adrcache^ == remotekey {
+				return (true)}}};
+	try {
+		local (urllist = string.urlsplit (url));
+		local (s = tcp.httpClient (server:urllist [2], path:urllist [3], ctFollowRedirects:2, flMessages:false, username:username, password:remotekey));
+		if tcp.httpGetStatusCode (s) == 200 { //valid login
+			adrcache^ = remotekey;
+			return (true)}};
+	return (false)}
+«bundle //test code
+	«dialog.alert (authenticate ("georgematesky", "fuckyou!"))
+	«dialog.alert (authenticate (user.friendFeed.prefs.username, user.friendFeed.prefs.remotekey))
+
+

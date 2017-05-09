@@ -1,0 +1,21 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Pownce.init
+
+«Changes
+	«3/1/08; 7:37:06 PM by DW
+		«Created.
+if not defined (user.pownce) {
+	new (tabletype, @user.pownce)};
+if not defined (user.pownce.prefs) {
+	new (tabletype, @user.pownce.prefs)};
+if not defined (user.pownce.prefs.username) {
+	user.pownce.prefs.username = ""};
+if not defined (user.pownce.prefs.password) {
+	user.pownce.prefs.password = ""};
+if not defined (user.pownce.prefs.appKey) {
+	user.pownce.prefs.appKey = "j36ua408pvr94136zlcj5h56xhk5uncn"};
+if not defined (user.pownce.prefs.secret) {
+	user.pownce.prefs.secret = "8y6ghep4ffw4818785ftp1qnj57c0as5"};
+if not defined (user.pownce.prefs.timeOutSecs) {
+	user.pownce.prefs.timeOutSecs = 180}
+
+

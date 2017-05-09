@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.core.setd
+
+on setd (obj, data) {
+	if nameOf (obj^) == "" { «invalid address
+		scriptError (-1728)}; «no such object
+	obj^ = data;
+	return (true)}
+
+

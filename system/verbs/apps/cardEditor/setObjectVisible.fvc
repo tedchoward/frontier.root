@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.setObjectVisible
+
+on setObjectVisible (name, flag) {
+	new (tableType, @atts);
+	atts.visi = boolean (flag);
+	return (cardEditor.setObjectAttributes (name, @atts))}
+
+

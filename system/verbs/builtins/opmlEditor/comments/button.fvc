@@ -1,0 +1,30 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.comments.button
+
+on button () {
+	«Changes
+		«10/3/12; 9:35:19 AM by DW
+			«url-encode the parameters we put into the hidden fields. Otherwise things get trashed if we use double-quotes or other characters that require encoding.
+				«http://worknotes.scripting.com/october2012/10312ByDw/encodingAndOpmlComments
+		«9/13/12; 10:27:49 AM by DW
+			«Factored from opmleditor.website.comments.button.
+		«9/5/12; 4:18:03 PM by DW
+			«Created.
+	local (pta = html.getpagetableaddress (), s = string (opmlEditor.comments.form), t);
+	«scratchpad.mybuttonparams = pta^
+	new (tabletype, @t);
+	webserver.parseargs (pta^.searchargs, @t);
+	
+	bundle { //set t.hiddenFields
+		local (s = "", adr);
+		for adr in @t {
+			s = s + "<input type=\"hidden\" name=\"" + nameof (adr^) + "\" value=\"" + string.urlencode (adr^, true) + "\">"};
+		t.hiddenFields = s};
+	
+	s = string.tablereplace (s, @t);
+	«wp.newtextobject (s, @scratchpad.mybutton)
+	return (html.buildJavascriptInclude (s))}
+«bundle //test code
+	«html.setpagetableaddress (@scratchpad.mybuttonparams)
+	«button ()
+
+

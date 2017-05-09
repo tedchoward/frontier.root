@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.introReplaceAll
+
+on introReplaceAll (str, pattern, replacementString) {
+	regex.subst (pattern, replacementString, @str, caseSensitive:regex.data.introCaseSensitive, maxSubs:infinity);
+	return str}
+
+

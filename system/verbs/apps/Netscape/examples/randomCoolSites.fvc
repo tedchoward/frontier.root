@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Netscape.examples.randomCoolSites
+
+local (adrtable = @netscape.examples.coolSites);
+local (sizetable = sizeof (adrtable^));
+netscape.launch ();
+loop {
+	local (url = @adrtable^ [random (1, sizetable)]);
+	window.msg (nameof (url^));
+	netscape.openUrl (url^);
+	clock.waitSeconds (20)}
+
+

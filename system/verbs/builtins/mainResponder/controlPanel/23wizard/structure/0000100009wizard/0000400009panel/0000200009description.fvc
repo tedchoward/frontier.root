@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.controlPanel.["#wizard"].structure.["00001000\twizard"].["00004000\tpanel"].["00002000\tdescription"]
+
+Frontier maintains logs detailing what happens on your system. Statistics provide a cumulative view. You can choose which logs and stats Frontier should maintain, and where to store the logs.
+
+

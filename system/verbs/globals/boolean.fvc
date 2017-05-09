@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.globals.boolean
+
+on boolean (val) {
+	kernel (lang.boolean)}
+
+

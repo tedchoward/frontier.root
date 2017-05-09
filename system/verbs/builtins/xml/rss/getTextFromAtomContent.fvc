@@ -1,0 +1,26 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.rss.getTextFromAtomContent
+
+on getTextFromAtomContent (adrcontent) {
+	«Changes
+		«9/21/12; 11:41:11 AM by DW
+			«Some Atom "entry" elements contain incredibly complicated content elements. Way too much for an aggregator to deal with. What we want is a sequence of paragraphs. 
+				«http://worknotes.scripting.com/september2012/92112ByDw/processingRichAtomDescriptions
+	on decode (s) {
+		return (xml.entitydecode (s, flAlphaEntities:true))};
+	on dolevel (adrlevel) {
+		local (s = "", adr, name);
+		for adr in adrlevel {
+			if nameof (adr^) contains "\t" {
+				name = string.nthfield (nameof (adr^), "\t", 2);
+				if typeof (adr^) == stringtype {
+					s = s + "<" + name + ">" + decode (adr^) + "</" + name + ">\r"}
+				else {
+					if typeof (adr^) == tabletype {
+						s = s + "<" + name + ">" + dolevel (adr) + "</" + name + ">\r"}}}};
+		return (s)};
+	return (dolevel (adrcontent))}
+«bundle //test code
+	«wp.newtextobject (getTextFromAtomContent (@scratchpad.feeditems.["002"].["00002000\tdescription"]), @scratchpad.mywphello)
+	«webbrowser.displaytext (string (scratchpad.mywphello))
+
+

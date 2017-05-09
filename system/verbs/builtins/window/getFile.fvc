@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.window.getFile
+
+on getFile (adr) {
+	kernel (window.getFile)}
+
+

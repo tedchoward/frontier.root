@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.news.getMostRecentAddress
+
+on getMostRecentAddress (sitename) { //return the address of the most recent news entry
+	local (adrnewstable = mainResponder.news.openRoot (sitename));
+	return (mainResponder.calendar.getMostRecentAddress (adrnewstable))}
+«bundle //test code
+	«dialog.alert (getMostRecentAddress ("scriptingNews"))
+
+

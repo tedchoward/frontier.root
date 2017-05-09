@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.isAllNumeric
+
+on isAllNumeric (s) {
+	«Changes
+		«5/30/09; 12:37:58 PM by DW
+			«Return true if the string contains only numeric characters, false otherwise.
+	local (i);
+	for i = 1 to sizeof (s) {
+		if not string.isNumeric (s [i]) {
+			return (false)}};
+	return (true)}
+«bundle //test code
+	«dialog.alert (isAllNumeric ("1234567"))
+	«dialog.alert (isAllNumeric ("1234d567"))
+
+

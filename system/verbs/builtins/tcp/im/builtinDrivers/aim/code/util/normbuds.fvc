@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.code.util.normbuds
+
+on normbuds (buddies) {
+	local {
+		buddy;
+		retStr=""};
+	for buddy in buddies {
+		retStr = retStr + " " + tcp.im.builtinDrivers.aim.code.util.normalize(buddy)};
+	return(string.popLeading(retStr, ' '))}
+
+

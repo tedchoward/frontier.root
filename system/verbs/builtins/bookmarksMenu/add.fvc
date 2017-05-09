@@ -1,0 +1,60 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.bookmarksMenu.add
+
+«Changes
+	«11/6/01; 11:33:08 PM by JES
+		«Bug fix: check to see if system.verbs.builtins.pike.isLocalOutline is defined, instead of system.verbs.builtins.pike.
+	«06/24/01; 1:33:50 AM by JES
+		«This is the entry point for the Add Bookmark command in the Bookmarks menu.
+			«First we call the callbacks at user.callbacks.addBookmark.
+			«If all of the callbacks return false, meaning that the command was not consumed, then the rest of this code will execute:
+			«First, we check to see if this is a file-based window. If so, we call bookmarksMenu.getFileLogic to get the script and command's default name.
+			«Next we check to see if it's an addressible object. If so, we call bookmarksMenu.getLogic to get the script and the command's default name.
+			«After that, we're out of luck -- we put up an error dialog.
+		«The Add Bookmark command in the right-click menu is handled by builtins.bookmarksMenu.addNode.
+local (adrwindow = window.frontmost ());
+local (adr = table.getCursorAddress ());
+
+local (logic, title);
+
+bundle { // give the user callbacks a chance to handle the command
+	local (nomad);
+	for nomad in @user.callbacks.addBookmark {
+		try {
+			while typeOf (nomad^) == addressType {
+				nomad = nomad^};
+			if nomad^ (adr, @logic, @title) {
+				return (bookmarksMenu.addBookmark (@logic, @title))}}}};
+bundle { //handle windowTypes windows
+	if defined (Frontier.tools.windowTypes) {
+		local (type);
+		if window.attributes.getOne ("type", @type, adrwindow) { //it has a type
+			local (adrtype);
+			if Frontier.tools.windowTypes.findWindowType (type, @adrtype) {
+				if defined (adrtype^.getBookmarkLogic) {
+					if adrtype^.getBookmarkLogic (adrwindow, @logic, @title) {
+						return (bookmarksMenu.addBookmark (@logic, @title))}
+					else { //windowTypes getBookmarkLogic scripts return false if they fail
+						return (false)}};
+				if table.tableContains (@system.temp.windowTypes, adrwindow) { //can't find type or type has no getBookmarkLogic script
+					dialog.alert ("Can't add a bookmark for this window because temporary windows of type '" + type + "' have no getBookmarkLogic script.");
+					return (false)}};
+			if table.tableContains (@system.temp.windowTypes, adrwindow) { //can't find type or type has no getBookmarkLogic script
+				dialog.alert ("Can't add a bookmark for this window because there is no windowType, '" + type + "'.");
+				return (false)}}}};
+bundle { // handle file-based windows
+	local (f = window.getFile (adr));
+	local (isFile = (f != "") );
+	if system.environment.isRadio {
+		if defined (system.verbs.builtins.pike.isLocalOutline) {
+			if pike.isLocalOutline (adr) {
+				local (adrFileInfo = parentOf (adr^));
+				f = adrFileInfo^.f;
+				isFile = true}}};
+	if isFile {
+		bookmarksMenu.getFileLogic (adr, f, @logic, @title);
+		return (bookmarksMenu.addBookmark (@logic, @title))}};
+bundle { // handle object database objects
+	bookmarksMenu.getLogic (adr, @logic, @title);
+	return (bookmarksMenu.addBookmark (@logic, @title))}
+
+

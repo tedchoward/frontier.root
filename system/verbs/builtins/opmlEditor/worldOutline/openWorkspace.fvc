@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.openWorkspace
+
+on openWorkspace () {
+	«Changes
+		«2/12/12; 3:32:06 PM by DW
+			«New method of getting server info.
+		«6/14/11; 8:35:19 AM by DW
+			«Make sure the password is a string.
+		«6/6/11; 9:34:49 AM by DW
+			«Created. 
+	local (adrdata = opmlEditor.worldOutline.init (), adroutline = @adrdata^.workspace, server, username, password);
+	opmlEditor.worldOutline.getServerInfo (@server, @username, @password); //2/11/12 by DW
+	local (atts = [server].worldOutline.getUserRoot (username, password));
+	bundle { //process atts
+		if atts.opmltext == "" {
+			new (outlinetype, adroutline)}
+		else {
+			op.xmltooutline (atts.opmltext, adroutline)}};
+	local (title = "World Outline: " + username);
+	edit (adroutline, adrButtonTable:@opmlEditor.worldOutline.buttons.workspace, windowtitle:title)};
+	«scripting2Suite.editor.setEditWindowAttributes (adroutline, title:title)
+	«bundle //if the workspace is new, create an initial "Hello World" post
+		«if adrdata^.editor.workspace.flnew
+			«scripting2Suite.editor.newPost ("My \"Hello World\" post")
+			«adrdata^.editor.workspace.flnew = false
+bundle { //test code
+	openWorkspace ()}
+
+

@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.tableToJson
+
+on tableToJson (adrtable) {
+	«Changes
+		«10/25/10; 10:45:05 PM by DW
+			«This routine moved to json.decompile. I left the shell here so as not to break anything that may have already been written. Obviously, it's clearer to call json.decompile instead.
+	return (json.decompile (adrtable))}
+
+

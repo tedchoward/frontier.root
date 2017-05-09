@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:suites.people.newGroup
+
+on newGroup (groupName) {
+	«Create a new group. Return false if the group already exists.
+	local (adrGroup = people.getGroupTable (groupName));
+	if people.groupExists (groupName, adrGroup) {
+		return (false)};
+	new (tableType, adrGroup);
+	new (tableType, @adrGroup^.services);
+	new (tableType, @adrGroup^.members);
+	adrGroup^.enabled = true;
+	return (true)};
+newGroup ("baseball")
+
+

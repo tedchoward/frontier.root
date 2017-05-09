@@ -1,0 +1,51 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.viewUrls
+
+on viewUrls (domain) {
+	«Changes
+		«3/27/12; 1:08:12 PM by DW
+			«Wrap the table in a div so the styles are properly attached to it.
+		«2/16/12; 3:21:28 PM by DW
+			«Created.
+	local (adrdata = frontier.opendatafile ("domainStats", defined (system.temp.opmlEditor.stats.flStatsFileOpen)));
+	local (adrdomain = @adrdata^.domains.[domain], now = clock.now ());
+	local (adrtoday = mainresponder.calendar.getdayaddress (@adrdomain^.calendar, now));
+	local (sortedrankings, i, adr, url);
+	
+	bundle { //build sortedrankings
+		local (oldtarget);
+		sortedrankings = adrtoday^.urls;
+		oldtarget = target.set (@sortedrankings);
+		table.sortby ("Value");
+		target.set (oldtarget)};
+	
+	
+	system.temp.opmlEditor.stats.flStatsFileOpen = true;
+	local (htmltext = "", indentlevel = 0);
+	on add (s) {
+		htmltext = htmltext + (string.filledstring ("\t", indentlevel) + s + "\r");};
+	
+	add (string (opmlEditor.data.outlines.domainsIntro));
+	add ("<div class=\"divDomainsPage\">"); indentlevel++; //3/27/12 by DW
+	add ("<table class=\"" + webApp.data.tableClass + " domainTable\">"); indentlevel++;
+	bundle { //column headers
+		add ("<thead>"); indentlevel++;
+		add ("<tr>"); indentlevel++;
+		add ("<th class=\"domainName\">Domain</th>");
+		add ("<th class=\"domainHits\">Hits</th>");
+		add ("</tr>"); indentlevel--;
+		add ("</thead>"); indentlevel--};
+	for i = sizeof (sortedrankings) downto 1 {
+		add ("<tr>"); indentlevel++;
+		adr = @sortedrankings [i];
+		url = nameof (adr^);
+		add ("<td class=\"domainName\"><a href=\"http://" + domain + url + "\">" + url + "</a></td>");
+		add ("<td class=\"domainHits\">" + adr^ + "</td>");
+		add ("</tr>"); indentlevel--};
+	add ("</table>"); indentlevel--;
+	add ("</div>"); indentlevel--;
+	
+	return (htmltext)};
+bundle { //test code
+	viewUrls ()}
+
+

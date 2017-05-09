@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.outlinerExpand
+
+on outlinerExpand (levels=1) {
+	system.menus.scripts.mustBeOutline ();
+	op.expand (levels)}
+
+

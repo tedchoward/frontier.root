@@ -1,0 +1,43 @@
+FrontierVcsFile:3:TEXT:user.html.glossary.userLandNavBox
+
+<!-- UserLand.Com sites -->
+	<br><table cellspacing="3" cellpadding="0">
+		<tr>
+			<td>
+				<table cellspacing="0" cellpadding="1" border="0">
+					<tr bgcolor="black">
+						<td align="left">
+							<table cellspacing="0" cellpadding="2" border="0">
+								<tr height="18" bgcolor="black">
+									<td nowrap><a href="http://www.userland.com/"><font color="black"><img src="http://legacystatic1.userland.com/snImages/userland.gif" border="0"></font></td>
+									</tr>
+								<tr bgcolor="white">
+									<td colspan="3">
+										<table cellpadding="3" cellspacing="0"><tr><td valign="top"><img src="http://legacystatic1.userland.com/snImages/bullet.gif" width="5" height="10"></td><td valign="middle"><a href="http://www.userland.com/directory/71">Directory</a></td></tr></table>
+										<table cellpadding="3" cellspacing="0"><tr><td valign="top"><img src="http://legacystatic1.userland.com/snImages/bullet.gif" width="5" height="10"></td><td valign="middle"><a href="http://www.scripting.com/">Scripting News</a></td></tr></table>
+										<table cellpadding="3" cellspacing="0"><tr><td valign="top"><img src="http://legacystatic1.userland.com/snImages/bullet.gif" width="5" height="10"></td><td valign="middle"><a href="http://davenet.userland.com/">DaveNet</a></td></tr></table>
+										<table cellpadding="3" cellspacing="0"><tr><td valign="top"><img src="http://legacystatic1.userland.com/snImages/bullet.gif" width="5" height="10"></td><td valign="middle"><a href="http://radio.userland.com/">Radio UserLand</a></td></tr></table>
+										<table cellpadding="3" cellspacing="0"><tr><td valign="top"><img src="http://legacystatic1.userland.com/snImages/bullet.gif" width="5" height="10"></td><td valign="middle"><a href="http://manila.userland.com/">Manila</a></td></tr></table>
+										<table cellpadding="3" cellspacing="0"><tr><td valign="top"><img src="http://legacystatic1.userland.com/snImages/bullet.gif" width="5" height="10"></td><td valign="middle"><a href="http://www.manilasites.com/">ManilaSites.Com</a></td></tr></table>
+										<table cellpadding="3" cellspacing="0"><tr><td valign="top"><img src="http://legacystatic1.userland.com/snImages/bullet.gif" width="5" height="10"></td><td valign="middle"><a href="http://frontier.userland.com/">Frontier</a></td></tr></table>
+										<table cellpadding="3" cellspacing="0"><tr><td valign="top"><img src="http://legacystatic1.userland.com/snImages/bullet.gif" width="5" height="10"></td><td valign="middle"><a href="http://backend.userland.com/">Backend</a></td></tr></table>
+										<table cellpadding="3" cellspacing="0"><tr><td valign="top"><img src="http://legacystatic1.userland.com/snImages/bullet.gif" width="5" height="10"></td><td valign="middle"><a href="http://login.userland.com/">Log In</a></td></tr></table>
+										<table cellpadding="3" cellspacing="0"><tr><td valign="top"><img src="http://legacystatic1.userland.com/snImages/bullet.gif" width="5" height="10"></td><td valign="middle"><a href="http://prefs.userland.com/">Preferences</a></td></tr></table>
+										<table cellpadding="3" cellspacing="0"><tr><td valign="top"><img src="http://legacystatic1.userland.com/snImages/bullet.gif" width="5" height="10"></td><td valign="middle"><a href="http://search.userland.com/">Search</a></td></tr></table>
+										<table cellpadding="3" cellspacing="0"><tr><td valign="top"><img src="http://legacystatic1.userland.com/snImages/bullet.gif" width="5" height="10"></td><td valign="middle"><a href="http://www.mailtothefuture.com/">MailToTheFuture</a></td></tr></table>
+										<table cellpadding="3" cellspacing="0"><tr><td valign="top"><img src="http://legacystatic1.userland.com/snImages/bullet.gif" width="5" height="10"></td><td valign="middle"><a href="http://store.userland.com/">Store</a></td></tr></table>
+										<table cellpadding="3" cellspacing="0"><tr><td valign="top"><img src="http://legacystatic1.userland.com/snImages/bullet.gif" width="5" height="10"></td><td valign="middle"><a href="http://whois.userland.com/">WhoIs?</a></td></tr></table>
+										<table cellpadding="3" cellspacing="0"><tr><td valign="top"><img src="http://legacystatic1.userland.com/snImages/bullet.gif" width="5" height="10"></td><td valign="middle"><a href="http://www.xmlrpc.com/">XML-RPC</a></td></tr></table>
+										<table cellpadding="3" cellspacing="0"><tr><td valign="top"><img src="http://legacystatic1.userland.com/snImages/bullet.gif" width="5" height="10"></td><td valign="middle"><a href="http://www.soapware.org/">SoapWare</a></td></tr></table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+
+
+

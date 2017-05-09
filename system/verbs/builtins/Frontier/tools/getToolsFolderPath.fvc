@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.getToolsFolderPath
+
+on getToolsFolderPath () {
+	«Make sure the Tools folder exists; return the path.
+	local (folder, pc = file.getPathChar ());
+	if system.environment.isPike {
+		folder = Frontier.pathString + "Tools" + pc}
+	else {
+		folder = Frontier.getSubFolder ("apps") + "Tools" + pc};
+	file.sureFolder (folder);
+	return (folder)}
+
+

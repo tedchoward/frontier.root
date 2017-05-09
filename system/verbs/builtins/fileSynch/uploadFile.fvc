@@ -1,0 +1,36 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fileSynch.uploadFile
+
+on uploadFile (adrfile) {
+	«Changes
+		«2/10/11; 11:53:42 AM by DW
+			«If prefs.rootUrl is not empty, use it to set the file's URL.
+		«7/8/06; 11:35:59 AM by DW
+			«Created.
+	local (adrdata);
+	adrdata = parentof (adrfile^); //files
+	adrdata = parentof (adrdata^); //the synchpoint table
+	if defined (adrdata^.callbacks.uploadFile) {
+		try {
+			«adrfile^.url = adrdata^.callbacks.uploadFile^ (adrdata, adrfile)
+			bundle { //upload file and set url, 2/10/11 by DW
+				local (url, rooturl = adrdata^.prefs.rooturl);
+				url = adrdata^.callbacks.uploadFile^ (adrdata, adrfile);
+				if sizeof (rooturl) == 0 {
+					adrfile^.url = url}
+				else {
+					adrfile^.url = rooturl + string.replaceall (nameof (adrfile^), file.getpathchar (), "/")}};
+			adrfile^.ctuploads++;
+			adrfile^.fldirty = false;
+			adrfile^.whenLastUpload = clock.now ();
+			adrdata^.stats.ctuploads++;
+			adrdata^.stats.lastUploadedFile = nameof (adrfile^);
+			try {delete (@adrfile^.lastError)}}
+		else {
+			adrfile^.cterrors++;
+			adrfile^.whenLastError = clock.now ();
+			adrfile^.lastError = tryError;
+			adrdata^.stats.cterrors++}}};
+bundle { //test code
+	uploadFile (@user.fileSynch.synchPoints.test.files.["oh.opml"])}
+
+

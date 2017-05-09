@@ -1,0 +1,5 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.localization.languages.dutch.strings.security.httpBadURIDirective
+
+Het verzoek kon niet door de server worden beantwoord daar het 'Request-URI' niet gelijk was aan de 'URI directive' van de 'authorizatieheader'.
+
+

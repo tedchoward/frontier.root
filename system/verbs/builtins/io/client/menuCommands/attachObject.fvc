@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.menuCommands.attachObject
+
+on attachObject () {
+	«Changes
+		«4/23/11; 4:05:38 PM by DW
+			«Attaches an object to an I/O outline node.
+	local (adrdata = io.init (), now = clock.now ());
+	if dialog.ask ("Address of object to attach?", @adrdata^.client.prefs.objectToAttach) {
+		local (s = fatPages.buildFileAtts (address (adrdata^.client.prefs.objectToAttach)));
+		local (atts);
+		new (tabletype, @atts);
+		atts.type = "fatp";
+		atts.bits = s;
+		atts.address = adrdata^.client.prefs.objectToAttach;
+		op.attributes.addgroup (@atts)}};
+bundle { //test code
+	attachObject ()}
+
+

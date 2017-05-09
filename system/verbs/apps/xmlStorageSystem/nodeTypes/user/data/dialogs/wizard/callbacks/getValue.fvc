@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.xmlStorageSystem.nodeTypes.user.data.dialogs.wizard.callbacks.getValue
+
+on getValue (pref, value) {
+	
+	case string.lower (pref) {
+		"NONE" {
+			}};//do nothing
+	return (value)}
+
+

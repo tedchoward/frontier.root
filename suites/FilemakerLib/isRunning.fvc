@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.FilemakerLib.isRunning
+
+on isRunning () {
+	return (FileMaker.isRunning ())}
+
+

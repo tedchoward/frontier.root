@@ -1,0 +1,9 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.html.dialog.website.["#template"]
+
+<html><head><Title>{title}</title>{css}{javaScript}</head>
+<body bgcolor="threedface">
+{bodytext}
+</body></html>
+
+
+

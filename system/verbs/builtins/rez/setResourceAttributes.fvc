@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.rez.setResourceAttributes
+
+on setResourceAttributes (path, resourcetype, id, attrs) {
+	kernel (rez.setResourceAttributes)}
+
+

@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.extensions.latintomac.mimetomac
+
+on mimetomac (mimeText) {
+	if frontier.isPowerPC () {
+		return (appleEvent (@latintomac.codePPC, 'cvtx', 'rpmc', '----', string (mimeText), 'cvmc', boolean (true)))}
+	else {
+		return (appleEvent (@latintomac.code68K, 'cvtx', 'rpmc', '----', string (mimeText), 'cvmc', boolean (true)))}}
+
+

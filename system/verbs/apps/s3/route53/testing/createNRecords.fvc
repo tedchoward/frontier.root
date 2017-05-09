@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.testing.createNRecords
+
+on createNRecords (n) {
+	«Changes
+		«10/25/11; 5:52:03 PM by DW
+			«Let's see what happens if we create more than 100 records in a domain. There's a comment that says there's a limit of 100, but I didn't quickly spot it in the code. 
+	local (server = "xmlrpc://blorkmarkserver.scripting.com:5337/RPC2");
+	local (hostname = "davecast.org", cname = "mamamia.scripting.com", i);
+	for i = 1 to n {
+		local (newname = "test" + string.padwithzeros (i, 3));
+		scratchpad.lastdomain = newname + "." + hostname;
+		[server].dnsapi2.createRecord (hostname, newname, cname, "CNAME")}};
+bundle { //test code
+	createNRecords (150)}
+
+

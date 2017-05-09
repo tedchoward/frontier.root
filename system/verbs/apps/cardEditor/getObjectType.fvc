@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.getObjectType
+
+on getObjectType (name) {
+	local (atts);
+	if not cardEditor.getObjectAttributes (name, @atts) {
+		return ("")};
+	return (atts.type)}
+
+

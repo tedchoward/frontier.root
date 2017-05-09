@@ -1,0 +1,52 @@
+FrontierVcsFile:3:scpt:["C3A\\Program Files\\OPML\\Guest Databases\\apps\\Tools\\dotOpml.root"].dotOpmlSuite.updateCode
+
+on updateCode (flquietmode=false) {
+	«Changes
+		«10/4/06; 9:14:26 AM by DW
+			«Request at most one update per hour.
+		«9/30/06; 9:50:59 AM by DW
+			«Don't update if this is the update server machine.
+		«7/12/06; 10:23:11 AM by DW
+			«Added optional paramter, flquietmode; if true, we update without dialogs.
+			«Set true by Frontier.tools.data.updateCommandScript, when called from the Update command in the File menu. Allows the command to update both opml.root and dotOpml.root, without asking the user twice.
+		«2/11/06; 2:14:02 PM by DW
+			«Created.
+	local (updateserver = "updates.opml.org");
+	if tcp.equalnames (updateserver, tcp.dns.getmydomainname ()) { //9/30/06; 9:53:40 AM by DW
+		return};
+	bundle { //at most one update per hour, 10/4/06 by DW
+		local (now = clock.now ());
+		if defined (system.temp.dotOpml.whenLastCodeUpdate) {
+			local (cthours = number (now - system.temp.dotOpml.whenLastCodeUpdate) / 3600);
+			if cthours < 1 {
+				return}};
+		system.temp.dotOpml.whenLastCodeUpdate = now};
+	local (adrtable = @user.rootUpdates.servers .dotOpml);
+	if not defined (adrtable^) {
+		new (tabletype, adrtable)};
+	if not defined (adrtable^.autobackup) {
+		adrtable^.autobackup = false};
+	if not defined (adrtable^.dbName) {
+		adrtable^.dbName = "dotOpml.root"};
+	if not defined (adrtable^.dialogs) {
+		adrtable^.dialogs = true};
+	if not defined (adrtable^.lastupdate) {
+		adrtable^.lastupdate = date (0)};
+	if not defined (adrtable^.method) {
+		adrtable^.method = "nirvanaServer.subscriptions.update"};
+	if not defined (adrtable^.port) {
+		adrtable^.port = 5337};
+	if not defined (adrtable^.serialnum) {
+		adrtable^.serialnum = 0};
+	if not defined (adrtable^.server) {
+		adrtable^.server = updateserver};
+	if not defined (adrtable^.url) {
+		adrtable^.url = ""};
+	local (ctnewparts);
+	rootUpdates.update (@dotOpmlSuite, flquietmode, adrCtNewParts:@ctnewparts);
+	if not flquietmode {
+		msg (ctnewparts + " new part(s) installed in dotOpml.root.")}};
+bundle { //test code
+	updateCode ()}
+
+

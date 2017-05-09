@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.writeStream
+
+on writeStream (stream, data) { «Write data from an open stream
+	kernel (tcp.writestream)}
+
+

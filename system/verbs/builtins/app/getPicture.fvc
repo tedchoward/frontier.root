@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.app.getPicture
+
+on getPicture () {
+	return (appleEvent (app.id, 'app1', 'gpic'))}
+
+

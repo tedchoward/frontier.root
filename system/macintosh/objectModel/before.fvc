@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.objectModel.before
+
+on before (obj) {
+	return (insertionLoc ('befo', obj))}
+
+

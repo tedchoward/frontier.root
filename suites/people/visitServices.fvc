@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:suites.people.visitServices
+
+on visitServices (adrCallback) {
+	local (i, serviceName);
+	for i = 1 to sizeOf (user.people.services) {
+		serviceName = nameOf (user.people.services [i]);
+		if people.serviceExists (serviceName) {
+			try {
+				adrCallback^ (serviceName)}}};
+	return (true)}
+
+

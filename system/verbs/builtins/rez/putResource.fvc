@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.rez.putResource
+
+on putResource (path, type, id, adr) {
+	kernel (rez.putresource)}
+
+

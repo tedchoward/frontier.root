@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.misc.paste
+
+on paste (appID) { «Paste an object from the clipboard
+	return (appleEvent (appID, 'misc', 'past'))}
+
+

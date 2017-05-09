@@ -1,0 +1,59 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.getFriends
+
+on getFriends (adrfriends, username=nil, password=nil, friendsurl=nil, flfollowers = false) {
+	twitter.init ();
+	bundle { //set defaults
+		if username == nil {
+			username = user.twitter.prefs.username};
+		if password == nil {
+			password = string (user.twitter.prefs.password)};
+		if friendsurl == nil {
+			if flfollowers {
+				friendsurl = user.twitter.prefs.followersurl}
+			else {
+				friendsurl = user.twitter.prefs.friendsurl}}};
+	local (urllist = string.urlsplit (friendsurl));
+	try {
+		local (tc = clock.ticks (), timeoutticks = 60 * user.twitter.prefs.timeOutSecs);
+		local (s = string.httpResultSplit (tcp.httpClient (server:urllist [2], path:urllist [3], username:username, password:password,  method:"GET", timeoutticks:timeoutticks, flMessages:false)));
+		«scratchpad.xmltext = s
+		«local (s = scratchpad.xmltext)
+		user.twitter.stats.whenLastGet = clock.now ();
+		user.twitter.stats.ctGets++;
+		user.twitter.stats.ctSecsLastGet = double (clock.ticks () - tc) / 60;
+		bundle { //extract data from the xml in adrfriends^
+			local (xstruct, adruser);
+			xml.compile (s, @xstruct);
+			new (tabletype, adrfriends);
+			local (adrusers = xml.getaddress (@xstruct, "users"));
+			for adruser in adrusers {
+				if nameof (adruser^) contains "user" {
+					local (screenname = xml.getvalue (adruser, "screen_name"));
+					local (adrsub = @adrfriends^.[screenname]);
+					new (tabletype, adrsub);
+					adrsub^.id = xml.getvalue (adruser, "id");
+					adrsub^.name = xml.getvalue (adruser, "name");
+					adrsub^.location = xml.getvalue (adruser, "location");
+					adrsub^.description = xml.getvalue (adruser, "description");
+					adrsub^.profileImageUrl = xml.getvalue (adruser, "profile_image_url");
+					adrsub^.url = xml.getvalue (adruser, "url");
+					try {
+						local (adrstatus = xml.getaddress (adruser, "status"));
+						adrsub^.statusCreatedAt = xml.getvalue (adrstatus, "created_at");
+						adrsub^.statusId = xml.getvalue (adrstatus, "id");
+						adrsub^.statusText = xml.getvalue (adrstatus, "text");
+						adrsub^.statusRelativeCreatedAt = xml.getvalue (adrstatus, "relative_created_at")}
+					else {
+						adrsub^.statusCreatedAt = date (0);
+						adrsub^.statusId = 0;
+						adrsub^.statusText = "";
+						adrsub^.statusRelativeCreatedAt = ""}}}};
+		user.twitter.stats.lastGetError = "";
+		return (true)}
+	else {
+		user.twitter.stats.lastGetError = tryerror;
+		return (false)}};
+bundle { //test code
+	getfriends (@scratchpad.twitterFriends, flfollowers:true)}
+
+

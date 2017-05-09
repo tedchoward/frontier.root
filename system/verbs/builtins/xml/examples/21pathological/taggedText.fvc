@@ -1,0 +1,18 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.xml.examples.["!pathological"].taggedText
+
+<?xml version="1.0"?>
+<?xml:namespace ns="DAV:" prefix="D"?>
+<?xml:namespace ns="http://www.userland.com/randomSchema/" prefix="UR"?>
+<comment>This contains a bunch of pathological XML examples that are designed to trip up the compiler.</comment>
+<author>Wesley Felter</author>
+<UR:examples>
+	<D:bar>This is a "bar" element in the "DAV:" namespace</D:bar>
+	<DAV:bar>And so is this; it should be parsed identically to the above element.</DAV:bar>
+	<baz namespace="DAV:">Don't be fooled; this tag doesn't have a namespace.</baz>
+	<UR:froboz namespace="DAV:">This tag should be in the randomSchema namespace.</UR:froboz>
+	<UR:Cancoon>This element doesn't have a proper ending tag.</Cancoon>
+	<start>This element uses a weird ending tag.</>
+	</UR:examples>
+
+
+

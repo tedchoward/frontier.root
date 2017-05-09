@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.code.util.normalize
+
+on normalize(data) {
+	
+	return ( string.lower(string.dropNonalphas(data)))}
+
+

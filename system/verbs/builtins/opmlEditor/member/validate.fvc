@@ -1,0 +1,56 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.member.validate
+
+on validate (username, password, groupname="default") {
+	«Changes
+		«12/17/12; 11:20:58 AM by DW
+			«Pass the groupname to opmlEditor.member.initMember.
+		«12/16/12; 12:35:17 PM by DW
+			«Take groupname as an optional parameter. If we are configured to use a remote server, and the group is not default, we use the local group, not the SLIDE group. 
+				«http://worknotes.scripting.com/december2012/121612ByDw/usingGroupsInOpmlServerApps
+		«7/26/11; 2:27:01 PM by DW
+			«Factor the remote stuff into a separate script object.
+		«7/25/11; 8:59:27 AM by DW
+			«Hook into remote identity server, if enabled.
+		«4/20/11; 8:44:33 PM by DW
+			«Keep counts of client IP addresses, both valid and invalid accesses. 
+		«4/4/11; 9:23:46 AM by DW
+			«initMember can fail -- if there is no user with that username. We should just return false.
+		«3/6/11; 7:04:52 PM by DW
+			«Created. 
+	local (pta = html.getpagetableaddress (), adrmember, now = clock.now ());
+	opmleditor.init ();
+	if user.opmlEditor.prefs.identity.flUseRemoteServer and (groupname == "default") { //12/16/12 by DW
+		return (opmlEditor.member.validateRemote (username, password))};
+	bundle { //find the member's table, return false if fail -- 4/4/11 by DW
+		try {
+			adrmember = opmlEditor.member.initMember (username, groupname)}
+		else {
+			return (false)}};
+	if adrmember^.prefs.enabled {
+		if adrmember^.prefs.password == password {
+			adrmember^.stats.ctValidate++;
+			adrmember^.stats.whenLastValidate = now;
+			bundle { //bump client count, 4/20/11 by DW
+				local (adrclient = @adrmember^.stats.clients.valid.[pta^.client]);
+				if defined (adrclient^) {
+					adrclient^++}
+				else {
+					adrclient^ = 1}};
+			return (true)}};
+	adrmember^.stats.ctNotValidate++;
+	adrmember^.stats.whenLastNotValidate = now;
+	bundle { //bump client count, 4/20/11 by DW
+		local (adrclient = @adrmember^.stats.clients.valid.[pta^.client]);
+		if defined (adrclient^) {
+			adrclient^++}
+		else {
+			adrclient^ = 1}};
+	return (false)};
+bundle { //test code
+	html.setpagetableaddress (@scratchpad.params);
+	local (tc = clock.ticks ());
+	validate ("bullmancuso", "jerseyshore");
+	tc = clock.ticks () - tc;
+	dialog.alert (tc)}
+
+

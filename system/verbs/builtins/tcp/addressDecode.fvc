@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.addressDecode
+
+on addressDecode (encodedAdr) { «Turn a 4-byte number into a dotted IP address
+	kernel (tcp.addressDecode)}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.openDocument
+
+on openDocument (file) {
+	return (required.openDocument (BBEdit.id, file))}
+
+

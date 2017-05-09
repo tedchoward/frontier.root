@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.exists
+
+on exists (obj) { «Verify if an object exists
+	return (appleEvent (Eudora.id, 'core', 'doex', '----', objspec (obj)))}
+
+

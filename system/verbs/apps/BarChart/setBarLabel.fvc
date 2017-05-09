@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BarChart.setBarLabel
+
+on setBarLabel (n, label) { «set the label of the nth bar
+	return (appleEvent (BarChart.id, 'BARC', 'slab', '----', short (n), 'lbar', string (label)))}
+
+

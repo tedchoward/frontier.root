@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.windowTypes.commands.findNext
+
+on findNext () {
+	«Run the Find Next command.
+		«09/29/00; 5:56:49 PM by PBS
+	system.menus.scripts.findNextCommand ()}
+
+

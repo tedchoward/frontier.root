@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.german.strings.macros.serverStats.upSinceHits
+
+Server gestartet am: [[upsince]]; Hits: [[hits]].
+
+

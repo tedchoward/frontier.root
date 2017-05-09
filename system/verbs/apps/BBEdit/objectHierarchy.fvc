@@ -1,0 +1,169 @@
+FrontierVcsFile:3:optx:system.verbs.apps.BBEdit.objectHierarchy
+
+application -- An application program
+	Properties:
+		clipboard -- contents of the clipboard
+		frontmost -- Is this the frontmost application?
+		name -- the name
+		selection -- the selection visible to the user
+		selectedText -- the selected text
+		version -- the version of the application
+		searchString -- the current text to search for. If Grep is turned on, this is interpreted as a search pattern.
+		replaceString -- the current replacement string
+	Elements:
+		document
+		window
+		recentFile
+character -- A character
+	Properties:
+		length -- length of text object (in characters)
+		offset -- offset of a text object from the beginning of the document (first char has offset 1)
+		startline
+		endline
+		startcolumn
+		endcolumn
+	Elements:
+		character
+		insertionPoint
+		text
+		textItem
+		word
+document -- an open document
+	Properties:
+		bounds
+		closeable -- Does the window have a close box?
+		contents -- the contents of the window
+		index -- the number of the window
+		modified
+		name
+		position -- upper left coordinates of window
+		resizable -- Is the window resizable?
+		selectedText -- the text enclosed by the current selection
+		selection -- the range of selected text
+		titled -- Does the window have a title bar?
+		visible -- is the window visible?
+		windowKind -- The type of this window.
+		hasMailer -- does this window have a PowerTalk mailer?
+		mailerExpanded -- is the mailer in this window expanded?
+		mailerActive -- is the mailer activated?
+		zoomable -- Is the window zoomable?
+		zoomed -- Is the window zoomed?
+		editDate -- the date and time this file was last edited.
+		file -- the disk file (or folder) corresponding to this window.
+		lineBreaks -- the line-breaking convention for the saved file (Mac | DOS | Unix)
+		saveDate -- the date and time this file was last saved.
+		savedState -- the type of state information saved in the file (None | MPW Shell | BBEdit)
+		firstVisibleLine -- the line number of the first line visible in the window
+		selectionStart -- character offset of the start of the selection range
+		selectionEnd -- character offset of the end of the selection range
+		selectionStartLine -- the line number of the start of the selection range
+		selectionEndLine -- the line number of the end of the selection range
+		windowText -- the entire text in this window
+		cursorPosition -- display the cursor position?
+		lineNumbers -- display line numbers?
+		philipBar -- display the Philip bar?
+		statusBar -- display the status bar?
+		tabStops -- display tab stops?
+		showInvisibles -- display invisible characters?
+		showSpaces -- if "show invisibles" is TRUE, display space characters?
+		autoIndent -- auto-indent while typing?
+		softWrapping -- is soft wrapping activated?
+		autoBalance -- auto-balance parens, braces, brackets, and smart quotes while typing?
+		smartQuotes -- substitute smart quotes while typing?
+		displayFont -- name of the display font
+		displayFontSize -- size, in points, of the display font
+		tabWidth -- width, in spaces, of each tab stop
+	Elements:
+		insertionPoint
+		character
+		word
+		line
+		textItem
+		text
+line -- A line
+	Properties:
+		length -- length of text object (in characters)
+		offset -- offset of a text object from the beginning of the document (first char has offset 1)
+		startline
+		endline
+		startcolumn
+		endcolumn
+	Elements:
+		character
+		line
+		text
+		word
+recentFile -- a recently opened file (i.e. one that appears under the "Open Recent" sub-menu)
+	Properties:
+		name -- the file's name
+		diskFile -- the disk file specification for this file
+selection-object -- the selected text
+	Properties:
+		contents -- the contents of the selection
+		length -- length of text object (in characters)
+		offset -- offset of a text object from the beginning of the document (first char has offset 1)
+		startline
+		endline
+		startcolumn
+		endcolumn
+	Elements:
+		character
+		line
+		paragraph
+		text
+		word
+textItem -- A text item
+	Properties:
+		length -- length of text object (in characters)
+		offset -- offset of a text object from the beginning of the document (first char has offset 1)
+		startline
+		endline
+		startcolumn
+		endcolumn
+	Elements:
+		character
+		insertionPoint
+		text
+		textItem
+		word
+window -- an open editing or browsing window
+	Properties:
+		bounds -- the boundary rectangle for the document
+		closeable -- Does the document have a close box?
+		index -- the number of the document
+		modal -- Is the document modal?
+		modified -- Has the document been modified since the last save?
+		name -- the title of the document
+		position -- upper left coordinates of the document
+		resizable -- Is the document resizable?
+		selectedText -- the text enclosed by the current selection
+		selection -- the selection
+		titled -- Does the document have a title bar?
+		visible -- Is the document visible?
+		windowKind -- The type of this window.
+		zoomable -- Is the document zoomable?
+		zoomed -- Is the document zoomed?
+	Elements:
+		character
+		insertionPoint
+		text
+		textItem
+		word
+		line
+word -- A word
+	Properties:
+		length -- length of text object (in characters)
+		offset -- offset of a text object from the beginning of the document (first char has offset 1)
+		startline
+		endline
+		startcolumn
+		endcolumn
+	Elements:
+		character
+		insertionPoint
+		text
+		textItem
+		word
+
+
+

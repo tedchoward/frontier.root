@@ -1,0 +1,40 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.["#filters"].firstFilter
+
+on firstFilter (pta) {
+	«Changes
+		«4/11/12; 1:52:19 PM by DW
+			«Allow the settings page to be accessed by non-members.
+		«9/29/11; 4:10:22 PM by DW
+			«Only let through users who are admin-like to the opmlEditor website.
+		«9/21/11; 5:02:07 PM by DW
+			«If we have a valid cookie, but the user doesn't have a table that means we authenticated with the SLIde server, but we don't have a user table on this server. At this point it's totally okay to create one, so we do.
+		«9/8/11; 11:27:09 AM by DW
+			«Let the styles page through even if no cookie. Otherwise the signin page looks awful.
+		«8/28/11; 10:17:57 AM by DW
+			«If the user isn't logged in with the cookie, redirect to the signin page. If he is logged in, set username and adruser (points to the opmlEditor sub-table of the user's members.root table).
+	bundle { //let through special pages, no cookie required
+		case string.lower (nameof (pta^.adrobject^)) {
+			"ajaxmembervalidate"; //3/20/12 by DW
+			"signin";
+			"signout";
+			"settings"; //4/11/12 by DW
+			"styles" {
+				return (true)}}};
+	bundle { //redirect people who aren't logged in to the signin page
+		if not opmlEditor.member.checkCookie ("signin", @username) {
+			return (false)}};
+	bundle { //eject people who are not admin-like //9/29/11 by DW
+		local (fllocal = defined (pta^.flLocalAdminUser) and pta^.flLocalAdminUser);
+		if (not fllocal) and (not opmlEditor.isUserAdminLike (username)) {
+			local (s = "Can't access the site because the user \"" + username + "\" is not authorized.");
+			pta^.code = 403; //forbidden
+			pta^.responseBody = webserver.util.buildErrorPage ("403 FORBIDDEN", s);
+			scripterror (s)}};
+	pta^.username = username;
+	pta^.adruser = opmlEditor.initUser (username, flcreate:true); //9/21/11 by DW
+	return (true)};
+bundle { //test code
+	html.setpagetableaddress (@scratchpad.ffparams);
+	firstfilter (@scratchpad.ffparams)}
+
+

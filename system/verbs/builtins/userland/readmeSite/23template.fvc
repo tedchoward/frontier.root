@@ -1,0 +1,18 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.userland.readmeSite.["#template"]
+
+{pageheader (title)}
+<h2>
+	{title}
+	</h2>
+<blockquote>
+	<bodytext>
+	</blockquote>
+// <hr>
+// <code>
+	The main Frontier website is at http://www.scripting.com/frontier/. 
+	This page was last built on {clock.now ()} Pacific. 
+	</code>
+{pagefooter ()}
+
+
+

@@ -1,0 +1,37 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.opml.search
+
+on search (adrxstruct, adrvisit) {
+	«Changes
+		«5/7/11; 4:44:35 PM by DW
+			«Created. Search the xstruct for a node that matches the visit routine's criteria. Depth-first search.
+	local (adropml = xml.getaddress (adrxstruct, "opml"));
+	local (adrbody = xml.getaddress (adropml, "body"));
+	on dolevel (adrparent) {
+		local (adr);
+		for adr in adrparent {
+			if nameof (adr^) endswith "outline" {
+				if adrvisit^ (adr) { //found it, pop out through levels of recursion.
+					return (true)};
+				if dolevel (adr) {
+					return (true)}}};
+		return (false)};
+	dolevel (adrbody)}
+«bundle //test code
+	«local (lowerhost = "howto2.scripting.com", adrdomainnode = nil)
+	«on visit (adrnode)
+		«local (adratts = @adrnode^.["/atts"])
+		«if defined (adratts^)
+			«if defined (adratts^.domain)
+				«if string.lower (adratts^.domain) == lowerhost
+					«adrdomainnode = adr
+					«return (true)
+		«return (false)
+	«local (adrtable)
+	«op.getNetOutline ("http://dropbox.scripting.com/dave/worldOutline/defaultRootOutline.opml", @adrtable)
+	«if not defined (adrtable^.xstruct)
+		«xml.compile (adrtable^.opmltext, @adrtable^.xstruct)
+	«edit (adrtable)
+	«search (@adrtable^.xstruct, @visit)
+	«edit (adrdomainnode)
+
+

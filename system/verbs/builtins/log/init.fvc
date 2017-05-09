@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.log.init
+
+«Changes
+	«4/21/09; 2:36:12 PM by DW
+		«Created. 
+if not defined (user.scheduler2.overnight.rollLogOutline) {
+	user.scheduler2.overnight.rollLogOutline = @log.rollLogOutline}
+
+

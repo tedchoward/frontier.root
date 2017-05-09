@@ -1,0 +1,105 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.uploadPhoto
+
+on uploadPhoto (f, title=nil, description=nil, tags=nil, flpublic=nil, flfriend=nil, flfamily=nil, safetyLevel=nil, contentType=nil, flhidden=nil) {
+	«Changes
+		«1/6/08; 6:57:09 PM by DW
+			«Support defaults.
+		«6/10/07; 12:52:56 PM by DW
+			«Created.
+			«http://www.flickr.com/services/api/upload.api.html
+	if title == nil {
+		title = file.filefrompath (f)};
+	bundle { //use defaults -- 1/6/08 by DW
+		if description == nil {
+			description = user.flickr.folderWatcher.defaults.description};
+		if flpublic == nil {
+			flpublic = user.flickr.folderWatcher.defaults.flpublic};
+		if flfriend == nil {
+			flfriend = user.flickr.folderWatcher.defaults.flfriends};
+		if flfamily == nil {
+			flfamily = user.flickr.folderWatcher.defaults.flfamily};
+		if safetyLevel == nil {
+			safetyLevel = user.flickr.folderWatcher.defaults.safetyLevel};
+		if contentType == nil {
+			contentType = user.flickr.folderWatcher.defaults.contentType};
+		if flhidden == nil {
+			flhidden = not user.flickr.folderWatcher.defaults.flnothidden}};
+	local (mystruct);
+	new (tabletype, @mystruct);
+	mystruct.api_key = user.flickr.prefs.apiKey;
+	mystruct.auth_token = user.flickr.prefs.token;
+	mystruct.title = title;
+	mystruct.description = description;
+	if tags != nil {
+		mystruct.tags = tags};
+	bundle { //flpublic
+		if flpublic {
+			mystruct.is_public = 1}
+		else {
+			mystruct.is_public = 0}};
+	bundle { //flfriend
+		if flfriend {
+			mystruct.is_friend = 1}
+		else {
+			mystruct.is_friend = 0}};
+	bundle { //flfamily
+		if flfamily {
+			mystruct.is_family = 1}
+		else {
+			mystruct.is_family = 0}};
+	bundle { //safetyLevel
+		mystruct.safety_level = safetyLevel}; //1 for Safe, 2 for Moderate, or 3 for Restricted
+	bundle { //contentType
+		mystruct.content_type = contentType}; //1 for Photo, 2 for Screenshot, or 3 for Other
+	bundle { //flhidden
+		if flhidden {
+			mystruct.hidden = 2}
+		else {
+			mystruct.hidden = 1}};
+	Flickr.signStruct (@mystruct);
+	local (boundary);
+	bundle { //build boundary
+		local (i);
+		boundary = "";
+		for i = 1 to 5 {
+			boundary = boundary + string.innerCaseName (states.nthState (random (1, 50)))};
+		boundary = string.hashmd5 (boundary)};
+	type = "multipart/form-data; boundary=" + boundary;
+	local (body = "");
+	bundle { //build body
+		local (indentlevel = 0);
+		on add (s) {
+			body = body + string.filledstring ("\t", indentlevel) + s + "\r\n"};
+		for adr in @mystruct {
+			add ("--" + boundary);
+			add ("Content-Disposition: form-data; name=\"" + nameof (adr^) + "\"");
+			add ("");
+			add (adr^)};
+		bundle { //add the picture
+			local (type);
+			add ("--" + boundary);
+			add ("Content-Disposition: form-data; name=\"photo\"; filename=\"" + f + "\"");
+			if f endswith ".gif" {
+				type = "image/gif"}
+			else {
+				type = "image/jpeg"};
+			add ("Content-Type: " + type);
+			add ("");
+			add (string (file.readwholefile (f)));
+			add ("--" + boundary + "--")}};
+	body = string.delete (body, sizeof (body) - 2, 2);
+	«wp.newtextobject (body, @scratchpad.body)
+	local (result = tcp.httpclient ("POST", "api.flickr.com", 80, "/services/upload/", datatype:type, data:body, debug:false));
+	wp.newtextobject (result, @scratchpad.posttext);
+	«edit (@scratchpad.posttext)
+	result = string.httpResultSplit (result);
+	xml.compile (result, @xstruct);
+	local (adrrsp = xml.getaddress (@xstruct, "rsp"));
+	local (photoid = xml.getvalue (adrrsp, "photoid"));
+	return (photoid)};
+bundle { //test code
+	«local (tags = "Nevada Oklahoma \"South Carolina\" Massachusetts")
+	«clipboard.putvalue (uploadPhoto ("Macintosh HD:mtm.jpg", tags:tags))
+	clipboard.putvalue (uploadPhoto ("Macintosh HD:mtm.jpg"))}
+
+

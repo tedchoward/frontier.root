@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:user.unix.scripts.examples.getStateName
+
+on getStateName (statenum) {
+	statenum = number (statenum);
+	return (states.nthState (statenum) + "\n")}
+
+

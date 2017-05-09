@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.clipboard.putValue
+
+on putValue (value) {
+	local (x = binary (value));
+	return (clipboard.put (getBinaryType (x), @x))}
+
+

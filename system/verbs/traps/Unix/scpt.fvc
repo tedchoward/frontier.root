@@ -1,0 +1,43 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.Unix.scpt
+
+on scpt (scriptName, paramList) {
+	«Find the script and call it with the parameter list. It works like XML-RPC and SOAP handlers. The root table is user.unix.scripts. Addresses are dereferenced. Any #security scripts found during the walk are run. All parameters are received as strings -- so your scripts need to take that into account. Also, the result from a command line call usually ends with "\n" (a line feed) -- your scripts will have to add those if appropriate.
+		«05/09/01; 12:22:46 AM by PBS
+	
+	local (nomad, adrScript);
+	local (adrHandlers = @user.unix.scripts);
+	local (securityList = {});
+	
+	bundle { //locate the script
+		try {
+			local (s = scriptName, name);
+			nomad = adrHandlers;
+			loop {
+				if typeOf (nomad^) == tabletype {
+					local (adr = @nomad^.["#security"]);
+					if defined (adr^) {
+						securitylist = securitylist + {adr}}};
+				if sizeof (s) == 0 {
+					break};
+				name = string.nthField (s, '.', 1);
+				nomad = @nomad^.[name];
+				if typeof (nomad^) == addresstype {
+					nomad = nomad^};
+				s = string.delete (s, 1, sizeof (name) + 1)};
+			adrscript = nomad}
+		else {
+			scriptError ("Can't call " + scriptName + " because the script wasn't found.")}};
+	
+	bundle { //check in with the #security scripts
+		local (adr);
+		for adr in securitylist {
+			local (t);
+			t.scriptName = scriptName;
+			t.paramList = paramList;
+			callScript (string (adr), {}, @t)}};
+	
+	local (t); //dummy paramtable
+	new (tableType, @t);
+	return (callScript (string (adrScript), paramList, @t))} //call the script; return the response
+
+

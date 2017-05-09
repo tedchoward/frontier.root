@@ -1,0 +1,78 @@
+FrontierVcsFile:3:scpt:system.agents.StatusMessage
+
+«Changes
+	«11/6/05; 7:56:17 AM by DW
+		«productstring was wrong for the OPML Editor.
+	«03/23/00; 10:22:53 PM by PBS
+		«Now works for both Pike and Frontier -- it says Frontier if you're running Frontier, Pike if you're running Pike.
+	«07/25/00; 4:45:54 PM by PBS
+		«Name change from Pike to Radio UserLand.
+	«04/30/01; 3:59:04 PM by JES
+		«If this is a Mac, restart the web server after waking the computer from sleep.
+	«9/8/99; 11:43:58 AM by DW
+		«I noticed that the standard version of this script doesn't report the number of hits if the web server is turned on. I think this is an essential readout, and I wanted to see if there were any other ideas out there for improvement to this script. I'd like to include this in the root updates before the release of 6.1.
+		«Added callback in response to Philippe Martin's request. Any script in user.callbacks.statusMessage will be called each time the message is generated. Each script in the table returns a bit of information which is then inserted into the message we display.
+		«http://frontier.userland.com/stories/storyReader$1304
+local (productstring);
+bundle { //set productstring
+	productString = "Frontier";
+	if defined (system.environment.isPike) {
+		if system.environment.isPike { //it's either Radio UserLand or Pike
+			if date.versionLessThan (Frontier.version (), "7.0d8") {
+				productString = "Pike"}
+			else {
+				productString = "Radio UserLand"}}
+		else {
+			if defined (system.environment.isOpmlEditor) {
+				if system.environment.isOpmlEditor {
+					productstring = "OPML Editor"}}}}};
+«if system.environment.isMac //restart server after waking from sleep
+	«if not temp.Frontier.startingUp
+		«local (flRestartServer = false, ipa = tcp.dns.getMyDottedId ())
+		«if not defined (temp.Frontier.webserverCheckTime)
+			«temp.Frontier.webserverCheckTime = clock.now ()
+		«if not defined (temp.Frontier.lastIpAddress)
+			«temp.Frontier.lastIpAddress = ipa
+		«if number (clock.now () - temp.Frontier.webserverCheckTime) > 90 //1.5 minutes
+			«flRestartServer = true
+		«if ipa != temp.Frontier.lastIpAddress
+			«flRestartServer = true
+		«if flRestartServer
+			«local (isRunning = inetd.isDaemonRunning (@user.inetd.config.http))
+			«if isRunning //restart the server
+				«inetd.stopOne (@user.inetd.config.http)
+				«inetd.startOne (@user.inetd.config.http)
+			«bundle //make a dummy HTTP request, to clear an error state in the MacOS TCP/IP stack
+				«local (flOnline = false)
+				«if defined (system.environment.isPike)
+					«if system.environment.isPike
+						«flOnline = not tcp.isOffline ()
+				«if isRunning
+					«flOnline = true
+				«if flOnline
+					«try
+						«tcp.httpReadUrl ("http://www.yahoo.com/")
+		«temp.Frontier.webserverCheckTime = clock.now ()
+local (s = productString + " " + Frontier.version () + ": " + string.megabyteString (memAvail ()) + " free, " + string.timeString () + "; ");
+bundle { //add threads
+	local (ctthreads = Frontier.countThreads ());
+	if ctthreads == 1 {
+		s = s + "1 thread"}
+	else {
+		s = s + ctthreads + " threads"}};
+bundle { //add hits if web server is turned on
+	if inetd.isDaemonRunning (@user.inetd.config.http) { //web server is turned on
+		s = s +"; " +  user.webserver.stats.hits + " hits"}};
+bundle { //call the callbacks
+	if defined (user.callbacks.statusMessage) {
+		if typeOf (user.callbacks.statusMessage) == tableType { //don't bomb while the user is creating the callback
+			local (i);
+			for i = 1 to sizeof (user.callbacks.statusMessage) {
+				try {
+					local (callbackresult = user.callbacks.statusMessage [i] ());
+					if sizeof (callbackresult) > 0 {
+						s = s + "; " + callbackresult}}}}}};
+s = s + ".";
+msg (s)
+
+

@@ -1,0 +1,75 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FriendFeed.newPost
+
+on newPost (title, username=nil, remotekey=nil, link=nil, comment=nil, room=nil, audioUrl=nil, audioTitle=nil, imageUrl=nil) {
+	«Changes
+		«12/3/08; 7:44:00 PM by DW
+			«Comment out debugging code.
+		«12/3/08; 7:33:52 PM by DW
+			«Request the format of the returned value to be XML. Return the address of the new post.
+		«12/3/08; 6:44:01 PM by DW
+			«Add support for images. New optional parameter, imageUrl, points to the image to be attached to the post. They will create the thumbnail automatically and link it to the full image. Here's the test post...
+				«http://friendfeed.com/e/c53fefbb-a7dc-4cef-9331-135a13d203a7/Testing-images-through-the-FriendFeed/
+		«7/1/08; 3:58:08 PM by DW
+			«Add support for audio enclosures. 
+				«From their docs...
+				«audioN_url, audioN_title - Audio links (MP3 only for now), specified from a 0-based index. audio0_url specifies the URL of the audio, which will appear as a play button below in the post. If audio0_title is given, it will be shown while playing, otherwise the entry title will be.
+				«http://code.google.com/p/friendfeed-api/wiki/ApiDocumentation#Create_New_Entries
+			«We have two optional params, audioEnclosure, audioEnclosureTitle. Only allow a single enclosure. Not the greatest interface ever, but there's no other way to go given what they've provided. 
+		«6/23/08; 10:08:44 PM by DW
+			«Created.
+			«If you don't send a non-empty data, then no Content-Length header is transmitted and FF complains.
+	local (posturl = "http://friendfeed.com/api/share");
+	friendfeed.init ();
+	bundle { //set defaults
+		if username == nil {
+			username = user.friendfeed.prefs.username};
+		if remotekey == nil {
+			remotekey = string (user.friendfeed.prefs.remotekey)}};
+	local (urllist = string.urlsplit (posturl), path = urllist [3]);
+	bundle { //add params to the path
+		path = path + "?format=xml&title=" + string.urlencode (title);
+		if link != nil {
+			path = path + "&link=" + string.urlencode (link)};
+		if comment != nil {
+			path = path + "&comment=" + string.urlencode (comment)};
+		if room != nil {
+			path = path + "&room=" + string.urlencode (room)};
+		if audioUrl != nil {
+			path = path + "&audio0_url=" + string.urlencode (audioUrl)};
+		if audioTitle != nil {
+			path = path + "&audio0_title=" + string.urlencode (audioTitle)};
+		if imageUrl != nil {
+			path = path + "&image0_url=" + string.urlencode (imageUrl)}};
+	try {
+		local (tc = clock.ticks (), timeoutticks = 60 * user.FriendFeed.prefs.timeoutsecs);
+		local (s = string.httpResultSplit (tcp.httpClient (server:urllist [2], path:path, username:username, password:remotekey,  method:"POST", timeoutticks:timeoutticks, flmessages:false, data:" ")));
+		
+		local (xstruct);
+		«wp.newtextobject (s, @scratchpad.friendfeedresult)
+		xml.compile (s, @xstruct);
+		local (adrfeed = xml.getaddress (@xstruct, "feed"));
+		local (adrentry = xml.getaddress (adrfeed, "entry"));
+		local (urlNewPost = xml.getvalue (adrentry, "link"));
+		
+		user.friendfeed.stats.whenLastPost = clock.now ();
+		user.friendfeed.stats.ctPosts++;
+		user.friendfeed.stats.ctSecsLastPost = double (clock.ticks () - tc) / 60;
+		user.friendfeed.stats.lastPostError = "";
+		return (urlNewPost)} //12/3/08 by DW
+	else {
+		user.friendfeed.stats.lastPostError = tryerror;
+		return (false)}}
+«bundle //test code
+	«webbrowser.openurl (newpost ("Test post please ignore. Really. I mean it! Now cut it out."))
+	«return
+	«
+	«local (imageUrl = "http://farm4.static.flickr.com/3019/2699829038_3b03c8723a_o.jpg")
+	«newpost ("Testing images through the FriendFeed API", comment:"There may be several of these as I test the new functions. They will likely be deleted. IMHO -- it's lame to make you go through the API to get pictures to flow through FF with descriptions (like the one you're reading now). Most people can't do what I'm doing to get this to work.", imageUrl:imageUrl)
+	«return
+	«
+	«local (audiourl = "http://mp3.newsjunk.com/godfatherOpeningScene.mp3")
+	«local (audiotitle = "Bonasera. Bonasera...")
+	«newpost ("Test post for audio enclosures through the FriendFeed API, the audio of the opening scene from The Godfather. The undertaker Bonasera, asks the Godfather for justice. Contains the famous line: \"Someday, and that day may never come, I'll call upon you to do a service for me.\"", audioUrl:audiourl, audiotitle:audiotitle)
+	«newpost ("Oh the buzzing of the bees!")
+
+

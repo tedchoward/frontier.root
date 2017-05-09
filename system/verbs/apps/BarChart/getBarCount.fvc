@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BarChart.getBarCount
+
+on getBarCount () { «returns the number of bars in the target window
+	return (appleEvent (BarChart.id, 'BARC', 'gcnt'))}
+
+

@@ -1,0 +1,35 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.init
+
+on init () {
+	«Changes
+		«7/12/11; 11:44:39 AM by DW
+			«Start a table at config.route53.
+		«6/22/11; 8:30:54 AM by DW
+			«Created.
+	local (adrdata = @config.route53);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)};
+		if not defined (adrdata^.prefs.flRpcEnabled) {
+			adrdata^.prefs.flRpcEnabled = false}};
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)}};
+	bundle { //install RPC handlers if enabled
+		if adrdata^.prefs.flRpcEnabled {
+			if not defined (user.betty.rpcHandlers.blorkmarkServer) {
+				user.betty.rpcHandlers.blorkmarkServer = @s3.route53.rpcHandlers}}};
+	bundle { //system.temp table
+		if not defined (system.temp.route53) {
+			new (tabletype, @system.temp.route53)};
+		if not defined (system.temp.route53.zoneIdCache) {
+			new (tabletype, @system.temp.route53.zoneIdCache)};
+		if not defined (system.temp.route53.recordInfoCache) {
+			new (tabletype, @system.temp.route53.recordInfoCache)}};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

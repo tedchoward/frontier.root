@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.getCardGrid
+
+on getCardGrid (adrGridOn, adrGridVisible, adrGridUnits) {
+	local (atts);
+	if not card.getCardAttributes (@atts) {
+		return (false)};
+	adrGridOn^ = atts.grid;
+	adrGridVisible^ = not atts.grvs;
+	adrGridUnits^ = atts.grun;
+	return (true)}
+
+

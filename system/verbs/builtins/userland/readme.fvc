@@ -1,0 +1,7 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.userland.readme
+
+This suite contains scripts and data that we use to build and clean up each Frontier release. It's much easier for us if we leave this table in the root file. 
+
+11/22/97 at 7:38:29 AM by DW
+
+

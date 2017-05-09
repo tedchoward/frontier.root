@@ -1,0 +1,5 @@
+FrontierVcsFile:3:wptx:system.extensions.odbc.queryTool.SQLQuery
+
+select * from guests
+
+

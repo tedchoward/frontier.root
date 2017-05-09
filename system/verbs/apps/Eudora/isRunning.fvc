@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.isRunning
+
+on isRunning () {
+	return (sys.appIsRunning (Eudora.id))}
+
+

@@ -1,0 +1,105 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.commands.addFeed
+
+on addFeed () {
+	«Changes
+		«5/27/14; 8:08:25 AM by DW
+			«If there's an error reading the feed, offer the user a chance to add it anyway.
+		«4/29/10; 5:16:20 PM by DW
+			«If the user gives us an HTML page, do the auto-discovery routine, cribbed from river2website.quicksub. 
+		«5/21/08; 8:40:30 PM by DW
+			«Rewrite to handle RSS 2.0, 1.0 and Atom feeds. Faster. Much simpler.
+		«3/19/06; 2:31:34 PM by DW
+			«Cribbed from newsRiverSuite.menuCommands.addRssAtts.
+			«Adds a node of type "rss" to the frontmost outline, after prompting the user for the URL of the feed.
+	on decode (s) {
+		return (xml.rss.decodeString (s))};
+	if not defined (user.tools.prefs.lastFeedToLinkTo) {
+		if defined (newsRiverData.prefs.lastFeedUrl) {
+			user.tools.prefs.lastFeedToLinkTo = newsRiverData.prefs.lastFeedUrl}
+		else {
+			user.tools.prefs.lastFeedToLinkTo = "http://"}};
+	local (url = user.tools.prefs.lastFeedToLinkTo);
+	local (clipboardValue = clipboard.getValue (stringType), lowerclip = string.lower (clipboardValue));
+	if (lowerclip beginswith "http://") or (lowerclip beginswith "https://") {
+		url = clipboardValue};
+	op.attributes.getOne ("xmlUrl", @url);
+	if dialog.ask ("URL for feed:", @url) {
+		local (xmltext = tcp.httpreadurl (url), xstruct, atts);
+		try {
+			xml.compile (xmltext, @xstruct)}
+		else { //4/29/10 by DW
+			local (linktable, flfoundfeed = false);
+			xml.getHtmlLinks ("", @linktable, @xmltext);
+			on getlink (type) {
+				local (adrlink);
+				for adrlink in @linktable {
+					if adrlink^.rel == "alternate" {
+						if adrlink^.type == type {
+							url = nameof (adrlink^);
+							flfoundfeed = true;
+							return (true)}}};
+				return (false)};
+			if not getlink ("application/rss+xml") {
+				if not getlink ("application/atom+xml") {
+					if dialog.confirm ("Can't find the feed, add it to the list anyway?") { //5/27/14 by DW
+						flfoundfeed = true}
+					else {
+						return}}};
+			if not flfoundfeed {
+				scriptError ("Can't add the feed because there is no feed link in the web page.")};
+			try {
+				xml.compile (tcp.httpreadurl (url), @xstruct)}};
+		«scratchpad.xstruct = xstruct
+		new (tabletype, @atts);
+		atts.type = "rss";
+		atts.xmlUrl = url;
+		atts.title = "Untitled";
+		atts.htmlUrl = "http://";
+		bundle { //set atts.title, atts.htmlUrl
+			try { //try RSS 2.0 first
+				local (adrrss = xml.getaddress (@xstruct, "rss"));
+				local (adrchannel = xml.getaddress (adrrss, "channel"));
+				try {atts.title = decode (xml.getvalue (adrchannel, "title"))};
+				try {atts.htmlUrl = decode (xml.getvalue (adrchannel, "link"))}}
+			else { //then Atom, then RSS 1.0
+				try { //see if it's Atom
+					local (adrfeed = xml.getaddress (@xstruct, "feed"), adr);
+					try {atts.title = decode (xml.getvalue (adrfeed, "title"))};
+					for adr in adrfeed { //find atts.htmlUrl, which is buried in a link element (there could be many)
+						if nameof (adr^) endswith "link" {
+							try {
+								local (adratts = @adr^.["/atts"]);
+								if adratts^.rel == "alternate" {
+									if string.lower (adratts^.type) == "text/html" {
+										atts.htmlUrl = decode (adratts^.href)}}}}}}
+				else { //see if it's RSS 1.0
+					try {
+						local (adrrdf = xml.getAddress (@xstruct, "RDF"));
+						local (adrchannel = xml.getAddress (adrrdf, "channel"));
+						try {atts.title = decode (xml.getValue (adrchannel, "title"))};
+						try {atts.htmlUrl = decode (xml.getValue (adrchannel, "link"))}}}}};
+		op.setDisplay (false);
+		op.attributes.addgroup (@atts);
+		op.setlinetext (atts.title);
+		op.setDisplay (true);
+		}}
+		«bundle //old code, 5/21/08 by DW
+			«local (adrdata = xml.aggregator.init ())
+			«local (adrservice = @adrdata^.services.[url], atts)
+			«user.tools.prefs.lastFeedToLinkTo = url
+			«
+			«local (servicestable)
+			«if not defined (adrservice^)
+				«new (tabletype, @servicestable)
+				«xml.aggregator.readService (url, @servicestable)
+				«adrservice = @servicestable.[url]
+			«
+			«if string.trimwhitespace (op.getlinetext ()) == ""
+				«op.setlinetext (adrservice^.compilation.channeltitle)
+			«new (tabletype, @atts)
+			«atts.title = adrservice^.compilation.channeltitle
+			«atts.htmlUrl = adrservice^.compilation.channellink
+«bundle //test code
+	«addFeed ()
+
+

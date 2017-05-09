@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.member.validateRemote
+
+on validateRemote (username, password) {
+	«Changes
+		«8/21/11; 9:30:29 PM by DW
+			«The guts of this routine were moved to system.verbs.apps.slide.httpClient.
+	return (slide.httpClient (user.opmlEditor.prefs.identity.serverDomain, username, password, "GET"))};
+bundle { //test code
+	loop {
+		system.temp.opmlEditor.membercache.dave.whenLastRemoteCall = date.yesterday (clock.now ());
+		scratchpad.flvalid = validateRemote ("dave", system.temp.davepass);
+		return;
+		clock.waitseconds (5)}}
+
+

@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.code.outgoing.removeBuddy
+
+on removeBuddy(adrSelf, buddies) {
+	tcp.im.builtinDrivers.aim.code.core.flap_to_toc(adrSelf, 2,"toc_remove_buddy "+ tcp.im.builtinDrivers.aim.code.util.normbuds(buddies));
+	
+	return(true)}
+
+

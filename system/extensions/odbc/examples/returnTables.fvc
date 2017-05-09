@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.examples.returnTables
+
+local { « enter your datasource name, userid, password, and sql statement
+	dsn = "MyDataSource";
+	uid = "";
+	pwd = "";
+	sqlstr = "select * from guests";
+	place = @scratchpad.odbcResults};
+odbc.execute (dsn, uid, pwd, sqlstr, "tables", place);
+odbc.disconnect (dsn);
+edit (place)
+
+

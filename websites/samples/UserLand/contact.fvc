@@ -1,0 +1,18 @@
+FrontierVcsFile:3:wptx:websites.samples.UserLand.contact
+
+#title "Contact Information"
+<dl>
+<dt><b>Email:</b>
+
+<dd>Sales: sales@userland.com<p>
+Bugs: frontier-bugs@userland.com<p>
+Webmaster: webmaster@userland.com
+
+<dt><b>Mail:</b>
+
+<dd>UserLand Software, Inc.<br>
+P.O. Box 1218<br>
+Burlingame, CA 94011-1218
+</dl>
+
+

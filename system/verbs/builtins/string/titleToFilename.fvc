@@ -1,0 +1,21 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.titleToFilename
+
+on titleToFilename (title, maxlen=nil) {
+	«Changes
+		«8/31/11; 9:42:12 AM by DW
+			«First, remove all non alpha characters, the inner-case, and optionally limit the length. A common function that should be factored.
+	local (fname = title, i, ch);
+	for i = sizeof (fname) downto 1 {
+		ch = fname [i];
+		if (not string.isalpha (ch)) and (not string.isnumeric (ch)) and (ch != ' ') {
+			fname = string.delete (fname, i, 1)}};
+	fname = string.innerCaseName (fname);
+	bundle { //limit length
+		if maxlen != nil {
+			if sizeof (fname) > maxlen {
+				fname = string.mid (fname, 1, maxlen)}}};
+	return (fname)}
+«bundle //test code
+	«dialog.alert (titleToFilename ("Hooray! for1 Hollywood!!"))
+
+

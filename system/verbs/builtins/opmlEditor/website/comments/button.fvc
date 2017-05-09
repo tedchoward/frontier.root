@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.comments.button
+
+on button () {
+	«Changes
+		«9/5/12; 4:18:03 PM by DW
+			«Created.
+	local (pta = html.getpagetableaddress (), s = string (opmlEditor.comments.form), t);
+	«scratchpad.mybuttonparams = pta^
+	new (tabletype, @t);
+	webserver.parseargs (pta^.searchargs, @t);
+	
+	bundle { //set t.hiddenFields
+		local (s = "", adr);
+		for adr in @t {
+			s = s + "<input type=\"hidden\" name=\"" + nameof (adr^) + "\" value=\"" + adr^ + "\">"};
+		t.hiddenFields = s};
+	
+	s = string.tablereplace (s, @t);
+	«wp.newtextobject (s, @scratchpad.mybutton)
+	return (html.buildJavascriptInclude (s))};
+bundle { //test code
+	html.setpagetableaddress (@scratchpad.mybuttonparams);
+	button ()}
+
+

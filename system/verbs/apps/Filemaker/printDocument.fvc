@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.printDocument
+
+on printDocument (file) {
+	return (required.printDocument (Filemaker.id, file))}
+
+

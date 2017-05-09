@@ -1,0 +1,66 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fileSynch.synch
+
+on synch (adrdata) {
+	«Changes
+		«2/10/11; 11:46:12 AM by DW
+			«Manage directory file, if feature is enabled. On Mac, skip files named "Icon\r".
+		«10/6/06; 5:12:38 PM by DW
+			«Make sure the synch folder exists before scanning it.
+		«7/8/06; 2:09:43 AM by DW
+			«Cribbed from dotOpmlSuite.folderwatcher.threadscript.
+		«11/6/05; 4:15:48 AM by DW
+			«On the Mac, skip files named .DS_Store.
+		«7/18/05; 10:10:31 AM by DW
+			«Changed test to see if the mod date is greater than the date we have on file. Now that we're synchronizing, it's not okay just to check that they're not equal.
+	local (startticks = clock.ticks (), flchanges = false);
+	adrdata^.stats.ctscans++;
+	bundle { //look for new or modified files
+		local (folder = adrdata^.prefs.folder, f, path, adrfile);
+		file.surefilepath (adrdata^.prefs.folder + "xxx"); //10/6/06; 5:12:30 PM by DW
+		fileloop (f in folder, infinity) {
+			if system.environment.isMac { //11/6/05; 4:15:48 AM by DW
+				local (fname = file.filefrompath (f));
+				if (fname == ".DS_Store") or (fname == "Icon\r") {
+					continue}};
+			path = string.delete (f, 1, sizeof (folder));
+			adrfile = @adrdata^.files.[path];
+			if not defined (adrfile^) {
+				new (tabletype, adrfile)};
+			fileSynch.initFileTable (adrfile);
+			if file.modified (f) > adrfile^.whenModified {
+				adrfile^.whenModified = file.modified (f);
+				adrfile^.fldirty = true}}};
+	bundle { //look for deleted files
+		local (adr, f);
+		for adr in @adrdata^.files {
+			f = adrdata^.prefs.folder + nameof (adr^);
+			if not file.exists (f) {
+				adr^.fldelete = true}}};
+	bundle { //record time used for scan
+		local (nowticks = clock.ticks ());
+		adrdata^.stats.ctSecsForLastScan = double (nowticks - startticks) / 60;
+		startticks = nowticks};
+	bundle { //upload dirty files
+		local (adr);
+		for adr in @adrdata^.files {
+			if adr^.fldirty {
+				fileSynch.uploadFile (adr);
+				flchanges = true}}};
+	bundle { //delete files marked for deletion
+		local (i, adr);
+		for i = sizeof (adrdata^.files) downto 1 {
+			adr = @adrdata^.files [i];
+			if defined (adr^.fldelete) {
+				if adr^.fldelete {
+					fileSynch.deleteFile (adr);
+					flchanges = true}}}};
+	bundle { //synch the directory, if enabled and there were changes, 2/10/11 by DW
+		if adrdata^.prefs.flSynchDirectory {
+			if flchanges {
+				fileSynch.synchDirectory (adrdata)}}};
+	bundle { //time used for uploads
+		adrdata^.stats.ctSecsForUploads = double (clock.ticks () - startticks) / 60}};
+bundle { //test code
+	synch (@user.fileSynch.synchPoints.["Amazon S3"])}
+
+

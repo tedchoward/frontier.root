@@ -1,0 +1,65 @@
+FrontierVcsFile:3:scpt:system.menus.buildMenuBar
+
+«Changes
+	«8/4/08; 8:21:45 AM by DW
+		«Install the Bookmarks menu from user.bookmarksMenu.menu, instead of user.menus.
+	«7/26/08; 10:32:34 AM by DW
+		«Commented call to html.menu.install, the HTML menu is now included in system.menus.menubar.
+	«6/8/06; 2:53:59 PM by DW
+		«New preferences, user.prefs.flBookmarkMenu and user.prefs.flCustomMenu, if true, we insert the bookmark menu and the custom menu. In the OPML Editor they default false, otherwise true.
+	«6/7/05; 10:30:47 AM by 
+		«If OPML editor, don't add the Bookmarks or Custom menus.
+
+bundle { //init new prefs, 6/8/06 by DW
+	local (flOpmlEditor = false);
+	if defined (system.environment.isOpmlEditor) {
+		flOpmlEditor = system.environment.isOpmlEditor};
+	if not defined (user.prefs.flBookmarkMenu) {
+		bookmarksMenu.init ();
+		user.prefs.flBookmarkMenu = not flOpmlEditor};
+	if not defined (user.prefs.flCustomMenu) {
+		user.prefs.flCustomMenu = not flOpmlEditor}};
+
+on add (adrmenu) {
+	try {
+		menu.install (adrmenu)}};
+
+menu.clearMenuBar ();
+
+bundle { //install menus
+	if defined (user.menus.menubar) {
+		add (@user.menus.menubar)}
+	else {
+		add (@system.menus.menubar)};
+	«html.menu.install () //7/26/08 by DW
+	if user.prefs.flBookmarkMenu {
+		add (@user.bookmarksMenu.menu)}; //8/4/08 by DW
+	if user.prefs.flCustomMenu {
+		add (@user.menus.customMenu)};
+	local (i);
+	for i = 1 to sizeOf (user.menus) { //PBS 8/13/98: add additional user menus
+		local (adrMenu = @user.menus [i]);
+		if typeOf (adrMenu^) == addressType { //menus can be address
+			if not defined (adrMenu^^) {
+				continue};
+			adrMenu = adrMenu^};
+		if typeOf (adrMenu^) == menuBarType {
+			case string.lower (nameOf (user.menus [i])) {
+				"bookmarkmenu";
+				"custommenu";
+				"menubar" {
+					continue}};
+			add (adrMenu)}};
+	add (@system.menus.helpMenu)};
+
+bundle { //add the modal menu, based on the type of the frontmost window
+	local (winType = window.getType (window.frontmost ()));
+	try {
+		menu.install (@system.menus.modals.[winType])}
+	else {
+		winType = 0};
+	system.menus.data.currentMenuType = winType}; //see system.menus.agent
+
+menu.buildMenuBar () //force update
+
+

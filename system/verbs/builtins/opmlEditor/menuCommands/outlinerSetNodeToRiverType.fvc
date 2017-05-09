@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.outlinerSetNodeToRiverType
+
+on outlinerSetNodeToRiverType () {
+	«Changes
+		«8/4/12; 1:59:19 PM by DW
+			«Created.
+	local (url);
+	op.attributes.getone ("url", @url);
+	if dialog.ask ("URL for the river's JSON data?", @url) {
+		op.attributes.setone ("type", "river");
+		op.attributes.setone ("url", url)}};
+bundle { //test code
+	outlinerSetNodeToRiverType ()}
+
+

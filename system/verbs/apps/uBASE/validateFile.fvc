@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.uBASE.validateFile
+
+on validateFile (fnum) {
+	return (appleEvent (ubase.id, 'UBAS', 'vald', 'fref', short (fnum)))}
+
+

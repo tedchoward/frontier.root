@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.updateRoot
+
+«Update an object database.
+	«Called from Frontier's Main menu, the top item.
+	«The default database to update is Frontier.root --
+	«but guest database can also be updated.
+	«Tue, Feb 23, 1999 at 4:23:30 PM by PBS
+	«Changes:
+		«This script now works when no windows are open.
+			«Sun, Feb 28, 1999 at 12:38:05 PM by PBS
+local (adr);
+try {
+	adr = table.getCursorAddress ()}
+else {
+	adr = @root};
+if not defined (adr) or typeOf (adr) == booleanType {
+	adr = @root};
+rootUpdates.threadedUpdate (adr)
+
+

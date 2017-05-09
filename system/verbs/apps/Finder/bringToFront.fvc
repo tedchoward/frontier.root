@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Finder.bringToFront
+
+on bringToFront () {
+	return (sys.bringAppToFront (Finder.id))}
+
+

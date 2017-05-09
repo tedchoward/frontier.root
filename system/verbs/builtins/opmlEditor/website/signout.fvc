@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.signout
+
+on signout () {
+	«Changes
+		«6/1/11; 11:09:28 AM by DW
+			«Sign-out page.
+	local (pta = html.getpagetableaddress ());
+	pta^.title = "Sign out";
+	return (opmlEditor.member.signout ("signin"))}
+
+

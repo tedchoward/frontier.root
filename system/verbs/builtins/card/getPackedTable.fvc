@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.getPackedTable
+
+on getPackedTable () {
+	return (appleEvent (0, card.id, 'tabl'))}
+
+

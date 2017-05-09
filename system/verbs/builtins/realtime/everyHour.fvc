@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.everyHour
+
+on everyHour () {
+	«Changes
+		«9/11/10; 11:42:51 PM by DW
+			«Write the log once per hour, so hours can be converted to dates when there's a new day.
+		«8/15/10; 7:37:07 PM by DW
+			«Created. 
+	local (adrdata = realtime.init ());
+	if adrdata^.server.prefs.enabled {
+		realtime.server.deleteOldInboxes ();
+		realtime.server.writeLog ()}}; //9/11/10 by DW
+bundle { //test code
+	everyHour ()}
+
+

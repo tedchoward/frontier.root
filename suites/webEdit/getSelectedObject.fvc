@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:suites.webEdit.getSelectedObject
+
+on getSelectedObject () {
+	local (adr);
+	adr = table.getCursorAddress ();
+	if not defined (adr^) {
+		return (false)};
+	return (adr)}
+
+

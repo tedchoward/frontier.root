@@ -1,0 +1,27 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Filemaker.ChangeNotes
+
+Changes 9/25/96 by PBS
+	New Filemaker Glue Navigator at filemaker.NavigatorOutline
+		To run, command-/ on the line below:
+		navigator.spawn (@filemaker.navigatorOutline, "Filemaker Navigator")
+	New DocServer Documentation
+		Double-click on the file “Filemaker DocServer Text” to install.
+	Removed “setEventInteraction (false)” from Filemaker.open
+		Problems with password-protected databases.
+	New verbs:
+		isRunning ()
+			Returns true if Filemaker is running, false if not.
+		HideWindow (db)
+			Hides the specified database’s window.
+			This is a useful verb for people running Filemaker Pro on their webservers.
+			Improves Filemaker’s performance.
+		ShowWindow (db)
+			Shows the specified database’s window.
+			Complements HideWindow.
+		SendToBack ()
+			Hides Filemaker in the background.
+			Another useful verb for people running Filemaker Pro on webservers.
+			Improves Filemaker’s performance.
+
+
+

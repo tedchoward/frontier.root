@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.oldstuff.code
+
+on code (s) {
+	return ("<code>" + s + "</code>")}
+
+

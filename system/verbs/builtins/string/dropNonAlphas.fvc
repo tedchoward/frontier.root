@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.dropNonAlphas
+
+on dropNonAlphas (s) { «drop out all non-alpha chars from string
+	kernel (string.dropNonAlphas)}
+
+

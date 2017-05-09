@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.viewSlogan
+
+on viewSlogan (flQuotes=true) {
+	«Changes
+		«11/15/11; 2:09:30 PM by DW
+			«New optional param, flQuotes. If true, we embed the slogan in quotes. 
+		«8/23/11; 7:09:45 PM by DW
+			«Slogans are now available everywhere, not just in Radio2.
+		«2/24/11; 10:29:01 AM by DW
+			«Put "double quotes" around slogan.
+		«2/23/11; 10:56:49 PM by DW
+			«Created. 
+	local (ix = date.minute () % sizeof (opmlEditor.data.slogans), s = opmlEditor.data.slogans [ix + 1]);
+	if flquotes {
+		s = "&quot;" + s + "&quot;"};
+	return (s)};
+bundle { //test code
+	dialog.alert (viewSlogan ())}
+
+

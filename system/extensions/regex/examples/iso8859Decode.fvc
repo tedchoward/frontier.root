@@ -1,0 +1,36 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.iso8859Decode
+
+on iso8859Decode (s) {
+	«Does the reverse of string.iso8859Encode ().
+		«Converts HTML entities to ASCII chars in your machine's charset.
+	
+	on hexEncode (s) {
+		local (result = "", i);
+		for i = 1 to sizeof (s) {
+			result = result + string.mid (string.hex (s [i]), 5, 2)};
+		return (result)};
+	
+	on deEntify (adrTable, adrString) {
+		local (key);
+		key = hexEncode (adrTable^.matchString);
+		if (defined (regex.examples.data.entities2ascii.[key])) {
+			adrString^ = regex.examples.data.entities2ascii.[key]}
+		else {
+			adrString^ = adrTable^.matchString};
+		return(true)};
+	
+	local (result = s);
+	
+	regex.subst ("\\[[^]]+\\]", @deEntify, @result);
+	regex.subst ("&[a-zA-z]+;", @deEntify, @result);
+	
+	return(result)};
+
+«bundle //test code
+	«local (s = "&Ecirc;&Iacute;&Ccedil;[&lt;][&gt;]")
+	«local (x)
+	«x = s + " decodes to: " + regex.examples.iso8859Decode (s)
+	«wp.newTextObject (x, @temp.text)
+	«edit (@temp.text)
+
+

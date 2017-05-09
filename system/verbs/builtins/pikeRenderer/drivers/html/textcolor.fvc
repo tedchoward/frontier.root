@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.pikeRenderer.drivers.html.textcolor
+
+on textcolor (textsize, adrprestring, adrpoststring) {
+	adrprestring^ = adrprestring^ + "<font color=\"" + myrules.textcolor + "\">";
+	adrpoststring^ = adrpoststring^ + "</font>"}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.globals.namedElement
+
+on namedElement (class, name, container) {
+	return (setObj (class, container, formName, name))}
+
+

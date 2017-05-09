@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.fileWriters.odb.startup
+
+on startup (adrObject, adrStorage) {
+	return (true)}
+
+

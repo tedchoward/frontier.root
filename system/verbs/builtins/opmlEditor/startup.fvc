@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.startup
+
+on startup () {
+	«Changes
+		«2/18/12; 11:51:24 AM by DW
+			«Just call opmleditor.worldoutline.startup to open the initial outline.
+		«11/25/11; 9:20:21 AM by DW
+			«Called from opmlEditor.init the first time its called in an invocation of the OPML Editor. It runs in its own thread so you don't have to launch threads here.
+		«9/16/11; 8:39:34 AM by DW
+			«This was a failed enterprise, with an empty shell left behind for calls that were made to this script, trying to work around the mistake.
+				«http://worknotes.scripting.com/september2011/91611ByDw/unwindingOpmlstartup
+	opmleditor.worldoutline.startup ();
+	«if user.opmlEditor.worldOutline.prefs.flOpenOnLaunch
+		«msg ("opmlEditor.startup: Opening your world outline.")
+		«opmlEditor.worldOutline.openWorkspace ()
+	return (true)};
+bundle { //test code
+	startup ()}
+
+

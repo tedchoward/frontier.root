@@ -1,0 +1,70 @@
+FrontierVcsFile:3:wptx:system.verbs.apps.Eudora.toys.readMe
+
+Here's a brief explanation of the commands and sub-menus in the Scripts menu. 
+
+***The Forward To Sub-Menu 
+
+Each of the commands in this sub-menu forwards the current message to someone else, and quickly formats it to make it look nicer. 
+
+You probably don't know Bozo the Clown (and he's probably not at bozo.com) or Ignatius Reilly, and Mom & Dad are probably at aol.com, not home.com. The idea here is that you could use Frontier's menu bar editor to create a list of people you commonly forward messages to, even assign single keystrokes to them. They will clearly be able to see that it's a forwarded message (Eudora's built-in forwarder isn't quite so clear...). 
+
+If you're using Frontier Runtime, and therefore can't customize this menu, the Someone Else... option is the way to go. Even if you have Frontier, you may not have the time to tweak up this menu. I find that I'm this kind of guy, but I use the Someone Else command all the time because I like to show off. 
+
+
+***The Respond With Sub-Menu 
+
+This one is a social experiment! 
+
+If you get a boring message and can't stand to *not* send a polite reply, choose one of the four styles of replies from this sub-menu and a script replies on your behalf. 
+
+There are four choices -- Sincere Appreciation, Lunch in 2 Weeks?, Can I Help? and Job Offer. You can edit the text of the template files by choosing the last command in this menu -- Open Templates Folder. 
+
+
+***The Selected Text Sub-Menu 
+
+As its name implies, the commands in this sub-menu do something to the text that's selected -- uppercasing it or lowercasing it, wrapping & indenting it, or passing it onto Netscape. 
+
+
+***The Run Message Command 
+
+This is a very powerful little command. First it checks to see if there's a selection. If so, that's what it runs. Try it here, select the line below and choose thge Run Message command: 
+
+dialog.alert (user.name + "; " + user.organization) 
+
+A dialog should have popped up, confirming that you actually want to run the script. This dialog will pop up *every* time. 
+
+The result of the script is put on the clipboard. 
+
+It will also run a script from the In window or the Out window. Just put the cursor on the email message you want to run and press cmd-/. Same confirmation dialog, result goes on the clipboard. 
+
+I hope to use this feature to send out updates. Maybe for questionnaires. Who knows what else??? 
+
+
+***The Example Scripts Sub-Menu 
+
+There are three commands in this menu, two of which, In Box Looper and Out Box Looper are just interesting, but not really useful. Good sample code, maybe someone has some ideas for scripts that loop over a Eudora list window? 
+
+The third command illustrates a hole in the implementation of Eudora's menu sharing, which otherwise is just great! When a script terminates in an error, the client app needs to pop up a dialog. Eudora isn't doing this. This command highlights the error. When the problem is fixed a dialog should pop up saying "This is a test of Eudora's script error reporting dialog." 
+
+
+***The Web Sites Sub-Menu 
+
+If Netscape supported menu sharing this wouldn't be there. I put together a list of websites that I like to visit. Each of the commands in this menu sends a message to Netscape (launching it if neccessary) to jump to a specific page. 
+
+The Random Cool Site command jumps you to a random cool site (of course!). 
+
+
+***The Edit Shared Menu command 
+
+Brings Frontier to the front, and opens system.menubars.CSOm, the shared menu for Eudora. This command does nothing in Frontier Runtime. 
+
+
+***The Edit Scripts Table command 
+
+Brings Frontier to the front, and opens system.verbs.apps.Eudora, the table of glue scripts and examples for Eudora. This command does nothing in Frontier Runtime. 
+
+Dave Winer 
+January 9, 1995 
+dwiner@well.com 
+
+

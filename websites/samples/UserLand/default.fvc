@@ -1,0 +1,9 @@
+FrontierVcsFile:3:wptx:websites.samples.UserLand.default
+
+#title "Home"
+#displayTitle false
+<center>
+<a href="http://www.scripting.com/frontier5/">{imageRef ("frontier5promo")}</a>
+</center>
+
+

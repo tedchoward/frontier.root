@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.hostNotFoundCallback
+
+on hostNotFoundCallback (pta) {
+	«Changes
+		«5/12/12; 10:19:57 AM by DW
+			«Redirect to opmlServer not opmlEditor -- the new preferred address for the site.
+		«4/9/12; 5:16:39 AM by DW
+			«Created.
+				«http://worknotes.scripting.com/april2012/4912ByDw/redirectFromServerTopLevel/
+	if string.lower (pta^.host) == string.lower (user.opmlEditor.prefs.server.externalDomainName) {
+		if pta^.path == "/" {
+			webserver.redirect (pta, "http://" + pta^.host + "/opmlServer/")}}}
+«bundle //test code
+	«hostNotFoundCallback ()
+
+

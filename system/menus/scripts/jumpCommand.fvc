@@ -1,0 +1,80 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.jumpCommand
+
+on jumpCommand () {
+	«Changes
+		«8/28/12; 9:00:20 AM by DW
+			«If user.prefs.dialogs.jumpAddress is not defined, set it to workspace. It used to be set to "websites". 
+		«Sunday, December 28, 1997 at 11:01:58 AM by dmb
+			«if there's a text selection, set it as the jumpAddress
+			«if the Shift key is down, try skipping the dialog
+			«call the cmd2click callback instead of edit, to get it's extra functionality
+			«Old code: system.misc.jumpTo ()
+	if not defined (user.prefs.dialogs) {
+		new (tableType, @user.prefs.dialogs)};
+	if not defined (user.prefs.dialogs.jumpAddress) {
+		user.prefs.dialogs.jumpAddress = "workspace"}; //"websites"
+	
+	try { // grab any selected text
+		local (s = wp.getSelText ());
+		if string.length (s) > 0 {
+			user.prefs.dialogs.jumpAddress = s}};
+	
+	if kb.shiftKey () { // skip the dialog
+		try {
+			system.callbacks.cmd2click (user.prefs.dialogs.jumpAddress);
+			return}};
+	
+	«PBS 11/14/00: don't use MacBird card with Carbon version.
+	local (flUseMacBird = false);
+	if system.environment.isMac {
+		if not system.environment.isCarbon {
+			flUseMacBird = true};
+		flUseMacBird = true};
+	
+	if flUseMacBird {
+		bundle { // init prefs
+			if not defined (user.prefs.dialogs.jumpList) {
+				user.prefs.dialogs.jumpList = {string (user.prefs.dialogs.jumpAddress)}};
+			if defined (user.prefs.dialogs.permanentJumpList) {
+				if (user.prefs.dialogs.permanentJumpList == "") or (user.prefs.dialogs.permanentJumpList == {}) {
+					delete (@user.prefs.dialogs.permanentJumpList)}};
+			if not defined (user.prefs.dialogs.permanentJumpList) {
+				user.prefs.dialogs.permanentJumpList = {"websites", "user.html.glossary", "user.html.macros", "html.data.standardMacros"}};
+			if not defined (user.prefs.dialogs.maxItemsInJumpList) {
+				user.prefs.dialogs.maxItemsInJumpList = 20}};
+		
+		local (prompt = "Enter an address to Jump to:");
+		local (jumpTo = user.prefs.dialogs.jumpaddress);
+		local (buttonhit);
+		
+		on addToJumpList () { «adds the requested jump to our hotlist
+			with user.prefs.dialogs {
+				if not (permanentJumpList contains jumpaddress) {
+					jumpList = jumpList - jumpaddress; «remove it if it's in the list
+					if sizeOf (jumpList) >= maxItemsInJumpList { «if our hotlist is too long
+						delete (@jumpList[maxItemsInJumpList])}; «delete the oldest
+					jumpList = jumpaddress + jumpList}}}; «add the new item
+		
+		card.run (@system.cards.jumpDialog);
+		
+		if buttonhit == 1 { «if the user hit OK edit the table object
+			user.prefs.dialogs.jumpAddress = jumpTo;
+			«try
+				«local (adr = address (user.prefs.dialogs.jumpAddress))
+				«if not defined (adr^) «only add to the hotlist if the cell exists
+					«scriptError ("")
+				«edit (adr)
+			if system.callbacks.cmd2Click (user.prefs.dialogs.jumpAddress) {
+				addToJumpList ()}
+			else {
+				speaker.beep ()}}}
+	else {
+		if dialog.ask ("Enter an address to Jump to:", @user.prefs.dialogs.jumpAddress) {
+			try {
+				system.callbacks.cmd2click (user.prefs.dialogs.jumpAddress)}
+			else {
+				speaker.beep ()}}}};
+bundle { //test code
+	jumpCommand ()}
+
+

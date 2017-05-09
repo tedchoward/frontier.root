@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.saveOpenDatabases
+
+on saveOpenDatabases () {
+	«Changes
+		«1/18/10; 11:29:01 AM by DW
+			«Created. 
+	if user.opmlEditor.prefs.flSaveDatabases {
+		local (now = clock.now (), ctsecs = (user.opmlEditor.prefs.ctMinutesBetwSaves * 60));
+		if (now - user.opmlEditor.stats.whenLastDatabaseSave) > ctsecs {
+			user.opmlEditor.stats.whenLastDatabaseSave = now;
+			user.opmlEditor.stats.ctDatabaseSaves++;
+			fileMenu.saveOpenDatabases ()}}}
+«bundle //test code
+	«saveOpenDatabases ()
+
+

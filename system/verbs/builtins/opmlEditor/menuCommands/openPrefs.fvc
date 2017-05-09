@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.openPrefs
+
+«Changes
+	«7/29/08; 11:59:38 AM by DW
+		«Added call to opmlEditor.init.
+	«7/28/08; 10:16:32 AM by DW
+		«Created. 
+opmlEditor.init ();
+webbrowser.openurl (opmlEditor.data.urls.prefsPage);
+webbrowser.bringtofront ()
+
+

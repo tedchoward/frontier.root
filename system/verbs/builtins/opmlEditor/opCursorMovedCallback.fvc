@@ -1,0 +1,38 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.opCursorMovedCallback
+
+on opCursorMovedCallback () {
+	«Changes
+		«5/27/12; 8:00:02 PM by DW
+			«Set the name attribute if one is called for.
+				«http://worknotes.scripting.com/may2012/52812ByDw/towardInvariantNames
+		«7/15/11; 6:55:30 PM by DW
+			«Created.
+	bundle { //maintain the atts window
+		local (adrattswindow = @system.temp.opmlEditor.attsWindow);
+		if window.frontmost () != adrattswindow {
+			local (atts);
+			op.attributes.getall (@atts);
+			opmlEditor.init ();
+			if atts == nil {
+				table.emptytable (adrattswindow)}
+			else {
+				bundle { //loop over elements of the atts window
+					local (adr, name);
+					for adr in adrattswindow {
+						name = nameof (adr^);
+						if defined (atts.[name]) {
+							adr^ = atts.[name]}
+						else {
+							delete (adr)}}};
+				bundle { //loop over elements of the atts from the cursor headline
+					local (adr, name);
+					for adr in @atts {
+						name = nameof (adr^);
+						if not defined (adrattswindow^.[name]) {
+							adrattswindow^.[name] = adr^}}}}}};
+	bundle { //set the canonical name, if appropriate, 5/27/12 by DW
+		opmlEditor.setNameAttribute ()}};
+bundle { //test code
+	opCursorMovedCallback ()}
+
+

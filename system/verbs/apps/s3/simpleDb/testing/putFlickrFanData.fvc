@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.simpleDb.testing.putFlickrFanData
+
+local (adr);
+s3.simpleDb.createDomain ("flickrFanData");
+for adr in @flickrFanData.pingers {
+	msg (nameof (adr^));
+	s3.simpleDb.putAttributes ("flickrFanData", nameof (adr^), adr)}
+
+

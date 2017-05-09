@@ -1,0 +1,63 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.getBucket
+
+on getBucket (name, adrtable, flmessages=false) {
+	«Changes
+		«5/5/07; 11:10:55 AM by DW
+			«If the name has a /, treat everything after the first / as a "prefix" following the docs for "GET" on the Amazon website. This allows you to get a list of all the files in a sub-bucket, very handy .
+				«http://docs.amazonwebservices.com/AmazonS3/2006-03-01/
+		«5/3/07; 5:59:40 PM by DW
+			«Add flmessages optional parameter.
+		«4/11/06; 6:31:11 PM by DW
+			«Created. Fill a table with information about all the objects in the bucket.
+	local (params);
+	new (tabletype, @params);
+	params.["max-keys"] = 50; //1000
+	
+	bundle { //5/5/07 by DW
+		if name beginswith "/" {
+			name = string.delete (name, 1, 1)};
+		if name contains "/" {
+			local (ix = string.patternmatch ("/", name));
+			params.prefix = string.mid (name, ix+1, sizeof (name)-ix-1);
+			name = string.mid (name, 1, ix-1)}};
+	
+	s3.init ();
+	
+	new (tabletype, adrtable);
+	local (ct=0);
+	loop {
+		local (response = s3.httpClient ("GET", "/" + name, @params), i, lastkey);
+		«scratchpad.response = response
+		local (adrlistbucketresult = xml.getaddress (@response.xstruct, "ListBucketResult"));
+		local (flTruncated = xml.getvalue (adrlistbucketresult, "IsTruncated"));
+		for i = 1 to sizeof (adrlistbucketresult^) {
+			local (adritem = @adrlistbucketresult^ [i]);
+			if string.nthfield (nameof (adritem^), "\t", 2) == "Contents" {
+				local (key = xml.getvalue (adritem, "Key"));
+				local (adrsub = @adrtable^.[key]);
+				bundle { //show message
+					if flmessages {
+						msg ("s3.getBucket /" + name + "/" + key + " #" + ++ct)}};
+				new (tabletype, adrsub);
+				adrsub^.size = xml.getvalue (adritem, "Size");
+				adrsub^.modified = date.iso8601StringToDate (xml.getvalue (adritem, "LastModified"));
+				adrsub^.etag = s3.decodeString (xml.getvalue (adritem, "ETag"));
+				adrsub^.storageClass = xml.getvalue (adritem, "StorageClass");
+				local (adrowner = xml.getaddress (adritem, "Owner"));
+				adrsub^.ownerId = xml.getvalue (adrowner, "ID");
+				try {
+					adrsub^.ownerName = xml.getvalue (adrowner, "DisplayName")}
+				else {
+					adrsub^.ownerName = ""};
+				lastkey = key}};
+		if not flTruncated { //we're done
+			break};
+		params.marker = lastkey};
+	if flmessages {
+		msg ("")};
+	return (true)};
+bundle { //test code
+	getBucket ("/scripting/backups/", @scratchpad.scriptingBackups, true)}
+	«getBucket ("scriptingImages", @scratchpad.scriptingImagesBucket, true)
+
+

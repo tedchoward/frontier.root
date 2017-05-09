@@ -1,0 +1,21 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.redirectObject
+
+on redirectObject (path, url) {
+	«Changes
+		«8/24/13; 10:59:50 AM by DW
+			«Created.
+				«http://dave.smallpict.com/2013/08/24/redirectingFromAnS3File
+	local (metadata);
+	new (tabletype, @metadata);
+	metadata.["website-redirect-location"] = url;
+	s3.setObjectMetadata (path, @metadata)}
+«bundle //test code
+	«redirectObject ("/smallpicture.com/fargoWorkgroup.html", "http://docs.fargo.io/workgroup")
+	«redirectObject ("/smallpicture.com/fargoRss.html", "http://docs.fargo.io/blogging")
+	«redirectObject ("/smallpicture.com/fargoPress.html", "http://docs.fargo.io/whatIsFargo")
+	«redirectObject ("/smallpicture.com/trexRules.html", "http://docs.fargo.io/contentManagement/rules")
+	«redirectObject ("/smallpicture.com/trexDocs.html", "http://docs.fargo.io/contentManagement/trex")
+	«redirectObject ("/smallpicture.com/outlinerHowto.html", "http://docs.fargo.io/outlinerHowto")
+	«redirectObject ("/smallpicture.com/fargoDocs.html", "http://docs.fargo.io/fargo")
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.putInto
+
+on putInto (obj, item, textFormat = nil, binaryFormat = nil) { «put files and/or folders into a remote directory
+	return (appleEvent (Fetch.id, 'FTCh', 'PutI', '----', objspec (obj), 'Itms', alias (item), 'TFmt', textFormat, 'BFmt', binaryFormat))}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.getLineText
+
+on getLineText () {
+	kernel (op.getlinetext)}
+
+

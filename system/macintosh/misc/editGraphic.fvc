@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.misc.editGraphic
+
+on editGraphic (appID, area) { «Edit the specified drawing area
+	return (appleEvent (appID, 'misc', 'edit', '----', area))}
+
+

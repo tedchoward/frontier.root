@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt (AppleScript):user.html.macros.circumference
+
+on circumference(diameter)
+	if {real, integer} contains class of diameter then
+		return (diameter * 3.14159)
+	end if
+end circumference
+
+
+

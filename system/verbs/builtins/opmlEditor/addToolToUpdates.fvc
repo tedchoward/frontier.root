@@ -1,0 +1,34 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.addToolToUpdates
+
+on addToolToUpdates (adrintool) {
+	«Changes
+		«9/17/11; 6:59:34 PM by DW
+			«When we install a tool, also create a sub-table of user.rootUpdates.servers, with the date pulled from the tool info table, if it's present. This way next time it updates, it won't have to update parts it already has. 
+		«8/4/08; 5:46:56 AM by DW
+			«Created. Called by a tool to request nightly updates. This is done by adding an address in the tool's database in a special table.
+	local (alist = string.parseAddress (adrintool));
+	local (f = alist [1], fname = file.filefrompath (f));
+	bundle { //add to user.opmlEditor.prefs.toolsToUpdate
+		local (adrsub = @user.opmlEditor.prefs.toolsToUpdate.[fname]);
+		if not defined (adrsub^) {
+			adrsub^ = adrintool}};
+	bundle { //add to user.rootUpdates.servers, 9/17/11 by DW
+		local (rootname = string.nthfield (fname, ".", 1));
+		local (adrinfotable = address (rootname + "Info"));
+		local (adrtable = @user.rootUpdates.servers.[rootname]);
+		new (tabletype, adrtable);
+		bundle { //set lastupdate
+			try {
+				adrtable^.lastupdate = date (adrinfotable^.releaseDate)}
+			else {
+				adrtable^.lastupdate = date (0)}};
+		bundle { //set rssUrl
+			try {
+				adrtable^.rssUrl = adrinfotable^.toolUpdateUrl}
+			else {
+				adrtable^.rssUrl = "http://bits.codecasting.org/" + fname + "/rss.xml"}};
+		adrtable^.server = ""}};
+bundle { //test code
+	addToolToUpdates (@river2suite)}
+
+

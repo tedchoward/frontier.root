@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.code.outgoing.setConfig
+
+on setConfig(adrSelf, strConfig) {
+	tcp.im.builtinDrivers.aim.code.core.flap_to_toc(adrSelf, 2,"toc_set_config \""+strConfig+"\"");
+	
+	return(true)}
+
+

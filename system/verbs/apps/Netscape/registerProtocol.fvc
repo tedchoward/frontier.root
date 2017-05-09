@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Netscape.registerProtocol
+
+on registerProtocol (x, forProtocol) { «Registers application as a ³handler² for this protocol with a given prefix. The handler will receive ³OpenURL², or if that fails, ³GetURL² event.
+	pack (x, @x);
+	setbinarytype (@x, 'sign');
+	return (appleEvent (Netscape.id, 'WWW!', 'RGPR', '----', x, 'PROT', string (forProtocol)))}
+
+

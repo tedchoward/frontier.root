@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.bookmarksMenu.insertBoilerplateInOutline
+
+on insertBoilerplateInOutline (itemName) {
+	«Changes
+		«11/10/01; 7:17:36 PM by JES
+			«Set the outline's display to false while making changes, and restore it afterwards.
+		«9/5/00; 6:02:24 PM by PBS
+			«Insert boilerplate into the frontmost outline.
+	
+	local (adrBoilerplate = @user.bookmarksMenu.boilerplate.[itemName]);
+	
+	if not defined (adrBoilerplate^) {
+		scriptError ("Can't insert \"" + itemName + "\" because the boilerplate outline can't be found.")};
+	
+	local (oldDisplay = op.getDisplay ());
+	op.setDisplay (false);
+	
+	if op.getLineText () == "" {
+		if op.getRefcon () == 0 {
+			op.insertOutline (adrBoilerplate, up);
+			op.deleteLine ()}}
+	else {
+		op.insertOutline (adrBoilerplate, down)};
+	
+	op.setDisplay (oldDisplay);
+	
+	return (true)}
+
+

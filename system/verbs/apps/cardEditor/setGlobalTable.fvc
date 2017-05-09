@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.setGlobalTable
+
+on setGlobalTable (windowtitle) {
+	«this script is called from "iowasetcontext" in iowa.c
+	card.setGlobalTable (@cardEditor.tables.[windowtitle], false)}
+
+

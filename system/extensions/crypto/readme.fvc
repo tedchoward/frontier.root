@@ -1,0 +1,9 @@
+FrontierVcsFile:3:optx:system.extensions.crypto.readme
+
+// 8/31/09; 3:00:53 PM by DW
+	If you're running this on an Intel Mac...
+		1. The non-kernelized, DLL-based code will not work, since its PowerPC code.
+		2. Only hashMD5, hmac_MD5 and hashSHA1 have been converted. It's not obvious to me how to convert the others.
+
+
+

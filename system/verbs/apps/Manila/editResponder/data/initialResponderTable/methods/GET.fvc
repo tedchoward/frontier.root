@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Manila.editResponder.data.initialResponderTable.methods.GET
+
+on GET (pta) {
+	return (manila.editResponder.respond (pta))}
+
+

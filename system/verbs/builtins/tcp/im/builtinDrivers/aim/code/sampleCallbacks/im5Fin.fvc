@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.code.sampleCallbacks.im_in
+
+on IM_IN(adrSelf, screenName, message, flAutoresponse) {
+	return("on IM in"+ screenName +" " + message)}
+
+

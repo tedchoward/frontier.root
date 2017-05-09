@@ -1,0 +1,32 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.instapaper.addUrlToAccount
+
+on addUrlToAccount (username, password, url, title, adrmessage=nil) {
+	«Changes
+		«3/21/10; 11:15:08 AM by DW
+			«http://blog.instapaper.com/post/73123968/read-later-api
+	local (apiurl = "http://www.instapaper.com/api/add", code, params);
+	new (tabletype, @params);
+	params.username = username;
+	params.password = password;
+	params.url = url;
+	params.title = title;
+	tcp.httpPost (apiurl, @params, adrcode:@code);
+	if adrmessage != nil {
+		case code {
+			201 {
+				adrmessage^ = ""};
+			403 {
+				adrmessage^ = "Invalid username or password."};
+			500 {
+				adrmessage^ = "The service encountered an error. Please try again later."}}
+		else {
+			adrmessage^ = "Unknown error"}};
+	return (code == 201)};
+bundle { //test code
+	local (username = config.river2.prefs.instapaper.username);
+	local (password = config.river2.prefs.instapaper.password);
+	local (url = "http://www.scripting.com/stories/2010/03/19/crutchfieldShreddedAmazon.html");
+	local (title = "Crutchfield shredded Amazon");
+	dialog.alert (addUrlToAccount (username, password, url, title, @messagestring))}
+
+

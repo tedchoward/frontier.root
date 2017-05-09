@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.sgmlToText
+
+on sgmlToText (s) {
+	«Converts an SGML document instance to plain text.
+		«Also converts character entities to Mac/Win charset.
+	
+	local (sgmlList, i, result = "");
+	
+	sgmlList = regex.examples.parseSgml (s);
+	
+	for i = 1 to sizeof (sgmlList) {
+		if not (sgmlList [i] beginsWith "<") {
+			result = result + sgmlList [i]}};
+	
+	result = regex.examples.iso8859Decode (result);
+	
+	return (result)};
+
+«bundle //test code
+	«local (t)
+	«t = sgmlToText (string (regex.examples.data.html))
+	«wp.newTextObject (t, @temp.text)
+	«edit (@temp.text)
+
+

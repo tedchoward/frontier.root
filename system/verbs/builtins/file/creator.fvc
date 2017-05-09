@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.creator
+
+on creator (path) {
+	kernel (file.creator)}
+
+

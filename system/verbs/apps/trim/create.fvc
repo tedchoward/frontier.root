@@ -1,0 +1,48 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.trim.create
+
+on create (longUrl, username="", password="", apikey="") {
+	«Changes
+		«5/6/09; 10:23:35 AM by DW
+			«Get the status result the official way and if it's in error, throw the error in our way. No more weird messages from tr.im.
+		«4/1/09; 3:30:49 PM by DW
+			«If an apikey is provided or if user.trim.prefs.apiKey is non-empty, add an api_key param to thecall.
+		«4/1/09; 10:56:15 AM by DW
+			«Created. 
+			«http://tr.im/website/api#URLS
+			«If the username and password are specified, then the short url is associated with that tr.im account, so you can track the stats for it. If the params are not specified, but you have set user.trim.prefs.username and user.trim.prefs.password -- then that account is used. If neither are specified, there's no account and no tracking. 
+	on error (s) {
+		user.trim.stats.ctCreateErrors++;
+		user.trim.stats.whenLastCreateError = now;
+		user.trim.stats.lastCreateError = s;
+		scripterror (s)};
+	local (apiurl, now = clock.now (), xmltext, xstruct);
+	apiurl = "http://api.tr.im/api/trim_url.xml?url=" + string.urlencode (longurl);
+	apiurl = apiurl + trim.pushParams (username, password, apikey);
+	try {
+		xmltext = tcp.httpreadurl (apiurl)}
+	else {
+		error (tryerror)};
+	xml.compile (xmltext, @xstruct);
+	scratchpad.xtrimstruct = xstruct;
+	local (adrtrim = xml.getaddress (@xstruct, "trim"));
+	local (adrstatus = xml.getaddress (adrtrim, "status"));
+	local (code = xml.getattributevalue (adrstatus, "code"));
+	if (code == 200) or (code == 201) {
+		local (shortUrl = xml.getvalue (adrtrim, "url"));
+		bundle { //stats
+			user.trim.stats.ctCreates++;
+			user.trim.stats.whenLastCreate = now;
+			local (adrday = mainresponder.calendar.getdayaddress (@user.trim.stats.calendar, now));
+			if defined (adrday^.ctCreates) {
+				adrday^.ctCreates++}
+			else {
+				adrday^.ctCreates = 1}};
+		return (shortUrl)}
+	else {
+		local (message = xml.getattributevalue (adrstatus, "message"));
+		scripterror (message)}};
+bundle { //test code
+	«webbrowser.openurl (create ("http://web2watch.blogspot.com/2009/05/emily-bell-on-future-of-journalism.html"))
+	webbrowser.openurl (create ("http://scripting.com/1997/04/03.html"))}
+
+

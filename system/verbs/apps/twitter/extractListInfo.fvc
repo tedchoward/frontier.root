@@ -1,0 +1,31 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.extractListInfo
+
+on extractListInfo (adrlist, adrtable) {
+	«Changes
+		«11/18/09; 6:55:50 PM by DW
+			«Handle the case where the list doesn't have a description. I guess some don't? Hmmm.
+		«11/18/09; 5:58:06 PM by DW
+			«Extract the new "description" attribute of lists.
+		«10/31/09; 8:09:00 AM by DW
+			«Pull information about a list from XML into a Frontier table.
+	new (tabletype, adrtable);
+	adrtable^.id = xml.getvalue (adrlist, "id");
+	adrtable^.name = xml.getvalue (adrlist, "name");
+	adrtable^.fullName = xml.getvalue (adrlist, "full_name");
+	adrtable^.subscriberCount = xml.getvalue (adrlist, "subscriber_count");
+	adrtable^.memberCount = xml.getvalue (adrlist, "member_count");
+	adrtable^.uri= xml.getvalue (adrlist, "uri");
+	adrtable^.mode = xml.getvalue (adrlist, "mode");
+	adrtable^.id = xml.getvalue (adrlist, "id");
+	bundle { //description, 11/18/09 by DW
+		try {
+			adrtable^.description = xml.getvalue (adrlist, "description")}
+		else {
+			adrtable^.description = ""}};
+	bundle { //get user info
+		local (adruser = xml.getaddress (adrlist, "user"));
+		adrtable^.userScreenName = xml.getvalue (adruser, "screen_name")}}
+«bundle //test code
+	«extractListInfo (@scratchpad.xstruct.["00002000\tlists_list"].["00001000\tlists"].["00004000\tlist"], @scratchpad.listinfo)
+
+

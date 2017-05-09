@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.FilemakerLib.lockDB
+
+on lockDB (db, timeOut = 3600) {
+	return (semaphores.lock (db, timeOut))}
+
+

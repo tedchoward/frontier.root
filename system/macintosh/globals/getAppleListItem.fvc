@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.globals.getAppleListItem
+
+on getAppleListItem (list, itemspec, adr) {
+	kernel (lang.getAppleListItem)}
+
+

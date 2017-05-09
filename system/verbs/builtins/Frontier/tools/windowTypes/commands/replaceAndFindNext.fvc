@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.windowTypes.commands.replaceAndFindNext
+
+on replaceAndFindNext () {
+	«Run the Replace and Find Next command.
+		«09/29/00; 6:00:49 PM by PBS
+	system.menus.scripts.replaceAndFindNextCommand ()}
+
+

@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.unregisterWindowClose
+
+on unregisterwindowclose (x) { «Notifies that the sending application would no longer like to receive WindowClose events.
+	case sys.os () {
+		"MacOS" {
+			return (appleEvent (user.webBrowser.currentid, 'WWW!', 'UNRC', '----', x))}}}
+
+

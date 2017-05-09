@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.ftp.closeConnection
+
+on closeConnection (adrconnectiontable) {
+	tcp.ftp.sendCommand (adrconnectiontable, "QUIT");
+	tcp.closeStream (adrconnectiontable^.commandStream);
+	delete (adrconnectiontable)}
+
+

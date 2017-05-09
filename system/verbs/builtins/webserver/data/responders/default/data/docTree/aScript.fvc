@@ -1,0 +1,5 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webserver.data.responders.default.data.docTree.aScript
+
+return (user.prefs.name + ", " + clock.now ())
+
+

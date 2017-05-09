@@ -1,0 +1,79 @@
+FrontierVcsFile:3:scpt:suites.opmlServer.startup
+
+«Changes
+	«8/17/06; 12:57:15 PM by DW
+		«Add call to mainresponder.startup.
+	«6/4/06; 8:13:14 AM by PM
+		«On Macintosh, we can't run a server on port 80, but we can set it up so that requests that come in on port 80 are forwarded to 5338, one of the ports we are listening on. 
+	«11/23/05; 5:41:44 AM by DW
+		«If folder is "", create one.
+		«And, if we created one, map the hostname to that folder.
+		«This allows all serving to be done by the OPML Editor, in this configuration, we don't rely on a static server.
+	«11/15/05; 10:51:30 AM by DW
+		«Update all the tools every time we startup.
+	«8/12/05; 10:30:36 AM by DW 
+		«Created. Called from startup.startupScript, so it runs every time the OPML Editor launches.
+local (flWeHostOpml = false);
+bundle { //load the tools from the server
+	on getTool (toolname) {
+		local (f = Frontier.tools.getToolsFolderPath () + toolname);
+		if not file.exists (f) {
+			local (startticks = clock.ticks ());
+			local (url = "http://serverdownload.opml.org/" + toolname);
+			file.writewholefile (f, tcp.httpreadurl (url));
+			if system.environment.isMac { //6/4/06 by DW
+				file.settype (f, 'TABL');
+				file.setcreator (f, 'LAND')};
+			log.addtooutline ("opmlServer.startup: " + toolname + " installed (" + string.megabytestring (file.size (f)) + ")", outlineUrl:url, startticks:startticks)}};
+	getTool ("opmlCommunityServer.root");
+	getTool ("opmlBlogs.root");
+	getTool ("opmlDirectory.root");
+	Frontier.tools.installNewTools ()};
+bundle { //if folder is "", create one
+	if user.opmlServer.folder == "" {
+		user.opmlServer.folder = frontier.getsubfolder ("www") + "hosting" + file.getpathchar ();
+		file.surefilepath (user.opmlServer.folder + "xxx");
+		flWeHostOpml = true}};
+bundle { //set up opmlCommunityServerData.root
+	local (adrdata = opmlCommunityServerSuite.init (user.opmlServer.hostname));
+	adrdata^.prefs.folder = user.opmlServer.folder;
+	adrdata^.prefs.url = "http://" + user.opmlServer.hostname + "/"};
+bundle { //initialize mainResponder
+	local (adrdata = Frontier.openDataFile ("config"));
+	mainResponder.init (); //init config.mainResponder
+	if user.opmlServer.blogsname != "" {
+		config.mainresponder.domains.[user.opmlServer.blogsname] = @opmlBlogsWebsite;
+		if flWeHostOpml {
+			config.mainresponder.domains.[user.opmlServer.hostname] = user.opmlServer.folder}};
+	bundle { //set up an http daemon on port 80
+		local (adrd = @user.inetd.config.http3);
+		if not defined (adrd^) {
+			adrd^ = opmlServer.data.daemon;
+			if system.environment.isMac { //6/4/06 by DW
+				adrd^.port = 5338};
+			if user.opmlServer.ipAddressPort80 != -1 {
+				adrd^.ip = user.opmlServer.ipAddressPort80};
+			filemenu.save ();
+			inetd.startone (adrd)}};
+	bundle { //set up a responder that calls mainResponder.respond for requests on port 80
+		local (adrr = @user.webserver.responders.mainResponderOnPort80);
+		if not defined (adrr^) {
+			adrr^ = @opmlServer.data.responder;
+			if system.environment.isMac { //6/4/06 by DW
+				opmlServer.data.responder.condition = "(port == 5338)"};
+			filemenu.save ()}};
+	bundle { //on Mac only, forward from port 80 to port 5338
+		if system.environment.isMac { //6/4/06 by DW
+			opmlServer.macPortForward (80, 5338)}}};
+bundle { //initialize the opmlBlogs.root
+	local (adrdata = opmlBlogsSuite.init ());
+	if adrdata^.prefs.domain == "" {
+		if user.opmlServer.hostname != "" {
+			local (dn = string.innerCaseName (string.replaceAll (user.opmlServer.hostname, ".", " ")));
+			adrdata^.prefs.domain = dn}}};
+bundle { //update all the tools every time we startup.
+	thread.callscript (@opmlCommunityServerSuite.updateTools, {})};
+bundle { //startup mainResponder
+	mainResponder.startup ()}
+
+

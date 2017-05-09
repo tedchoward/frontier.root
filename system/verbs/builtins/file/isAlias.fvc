@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.isAlias
+
+on isAlias (path) {
+	kernel (file.isAlias)}
+
+

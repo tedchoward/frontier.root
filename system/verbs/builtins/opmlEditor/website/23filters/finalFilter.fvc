@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.["#filters"].finalFilter
+
+on finalFilter (pta) {
+	«Changes
+		«11/26/07; 11:43:21 PM by DW
+			«Add call to html.processMacros, for some reason macros weren't getting processed. This took care of it.
+	local (s = pta^.renderedText);
+	s = html.processmacros (s);
+	s = string.replaceall (s, "<div class=\"row\"><div class=\"clearfix\"></div></div>", "");
+	s = string.replace (s, "[[title]]", "<title>");
+	pta^.renderedText = s;
+	return (true)}
+
+

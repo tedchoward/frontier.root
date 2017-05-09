@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.editMenu.undo
+
+on undo () {
+	kernel (editmenu.undo)}
+
+

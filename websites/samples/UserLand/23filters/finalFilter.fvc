@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:websites.samples.UserLand.["#filters"].finalFilter
+
+on finalFilter (adrPageTable) {
+	«Patch "../[table]/x.html" urls
+		«Should be "x.html" instead.
+	bundle {
+		local (adrText = @adrPageTable^.renderedText);
+		local (pattern = "<a href=\"../" + nameOf (parentOf (adrPageTable^.adrObject^)^) + "/");
+		local (replacePattern = "<a href=\"");
+		adrText^ = string.replaceAll (adrText^, pattern, replacePattern)};
+	return (true)}
+
+

@@ -1,0 +1,49 @@
+FrontierVcsFile:3:scpt:suites.webEdit.init
+
+on init () {
+	«Changes
+		«6/14/12; 11:24:56 AM by DW
+			«Init prefs for backup folder for checkouts. 
+		«3/6/11; 11:47:41 AM by DW
+			«The recentChanges outline becomes a table.
+		«3/2/11; 6:45:05 PM by DW
+			«Init user.webEdit.stats.
+	if not defined (user.webEdit) {
+		new (tableType, @user.webEdit)};
+	if not defined (user.webEdit.servers) {
+		new (tableType, @user.webEdit.servers)};
+	bundle { //prefs
+		if not (defined (user.webEdit.prefs)) {
+			new (tableType, @user.webEdit.prefs)};
+		if not (defined (user.webEdit.prefs.currentServer)) {
+			user.webEdit.prefs.currentServer = ""};
+		if not (defined (user.webEdit.prefs.overrideWebEditServerDirective)) {
+			user.webEdit.prefs.overrideWebEditServerDirective = false};
+		if not (defined (user.webEdit.prefs.flDialogs)) {
+			user.webEdit.prefs.flDialogs = true};
+		if not (defined (user.webEdit.prefs.flKeepRecentChangesOutline)) { //3/3/11 by DW
+			user.webEdit.prefs.flKeepRecentChangesOutline = false};
+		if not defined (user.webEdit.prefs.backupFolder) { //6/14/12 by DW
+			user.webEdit.prefs.backupFolder = frontier.getsubfolder ("/ops/webEditCheckoutBackups/")}};
+	bundle { //stats
+		if not defined (user.webEdit.stats) {
+			new (tableType, @user.webEdit.stats)};
+		«if not defined (user.webEdit.stats.recentChanges)
+			«new (outlinetype, @user.webEdit.stats.recentChanges)
+		bundle { //user.webEdit.stats.recentChanges
+			if defined (user.webEdit.stats.recentChanges) {
+				if typeof (user.webEdit.stats.recentChanges) == outlinetype {
+					table.rename (@user.webEdit.stats.recentChanges, "recentChangesOutline");
+					new (tabletype, @user.webEdit.stats.recentChanges)}}
+			else {
+				new (tabletype, @user.webEdit.stats.recentChanges)}};
+		if not defined (user.webEdit.stats.checkoutSerialnum) { //6/14/12 by DW
+			user.webEdit.stats.checkoutSerialnum = 0}};
+	webEdit.buildServerSubMenu ();
+	return (true)}
+«bundle //test code
+	«local (startticks = clock.ticks ())
+	«init ()
+	«dialog.alert (clock.ticks () - startticks)
+
+

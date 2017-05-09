@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.xmlutils.getCharacterData
+
+on getCharacterData (adrelement) {
+	if typeof (adrelement^) == tableType {
+		return (adrelement^.["/pcdata"])}
+	else {
+		return (adrelement^)}}
+
+

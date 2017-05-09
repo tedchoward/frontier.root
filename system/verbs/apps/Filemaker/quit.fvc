@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.quit
+
+on quit () { «Perform tasks before termination, then terminate
+	return (appleEvent (Filemaker.id, 'aevt', 'quit'))}
+
+

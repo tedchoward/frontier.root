@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.everyMinute
+
+on everyMinute () {
+	«Changes
+		«1/18/10; 9:24:00 AM by DW
+			«http://frontiernews.org/2010/01/18/frontier-tools-thread-is-replaced/
+				«Replaces the thread. Most of what the thread script was doing is now done better by scheduler2. 
+	if not system.temp.Frontier.startingUp { //wait for startup to finish
+		Frontier.tools.init ();
+		if user.tools.prefs.flCheckToolsFolder {
+			Frontier.tools.checkTools ()}}}
+«bundle //test code
+	«everyMinute ()
+
+

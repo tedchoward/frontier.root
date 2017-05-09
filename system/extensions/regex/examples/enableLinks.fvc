@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.enableLinks
+
+on enableLinks (s) {
+	«Enables hyper links in s.
+		«Useful for pre-processing plain text data.
+		«Assumes that s is plain text (no html markup).
+		«Returns the html text (a string).
+		«Note: This script does basically the same thing as the built-in html.expandURLs ()
+	
+	local (pattern = "(http|ftp|gopher|news|mailto|telnet)(:[/]*[A-Za-z0-9]+[-_~%@:/\\.A-Za-z0-9]+[A-Za-z/0-9])");
+	local (replace = ³<A HREF="\\1\\2">\\0</A>²);
+	
+	regex.subst (pattern, replace, @s);
+	
+	return (s)};
+
+«bundle //test code
+	«local (test = "Check http://www.muppets.com/~gonzo/ for more info, ftp://ftp.muppets.com for new files, send your q's to mailto:gonzo@muppets.com")
+	«test = enableLinks (test)
+	«wp.newTextObject (test, @temp.enableLinksTest)
+	«edit(@temp.enableLinksTest)
+
+

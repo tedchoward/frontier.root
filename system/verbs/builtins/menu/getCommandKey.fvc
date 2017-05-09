@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.menu.getCommandKey
+
+on getCommandKey () {
+	kernel (menu.getCommandKey)}
+
+

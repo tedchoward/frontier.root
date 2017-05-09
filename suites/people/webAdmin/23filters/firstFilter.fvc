@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.people.webAdmin.["#filters"].firstFilter
+
+on firstFilter (adrPageTable) {
+	return (true)}
+
+

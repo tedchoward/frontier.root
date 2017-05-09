@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.windowTypes.commands.openManilaTemplate
+
+on openManilaTemplate (siteurl, type, adradrwindow) {
+	
+	local (adrtype);
+	if Frontier.tools.windowTypes.findWindowType ("manilaTemplate", @adrtype) {
+		return (adrtype^.openTemplate (siteurl, type, adradrwindow:adradrwindow))};
+	
+	return (false)}
+
+

@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.getObjectMetadata
+
+on getObjectMetadata (path, adrmetadata, flmessages=false) {
+	«Changes
+		«5/6/07; 1:02:21 PM by DW
+			«Created. Get everything about the object but the data. This is going to be very useful.
+	local (adrdata = s3.init (), response);
+	local (apiUrl = adrdata^.accounts.[adrdata^.currentaccount].apiurl);
+	if not (path beginswith "/") {
+		path = "/" + path};
+	if flmessages {
+		msg ("s3.getObjectMetadata " + path)};
+	response = s3.httpClient ("HEAD", path);
+	if flmessages {
+		msg ("")};
+	scratchpad.response = response;
+	adrmetadata^ = response.headers;
+	if response.flerror {
+		return (false)};
+	if not defined (response.headers.["Content-Length"]) { //indicates it was not found
+		return (false)};
+	if not defined (response.headers.["Last-Modified"]) { //indicates it was not found
+		return (false)};
+	return (true)};
+bundle { //test code
+	if getObjectMetadata ("/scriptingImages/2005/09/25/cheerios.gif", @scratchpad.cheeriosdata, true) {
+		edit (@scratchpad.cheeriosdata)}}
+
+

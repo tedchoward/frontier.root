@@ -1,0 +1,35 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Netscape.notes
+
+command keys
+	defined by Netscape 1.1
+		. -- stop loading
+		0-9 -- first 10 history menu items
+		[ -- go back
+		] -- go forward
+		A -- select all
+		B -- view bookmarks
+		C -- copy
+		D -- add bookmark
+		F -- find
+		G -- find again
+		H -- view history
+		I -- load images
+		L -- open location
+		M -- mail document
+		N -- new window
+		O -- open file
+		P -- print
+		Q -- quit
+		R -- reload
+		S -- save as
+		V -- paste
+		W -- close
+		X -- cut
+		Z -- undo
+	used by Clay Basket
+		'  -- Page Preview
+	available for script writers
+		Alphas: E, J, K, T, U, Y
+
+
+

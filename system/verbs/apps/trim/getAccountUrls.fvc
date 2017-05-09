@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.trim.getAccountUrls
+
+on getAccountUrls (adrtable, username="", password="", apikey="") {
+	«Changes
+		«4/3/09; 9:22:11 AM by DW
+			«Created. Fills the table pointed to by the first param with the 100 most recent URLs shortened by the indicated user. The value for each URL is the number of visits. The table is sorted from lowest to highest count.
+	local (apiurl = "http://api.tr.im/api/account_urls.xml?count=100");
+	apiurl = apiurl + trim.pushParams (username, password, apikey);
+	new (tabletype, adrtable);
+	local (xmltext = tcp.httpreadurl (apiurl), xstruct);
+	xml.compile (xmltext, @xstruct);
+	«scratchpad.xstruct = xstruct
+	local (adrvisits = xml.getaddress (@xstruct, "visits"));
+	local (adrurls = xml.getaddress (adrvisits, "urls"), adritem);
+	for adritem in adrurls {
+		if nameof (adritem^) endswith "item" {
+			local (urldest = xml.getvalue (adritem, "destination"));
+			local (visits = number (xml.getvalue (adritem, "visits")));
+			adrtable^.[urldest] = visits}};
+	local (oldtarget = target.set (adrtable));
+	table.sortby ("Value");
+	target.set (oldtarget);
+	user.trim.stats.ctGetAccountUrls++;
+	user.trim.stats.whenLastGetAccountUrls = clock.now ()};
+bundle { //test code
+	getAccountUrls (@scratchpad.urls);
+	edit (@scratchpad.urls)}
+
+

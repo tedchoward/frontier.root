@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.AnArchie.frontwindowrecord
+
+on frontwindowrecord () { «returns the record for the front window
+	return (appleEvent (AnArchie.id, 'Arch', 'Afwr'))}
+
+

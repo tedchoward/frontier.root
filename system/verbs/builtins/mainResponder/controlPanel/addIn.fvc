@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.controlPanel.addIn
+
+«Build the settings page for an add-in.
+	«11/10/99; 2:06:35 AM by PBS
+
+local (pta = html.getPageTableAddress ());
+local (addInName = pta^.pathArgs);
+local (adrWizard = @config.mainResponder.controlPanel.wizards.[addInName]);
+while typeOf (adrWizard^) == addressType { //de-reference, possibly
+	adrWizard = adrWizard^};
+pta^.wizard = adrWizard;
+
+bundle { //set up a dummy navigator so afterCompile callbacks don't overwrite the real navigator
+	local (dummyNavigator);
+	new (tableType, @dummyNavigator);
+	dummyNavigator.outline = "";
+	pta^.navigator = @dummyNavigator};
+
+webserver.util.setCookie (pta, "wizard", pta^.pathArgs);
+local (actionUrl = "addin$" + pta^.pathArgs);
+return (prefsSuite.browser (flIncludeTitle:false, inputPanel:1, action:actionUrl, separatorColor:gainsboro, separatorTextColor:black))
+
+

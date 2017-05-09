@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.menu.setLowerCaseTags
+
+on setLowerCaseTags (fl) {
+	user.html.menu.lowerCaseTags = fl}
+
+

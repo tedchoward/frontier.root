@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:user.html.renderers.pikeRenderer
+
+on pikeRenderer (adroutline) {
+	return (pikeRenderer.theRenderer (adroutline))}
+
+

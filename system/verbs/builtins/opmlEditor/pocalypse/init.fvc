@@ -1,0 +1,30 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.pocalypse.init
+
+on init () {
+	«Changes
+		«3/29/12; 1:54:45 PM by DW
+			«Created.
+	local (adrdata = @user.opmlEditor.pocalypse);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)};
+		if not defined (adrdata^.prefs.username) {
+			adrdata^.prefs.username = user.prefs.name};
+		if not defined (adrdata^.prefs.s3Path) {
+			adrdata^.prefs.s3Path = ""};
+		if not defined (adrdata^.prefs.folder) {
+			adrdata^.prefs.folder = frontier.getsubfolder ("ops") + "Pocalypse Archive" + file.getpathchar ()}};
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)};
+		if not defined (adrdata^.stats.archiveSerialnum) {
+			adrdata^.stats.archiveSerialnum = 0}};
+	if not defined (adrdata^.workspace) {
+		new (outlinetype, @adrdata^.workspace)};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

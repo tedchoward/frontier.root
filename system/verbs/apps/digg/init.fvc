@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.digg.init
+
+on init () {
+	«Changes
+		«4/2/09; 2:41:20 PM by DW
+			«Created. 
+	if not defined (config.digg) {
+		new (tabletype, @config.digg)};
+	bundle { //stats
+		if not defined (config.digg.stats) {
+			new (tabletype, @config.digg.stats)};
+		if not defined (config.digg.stats.ctShortUrlCreates) {
+			config.digg.stats.ctShortUrlCreates = 0};
+		if not defined (config.digg.stats.whenLastShortUrlCreate) {
+			config.digg.stats.whenLastShortUrlCreate = date (0)}}};
+bundle { //test code
+	init ()}
+
+

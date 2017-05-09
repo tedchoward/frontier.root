@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.xmlutils.getElementName
+
+on getElementName (adrelement) {
+	return (xml.convertToDisplayName (nameOf (adrelement^)))}
+
+

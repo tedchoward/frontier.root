@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.openTemplate
+
+on openTemplate () {
+	«Changes
+		«3/7/12; 9:08:23 PM by DW
+			«Convert for new template-editing process.
+		«2/12/12; 3:32:06 PM by DW
+			«New method of getting server info.
+		«6/26/11; 12:54:04 PM by DW
+			«Adapt to receiving opmltext instead of tabbed text. Much better. Whew.
+		«6/18/11; 10:18:10 AM by DW
+			«Created.
+	local (adrdata = opmlEditor.worldOutline.init ());
+	if dialog.ask ("Open template for which nodetype?", @adrdata^.stats.lastNodetype) {
+		local (nodetype = adrdata^.stats.lastNodetype, adroutline = @adrdata^.templates.[nodetype], server, username, password);
+		opmlEditor.worldOutline.getServerInfo (@server, @username, @password); //2/11/12 by DW
+		local (t = [server].worldOutline.getTemplate (username, password, nodetype));
+		op.xmltooutline (t.opmltext, adroutline);
+		local (title = "Template for: \"" + nodetype + "\"");
+		edit (adroutline, adrButtonTable:@opmlEditor.worldOutline.buttons.template, windowtitle:title)}}
+«bundle //test code
+	«openTemplate ()
+
+

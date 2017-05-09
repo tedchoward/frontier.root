@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.aggregator.rpcTesting.testSubs
+
+local (username = aggregatorData.prefs.security.username);
+local (password = string (aggregatorData.prefs.security.password));
+local (url = "http://static.userland.com/gems/backend/rssTwoExample2.xml");
+local (endpoint = "xmlrpc://127.0.0.1:5337/RPC2" );
+bundle { //aggregator.getSubs
+	scratchpad.subs = [endpoint].aggregator.getSubs (username, password);
+	edit (@scratchpad.subs)};
+bundle { //aggregator.subscribe
+	scratchpad.newSubInfo = [endpoint].aggregator.subscribe (url, username, password);
+	edit (@scratchpad.newSubInfo)};
+bundle { //aggregator.getSubInfo
+	scratchpad.subInfo = [endpoint].aggregator.getSubInfo (url, username, password);
+	edit (@scratchpad.subInfo)};
+bundle { //aggregator.unsubscribe
+	scratchpad.returnValue = [endpoint].aggregator.unsubscribe (url, username, password);
+	edit (@scratchpad.returnValue)};
+bundle { //aggregator.getLastScanInfo
+	scratchpad.lastScanInfo = [endpoint].aggregator.getLastScanInfo (username, password);
+	edit (@scratchpad.lastScanInfo)}
+
+

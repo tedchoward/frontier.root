@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.window.setTitle
+
+on setTitle (adr, title) {
+	kernel (window.setTitle)}
+
+

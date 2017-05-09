@@ -1,0 +1,52 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.getUserFollows
+
+on getUserFollows (username, adrfollows, maxfollows=nil) {
+	«Changes
+		«8/6/09; 6:48:02 PM by DW
+			«Twitter is redirecting these calls today, so I added ctFollowRedirects:3 to the call.
+		«8/6/09; 9:15:54 AM by DW
+			«Better error message when Twitter returns an empty string. They're having serious problems this morning and the message we were returning was "Can't get the address of 'users' because the table doesn't have an object with that name."
+		«8/4/09; 3:02:23 PM by DW
+			«New optional param, maxfollows. If non-nil, we won't return more than that amount of followers.
+		«6/1/09; 8:54:47 AM by DW
+			«Check that screenname isn't non-empty. 
+		«5/31/09; 6:01:47 PM by DW
+			«Created. Return a table containing info about all the people the indicated user follows.
+	local (s = "http://twitter.com/statuses/friends.xml?screen_name=" + username, pagenum=1);
+	new (tabletype, adrfollows);
+	loop {
+		local (url = s + "&page=" + pagenum++);
+		local (xmltext = tcp.httpreadurl (url, ctFollowRedirects:3), xstruct, ctadded=0);
+		if sizeof (xmltext) == 0 {
+			scripterror ("Can't get the followers for \"" + username + "\" because Twitter returned an empty result.")};
+		xml.compile (xmltext, @xstruct);
+		«scratchpad.userfollowsxstruct = xstruct
+		local (adrusers = xml.getaddress (@xstruct, "users"), adruser);
+		for adruser in adrusers {
+			if maxfollows != nil { //8/4/09 by DW
+				if sizeof (adrfollows^) >= maxfollows {
+					return}};
+			if nameof (adruser^) endswith "user" {
+				local (screenname = xml.getvalue (adruser, "screen_name"));
+				if sizeof (screenname) > 0 {
+					local (adrtable = @adrfollows^.[screenname]);
+					new (tabletype, adrtable);
+					adrtable^.userId = xml.getvalue (adruser, "id");
+					adrtable^.userName = xml.getvalue (adruser, "name");
+					adrtable^.userScreenName = screenname;
+					adrtable^.userLocation = xml.getvalue (adruser, "location");
+					adrtable^.userDescription = xml.getvalue (adruser, "description");
+					adrtable^.userProfileImageUrl = xml.getvalue (adruser, "profile_image_url");
+					adrtable^.userUrl = xml.getvalue (adruser, "url");
+					adrtable^.userFollowedBy = number (xml.getvalue (adruser, "followers_count")); //5/9/09 by DW
+					adrtable^.userFollows = number (xml.getvalue (adruser, "friends_count")); //5/9/09 by DW
+					adrtable^.userCtStatuses = number (xml.getvalue (adruser, "statuses_count")); //5/9/09 by DW
+					adrtable^.flProtected = xml.getvalue (adruser, "protected"); //12/8/07 by DW
+					ctadded++}}};
+		if ctadded == 0 {
+			return}}};
+		«scratchpad.follows = xstruct
+bundle { //test code
+	getUserFollows ("px", @scratchpad.userfollows, 15)}
+
+

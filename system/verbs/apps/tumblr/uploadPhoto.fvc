@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.tumblr.uploadPhoto
+
+on uploadPhoto (f, email=nil, password=nil, generator=nil, caption=nil, clickThroughUrl=nil) {
+	«Changes
+		«6/10/09; 11:01:01 AM by DW
+			«Created. 
+	local (id);
+	id = tumblr.newPost ("", "", email, password, "photo", fdata:f, caption:caption, clickThroughUrl:clickThroughUrl, flMultipart:true);
+	return (id)}
+«bundle //test code
+	«local (tc = clock.ticks ())
+	«uploadPhoto ("ohio:katzs.jpg", caption:"Katz's Deli, New York, NY. \"Send a salami to your boy in the army!\"", clickThroughUrl:"http://www.katzdeli.com/")
+	«dialog.alert (clock.ticks () - tc)
+
+

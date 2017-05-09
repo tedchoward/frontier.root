@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.core.save
+
+on save (appID, obj, saveIn = nil, as = nil) { «Save an object
+	return (appleEvent (appID, 'core', 'save', '----', objspec (obj), 'kfil', alias (saveIn), 'fltp', string4 (as)))}
+
+

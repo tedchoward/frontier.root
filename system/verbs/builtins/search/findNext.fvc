@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.search.findNext
+
+on findNext () {
+	kernel (search.findnext)}
+
+

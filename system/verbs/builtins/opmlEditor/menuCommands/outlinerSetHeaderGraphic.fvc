@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.outlinerSetHeaderGraphic
+
+on outlinerSetHeaderGraphic () {
+	«Changes
+		«5/20/11; 1:13:57 PM by DW
+			«Command to set the headerGraphic attribute on a node.
+	local (headerGraphic);
+	op.attributes.getone ("headerGraphic", @headerGraphic);
+	if dialog.ask ("HTML for this outline's headerGraphic?", @headerGraphic) {
+		op.attributes.setone ("headerGraphic", headerGraphic)}};
+bundle { //test code
+	outlinerSetHeaderGraphic ()}
+
+

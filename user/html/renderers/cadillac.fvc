@@ -1,0 +1,49 @@
+FrontierVcsFile:3:scpt:user.html.renderers.cadillac
+
+on cadillac (adrOutline) {
+	«PBS 4/12/98:
+		«Fix for truncation caused by 255 character outline line limit.
+		«Performance boosts:
+			«Set display to false.
+			«Call spacePixels macro just once.
+		«Changes:
+			«06/19/00; 4:12:23 PM by PBS
+				«HTML attributes are now in quotes. The valign attribute is now "middle" instead of "center," so it's valid.
+	local (display = op.getDisplay ());
+	op.setDisplay (false);
+	op.firstsummit ();
+	op.fullexpand ();
+	local (level = 0);
+	local (htmlText);
+	local (imgTag = html.data.standardMacros.spacePixels ("<replaceme>"));
+	on add (s) {
+		htmlText = htmlText + s + "\r"};
+	on visit () {
+		loop {
+			local (hassubs = op.countSubs (1) > 0);
+			local (linetext = op.getlinetext ());
+			local (s = "");
+			s = s + "<table><tr>";
+			if level > 0 { «add a dummy cell to do the indentation
+				local (pixels = 20 * level);
+				local (oneimgtag = string.replace (imgTag, "<replaceme>", pixels));
+				s = s + "<td valign=\"middle\" width=\"" + pixels + "\">" + oneimgtag + "</td>"}
+			else {
+				linetext = "<b>" + linetext + "</b>"};
+			s = s + "<td>" + linetext + "</td></tr></table>";
+			add (s);
+			«op.setlinetext (s)
+			«window.msg (s)
+			if hassubs {
+				op.go (right, 1);
+				level++;
+				visit ();
+				level--;
+				op.go (left, 1)};
+			if not op.go (down, 1) {
+				break}}};
+	visit ();
+	op.setDisplay (display);
+	return (htmlText)}
+
+

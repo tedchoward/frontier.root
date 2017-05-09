@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.bookmarksMenu.["builtinNodeTypes-toBeDeleted"].nodeTypes.manilaSiteStructureMessage
+
+on manilaSiteStructureMessage (adrLogic, adrTitle) {
+	return (bookmarksMenu.builtinNodeTypes.getManilaMessageLogic (adrLogic, adrTitle))}
+
+

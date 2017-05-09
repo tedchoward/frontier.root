@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.popTrailing
+
+on popTrailing (s, ch) {
+	«Thursday, November 11, 1999 at 2:57:27 AM by AR
+		«Implemented as a kernel verb in Frontier 6.1.
+		«Old code
+			«on popTrailing (s, ch)
+				« while s endsWith ch
+					«s = string.delete (s, string.length (s), 1)
+				«return (s)
+	kernel (string.poptrailing)}
+
+

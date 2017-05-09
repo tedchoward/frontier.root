@@ -1,0 +1,49 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.metaWeblog.getRsdData
+
+on getRsdData (weblogurl, adrtable) {
+	«Changes
+		«8/29/06; 10:52:26 AM by DW
+			«Manila sometimes includes its <link> element without a closing />. Rather than force the user to update, or hack up the Manila source, we go ahead and put the slash in there for them. An example:
+				«<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://fmcpherson.weblogger.com/xml/rsd.xml" >
+		«8/26/06; 11:50:38 AM by DW
+			«Allow for redirection on the HTTP read.
+		«1/20/06; 8:33:14 AM by DW
+			«Created.
+			«Given the address of a weblog, read its source, find the RSD file, see if it supports the MetaWeblog API, and if so, fill teh table with its url and blogID, and return true.
+	local (pat = "<link rel=\"EditURI\"");
+	local (s = tcp.httpreadurl (weblogurl, ctFollowRedirects:5));
+	local (ix = string.patternmatch (pat, s));
+	if ix == 0 {
+		return (false)};
+	s = string.delete (s, 1, ix-1);
+	local (i, xstruct);
+	for i = 1 to sizeof (s) {
+		if s [i] == '>' {
+			s = string.mid (s, 1, i);
+			break}};
+	if not (s endswith "/>") { //8/29/06 by DW
+		s = string.insert ("/", s, sizeof (s))};
+	xml.compile (s, @xstruct);
+	«scratchpad.xstruct = xstruct; scratchpad.s = s
+	
+	local (adrlink = xml.getaddress (@xstruct, "link"));
+	local (rsdurl = adrlink^.["/atts"].href);
+	local (xmltext = tcp.httpreadurl (rsdurl));
+	xml.compile (xmltext, @xstruct);
+	«scratchpad.xstruct = xstruct
+	
+	local (adrrsd = xml.getaddress (@xstruct, "rsd"));
+	local (adrservice = xml.getaddress (adrrsd, "service"));
+	local (adrapis = xml.getaddress (adrservice, "apis"), adr);
+	for adr in adrapis {
+		if nameof (adr^) contains "api" {
+			if adr^.["/atts"].name == "MetaWeblog" {
+				new (tabletype, adrtable);
+				adrtable^.url = adr^.["/atts"].apiLink;
+				adrtable^.blogID = adr^.["/atts"].blogID;
+				return (true)}}};
+	return (false)} //doesn't support the MetaWeblog API
+«bundle //test code
+	«getRsdData ("http://scripting.wordpress.com/", @scratchpad.rsdData)
+
+

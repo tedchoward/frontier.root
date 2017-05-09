@@ -1,0 +1,116 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.httpClient
+
+on httpClient(method="GET", resource="/", adrParams=nil, content=nil, adrMeta=nil, acl=nil, content_type="", idaccount="default", debug=false, flHttpMessages=false) {
+	«Changes
+		«8/24/13; 10:50:08 AM by DW
+			«If the metadata key is website-redirect-location, then we special-case the addition of the header so as not to add the string "meta-" -- which causes it to break. Not sure if the setting metadata feature ever worked, but this is the most conservative approach to avoiding breakage. 
+		«7/10/06; 8:38:52 PM by DW
+			«Added flHttpMessages optional param, default false. Determines if HTTP calls display messages in the About window.
+		«4/11/06; 7:11:53 AM by DW
+			«Changed name of the compiled xml structure to xstruct. It's generally not a good idea to use the names of built-in tables in naming data or code, although this naming couldn't have hurt anything because it's in a table.
+			«Fixed the error-handling code. If the server returns an error, we throw a scriptError, but before doing that, we set various fields of the returned table to provide information about the error in case the caller wants to process errors.
+		«4/10/06; 7:04:01 AM by DW
+			«Adapted from Les's script.
+		«3/28/06; 7:37:23 AM by LMO
+			«Added metadata header handling
+		«3/27/06; 11:38:19 PM by LMO
+			«Initial Revision
+	on hmac (data, key) {
+		«Changes
+			«3/27/06; 5:57:47 PM by LMO
+				«Initial implementation, stolen from Digest::HMAC in Perl
+		local (BLOCK_SIZE=64);
+		on sha1 (data) {
+			«See: http://www.spicynoodles.net/projects/crypto.html
+			return (crypto.hashSHA1(data, false))};
+		local(k_ipad, k_opad, i);
+		if string.length (key) > BLOCK_SIZE {
+			key = sha1 (key)};
+		for i = 0 to BLOCK_SIZE-1 {
+			if i < string.length(key) {
+				«XOR characters of the key
+				k_char = string.nthChar(key, i+1);
+				k_ipad = k_ipad + char(bit.logicalXor(k_char, char(0x36)));
+				k_opad = k_opad + char(bit.logicalXor(k_char, char(0x5c)))}
+			else {
+				«Pad out the rest of the block size length
+				k_ipad = k_ipad + char(0x36);
+				k_opad = k_opad + char(0x5c)}};
+		return (sha1 (k_opad + sha1 (k_ipad + data)))};
+	local (adrdata = s3.init ());
+	local (timeOutTicks = 60 * adrdata^.accounts.[idaccount].timeOutSecs);
+	local (adraccount = @adrdata^.accounts.[idaccount]);
+	local (nowstring = date.netstandardstring (clock.now ()));
+	local (hdrs, rv, params);
+	bundle { // Set up authentication and HTTP headers
+		local (s, signature, string_to_sign, acl_header_to_sign, meta_to_sign);
+		new (tabletype, @hdrs);
+		local (content_MD5 = "");
+		«Huh.  The Perl s3curl script defines a $contentMD5, but it never uses it.
+		«if content != nil
+			«content_MD5 = string.hashMD5(content)
+		if acl != nil {
+			hdrs.["x-amz-acl"] = acl;
+			acl_header_to_sign = "x-amz-acl:" + acl + "\n"};
+		if adrMeta != nil {
+			meta_to_sign = "";
+			for i = 1 to sizeof (adrMeta^) {
+				local (name = nameof(adrMeta^[i]));
+				if name == "website-redirect-location" { //8/24/13 by DW
+					name = "x-amz-"+name}
+				else {
+					name = "x-amz-meta-"+name};
+				hdrs [name] = adrMeta^[i];
+				«Note: No space between header name, colon, and value.  This was a gotcha.
+				meta_to_sign = meta_to_sign + name+":"+adrMeta^[i]+"\n"}};
+		bundle { // Build signature for authentication
+			s = method + "\n";
+			s = s + content_MD5 + "\n";
+			s = s + content_type + "\n";
+			s = s + nowstring + "\n";
+			s = s + acl_header_to_sign;
+			s = s + meta_to_sign;
+			s = s + resource;
+			if debug {
+				wp.newTextObject (s, @system.temp.s3signatureString)};
+			signature = base64.encode(hmac (s, adraccount^.SecretAccessKey), 0);
+			if debug {
+				wp.newTextObject (signature, @system.temp.s3signature)}};
+		hdrs.Date = nowstring;
+		hdrs.Authorization = "AWS " + adraccount^.AWSAccessKeyId + ":" + signature};
+	bundle { // Make the HTTP request
+		local(u, http_rv);
+		url = adraccount^.apiUrl + resource;
+		if adrParams != nil {
+			if sizeOf (adrParams) > 0 {
+				url = url + "?" + webserver.encodeArgs (adrParams)}};
+		u = string.urlsplit (url);
+		if content != nil {
+			http_rv = tcp.httpClient (method, u[2], path:u[3], adrHdrTable:@hdrs, data:content, datatype:content_type, debug:debug, timeOutTicks:timeOutTicks, flMessages:flHttpMessages)}
+		else {
+			http_rv = tcp.httpClient(method, u[2], path:u[3], adrHdrTable:@hdrs, debug:debug, timeOutTicks:timeOutTicks, flMessages:flHttpMessages)};
+		new (tabletype, @rv);
+		rv.errorcode = ""; //if non-empty, the code returned by the S3 server
+		rv.errorstring = ""; //human-readable error string
+		rv.data = string.httpResultSplit (http_rv, @rv.headers);
+		try { //parse the data as an XML doc
+			xml.compile (rv.data, @rv.xstruct);
+			rv.flerror = false}
+		else {
+			rv.errorstring = tryerror;
+			rv.flerror = true};
+		if not rv.flerror { //look for an <Error> root element
+			try {
+				local (adrError = xml.getAddress (@rv.xstruct, "Error"));
+				local (errorstring = xml.getValue (adrError, "Message"));
+				rv.errorstring = "Can't process the request because the S3 server reported an error: \"" + errorstring + "\"";
+				rv.errorcode = xml.getValue (adrError, "Code");
+				rv.flerror = true};
+			if rv.flerror {
+				scriptError (rv.errorstring)}}};
+	return (rv)};
+bundle { //test code
+	s3.getMyBuckets (@scratchpad.myBuckets);
+	edit (@scratchpad.myBuckets)}
+
+

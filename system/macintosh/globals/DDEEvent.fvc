@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.globals.DDEEvent
+
+on DDEEvent () { «variable parameter list
+	kernel (lang.DDEEvent)}
+
+

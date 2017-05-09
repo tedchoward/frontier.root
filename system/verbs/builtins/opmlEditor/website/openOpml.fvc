@@ -1,0 +1,28 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.openOpml
+
+on openOpml () {
+	«Changes
+		«10/10/11; 1:31:43 PM by DW
+			«Redirect back to the url after opening the outline.
+		«10/6/11; 5:57:25 PM by DW
+			«Return the URL so the caller doesn't have to get it himself.
+		«8/29/11; 1:14:23 PM by DW
+			«The user clicked on a special OPML link in the World Outline somewhere.
+	local (pta = html.getpagetableaddress (), args, adroutline = @scratchpad.myFriendTheOutline, opmltext);
+	new (tabletype, @args);
+	webserver.parseargs (pta^.searchargs, @args);
+	op.getnetoutline (args.url, @adrtable, flKeepXml:true);
+	if not defined (adrtable^.outline) {
+		op.xmltooutline (adrtable^.xmltext, @adrtable^.outline);
+		bundle { //do a full collapse of the outline before inserting
+			local (oldtarget = target.set (@adrtable^.outline));
+			op.fullcollapse ();
+			target.set (oldtarget)}};
+	frontier.bringtofront ();
+	edit (@adrtable^.outline, args.url);
+	webserver.redirect (pta, args.url);
+	return (args.url)};
+bundle { //test code
+	openOpml ()}
+
+

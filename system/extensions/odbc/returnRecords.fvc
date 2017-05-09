@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.returnRecords
+
+on returnRecords (dsn=user.prefs_odbc.dsn, uid=user.prefs_odbc.uid, pwd=user.prefs_odbc.pwd, sql) {
+	«Obsolete. Use odbc.execute().
+	«Saturday, August 08, 1998 at 11:47:39 PM by HA
+	
+	odbc.execute (dsn, uid, pwd, sql, "records")}
+
+

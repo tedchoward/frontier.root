@@ -1,0 +1,7 @@
+FrontierVcsFile:3:wptx:suites.people.webAdmin.addUserToGroup
+
+#title "Add User to Group"
+{addUserToGroup ()}
+{goBack ()}
+
+

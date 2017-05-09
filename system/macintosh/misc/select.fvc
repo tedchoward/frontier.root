@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.misc.select
+
+on select (appID, obj) { «Select object(s)
+	return (appleEvent (appID, 'misc', 'slct', '----', objspec (obj)))}
+
+

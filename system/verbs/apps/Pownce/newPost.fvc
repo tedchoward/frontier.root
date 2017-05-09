@@ -1,0 +1,36 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Pownce.newPost
+
+on newPost (bodytext, username=nil, password=nil, link=nil, mediaFileData=nil, postTo="all") {
+	«Changes
+		«3/1/08; 7:43:35 PM by DW
+			«http://pownce.pbwiki.com/API+Documentation2-0#PostaMessage
+			«if link != nil, then it's a link.
+	local (apiurl, data);
+	pownce.init ();
+	bundle { //set apiurl
+		apiurl = "http://api.pownce.com/2.0/send/message.xml";
+		if mediaFileData != nil {
+			apiurl = "http://api.pownce.com/2.0/send/file.xml"}
+		else {
+			if link != nil {
+				apiurl = "http://api.pownce.com/2.0/send/link.xml"}}};
+	bundle { //set username, password, if nil
+		if username == nil {
+			username = user.pownce.prefs.username};
+		if password == nil {
+			password = user.pownce.prefs.password}};
+	bundle { //set data
+		data = "note_to=" + postTo;
+		if mediaFileData != nil {
+			data = data + "&media_file=" + string.urlencode (mediaFileData)};
+		if link != nil {
+			data = data + "&url=" + link};
+		data = data + "&note_body=" + string.urlencode (bodytext)};
+	local (s = pownce.httpClient ("POST", apiurl, data, username, password));
+	wp.newtextobject (s, @scratchpad.s); edit (@scratchpad.s)};
+bundle { //test code
+	local (linkurl = "http://www.flickr.com/photos/scriptingnews/303617349/");
+	local (mediafiledata = string (file.readwholefile ("ohio:theWireMarch10.mp3")));
+	newPost ("Seventh in a series of test posts to see if the OPML Editor glue for Pownce is working, a retry of the previous test. It has an MP3 file attached, with an important announcement about the final episode of The Wire, airing on March 10. Put down the coffee cup and swallow before listening to this. Seriously. :-)", mediaFileData:mediafiledata, postTo:"all")}
+
+

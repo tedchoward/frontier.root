@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.getMyBuckets
+
+on getMyBuckets (adrtable) {
+	«Changes
+		«4/8/06; 4:58:41 PM by DW
+			«Created. Return a table containing all my buckets. Apparently there's a limit of 100 per user. 
+			«Note to Les. Tables are easier to work with in Frontier, and are much more efficient than lists and records. 
+	local (resp, i);
+	s3.init ();
+	resp = s3.httpClient (method:"GET", resource:"/");
+	«scratchpad.resp = resp
+	
+	local (adrresult = xml.getAddress (@resp.xstruct, "ListAllMyBucketsResult"));
+	local (adrbuckets = xml.getAddress (adrresult, "Buckets"));
+	new (tabletype, adrtable);
+	for i = 1 to sizeof (adrbuckets^) {
+		local (adrsub = @adrbuckets^ [i]);
+		local (name = string.nthfield (nameof (adrsub^), "\t", 2));
+		if name == "Bucket" {
+			local (bucketname = xml.getvalue (adrsub, "Name"));
+			local (bucketval = xml.getvalue (adrsub, "CreationDate"));
+			adrtable^.[bucketname] = date.iso8601StringToDate (bucketval)}};
+	return (true)};
+bundle { //test code
+	getMyBuckets (@scratchpad.myBuckets)}
+
+

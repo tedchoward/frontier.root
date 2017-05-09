@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.wp.inTextMode
+
+on inTextMode () {
+	kernel (wp.intextmode)}
+
+

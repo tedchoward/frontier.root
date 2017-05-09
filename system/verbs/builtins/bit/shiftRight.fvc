@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.bit.shiftRight
+
+on shiftRight (n, dist) {
+	kernel (bit.shiftRight)}
+
+

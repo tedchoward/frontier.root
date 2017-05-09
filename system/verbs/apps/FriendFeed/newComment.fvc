@@ -1,0 +1,41 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FriendFeed.newComment
+
+on newComment (id, body, username=nil, remotekey=nil) {
+	«Changes
+		«5/14/09; 8:38:23 AM by DW
+			«Created. Calls the FriendFeed API to add a comment to the indicated post.
+	local (posturl = "http://friendfeed.com/api/comment");
+	friendfeed.init ();
+	bundle { //set defaults
+		if username == nil {
+			username = user.friendfeed.prefs.username};
+		if remotekey == nil {
+			remotekey = string (user.friendfeed.prefs.remotekey)}};
+	local (urllist = string.urlsplit (posturl), path = urllist [3]);
+	bundle { //add params to the path
+		path = path + "?format=xml&entry=" + id + "&body=" + string.urlencode (body)};
+	try {
+		local (tc = clock.ticks (), timeoutticks = 60 * user.FriendFeed.prefs.timeoutsecs);
+		local (s = string.httpResultSplit (tcp.httpClient (server:urllist [2], path:path, username:username, password:remotekey,  method:"POST", timeoutticks:timeoutticks, flmessages:false, data:" ")));
+		
+		local (xstruct);
+		«wp.newtextobject (s, @scratchpad.friendfeedresult)
+		xml.compile (s, @xstruct);
+		«scratchpad.ffcommentxstruct = xstruct
+		
+		local (adrcomment = xml.getaddress (@xstruct, "comment"));
+		local (id = xml.getvalue (adrcomment, "id"));
+		return (id)}
+	else {
+		user.friendfeed.stats.lastPostCommentError = tryerror;
+		user.friendfeed.stats.whenLastPostCommentError = clock.now ();
+		return (false)}}
+«bundle //test code
+	«local (t, url = friendfeed.newpost ("Testing code to add comments to a FF post, reciting the names of the 50 states in the US", adrdata:@t))
+	«window.about ()
+	«for i = 1 to 50
+		«msg (states.nthstate (i))
+		«newcomment (t.id, states.nthstate (i))
+	«newcomment (t.id, "This is a comment. If you see it, something is working!")
+
+

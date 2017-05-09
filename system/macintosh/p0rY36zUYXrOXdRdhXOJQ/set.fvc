@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.core.set
+
+on set (appID, obj, setTo) { «Set an object's data
+	return (appleEvent (appID, 'core', 'setd', '----', objspec (obj), 'data', setTo))}
+
+

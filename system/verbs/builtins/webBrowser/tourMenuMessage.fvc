@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.tourMenuMessage
+
+«return a string which is displayed in Frontier's menu bar
+
+if webbrowser.tours.flrecording {
+	return ("End Web Tour")}
+else {
+	return ("Start Web Tour")}
+
+

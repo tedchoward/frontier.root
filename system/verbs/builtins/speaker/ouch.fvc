@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.speaker.ouch
+
+on ouch () {
+	return (speaker.sound (2, 200, 15000))}
+
+

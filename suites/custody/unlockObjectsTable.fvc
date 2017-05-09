@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.custody.unlockObjectsTable
+
+on unlockObjectsTable () {
+	return (semaphore.unlock ("user.custody.objects"))}
+
+

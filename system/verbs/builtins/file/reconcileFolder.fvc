@@ -1,0 +1,93 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.reconcileFolder
+
+on reconcileFolder (sourcefolder, destfolder, adrCopyFilter=nil, adrErrorTable=nil) {
+	«Changes
+		«5/22/10; 7:36:27 PM by DW
+			«If the destfolder doesn't exist, create it.
+		«5/15/10; 9:17:53 AM by DW
+			«Added optional errortable parameter. If it's not nil, errors don't stop the reconciler, they're just added to table and the process continues.
+			«Added error-checking. If adrCopyFilter is nil, we provide one. Error messages are now sentences. Don't roll the beachball (this might be running in a background thread or on a server, waste of cycles, distraction).
+			«http://frontiernews.org/2010/05/15/file-reconcilefolder-rewrite/
+		«3.0.2: validate input parameters as folders. also fixed path calcuation 
+			«when the case of original or clone differed from that used in the file system
+	on defaultFilter (f) { //we use this filter if one isn't specified, 5/15/10 by DW
+		return (true)};
+	if adrCopyFilter == nil {
+		adrCopyFilter = @defaultFilter};
+	bundle { //make sure the destfolder exists, 5/22/10 by DW
+		file.surefilepath (destfolder + "xxx")};
+	bundle { //make sure both folders are folders
+		on checkIsFolder (folder) {
+			if not file.isFolder (folder) {
+				scriptError ("Can't reconcile the folder because \"" + file.fileFromPath (folder) + "\" is not a folder.")};
+			folder = filespec (folder);
+			return (folder)};
+		sourcefolder = checkIsFolder (sourcefolder);
+		destfolder = checkIsFolder (destfolder)};
+	bundle { //set up the error table, 5/15/10 by DW
+		if adrErrorTable != nil {
+			new (tabletype, adrErrorTable)}};
+	on pushErrorTable (errorstring, fsource, fdest) {
+		local (adrsub = @adrErrorTable^.[string.padwithzeros (sizeof (adrErrorTable^), 5)]);
+		new (tabletype, adrsub);
+		adrsub^.errorstring = errorstring;
+		adrsub^.fsource = fsource;
+		adrsub^.fdest = fdest};
+	
+	local (extraname = "Extra Files" + file.getPathChar ());
+	on checkForMissingFiles (path) {
+		local (fsource, fdest);
+		fileloop (fsource in path) { //loop over files in the original folder
+			try {
+				if file.isFolder (fsource) { //skip any folder named Extra Files
+					if file.fileFromPath (fsource) == extraname {
+						continue}};
+				fdest = destfolder + (fsource - sourcefolder);
+				if not file.exists (fdest) { //file or folder is missing
+					file.filteredCopy (fsource, fdest, adrCopyFilter)}
+				else {
+					if file.isFolder (fsource) {
+						checkForMissingFiles (fsource)}
+					else {
+						if file.modified (fsource) > file.modified (fdest) { //the user changed the file
+							file.filteredCopy (fsource, fdest, adrCopyFilter)}}}}
+			else {
+				if adrErrorTable == nil { //re-throw the error
+					scripterror (tryerror)};
+				pushErrorTable (tryerror, fsource, fdest)}}};
+	checkForMissingFiles (sourcefolder);
+	
+	local (userfolder = destfolder + extraname);
+	on checkForExtraFiles (path) {
+		local (fdest, fsource);
+		fileloop (fdest in path) {
+			try {
+				«rollBeachBall ()
+				if fdest != userfolder { //don't look at or inside of the user's personal folder
+					fsource = sourcefolder + (fdest - destfolder);
+					if not file.exists (fsource) { //new file created by user, move it to personal folder
+						if file.exists (userfolder) {
+							if not file.isFolder (userfolder) { //we're really paranoid
+								file.delete (userfolder);
+								file.newFolder (userfolder)}}
+						else {
+							msg (userfolder);
+							file.newFolder (userfolder)};
+						file.move (fdest, userfolder)}
+					else { //the file is a copy from the original folder
+						if file.isFolder (fdest) {
+							checkForExtraFiles (fdest)}}}}
+			else {
+				if adrErrorTable == nil { //re-throw the error
+					scripterror (tryerror)};
+				pushErrorTable (tryerror, fsource, fdest)}}};
+	checkForExtraFiles (destfolder)} //make sure there aren't any extra files or folders in the clone
+«bundle //test code
+	«local (sourcefolder = "Albert:Stuff from Leon:")
+	«local (destfolder = "Ohio2:Leon:Contents of his hard disk:")
+	«on filter (f) //we use this filter if one isn't specified, 5/15/10 by DW
+		«scratchpad.f = f
+		«return (true)
+	«reconcileFolder (sourcefolder, destfolder, @filter, adrerrortable:@scratchpad.reconcileErrors)
+
+

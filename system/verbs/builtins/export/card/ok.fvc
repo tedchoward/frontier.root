@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.export.card.ok
+
+on ok (address, kind, location, compression) {
+	user.export.lastaddress = address;
+	user.export.lastkind = kind;
+	user.export.lastlocation = location;
+	user.export.lastcompression = compression;
+	user.export.ok = true;
+	return (true)}
+
+

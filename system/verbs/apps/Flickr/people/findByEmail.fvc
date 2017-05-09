@@ -1,0 +1,26 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.people.findByEmail
+
+on findByEmail (email, adrid, adrusername) {
+	«Changes
+		«11/29/07; 5:34:19 PM by DW
+			«Created. Give me an email address, and I'll return the id and username.
+	flickr.init ();
+	local (mystruct);
+	new (tabletype, @mystruct);
+	mystruct.api_key = user.flickr.prefs.apiKey;
+	mystruct.method = "flickr.people.findByEMail";
+	mystruct.find_email = email;
+	local (s = [user.flickr.prefs.server].flickr.people.findByEmail (mystruct), xstruct);
+	s = xml.entityDecode (s, true);
+	xml.compile (s, @xstruct);
+	scratchpad.xstruct = xstruct;
+	local (adruser = xml.getaddress (@xstruct, "user"));
+	adrid^ = adruser^.["/atts"].id;
+	adrusername^ = xml.getvalue (adruser, "username");
+	return (true)};
+bundle { //test code
+	local (id, username);
+	findByEmail ("dave.winer@gmail.com", @id, @username);
+	dialog.alert (id + ", " + username)}
+
+

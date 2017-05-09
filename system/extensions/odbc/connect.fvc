@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.connect
+
+on connect (dsn=user.prefs_odbc.dsn, uid=user.prefs_odbc.uid, pwd=user.prefs_odbc.pwd) {
+	if ! dll.isLoaded (user.prefs_odbc.dllpath) {
+		dll.load (user.prefs_odbc.dllpath)};
+	return (dll.call (user.prefs_odbc.dllpath, "Connect", dsn, uid, pwd))}
+
+

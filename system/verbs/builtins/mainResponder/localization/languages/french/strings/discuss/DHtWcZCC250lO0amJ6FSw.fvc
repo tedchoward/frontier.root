@@ -1,0 +1,21 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.localization.languages.french.strings.discuss.sendRpcEnclosureDidntWorkBody
+
+D&eacute;sol&eacute;, le serveur ne peut envoyer le contenu du message [[msgnum]] &agrave; votre ordinateur.<p>
+
+Voici l'information re&ccedil;ue de votre ordinateur (&ccedil;a peut &ecirc;tre &eacute;nigmatique):
+
+<blockquote><i>[[errorstring]]</i></blockquote>
+
+<b>Voic quelques points &agrave; v&eacute;rifier</b>:<ul><p>
+
+	<li>Vous devez avoir install&eacute; user.betty.rpcHandlers.userland.<p>
+
+	<li>L'application Frontier doit &ecirc;tre lanc&eacute;e <i>sur votre ordinateur.</i><p>
+
+	<li>Frontier doit tourner sur le port 80. (A terme, le port pourra &ecirc;tre d&eacute;fini dans les pr&eacute;f&eacute;rences.)<p>
+
+	<li>Si vous &ecirc;tes sur que tout fonctionne correctement de votre c&ocirc;t&eacute;, et que vous &ecirc;tes connect&eacute; via un proxy ou un firewall, veuillez v&eacute;rifier avec votre administrateur syst&egrave;me si il n'y a pas une erreur dans la configuration du serveur.<p>
+
+	</ul>
+
+

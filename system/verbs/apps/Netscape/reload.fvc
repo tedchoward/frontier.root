@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Netscape.reload
+
+on reload (x = nil) { «Reloads the current url
+	return (appleEvent (netscape.id, 'MOSS', 'relo', '----', x))}
+
+

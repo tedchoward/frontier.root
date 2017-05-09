@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.directory.getInclusionXstruct
+
+on getInclusionXstruct (opmlUrl, adradrxstruct) {
+	«Changes
+		«6/10/11; 1:34:05 PM by DW
+			«Dramatically simplified with new xstruct management.
+		«6/9/11; 7:06:51 PM by DW
+			«Replaces a caching routine we used to use. 
+	local (adrtable);
+	op.getnetoutline (opmlUrl, @adrtable);
+	xml.thread.accessStruct (@adrtable^.struct, adradrxstruct)};
+bundle { //test code
+	getInclusionXstruct ("http://scripting.com/misc/blogroll.opml", @scratchpad.adrxstruct)}
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.getMessageBCC
+
+on getMessageBCC (msgObj) {
+	with objectModel, Eudora, eventInfo {
+		return (core.get (id, msgObj.field ["Bcc"]) - "Bcc: ")}}
+
+

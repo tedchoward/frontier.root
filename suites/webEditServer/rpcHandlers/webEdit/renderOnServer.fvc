@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:suites.webEditServer.rpcHandlers.webEdit.renderOnServer
+
+on renderOnServer (userName, password, adrObject) {
+	«Render a page on the server.
+	
+	local (adrPreCallback = @user.webEditServer.callbacks.preRenderOnServer);
+	local (adrCallback = @user.webEditServer.callbacks.renderOnServer);
+	local (now = clock.now ());
+	
+	if not (people.authenticateUser (userName, password, "WebEdit")) {
+		scriptError ("Can't render " + adrObject + " because an invalid username or password was supplied.")};
+	
+	local (adrPageTables = @system.temp.webEditPageTables);
+	if not defined (adrPageTables^) {
+		new (tableType, adrPageTables)};
+	local (adrPageTable = @adrPageTables^.[thread.getCurrentID ()]);
+	new (tableType, adrPageTable);
+	
+	adrObject = webeditServer.fixGuestDbAdr (adrObject);
+	
+	webEditServer.callbackLoop (adrPreCallback, adrObject, userName, now, "");
+	
+	html.buildOnePage (adrObject, adrPageTable);
+	
+	webEditServer.callbackLoop (adrCallback, adrObject, userName, now, "");
+	
+	return (adrPageTable^.url)}
+
+

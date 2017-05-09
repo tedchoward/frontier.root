@@ -1,0 +1,53 @@
+FrontierVcsFile:3:optx:system.extensions.regex.docServer.subst
+
+#title "regex.subst"
+#renderOutlineWIth "docServerRenderer"
+Syntax
+	regex.subst (pattern, repl, adrObject, caseSensitive, maxSubs, abortOnNoSubst)
+Params
+	pattern is a regular expression.
+	
+	repl may be a string or the address of a script.
+	
+	adrObject  is the address of a string
+	
+	caseSensitive is an optional boolean flag. Default is false.
+	
+	maxSubs is an optional number. Default is infinity.
+	
+	abortOnNoSubst is an optional boolean. Default is true.
+Action
+	Replace all matches to a regular expression in target string pointed to by adrString with repl
+Returns
+	Number of substitutions.
+Examples
+	Replace line breaks elements from a string containing a webpage with carriage returns
+	
+	local (s = "Here's some text<br>from a web  <br> page")
+	regex.subst ("<br>", "\r", @s)
+	 
+	s is now "Here's some text\rfrom a web \r page"
+	
+	Substitute all the text in between the opening and closing tags of an anchor element with it's source anchor
+	
+	local (pattern = "<a +[^>]*href *= *\"[^\"]*\"[^>]*>([^<]*)</a>");
+	local (s = "<a href = "http://www.scriptmeridian.org/">Script Meridian</a>");
+	regex.subst (pattern, "\\1", @s)
+	
+	s is now "Script Meridian"
+	
+Notes
+	maxSubs controls the maximum number of substitutions.
+	
+	If repl is a string, each match is replaced by repl. The replacement string may contain back references for subexpressions in the \\digit form.
+	
+	Each backreference is substituted by the corresponding subexpression match: "\\0" is the whole pattern match, "\\1" the first subexpression, etc
+	
+	If repl is the address of a script, the script is called for each match and takes two parameters: the address of the "MatchInfo table" and the address of the replacement string. 
+	The callback script must return a boolean. Returning true will continue the subsitution process, returning false will halt it if  abortOnNoSubst is true.
+	If abortOnNoSubst is false, the search on the target string continues even though the callback script returned false, but no substitution will be made for the false return from the callback script.
+	
+	abortOnNoSubst is ignored unless repl is the address of a callback script.
+
+
+

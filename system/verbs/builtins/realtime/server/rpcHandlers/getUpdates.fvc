@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.server.rpcHandlers.getUpdates
+
+on getUpdates (username, password, randomString=nil) {
+	«Changes
+		«7/11/12; 10:55:37 AM by DW
+			«If the realtime layer is not enabled, return an update that indicates that the server is disabled. The client should stop requesting updates.
+				«http://worknotes.scripting.com/july2012/71112ByDw/ioServerLooseend
+		«8/12/10; 6:29:38 AM by DW
+			«Add randomString param. See comment at head of realtime.server.getupdates.
+		«7/19/10; 9:09:38 AM by DW
+			«Create a subscription table for the indicated user. 
+	local (adrdata = realtime.init ());
+	if not adrdata^.server.prefs.enabled { //7/11/12 by DW
+		local (t, adrsub);
+		new (tabletype, @t);
+		new (tabletype, @t.tsub);
+		t.tsub.type = "realtime";
+		t.tsub.data = "disabled";
+		t.tsub.when = clock.now ();
+		return (t)};
+	realtime.server.validatePassword (username, password);
+	return (realtime.server.getUpdates (username, client, randomString))}
+
+

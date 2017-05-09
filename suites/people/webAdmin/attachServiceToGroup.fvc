@@ -1,0 +1,7 @@
+FrontierVcsFile:3:wptx:suites.people.webAdmin.attachServiceToGroup
+
+#title "Attach Service To Group"
+{attachServiceToGroup ()}
+{goBack ()}
+
+

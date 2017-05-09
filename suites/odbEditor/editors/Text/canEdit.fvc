@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:suites.odbEditor.editors.Text.canEdit
+
+on canEdit (adr) {
+	local (type = typeOf (adr^));
+	return (type == stringType) or (type == wptexttype)}
+
+

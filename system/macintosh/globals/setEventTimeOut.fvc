@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.globals.setEventTimeOut
+
+on setEventTimeOut (ticks) {
+	kernel (lang.setEventTimeOut)}
+
+

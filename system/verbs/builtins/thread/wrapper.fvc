@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.thread.wrapper
+
+on wrapper (s, adr) {
+	adr^ = evaluate (s);
+	return (true)}
+
+

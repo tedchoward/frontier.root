@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.addBookmarkCallback
+
+on addBookmarkCallback (adrobject, adrlogic, adrtitle) {
+	«Changes
+		«10/2/12; 7:43:54 PM by DW
+			«Add a worldoutlineserver param on the call to openArchivedOutline.
+				«http://worknotes.scripting.com/october2012/10212ByDw/bookmarkingRoots
+		«1/11/12; 5:54:25 PM by DW
+			«If it's a root outline window, add a bookmark that opens it.
+	local (url, domain);
+	if window.attributes.getone ("urlOutline", @url, adrobject) and window.attributes.getone ("editorialDomain", @domain, adrobject) {
+		adrtitle^ = window.gettitle (adrobject);
+		adrlogic^ = "opmlEditor.worldOutline.openArchivedOutline (\"" + url + "\", \"" + adrtitle^ + "\", worldoutlineserver:\"" + domain + "\")";
+		return (true)};
+	return (false)}
+«bundle //test code
+	«addBookmarkCallback ()
+
+

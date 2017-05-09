@@ -1,0 +1,31 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.member.getMemberPrefs
+
+on getMemberPrefs (adrprefs) {
+	«Changes
+		«4/20/12; 11:35:18 AM by DW
+			«Get the member prefs for the signed-on user. If no user is signed-on, return false, otherwise return true.
+	local (username, password);
+	bundle { //get username and password
+		try {
+			opmlEditor.member.checkCookie ("", @username, false, @password)}
+		else {
+			return (false)}};
+	local (adrdata = opmleditor.init (), adrmember = opmlEditor.member.initMember (username));
+	if adrdata^.prefs.identity.flUseRemoteServer {
+		local (server = "xmlrpc://" + adrdata^.prefs.identity.serverDomain + ":5337/RPC2");
+		adrprefs^ = [server].memberPrefs.get (username, password)}
+	else {
+		adrprefs^ = adrmember^.prefs};
+	if not defined (adrprefs^.name) {
+		adrprefs^.name = ""};
+	if not defined (adrprefs^.mailAddress) {
+		adrprefs^.mailAddress = ""};
+	if not defined (adrprefs^.organization) {
+		adrprefs^.organization = ""};
+	if not defined (adrprefs^.bio) {
+		adrprefs^.bio = ""};
+	return (true)};
+bundle { //test code
+	getMemberPrefs (@scratchpad.daveprefs)}
+
+

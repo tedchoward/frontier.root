@@ -1,0 +1,13 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.mainResponder.controlPanel.["#pageHeader"]
+
+<html>
+<head>
+	<title>{title}</title>
+	{metaTags ()}
+	{string (prefsSuite.javaScriptSource)}
+	{customStyleSheet ()}
+	</head>
+{bodyTag ()}
+
+
+

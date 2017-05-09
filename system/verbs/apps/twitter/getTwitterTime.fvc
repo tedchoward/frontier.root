@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.getTwitterTime
+
+on getTwitterTime (s) {
+	«Changes
+		«1/8/09; 10:14:16 PM by DW
+			«Adjust from GMT to local time. 
+		«1/4/09; 4:30:48 PM by DW
+			«Rewrite.
+		«1/4/09; 11:30:06 AM by DW
+			«Twitter's time strings have a strange format. We decode that format, returning an internal Frontier date.
+			«Example of a Twitter time: Sun Jan 04 16:22:38 +0000 2009
+			«twitter.getTwitterTime ("Sun Jan 04 16:22:38 +0000 2009")
+				«"1/4/09; 4:22:38 PM"
+	local (day = number (string.nthfield (s, " ", 3)));
+	local (year = number (string.nthfield (s, " ", 6)));
+	local (time = string.nthfield (s, " ", 4));
+	local (hour = number (string.nthfield (time, ":", 1)));
+	local (minute = number (string.nthfield (time, ":", 2)));
+	local (second = number (string.nthfield (time, ":", 3)));
+	local (month = string.lower (string.nthfield (s, " ", 2)), i);
+	for i = 1 to 12 {
+		if string.lower (date.monthtostring (i)) beginswith month {
+			month = i;
+			break}};
+	return (date.set (day, month, year, hour, minute, second) + date.getCurrentTimeZone ())} //1/8/09 by DW
+«bundle //test code
+	«dialog.alert (getTwitterTime ("Sun Jan 04 16:22:38 +0000 2009"))
+
+

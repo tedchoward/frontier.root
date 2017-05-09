@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.extensions.crypto.encryptRC4
+
+on encryptRC4 (s, keyphrase) {
+	return (string (dll.call (crypto.data.getPath (), "RC4_verb", string (s), string (keyphrase))))}
+
+

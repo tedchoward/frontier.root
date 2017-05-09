@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.doMenu
+
+on doMenu (obj) { «Do the action associated with a menu item
+	return (misc.doMenu (BBEdit.id, obj))}
+
+

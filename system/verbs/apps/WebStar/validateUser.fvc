@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.validateUser
+
+on validateUser (x, password, realm, appID = WebStar.id) { «Validate that a given password is correct for a user in a specific realm
+	return (appleEvent (appID, 'WWW‡', 'Vusr', '----', x, 'AUpw', password, 'AUrm', realm))}
+
+

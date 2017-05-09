@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.semaphore.lock
+
+on lock (name, timeoutticks) {
+	kernel (semaphore.lock)}
+
+

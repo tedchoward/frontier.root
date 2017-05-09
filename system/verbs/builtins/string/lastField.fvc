@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.lastField
+
+on lastField (s, chdelim) {
+	«Changes
+		«11/1/07; 10:23:19 AM by DW
+			«Created. Got tired of writing this bit of code over and over. 
+	return (string.nthfield (s, chdelim, string.countfields (s, chdelim)))}
+«bundle //test code
+	«dialog.alert (string.lastField ("http://static.flickrfan.org/river/startupPics/archive00264.jpg", "/"))
+
+

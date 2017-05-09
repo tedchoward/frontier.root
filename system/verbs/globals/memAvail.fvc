@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.globals.memAvail
+
+on memAvail () {
+	kernel (lang.memavail)}
+
+

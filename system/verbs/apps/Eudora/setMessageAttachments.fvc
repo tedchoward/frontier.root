@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.setMessageAttachments
+
+on setMessageAttachments (msgObj, msgAttachments) {
+	«msgAttachments contains a list of attachment paths as produced by Eudora
+		«":" must be added to the front and back of each attachment for
+		«it to work via EudoraŠ
+	
+	with objectModel, Eudora, eventInfo {
+		return (core.set (id, msgObj.field ["X-Attachments"], msgAttachments))}}
+
+

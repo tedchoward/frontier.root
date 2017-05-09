@@ -1,0 +1,83 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.watchFolder
+
+on watchFolder () {
+	«Changes
+		«12/31/12; 10:09:54 PM by DW
+			«Write OPML files too.
+				«http://worknotes.scripting.com/december2012/123112ByDw/opmlFlowsThroughImages
+		«10/4/12; 11:24:08 AM by DW
+			«Remove whitespace from the template. A carriage return at the end will cause pasting problems in the outliner. 
+		«10/4/12; 10:42:23 AM by DW
+			«Watch a folder for images, upload them and open a window with HTML to paste.
+				«http://worknotes.scripting.com/october2012/10412ByDw/pictureUploader
+		«10/4/12; 10:26:33 AM by DW
+			«Add support for .png images.
+		«10/3/12; 1:34:47 PM by DW
+			«Created.
+	local (adrdata = opmleditor.init (), now = clock.now ());
+	if adrdata^.prefs.watchedfolder.enabled {
+		on uploadImageFile (f) {
+			local (fname = file.filefrompath (f), ext = string.lower (string.lastfield (fname, ".")));
+			if (ext == "gif") or (ext == "jpg") or (ext == "jpeg") or (ext == "png") or (ext == "opml") {
+				local (url, bits = file.readwholefile (f));
+				url = opmlEditor.writeStaticFile ("images/" + file.getdatepath ("/") + fname, bits);
+				adrdata^.stats.watchedFolder.ctUploads++;
+				adrdata^.stats.watchedFolder.whenLastUpload = now;
+				adrdata^.stats.watchedFolder.urlLastUpload = url;
+				return (url)}};
+		on getImageClipboardText (f, url, adrtemplate=nil) {
+			local (t, height, width, s);
+			new (tabletype, @t);
+			bundle { //set height, width
+				if string.lower (f) endswith ".gif" {
+					local (hw = html.getgifheightwidth (f));
+					height = hw [1];
+					width = hw [2]}
+				else {
+					if string.lower (f) endswith ".png" { //10/4/12 by DW
+						local (hw = html.getpngheightwidth (f));
+						height = hw [1];
+						width = hw [2]}
+					else {
+						hw = html.getjpegheightwidth (f);
+						height = hw [1];
+						width = hw [2]}}};
+			t.url = url;
+			t.height = height;
+			t.width = width;
+			t.filename = file.filefrompath (f);
+			if adrtemplate == nil {
+				s = string (adrdata^.prefs.watchedFolder.clipboardTemplate)}
+			else {
+				s = string (adrtemplate^)};
+			return (string.tablereplace (string.trimwhitespace (s), @t))};
+		file.surefilepath (adrdata^.prefs.watchedfolder.folder + "xxx"); //make sure the folder exists
+		adrdata^.stats.watchedfolder.ctChecks++;
+		adrdata^.stats.watchedfolder.whenLastCheck = now;
+		fileloop (f in adrdata^.prefs.watchedfolder.folder) {
+			local (lowerf = string.lower (f));
+			if (lowerf endswith "gif") or (lowerf endswith "jpg") or (lowerf endswith "jpeg") or (lowerf endswith "png") or (lowerf endswith "opml") {
+				local (url);
+				speaker.sound (1, 100, 1000);
+				url = uploadImageFile (f);
+				bundle { //backup the image
+					if sizeof (adrdata^.prefs.watchedfolder.backupFolder) > 0 {
+						local (fbackup = adrdata^.prefs.watchedfolder.backupFolder + file.getdatepath () + file.filefrompath (f));
+						file.surefilepath (fbackup);
+						file.writewholefile (fbackup, file.readwholefile (f))}};
+				bundle { //show clipboard text
+					local (img);
+					if lowerf endswith "opml" {
+						img = url}
+					else {
+						img = getImageClipboardText (f, url)};
+					frontier.bringtofront ();
+					wp.newtextobject (img, @system.temp.clipboard);
+					edit (@system.temp.clipboard)};
+				speaker.sound (1, 125, 2000)};
+			file.delete (f);
+			return}}}; //only do one file each loop
+bundle { //test code
+	watchFolder ()}
+
+

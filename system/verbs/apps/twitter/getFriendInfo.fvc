@@ -1,0 +1,50 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.getFriendInfo
+
+on getFriendInfo (adrfriend, friendname=nil, username=nil, password=nil, apiurl=nil) {
+	«Changes
+		«4/26/08; 6:09:40 PM by DW
+			«Created. Get the profile information of a Twitter user.
+	twitter.init ();
+	bundle { //set defaults
+		if apiurl == nil {
+			apiurl = user.twitter.prefs.showurl + friendname + ".xml"};
+		if friendname == nil {
+			friendname = user.twitter.prefs.username};
+		if username == nil {
+			username = user.twitter.prefs.username};
+		if password == nil {
+			password = string (user.twitter.prefs.password)}};
+	local (urllist = string.urlsplit (apiurl));
+	try {
+		local (tc = clock.ticks (), timeoutticks = 60 * user.twitter.prefs.timeOutSecs);
+		local (s = string.httpResultSplit (tcp.httpClient (server:urllist [2], path:urllist [3], username:username, password:password,  method:"GET", timeoutticks:timeoutticks, flMessages:false)));
+		user.twitter.stats.whenLastGet = clock.now ();
+		user.twitter.stats.ctGets++;
+		user.twitter.stats.ctSecsLastGet = double (clock.ticks () - tc) / 60;
+		bundle { //extract data from the xml in adrfriends^
+			local (xstruct);
+			xml.compile (s, @xstruct);
+			«scratchpad.xstruct = xstruct
+			new (tabletype, adrfriend);
+			local (adruser = xml.getaddress (@xstruct, "user"));
+			adrfriend^.id = xml.getvalue (adruser, "id");
+			adrfriend^.name = xml.getvalue (adruser, "name");
+			adrfriend^.screenName = xml.getvalue (adruser, "screen_name");
+			adrfriend^.location = xml.getvalue (adruser, "location");
+			adrfriend^.description = xml.getvalue (adruser, "description");
+			adrfriend^.profileImageUrl = xml.getvalue (adruser, "profile_image_url");
+			adrfriend^.url = xml.getvalue (adruser, "url");
+			adrfriend^.ctFollowers = xml.getvalue (adruser, "followers_count");
+			adrfriend^.timeZone = xml.getvalue (adruser, "time_zone");
+			adrfriend^.ctStatuses = xml.getvalue (adruser, "statuses_count");
+			adrfriend^.ctFriends = xml.getvalue (adruser, "friends_count")};
+			«adrfriend^.whenProfileCreated = date (string.replace (xml.getvalue (adruser, "created_at"), "+0000 ", ""))
+		user.twitter.stats.lastGetError = "";
+		return (true)}
+	else {
+		user.twitter.stats.lastGetError = tryerror;
+		return (false)}}
+«bundle //test code
+	«getFriendInfo (@scratchpad.friendinfo, "techcrunch")
+
+

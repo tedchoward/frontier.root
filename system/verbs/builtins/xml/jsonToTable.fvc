@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.jsonToTable
+
+on jsonToTable (s, adrtable, flParseAtts=false) {
+	«Changes
+		«10/25/10; 10:42:46 PM by DW
+			«This routine moved to json.compile. I left the shell here so as not to break anything that may have already been written. Obviously, it's clearer to call json.compile instead.
+	return (json.compile (s, adrtable, flParseAtts))}
+
+

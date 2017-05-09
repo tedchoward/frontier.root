@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.OAuth.initApp
+
+on initApp (appname) {
+	«Changes
+		«2/12/09; 2:01:43 PM by DW
+			«Created. 
+	local (adrdata = OAuth.init (), adrapp = @adrdata^.apps.[appname]);
+	if not defined (adrapp^) {
+		new (tabletype, adrapp)};
+	if not defined (adrapp^.consumerKey) {
+		adrapp^.consumerKey = ""};
+	if not defined (adrapp^.consumerSecret) {
+		adrapp^.consumerSecret = ""};
+	if not defined (adrapp^.requestTokenUrl) {
+		adrapp^.requestTokenUrl = ""};
+	if not defined (adrapp^.accessTokenUrl) {
+		adrapp^.accessTokenUrl = ""};
+	if not defined (adrapp^.authorizeUrl) {
+		adrapp^.authorizeUrl = ""};
+	return (adrapp)};
+bundle { //test code
+	initApp ("twitter")}
+
+

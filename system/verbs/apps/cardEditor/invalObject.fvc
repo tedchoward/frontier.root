@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.invalObject
+
+on invalObject (name) {
+	new (tableType, @atts);
+	atts.inva = true;
+	return (cardEditor.setObjectAttributes (name, @atts))}
+
+

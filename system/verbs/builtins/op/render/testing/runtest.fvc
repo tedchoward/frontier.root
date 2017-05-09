@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.render.testing.runtest
+
+on runtest () {
+	«Changes
+		«2/8/12; 11:19:26 AM by DW
+			«Created.
+	op.render.viewOutline (url)};
+bundle { //test code
+	runtest ()}
+
+

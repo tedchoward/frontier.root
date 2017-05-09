@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.data.responder.methods.any
+
+on any (pta) {
+	return (webserver.responders.websiteFramework.methods.any (pta))}
+
+

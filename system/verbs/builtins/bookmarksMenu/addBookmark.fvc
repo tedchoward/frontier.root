@@ -1,0 +1,26 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.bookmarksMenu.addBookmark
+
+on addBookmark (adrLogic, adrTitle) { // add a bookmark command to the Bookmarks menu
+	«06/24/01; 3:34:30 AM by JES
+		«Add a command to the Bookmarks menu.
+			«Call this script to add a bookmark.
+			«adr is the address of the window.
+			«adrLogic is the address of the script which envokes the bookmark
+			«adrTitle is the address of a string to use for the bookmark command's name
+	local (adrmenu = bookmarksMenu.init ());
+	local (menuname);
+	bundle { //get the name of the Bookmarks menu
+		local (oldtarget = target.set (adrmenu));
+		local (oldcursor = op.getcursor ());
+		op.firstsummit ();
+		menuname = op.getlinetext ();
+		op.setcursor (oldcursor);
+		target.set (oldtarget)};
+	if dialog.ask ("Add this item to the " + menuname + " menu?", adrTitle) {
+		adrTitle^ = string.replaceAll (adrTitle^, "\"", "\\\"");
+		adrLogic^ = string.replace (adrLogic^, "<<title>>", adrTitle^);
+		return (menu.addMenuCommand (adrmenu, menuname, adrTitle^, adrLogic^))}
+	else {
+		return (false)}}
+
+

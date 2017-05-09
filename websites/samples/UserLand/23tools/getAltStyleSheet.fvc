@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:websites.samples.UserLand.["#tools"].getAltStyleSheet
+
+on getAltStyleSheet (styleSheetName) {
+	local (s);
+	s = html.data.standardMacros.linkStyleSheet (styleSheetName); //use the standard macro
+	
+	«Pull the href out of s.
+	local (pattern = "href=\"");
+	local (ix = string.patternMatch (pattern, s));
+	s = string.delete (s, 1, ix + sizeOf (pattern) - 1);
+	s = string.nthField (s, '"', 1);
+	return ("\"" + s + "\";")}
+
+

@@ -1,0 +1,23 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Manila.windowTypes.dialogs.wizard.outline
+
+<wizard>
+	<panel title="Manila Login" height="240" width="235">
+		<item title="Email Address:" type="string" size="25" maxlength="100" adr="username"/>
+		<item title="Password:" type="password" size="25" maxlength="50" adr="password"/>
+		<item title="Save password" type="checkbox" adr="flSavePassword"/>
+		<item title="Clicked OK" type="hidden" adr="userClickedOk"/>
+		</panel>
+	<panel title="Add a Manila Site" height="205" width="340">
+		<item title="Manila Site URL:" type="string" size="43" maxlength="100" adr="siteUrl"/>
+		<group>
+			<row>
+				<item title="Email Address:" type="string" size="24" maxlength="35" indent="3" adr="username"/>
+				<item title="Password:" type="password" size="10" maxlength="15" indent="2" adr="password"/>
+				</row>
+			</group>
+		<item title="Clicked OK" type="hidden" adr="userClickedOk"/>
+		</panel>
+	</wizard>
+
+
+

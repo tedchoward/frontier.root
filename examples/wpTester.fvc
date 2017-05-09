@@ -1,0 +1,15 @@
+FrontierVcsFile:3:wptx:examples.wpTester
+
+This Frontier word processing document is designed to permit you to test various wp verbs.
+
+If you make any changes to this document, it's a good idea not to save the root or to revert it or to undo the changes so this document stays in its original condition.
+
+The wp verbs in Frontier are a powerful sub-set and example of the kinds of things you could "wire" a word processing program to do under Frontier script control.  You can do a lot of formatting on the contents of a document using these verbs.
+
+You can also, however, use some of the other verbs in Frontier ‹ particularly the editMenu set ‹ to change the font, typeface, style, size, and other characteristics of the text in a word processing document.  All you have to do is use the wp verbs to get the right text selected and then invoke the appropriate editMenu verb(s) to carry out the special formatting you want.
+
+You'll get a chance to do that in some of the examples in the Frontier Language Reference manual, in fact.
+
+End of document!
+
+

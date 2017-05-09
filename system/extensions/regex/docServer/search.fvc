@@ -1,0 +1,46 @@
+FrontierVcsFile:3:optx:system.extensions.regex.docServer.search
+
+#title "regex.search"
+#renderOutlineWIth "docServerRenderer"
+Syntax
+	regex.search (patternRef, adrObject, adrTable, start, range, makeGroups)
+Params
+	patternRef is the pattern reference returned from "regex.compile".
+	
+	adrObject is an address pointing to an object that can be coerced to a string object.
+	
+	adrTable is an optional address of a table that receives information about the search. Defaults to nil.
+	
+	start is an optional integer. Defaults to .
+	
+	range is an optional integer, specifying the number of successive positions where the search will be performed. Defaults to 0 (search till end of string).
+	
+	makeGroups is an optional boolean flag. Defaults to false.
+Action
+	Tries to match the compiled pattern, referenced by patternRef, to the target string pointed to by adrString, at successive positions starting at position start.
+Returns
+	True if successful, false otherwise.
+Examples
+	local (pattern = "<[^>]*>")
+	local (s = "<font size = \"-2\">")
+	local (patRef)
+	try
+		patRef = regex.compile(pattern)
+		dialog.notify (regex.search(patRef, @s, @temp.matchInfo, 1, true))
+		regex.free (patRef)
+	else
+		regex.free (patRef)
+Notes
+	start specifies the position in the coerced string where the search will commence.
+	
+	If makeGroups is true, information about any subexpression matches will be returned in the table pointed to by adrTable.  
+	
+	The "Matchinfo Table" outines the information optionally returned in the table pointed to by adrTable.
+	
+	It is good practice to place regex.search in a try statement and ensure that memory is always released through an else statement.
+See Also
+	"regex.compile"
+	"regex.easySearch"
+
+
+

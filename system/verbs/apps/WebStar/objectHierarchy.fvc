@@ -1,0 +1,29 @@
+FrontierVcsFile:3:optx:system.verbs.apps.WebStar.objectHierarchy
+
+application -- WebSTAR application properties for use with Get and Set
+	Properties:
+		bufferSize -- Output buffer size for TCP/IP writes to clients. (256-10240)
+		pigDelay -- Number of ticks to run the server before relinquishing control to other apps (0-120)
+		maxUsers -- Maximum number of simultaneous users. (4-50)
+		noDNS -- Toggle for domain name resolution by the server (true=off/false=on)
+		timeOut -- Timeout value for idle client connections and AppleEvents in seconds (5-600)
+		maxListens -- Maximum number of TCP/IP listens to queue up (4-50)
+		logging -- Enable/Disable logging
+		verboseMessages -- Toggle Verbose Messages on/off
+		refuseConnections -- Refuse/Allow incoming connections
+		defMimeType -- Default MIME type for untyped files 
+		port -- TCP/IP port for server to listen on
+		indexFile -- Name of the default "index" file
+		errorFile -- Name of the error message file
+		logFile -- Name of server log file
+		logFormat -- string of keywords for info to log
+		noAccessFile -- Name of "no access" file 
+		preProcessor -- pre-processor application name
+		postProcessor -- post-processor application name
+		suffixMappings -- Suffix and MIME Type mappings in text block format
+		accessControls -- Allow/Deny access controls via IP address and domain name. Text block format
+		realms -- Security realm entries in text block format.
+		actions -- User-defined actions in text block format
+
+
+

@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.german.strings.members.validMailAddressNoDot
+
+Die Email konnte nicht abgeschickt werden, weil der Domain-Name [[domain]] keinen Punkt enthielt.
+
+

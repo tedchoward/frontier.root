@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.agents.SchedulerMonitor
+
+try {scheduler.monitor ()};
+local (day, month, year, hour, minute, second);
+date.get (clock.now (), @day, @month, @year, @hour, @minute, @second);
+clock.sleepFor (60 - second) //sleep until next minute tick
+
+

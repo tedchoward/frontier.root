@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.setCardSize
+
+on setCardSize (width, height) {
+	local (atts);
+	new (tableType, @atts);
+	atts.rbor = width;
+	atts.bbor = height;
+	return (card.setCardAttributes (@atts))}
+
+

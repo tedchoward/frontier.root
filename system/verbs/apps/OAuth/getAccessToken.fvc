@@ -1,0 +1,44 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.OAuth.getAccessToken
+
+on getAccessToken (endpoint, consumerkey, consumersecret, token, tokensecret, verifier=nil, adrtoken, adrtokensecret, adruserid=nil, adrusername=nil) {
+	«Changes
+		«7/31/12; 11:33:03 AM by DW
+			«Two new optional params, adruserid, adrusername. If non-nil, get these values from the string returned by the server.
+				«http://worknotes.scripting.com/july2012/73112ByDw/gettingTwitterUsername
+		«1/1/10; 11:31:09 AM by DW
+			«Add optional parameter, verifier, if non-nil, we send it as the oauth_verifier param, per the spec on the Twitter API wiki.
+				«http://apiwiki.twitter.com/Authentication
+		«3/6/09; 8:53:19 AM by DW
+			«Comment debugging code.
+		«2/12/09; 12:16:28 PM by DW
+			«Created. 
+				«http://term.ie/oauth/example/access_token.php?oauth_version=1.0&oauth_nonce=565e1bb17d9bc781d0ccb2c95411dd58&oauth_timestamp=1234469657&oauth_consumer_key=key&oauth_token=requestkey&oauth_signature_method=HMAC-SHA1&oauth_signature=qKdhday%2Fo1m2B%2Baabei4xC%2BBF3A%3D
+	local (params);
+	new (tabletype, @params);
+	params.oauth_version = "1.0";
+	params.oauth_nonce = OAuth.getNonce ();
+	params.oauth_timestamp = OAuth.getTimeStamp ();
+	params.oauth_consumer_key = consumerKey;
+	params.oauth_signature_method = "HMAC-SHA1";
+	params.oauth_token = token;
+	if verifier != nil { //1/1/10 by DW
+		params.oauth_verifier = verifier};
+	params.oauth_signature = OAuth.getSignature (@params, endpoint, consumersecret, tokenSecret);
+	local (s = OAuth.httpClient (endpoint, @params));
+	«wp.newtextobject (s, @scratchpad.accesstokenresult); edit (@scratchpad.accesstokenresult)
+	bundle { //parse the resulting string
+		on getvalue (ix) {
+			return (string.nthfield (string.nthfield (s, "&", ix), "=", 2))};
+		adrtoken^ = getvalue (1);
+		adrtokensecret^ = getvalue (2);
+		if adruserid != nil { //7/31/12 by DW
+			adruserid^ = getvalue (3)};
+		if adrusername != nil { //7/31/12 by DW
+			adrusername^ = getvalue (4)}}}
+		«oauth_token=accesskey&oauth_token_secret=accesssecret
+«bundle //test code
+	«local (endpoint = "http://term.ie/oauth/example/access_token.php")
+	«local (consumerkey = "key", consumersecret = "secret")
+	«getAccessToken (endpoint, consumerkey, consumersecret, scratchpad.token, scratchpad.tokensecret, @scratchpad.accesstoken, @scratchpad.accesstokensecret)
+
+

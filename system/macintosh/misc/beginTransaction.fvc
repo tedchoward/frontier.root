@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.misc.beginTransaction
+
+on beginTransaction (appID) { «Begin a transaction
+	return (appleEvent (appID, 'misc', 'begi'))}
+
+

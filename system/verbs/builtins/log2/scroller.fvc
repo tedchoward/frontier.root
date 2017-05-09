@@ -1,0 +1,34 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.log2.scroller
+
+on scroller (s, nameoutline="default") {
+	«Changes
+		«2/14/12; 10:37:30 AM by DW
+			«Add buttons, pause/resume.
+		«2/13/12; 11:37:24 PM by DW
+			«Turn off the display while adding stuff to the outline.
+		«2/13/12; 11:08:57 PM by DW
+			«A new kind of log. Scrolls a message in at the top, removes items off the bottom. 
+	local (adrdata = log2.init (), adrscroller = @system.temp.log2.scrollers.[nameoutline], maxlines = 15, now = clock.now (), flpaused);
+	if not defined (adrscroller^) {
+		new (outlinetype, adrscroller);
+		edit (adrscroller, "log2.scroller: " + nameoutline, true, @log2.scrollerButtons);
+		window.attributes.setone ("paused", false, adrscroller)};
+	if window.attributes.getone ("paused", @flpaused, adrscroller) {
+		if flpaused {
+			return}};
+	local (oldtarget = target.set (adrscroller));
+	op.setdisplay (false);
+	if op.countsummits () >= maxlines {
+		op.go (down, infinity);
+		op.deleteline ()};
+	op.firstsummit ();
+	op.insert (date.timestring (now, true) + ": " + s, up);
+	op.setdisplay (true);
+	target.set (oldtarget)};
+bundle { //test code
+	local (i);
+	for i = 1 to 100 {
+		scroller (string.getrandompassword (10));
+		clock.waitseconds (1)}}
+
+

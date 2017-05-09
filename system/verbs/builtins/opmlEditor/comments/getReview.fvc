@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.comments.getReview
+
+on getReview (urlstory, username, adrsuboutline) {
+	try {
+		local (urllist = string.urlsplit (urlstory), server = "xmlrpc://" + urllist [2] + "/RPC2", t);
+		t = [server].comments.getReview (urlstory, username);
+		op.xmltooutline (t.opmltext, adrsuboutline);
+		return (true)}
+	else {
+		user.opmleditor.stats.lastGetReviewError = tryerror;
+		user.opmleditor.stats.whenLastGetReviewError = clock.now ();
+		return (false)}}
+
+

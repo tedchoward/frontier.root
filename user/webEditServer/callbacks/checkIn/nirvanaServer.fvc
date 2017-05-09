@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:user.webEditServer.callbacks.checkIn.nirvanaServer
+
+on nirvanaServer (adrObject, username, now, description) {
+	return (mainResponder.subscriptions.checkInCallback (adrObject, username, now, description))}
+
+

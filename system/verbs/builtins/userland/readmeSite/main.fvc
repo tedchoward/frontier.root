@@ -1,0 +1,19 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.userland.readmeSite.main
+
+#title "Frontier Main Readme"
+#realFile "Macintosh HD:New Releases:Frontier 4.2:Read Me"
+This is Frontier {Frontier.version ()}/Mac, released on {date.longstring (Frontier.shipdate)}.
+
+Note: 4.2 is a root-only upgrade. That means that the UserLand Frontier application was unchanged in this release. It's exactly the same program that shipped with 4.1. We didn't change its version number because there were no changes in the app.
+
+The docs are online at the main Frontier website:
+
+<blockquote>http://www.scripting.com/frontier/</blockquote>
+
+Support is also available online, thru net-based mailing lists. Check them out at:
+
+<blockquote>http://www.scripting.com/frontier/admin/mail.html</blockquote>
+
+Thank you for checking out Frontier!
+
+

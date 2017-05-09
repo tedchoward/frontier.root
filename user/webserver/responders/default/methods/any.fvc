@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:user.webserver.responders.default.methods.any
+
+on any (pta) {
+	«Changes
+		«3/11/09; 11:37:55 AM by DW
+			«Took another look and what we want is by default to flow requests through mainResponder.
+				«bundle //old code
+					«pta^.code = 200
+					«pta^.responseHeaders.["Content-Type"] = "text/html"
+					«
+					«local (htmltext)
+					«bundle
+						«htmltext = "<html><body><h1>Default responder</h1>This text was produced by the default responder at \"" + this + "\" on " + clock.now () + ".</body></html>"
+						«htmltext = dotOpmlSuite.mdiWindow.viewMainPage (pta)
+					«
+					«pta^.responseBody = htmltext
+					«scratchpad.params = pta^
+					«return (true)
+		«3/11/09; 11:09:14 AM by DW
+			«Undid the hack from 6/3/05. We're not running dotOpml.root any longer, so it was broken everywhere. 
+		«6/3/05; 11:01:50 AM by 
+			«I wanted to use the responder in the dotOpml.root tool, but I couldn't get the kernel to call it. If we can figure out, after release, why this is not working, we can undo the klooge here. This script should just put up some kind of simple default page (probably, unless someone has a better idea). 
+	return (mainresponder.respond (pta))}
+
+

@@ -1,0 +1,5 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.localization.languages.dutch.strings.security.httpUnsupportedDigestAlgorithm
+
+Het verzoek kon niet door de server worden beantwoord daar het gespecificeerd 'digest algoritme' in de 'authorizatieheader' niet werd ondersteund.
+
+

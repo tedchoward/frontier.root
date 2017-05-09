@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.runsCards
+
+on runsCards () {
+	case sys.os () {
+		"MacOS" {
+			return (true)}};
+	return (false)}
+
+

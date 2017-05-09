@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.webserver.responders.wormDefense.condition
+
+(string.lower (host) equals "www")
+
+

@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.authPageUrl
+
+on authPageUrl (adrfrob) {
+	«Changes
+		«11/13/07; 6:18:11 PM by DW
+			«This was the site of major breakage. I found a way to work around the problem, by introducing a delay, per John Watson's suggestion. This routine changed by sending the frob it generates back to the caller so it can be used in the gettoken call.
+				«http://www.scripting.com/stories/2007/11/13/stillFumblingAroundWithFli.html
+		«11/12/07; 9:13:52 AM by DW
+			«Factored from Flickr.authPage.
+	local (url = "http://flickr.com/services/auth/", mystruct);
+	adrfrob^ = Flickr.api.auth.getFrob ();
+	new (tabletype, @mystruct);
+	mystruct.api_key = user.flickr.prefs.apiKey;
+	mystruct.perms = "write";
+	mystruct.frob = adrfrob^;
+	Flickr.signStruct (@mystruct);
+	
+	local (adr, ch="?");
+	for adr in @mystruct {
+		url = url + ch + nameof (adr^) + "=" + string.urlencode (adr^);
+		ch = "&"};
+	return (url)};
+bundle { //test code
+	local (frob);
+	dialog.alert (authPageUrl (@frob))}
+
+

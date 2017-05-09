@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.extensions.crypto.examples.oneliners
+
+dialog.notify (crypto.hashMD2 ("01234567890"));
+dialog.notify (crypto.hashMD5 ("01234567890"));
+dialog.notify (crypto.hashRIPEMD160 ("01234567890"));
+dialog.notify (crypto.hashSHA ("01234567890"));
+dialog.notify (crypto.hashSHA1 ("01234567890"));
+
+dialog.notify (crypto.encryptRC4 ("01234567890", "opensesame"));
+dialog.notify (crypto.encryptRC4 (crypto.encryptRC4 ("01234567890", "opensesame"), "opensesame"));
+
+dialog.notify (crypto.hmac_MD5 ("Hi There", string.filledString ('\x0b', 16))); //expected result: 0x9294727a3638bb1c13f48ef8158bfc9d
+dialog.notify (crypto.hmac_MD5 ("what do ya want for nothing?", "Jefe")); //expected result: 0x750c783e6ab0b503eaa86e310a5db738
+dialog.notify (crypto.hmac_MD5 (string.filledString ('\xdd', 50), string.filledString ('\xaa', 16))) //expected result: 0x56be34521d144c88dbb8c733f0e8b3f6
+
+

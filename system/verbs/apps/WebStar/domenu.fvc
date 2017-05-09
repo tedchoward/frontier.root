@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.domenu
+
+on domenu (x, appID = WebStar.id) { «Execute the specified menu item from the server menus. Obsolete.
+	return (appleEvent (appID, 'WWW‡', 'menu', '----', x))}
+
+

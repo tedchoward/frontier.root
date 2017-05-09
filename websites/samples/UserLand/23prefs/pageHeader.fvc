@@ -1,0 +1,27 @@
+FrontierVcsFile:3:optx:websites.samples.UserLand.["#prefs"].pageHeader
+
+<html>
+	<head>
+		<title>{getTitle ()}</title>
+		{linkStyleSheet ()}
+		<script>
+			{"<!--"}
+			function isIE4Win () \{
+				if (navigator.appVersion.indexOf (\"Mac") < 0) {
+					if (navigator.appVersion.indexOf ("MSIE 4") > 0) \{
+						return (true);
+						}
+					}
+				return (false);
+				}
+			var flie4win = isIE4Win ();
+			if (flie4win) \{
+				document.styleSheets (0).href = {getAltStyleSheet ("msie4")}
+				}
+			{"//-->"}
+		</script>
+	</head>
+{bodyTag ()}
+
+
+

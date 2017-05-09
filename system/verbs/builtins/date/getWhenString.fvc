@@ -1,0 +1,47 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.date.getWhenString
+
+on getWhenString (when) {
+	«Changes
+		«10/25/12; 11:17:50 AM by DW
+			«If it's 31 or more days ago, use the date instead of saying xxx days ago. The cutoff used to be 45 days.
+		«9/15/12; 4:24:40 PM by DW
+			«Instead of "1 hours ago" make it "1 hour ago."
+		«9/15/12; 10:58:03 AM by DW
+			«Get a string that expresses "when" in terms of how many hours, minutes or days it is in the past. 
+				«http://worknotes.scripting.com/september2012/91512ByDw/dategetwhenstring
+	local (now = clock.now (), ctminutes = number ((now - when) / 60), whenstring);
+	if when > now {
+		whenstring = string (when)}
+	else {
+		if ctminutes <= 60 {
+			if ctminutes <= 1 {
+				if ctminutes == 0 {
+					whenstring = "now"}
+				else {
+					whenstring = "1 minute ago"}}
+			else {
+				whenstring = ctminutes + " minutes ago"}}
+		else {
+			local (cthours = ctminutes / 60);
+			if cthours < 24 {
+				if cthours == 1 {
+					whenstring = "1 hour ago"}
+				else {
+					whenstring = cthours + " hours ago"}}
+			else {
+				local (ctdays = cthours / 24);
+				if ctdays < 30 {
+					if ctdays == 1 {
+						whenstring = "yesterday"}
+					else {
+						whenstring = ctdays + " days ago"}}
+				else {
+					whenstring = "on " + date.longstring (when)}}}};
+	return (whenstring)}
+«bundle //test code
+	«local (when = date.yesterday (clock.now ()))
+	«when = clock.now () - 1200
+	«when = clock.now () + 0
+	«dialog.alert (getWhenString (when))
+
+

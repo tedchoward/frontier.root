@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.people.getUsersFeed
+
+on getUsersFeed (username, id=nil) {
+	«Changes
+		«11/27/07; 9:08:32 AM by DW
+			«Add id as an optional parameter. It's really ugly, but necessary for performance. It's possible that the caller has an id, and if so, this can be instantaneous.
+		«11/6/07; 8:45:39 AM by DW
+			«Given a username, return the url of his or her feed.
+	if id == nil { //11/27/07 by DW
+		id = Flickr.people.findByUsername (username)};
+	local (url = "http://api.flickr.com/services/feeds/photos_public.gne?lang=en-us&format=rss_200");
+	url = url + "&id=" + id;
+	return (url)}
+«bundle //test code
+	«webbrowser.openurl (getUsersFeed ("", "22221172@N00"))
+	«webbrowser.openurl (getUsersFeed ("bsabet"))
+	«webbrowser.openurl (getUsersFeed ("dickheadmcgee"))
+
+

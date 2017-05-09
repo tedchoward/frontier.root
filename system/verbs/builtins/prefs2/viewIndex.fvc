@@ -1,0 +1,40 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.prefs2.viewIndex
+
+on viewIndex (adroutline, adrtoolprefs=nil) {
+	«Changes
+		«9/16/11; 6:56:06 PM by DW
+			«New optional parameter, adrtoolprefs.
+		«8/30/11; 4:11:44 PM by DW
+			«Created.
+	local (opmltext = op.outlinetoxml (adroutline), xstruct, htmltext = "\r\r", indentlevel = 0, adrcat, adrpanel, catnum = 1);
+	local (mypagename = nameof (pta^.adrobject^));
+	on add (s) {
+		htmltext = htmltext + (string.filledstring ("\t", indentlevel) + s + "\r");};
+	on decode (s) {
+		return (xml.entitydecode (s, true))};
+	on gettext (adrx) {
+		return (string.replaceall (decode (adrx^.["/atts"].text), "<br>", ""))};
+	xml.compile (opmltext, @xstruct);
+	local (adropml = xml.getaddress (@xstruct, "opml"));
+	local (adrbody = xml.getaddress (adropml, "body"));
+	prefs2.compileToolPrefs (adrbody, adrtoolprefs); //9/16/11 by DW
+	scratchpad.xstructprefsindex = xstruct;
+	add ("<div class=\"divPrefs\">"); indentlevel++;
+	for adrcat in adrbody {
+		if nameof (adrcat^) endswith "outline" {
+			local (panelnum = 1);
+			add ("<h4>" + gettext (adrcat) + "</h4>");
+			add ("<ul>"); indentlevel++;
+			for adrpanel in adrcat {
+				if nameof (adrpanel^) endswith "outline" {
+					local (url = mypagename + "?page=" + catnum + "." + panelnum);
+					add ("<li><a href=\"" + url + "\">" + gettext (adrpanel) + "</a></li>");
+					panelnum++}};
+			catnum++;
+			add ("</ul>"); indentlevel--}};
+	add ("</div>"); indentlevel--;
+	return (htmltext)};
+bundle { //test code
+	viewIndex ()}
+
+

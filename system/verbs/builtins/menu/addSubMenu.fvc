@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.menu.addSubMenu
+
+on addSubMenu (adrMenubar, inMenu, adrSubMenu) {
+	kernel (menu.addSubMenu)}
+
+

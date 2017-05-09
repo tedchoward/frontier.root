@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.app.nthWindow
+
+on nthWindow (n) {
+	return (appleEvent (app.id, 'app1', 'nthw', '----', short (n)))}
+
+

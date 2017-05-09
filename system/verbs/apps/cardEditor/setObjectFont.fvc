@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.setObjectFont
+
+on setObjectFont (name, fontName, fontSize, fontStyle) {
+	new (tableType, @atts);
+	atts.font = string (fontName);
+	atts.size = number (fontSize);
+	atts.styl = number (fontStyle);
+	return (cardEditor.setObjectAttributes (name, @atts))}
+
+

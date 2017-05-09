@@ -1,0 +1,25 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.realtime.server.data.log.template
+
+<html>
+	<head>
+		<title><%title%></title>
+		</head>
+	<body>
+		<br />
+		<center>
+			<table>
+				<tr>
+					<td>
+						<font size="-1"><b>Last update</b>: <%now%></font>
+						<h1><%title%></h1>
+						<%logTable%>
+						</td>
+					</tr>
+				</table>
+			</center>
+		<br /><br /><br />
+		</body>
+	</html>
+
+
+

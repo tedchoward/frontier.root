@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.exists
+
+on exists (obj) { «Tell if an object exists
+	return (appleEvent (Filemaker.id, 'core', 'doex', '----', objspec (obj)))}
+
+

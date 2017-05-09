@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Netscape.examples.testopen
+
+«a simple burn-in script -- see how long it runs!
+local (ct = 0);
+netscape.bringtofront ();
+loop {
+	msg (ct++);
+	netscape.openUrl ("http://www.ccnet.com/SF_Free_Press/");
+	clock.waitseconds (10);
+	netscape.openUrl ("http://diamond.sierra.net/SkiWeb/");
+	clock.waitseconds (10)}
+
+

@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.thread.script
+
+«Changes
+	«8/6/10; 4:17:30 PM by DW
+		«Created. 
+loop {
+	io.thread.ct++;
+	try {io.threadScript ()};
+	thread.sleepSweet (10)}
+
+

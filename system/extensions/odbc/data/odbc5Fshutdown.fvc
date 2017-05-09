@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.data.odbc_shutdown
+
+on odbc_shutdown () {
+	«Script called from the user.callbacks.shutdown table
+		«The original is in extensions.odbc.data.odbc_shutdown
+		«unload the odbc dll once the session is finished
+		«Thu, Apr 16, 1998 at 4:37:56 PM by HA
+	try {
+		dll.unload(user.prefs_odbc.dllpath)}}
+
+

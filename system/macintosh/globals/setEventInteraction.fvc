@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.globals.setEventInteraction
+
+on setEventInteraction (allow) {
+	kernel (lang.setEventInteraction)}
+
+

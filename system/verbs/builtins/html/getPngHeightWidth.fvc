@@ -1,0 +1,36 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.getPngHeightWidth
+
+on getPngHeightWidth (f) {
+	«Changes
+		«1/27/12; 7:39:03 PM by DW
+			«We've needed this functionality for a long time. 
+				«http://worknotes.scripting.com/january2012/12812ByDw/getPngHeightwidth/
+	on numberFromBytes (ix) {
+		local (x = "", i);
+		for i = 0 to 3 {
+			x = x + string.mid (string.hex (s [ix + i]), 5, 2)};
+		return (number ("0x" + x))};
+	local (s, s1,s2);
+	file.open (f);
+	s = string (file.read (f, 32));
+	«bundle //debugging
+		«local (adroutline = @scratchpad.pngheaderinfo, i, ch)
+		«new (outlinetype, adroutline)
+		«target.set (adroutline)
+		«edit (adroutline)
+		«for i = 1 to 32
+			«ch = s [i]
+			«op.insert (string.padwithzeros (i, 3) + ": " + string.hex (ch) + " -- " + string.padwithzeros (number (string.hex (ch)), 3) + " -- " + ch, down)
+		«op.firstsummit (); op.deleteline ()
+		«window.zoom (adroutline)
+	file.close (f);
+	width = numberFromBytes (17);
+	height = numberFromBytes (21);
+	return ({height, width})}
+«bundle //test code
+	«html.getPngHeightWidth ("ohio:colorPark.png")
+	«getPngHeightWidth ("ohio:women.png")
+	«getPngHeightWidth ("ohio:jfk.png")
+	«getPngHeightWidth ("Macintosh HD:Users:davewiner:downloads:glyphicons_free:glyphicons:png:glyphicons_030_pencil.png")
+
+

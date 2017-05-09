@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FinderMenu.commands.setTypeCreator
+
+on setTypeCreator (type, creator) {
+	local (f);
+	for f in FinderMenu.getSelectionList () {
+		file.settype (f, type);
+		file.setcreator (f, creator);
+		file.setmodified (file.folderfrompath (f), clock.now())}}
+
+

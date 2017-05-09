@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.utilities.installEmbeddedScript
+
+local (apprezfile = "Macintosh HD:Programming:UCMDs & XCMDs:Macro Processor:app.¼.rsrc");
+local (adrScript = @html.ucmds.embeddedscript, compiledScript);
+osa.compile (adrScript, false, @compiledScript);
+dialog.alert (rez.putResource (apprezfile, 'scpt', 128, @compiledScript))
+
+

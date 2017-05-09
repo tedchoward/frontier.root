@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.fileFromPath
+
+on fileFromPath (path) {
+	kernel (file.filefrompath)}
+
+

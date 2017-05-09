@@ -1,0 +1,35 @@
+FrontierVcsFile:3:scpt:user.html.renderers.siteOutliner
+
+on siteOutliner (adroutline) { «for processing a site outline
+	«by the time we get it, the #directives have been removed
+		«it's also the target outline
+	
+	op.firstsummit ();
+	op.fullexpand ();
+	on visit () {
+		loop {
+			local (s = op.getlinetext ());
+			if s contains "," { «special processing here
+				local (firstpart = string.nthfield (s, ',', 1));
+				local (secondpart = string.nthfield (s, ',',  2));
+				s = "<a href=\"" + firstpart + ".html\">" + secondpart + "</a>"};
+			s = s + "<br>";
+			op.setlinetext (s);
+			if op.go (right, 1) { «cursor has subheads
+				visit ();
+				op.go (left, 1)};
+			if not op.go (down, 1) {
+				break}}};
+	visit ();
+	
+	local (s = html.getOutlineHtml (adroutline, "\r<ul>", "\r</ul>", "\r<li>", ""));
+	return (s)};
+
+«bundle «test code
+	«table.copy (@user.websites.frontier.siteoutline, @scratchpad)
+	«target.set (@scratchpad.siteoutline)
+	«edit (@scratchpad.siteoutline)
+	«webbrowser.displaytext (siteOutliner (@scratchpad.siteoutline))
+	«target.clear ()
+
+

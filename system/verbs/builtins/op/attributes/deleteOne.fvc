@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.attributes.deleteOne
+
+on deleteOne (attname) {
+	«Changes
+		«4/24/12; 10:47:05 AM by DW
+			«Created. This bit of functionality was missing.
+	local (atts);
+	op.attributes.getall (@atts);
+	if defined (atts.[attname]) {
+		local (data);
+		delete (@atts.[attname]);
+		pack (atts, @data);
+		op.setrefcon (data)}}
+«bundle //test code
+	«deleteOne ("type")
+
+

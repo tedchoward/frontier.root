@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.ftpText
+
+on ftpText (s, adrPageTable=@websites.["#data"]) {
+	if defined (adrPageTable^.fileWriter) { //new method
+		html.writeFile (adrPageTable^.f, @s, 'TEXT', html.getPref ("textFileCreator", adrPageTable), clock.now (), adrPageTable)}
+	else { //if fileWriters are not being used
+		true}}
+
+

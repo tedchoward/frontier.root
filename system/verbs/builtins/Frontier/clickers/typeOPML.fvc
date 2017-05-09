@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.clickers.typeOPML
+
+on typeOPML (path) {
+	«Changes:
+		«7/9/01; 12:09:36 AM by JES
+			«Call Frontier.tools.windowTypes.commands.open instead of pike.commands.open.
+		«PBS 09/21/00: called to handle opening an OPML document that's been double-clicked on in the Explorer or Finder or dropped on the app's icon.
+	Frontier.finderToFront = false;
+	return (Frontier.tools.windowTypes.commands.open (path))}
+
+

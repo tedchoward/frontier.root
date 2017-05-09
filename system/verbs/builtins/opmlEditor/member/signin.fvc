@@ -1,0 +1,46 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.member.signin
+
+on signin (urlRedirect, groupname="default", adrusername=nil) {
+	«Changes
+		«12/16/12; 7:05:24 PM by DW
+			«New optional parameters, groupname and adrusername.
+				«http://worknotes.scripting.com/december2012/121612ByDw/usingGroupsInOpmlServerApps
+		«6/21/12; 5:36:48 PM by DW
+			«Error message if incorrect username or password.
+		«3/22/12; 1:09:05 PM by DW
+			«Look for a param that says where to redirect to after the user signs-in.
+		«3/6/11; 6:36:11 PM by DW
+			«Cookie-based signin. If it's a post, check adrpostresult. If true, the user validated, send him to the home page (probably). If false, display the returned HTML.
+				«http://replay.waybackmachine.org/20000510220658/http://home.netscape.com/newsref/std/cookie_spec.html
+	local (pta = html.getpagetableaddress (), t, now = clock.now ());
+	pta^.title = "Sign in";
+	«adrpostresult^ = false //not a post, or didn't validate
+	bundle { //initial setup of t
+		new (tabletype, @t);
+		t.message = "";
+		t.username = "";
+		t.errormessage = ""}; //6/14/12 by DW
+	«scratchpad.signinparams = pta^; edit (@scratchpad.signinparams)
+	if pta^.method == "POST" {
+		local (args);
+		new (tabletype, @args);
+		webserver.parseargs (pta^.requestbody, @args);
+		«scratchpad.args = args; edit (@scratchpad.args)
+		if opmlEditor.member.validate (args.username, args.password, groupname) {
+			local (adrgroup = opmlEditor.member.initGroup (groupname));
+			local (cookievalue = "username=" + args.username + "&password=" + args.password);
+			webserver.util.setCookie (pta, adrgroup^.cookiename, cookievalue, adrgroup^.cookiedomain, adrgroup^.cookieexpires);
+			«scratchpad.signinparams = pta^; edit (@scratchpad.signinparams)
+			«adrpostresult^ = true
+			webserver.redirect (pta, args.urlRedirect);
+			if adrusername != nil {
+				adrusername^ = args.username};
+			return ("")}
+		else {
+			t.username = args.username; //save the trouble of entering it again
+			t.errormessage = "Incorrect username or password.";
+			urlRedirect = args.urlRedirect}};
+	t.urlRedirect = urlRedirect; //3/22/12 by DW
+	return (string.multiplereplaceall (string (opmlEditor.data.outlines.signInTemplate), @t, false, "<%", "%>"))}
+
+

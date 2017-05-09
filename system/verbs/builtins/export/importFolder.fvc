@@ -1,0 +1,64 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.export.importFolder
+
+on importFolder (folder) {
+	«Changes
+		«11/9/14; 9:13:35 PM by DW
+			«Avoid importing .DS_Store (an invisible Mac file). Use system.environment.isMac to determine if we're running on the Mac instead of doing a string comparison on the result of sys.os.
+		«9/6/11; 8:54:17 AM by DW
+			«When I released it I didn't include a fix I had made on the test server. Fixed. 
+		«9/6/11; 8:12:40 AM by DW
+			«For addresses in guest databases, remove the file spec from the beginning of the address, so objects end up where they belong. Worth noting that it's been over 13 years since this script has been modified. Must be some kind of record. :-)
+		«Monday, February 23, 1998 at 10:58:34 AM by DW
+			«This script had never been updated for Frontier 5 or Windows. 
+			«It could only read from the resource fork. Oops.
+			«Removed the first parameter, the address of the table we're going to import into.
+			«This never worked, because it depended on the folder name being the same as the table name.
+			«This can't be true due to limits in the file systems.
+			«Instead, we use the address that's stored in each of the files.
+	local (f, flgotfile);
+	fileloop (f in folder, infinity) {
+		flgotfile = false;
+		if file.fileFromPath (f) != ".DS_Store" { //11/9/14 by DW
+			if system.environment.isMac {
+				try { //see if it's an old format, Frontier 4-compatible file
+					local (adr);
+					rez.getNthResource (f, 'data', 1, @adr, @resdata);
+					msg (adr);
+					unpack (@resdata, @resdata);
+					unpack (@resdata, @resdata);
+					table.moveAndRename (@resdata, adr);
+					flgotfile = true}};
+			if not flgotfile { //not Mac or not resource-based file
+				«ugly -- we have to crib code because fatPages.importFatFile doesn't do a table.surePath
+				local (pageSource = string (file.readwholeFile (f)), atts);
+				pageSource = string.replaceAll (pageSource, cr + lf, cr);
+				pageSource = string.replaceAll (pageSource, lf, cr);
+				if not fatPages.getPageAtts (@pageSource, @atts) {
+					scriptError ("The file, \"" + f + "\", does not contain an embedded object.")};
+				«scratchpad.atts = atts
+				if not defined (atts.pageData) {
+					scriptError ("The file, \"" + f + "\", does not contain an embedded object.")};
+				local (x = atts.objectType, objectType);
+				local (prefix = "application/x-frontier-");
+				if not (x beginsWith prefix) {
+					return (nil)};
+				objectType = string.delete (x, 1, sizeof (prefix));
+				local (data = binary (base64.decode (atts.pageData)));
+				setBinaryType (@data, objectType);
+				
+				local (adrobject);
+				bundle { //set adrobject, 9/6/11 by DW
+					local (s = atts.adrPageData);
+					if s beginswith "[\"" { //it's a guest database file spec
+						local (ix = string.patternMatch ("\"].", s));
+						s = string.delete (s, 1, ix+2)};
+					adrobject = address (s)};
+				
+				table.surePath (string (adrobject)); //here's the new bit that's not in fatPages.importFatFile
+				unpack (@data, adrobject);
+				
+				msg (atts.adrPageData)}}}}
+«bundle //test code
+	«importfolder ("Broadway:manilaupdates:")
+
+

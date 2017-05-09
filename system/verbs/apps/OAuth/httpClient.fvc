@@ -1,0 +1,36 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.OAuth.httpClient
+
+on httpClient (endpoint, adrparams, method="GET") {
+	«Changes
+		«10/27/12; 10:33:22 AM by DW
+			«Work around breakage this morning in the Twitter API. Instead of calling tcp.httpReadUrl, we bake our own call to tcp.httpClient so we can send a header in.
+				«http://worknotes.scripting.com/october2012/102712ByDw/fixTwitterBreakage
+		«3/26/11; 9:42:54 PM by DW
+			«When calling string.urlEncode, pass the second optional param for the "full" encode. Otherwise characters like @ aren't encoded, and the signatures are declared invalid.
+		«3/26/11; 10:13:43 AM by DW
+			«New optional parameter, method, default GET.
+		«2/12/09; 12:21:41 PM by DW
+			«Created. 
+	local (url = endpoint + "?");
+	for adr in adrparams {
+		url = url + nameof (adr^) + "=" + string.urlencode (adr^, true) + "&"};
+	url = string.delete (url, sizeof (url), 1);
+	«scratchpad.urloauth = url
+	
+	bundle { //make HTTP call -- 10/27/12 by DW
+		local (urllist, headers, s, code);
+		bundle { //set urllist
+			try {
+				urllist = string.urlsplit (url)}
+			else {
+				urllist = string.urlsplit (url + "/")}};
+		bundle { //set up headers table
+			new (tabletype, @headers);
+			headers.["Content-Length"] = "0"};
+		s = tcp.httpClient (method, server:urllist [2], path:urllist [3], ctFollowRedirects:3, flMessages:false, adrHdrTable:@headers);
+		«code = tcp.httpGetStatusCode (s) //for debugging only
+		return (string.httpResultSplit (s));
+		}}
+		«return (tcp.httpreadurl (url, method:method))
+
+

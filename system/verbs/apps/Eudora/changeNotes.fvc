@@ -1,0 +1,287 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Eudora.changeNotes
+
+Original Version by Forrest Thiessen (fthiess@nma.mnet.uswest.com)
+Changes by Leonard Rosenthol (leonardr@netcom.com)
+	10/10/93
+		Moved all constants into an eventInfo subtable
+		Modified all scripts to use the new eventInfo subtable
+		Added some standard app verbs
+			bringToFront
+		Removed the msgObj param from Connect - not needed!
+	10/20/93
+		renamed attachDocument to attachFile
+		added new attachFileList for future Frontier improvements
+		changed pleaseNotify to take the application specifier
+		added new pleaseNotifyFrontier for local notification
+		added new replyAll and replyWithQuote verbs for more flexibility
+	10/31/93
+		Fixed some of the eventInfo constants
+		attachFile & attachFileList now work!!!
+		Added more standard verbs
+			isRunning
+			launch
+		Added getMessageObject which returns an objectSpec for a given mailbox & index
+		Moved examples.countMsgs -> countMessages and cleaned up
+		Added moveMessage
+		Added simple get & set verbs for message fields
+			getMessagePriority
+			getMessageStatus
+			getMessageSubject
+			getMessageText
+			getMessageTo
+			setMessagePriority
+				setMessagePriorityHigh
+				setMessagePriorityHighest
+				setMessagePriorityLow
+				setMessagePriorityLowest
+				setMessagePriorityNormal
+			setMessageStatus
+			setMessageSubject
+			setMessageText
+			setMessageTo
+		Added 
+		Wrote some cool FinderMenu Scripts
+			Mail
+			Stuff & Mail
+			Launch
+	11/21/93
+		Revamped FinderMenu scripts for Frontier 3.0
+		Added getCurrentMessageObject()
+	11/22/93
+		Updated createMessage() for Frontier 3.0
+			added optional param for mailfolder & mailbox
+				however they are not currently supported by Eudora
+		Added support for RIPEM!
+			Added a new examples folder for RIPEM
+			Write the RIPEM handling scripts
+			Attached the RIPEM scripts to the shared menu
+		Added some new "get" routines
+			getMessageBCC()
+			getMessageCC()
+			getMessageSender()
+		Added kDontSave to eventInfo table
+		Added some new examples
+			setAsDontSave
+		Cleaned up the shared menu & added some useful items
+	11/28/93
+		Fixed the movetoSentMail example
+		Modified countMailboxes & countMessages to take object specifiers
+		Added new messageCounter example
+		Removed some old examples now found as top level commands
+		Cleaned up trashMsg example & renamed to trashMessage
+		Added new visitMessages command
+		Added testVisitMessages example
+		Added getMailfolderName & getMailboxName
+	11/29/93
+		Modified openMessage & closeMessage to use new/correct events
+		Modified getMailboxName & getMailfolderName to use pName
+	12/1/93 - final cleanup for posting!
+		Modified attachFile for Frontier 3.1
+			Changed attachFile -> attachFiles
+			Modified to deal with lists of items
+			Removed attachFileList
+		Improved & tested the mail notification handling
+			Created system.verbs.traps.CSOm.eNot for mail notification
+			Cleaned up the eudoraHandler example & tested it!
+			Changed pleaseNotify & unNotify to turnNotificationOn/Off
+		Added optional parameters to connect for checking & sending
+		Added some Read Me notes to the RIPEM examples table
+		Modified queue to use optional parameters
+		Removed replyAll & replyWithQuote & made them optionals on reply
+		Changed salvage to sendAgain - much nicer sounding
+		Cleaned up my original implementation of msg priorities
+			Added priority constants to eventInfo
+			Removed individual setMessagePriority commands
+			Modified setMessagePriority to use priority as optional
+Changes by Dave Winer (dwiner@well.com)
+	11/12/94 
+		added Eudora.getSelectedText ()
+			it's a property of the application
+		added Eudora.replaceSelectedText ()
+			there's a bug in the implementation of this Apple Event
+			it properly replaces the selected text... but it returns an error
+			the script works around this problem in a klunky way
+				but it works!
+		added Eudora.setMessageSender ()
+	12/31/94
+		added ucmds table
+			contains a single ucmd resource and two glue scripts
+				Eudora.ucmds.wrapText
+				Eudora.ucmds.massageText
+			both do formatting of text much faster than scripts can
+			check out Eudora.examples.forwardMessage
+			C source code is provided for the ucmd code resource
+		attachments
+			looked for a way to find out if a message has a file attached
+			didn't seem to be a way
+		Eudora.newOutgoingMessage
+			creates a new message in a single call
+			check out Eudora.examples.hiDave for an example
+		added Eudora.getScriptPrefsFolder
+			for scripts that want to store stuff in folders in the System Folder…
+				we return a path to a folder just for Eudora-based scripts
+				it's a sub-folder of the Preferences folder at:
+					System Folder
+						Preferences
+							UserLand
+								Eudora
+									(your stuff goes here)
+		added Eudora.getCurrentScript
+			get script text from message, or selection, 
+			and (important!) confirms with user
+		added Eudora.isg table
+			"isg" stands for Internet Scripting Group
+			all the scripts that implement the mailing list are in this table
+			so is the users
+		moved old examples out to disk
+			to streamline the install file, make it more approachable
+			new sub-folder called "Extras"
+			all the Eudora verbs are still here and supported
+Changes by Cameron Smith (ccsmith@pinc.com)
+	4/27/96
+		added low-level verbs
+			added Eudora.duplicate()
+			added Eudora.exists()
+			added Eudora.get()
+			added Eudora.printMessage()
+			created Eudora.saveAs()
+				no built-in AE support for "Save As" so this is implemented as a script
+				Note that it uses setting[10] to set the creator of the text file
+			added Eudora.set()
+			added Eudora.unqueue()
+		added Eudora.getAlternateSignature()
+		added Eudora.getMessageFrom()
+		added Eudora.getMessageAttachments()
+		added Eudora.getSetting()
+		added Eudora.getSignature()
+		added Eudora.setAlternateSignature()
+		added Eudora.setSetting()
+		added Eudora.setSignature()
+		fixed Eudora.setMessageSender()
+			it was setting the "From" field
+		fixed Eudora.turnNotificationOn()
+			now uses kEuStartNotifying
+			can ask for specific event notification to be turned on
+		fixed Eudora.turnNotificationOff()
+			now uses kEuStopNotifying
+			can ask for specific event notification to be turned off
+		added to eventInfo
+			New
+				body
+					property of message
+				label
+					property of message
+				qp
+					property of message
+					quoted printable encoding
+				returnReceipt
+					property of message
+				setting
+					for getting and setting Eudora settings
+					Use:
+						get (setting [number])
+						set (setting [number], value)
+				transliterationTable
+					property of message
+				willBeDeleted
+					property of message
+				willBeFetched
+					property of message
+			Added to conform to aete (and imported glue) info
+				attachmentEncoding
+					property of message
+					identical to existing attachTo
+				location
+					property of mailbox
+					identical to existing FSS
+				preserveMacintoshInfo
+					property of message
+					identical to existing hqxText
+				showAllHeaders
+					property of message
+					identical to existing showAll
+				spaceRequired
+					property of mailbox
+					identical to existing neededSpace
+				spaceWasted
+					property of mailbox
+					identical to existing wasteSpace
+				tabExpansion
+					property of message
+					identical to existing fakeTabs
+				tocLocation
+					property of mailbox
+					identical to existing TOCFSS
+				kEuStartNotifying
+					as opposed to the kEuPleaseNotify
+					is this a change from previous versions or specific to Light?
+				kEuStopNotifying
+					as opposed to the kEuPleaseNotify
+					is this a change from previous versions or specific to Light?
+			Enumerators
+				alreadyRead
+				alternate
+				appledouble
+				applesingle
+				binhex
+				forwarded
+				hasConnected
+				hasManuallyFiltered
+				mailArrives
+				mailSent
+				neverSent
+				none
+				notSendable
+				opensFilters
+				queued
+				redirected
+				replied
+				sendable
+				sent
+				standard
+				unread
+				uuencode
+				willConnect
+		added settings info to object hierarchy
+			This information came from the Q&A stack on the Qualcomm web site
+			and from reading through the STR resource within Eudora itself.
+			Check it out -- there's some *really* interesting stuff in there.
+Changes by Preston Holmes (pholmes@ucsd.edu)
+	5/4/96
+		reparsed Glue from Eudora 3 Beta
+		copied over all older scripts from current table
+		copied over settings descriptions though may be out of date.
+		New in parsed glue
+			wait parameter added to connect()
+	5/9/96
+		changed id1 to uniqueID in eventInfo
+	7/19/96
+		comparison of code between scripts common to old and new tables
+			launch had a strange behavior - it was launching then quitting non scriptable version
+				There aren't all that many of these left floating around, so why bother..
+			rearranged parameter order for reply to conform to previous versions
+		made 'at' non opitonal in make verb - Eudora needs it
+	7/22/96
+		Fixed some pretty glaring bugs in the saveAs verb (who wrote this one!?)
+	8/23/96
+		rewrote sendNow verb to work with current versions of Eudora
+			support for this event changed since script was first written.
+		removed the sendLater script
+			It doesn't work, and 'later' is too arbitrary.
+			Queue verb will except a time
+		Added reply to digest feature originally by SSL
+	8/24/96
+		rewrote some examples
+		wrote a oneliners example
+		Readmes
+		New organization of shared menu
+	9/8/96
+		Included B. Deverman's fixes for get/set signature scripts
+	9/17/96
+		Added following scripts from Ben Richardson (naib@iinet.net.au)
+			Eudora.setMessageCC
+			Eudora.setMessageBCC
+			Eudora.getMessageReplyTo
+
+
+

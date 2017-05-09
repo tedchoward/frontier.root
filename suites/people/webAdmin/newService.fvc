@@ -1,0 +1,7 @@
+FrontierVcsFile:3:wptx:suites.people.webAdmin.newService
+
+#title "New Service"
+{newService ()}
+{goBack ()}
+
+

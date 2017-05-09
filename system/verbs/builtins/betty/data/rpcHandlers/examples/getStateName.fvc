@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.betty.data.rpcHandlers.examples.getStateName
+
+on getStateName (statenum) {
+	return (states.nthState (statenum))}
+
+

@@ -1,0 +1,45 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.radio.prefs.numberPref
+
+on numberPref (prompt, adrnumber, lowerbound=0, upperbound=infinity, colspan=1, textToRight="", labelAlign="right") {
+	«Changes:
+		«10/31/12; 2:48:06 PM by JES
+			«On POST, check the responder, not environment to determine where to pick up postArgs.
+		«10/28/07; 9:48:16 AM by DW
+			«Optional param, labelAlign, defaults to right.
+		«8/3/02; 8:43:10 PM by JES
+			«Quote characters in addresses were mangling the HTML, so now addresses are url-encoded when generating the form element. When processing a POST, we look for the url-encoded field in the postArgs table.
+		«2/5/02; 11:34:44 AM by PBS
+			«Conditionalized to work in Frontier.
+	«bundle //debugging
+		«workspace.pt = pta^
+	local (pta = html.getpagetableaddress ());
+	local (size = sizeof (string (upperbound)));
+	if sizeof (string (lowerbound)) > size {
+		size = sizeof (string (lowerbound))};
+	local (maxlength = size, type = "text");
+	local (error = "");
+	if pta^.method == "POST" {
+		local (value);
+		try {
+			if defined (pta^.radioResponder) { //JES 10/31/12: check responder, not environment
+				value = number (pta^.radioresponder.postargs.[string.urlEncode (string.popFileFromAddress (adrnumber))])}
+			else { //assume mainResponder
+				value = number (pta^.postargs.[string.urlEncode (string.popFileFromAddress (adrnumber))])};
+			if value < lowerbound {
+				error = radio.prefs.errorstring ("Can't set the number because it is too small. The smallest permissible value is " + lowerbound + ".")};
+			if value > upperbound {
+				error = radio.prefs.errorstring ("Can't set the number because it is too large. The largest permissible value is " + upperbound + ".")};
+			if sizeof (error) == 0 {
+				local (adr = address (string.popFileFromAddress (adrnumber)));
+				adr^ = value}}
+		else {
+			error = radio.prefs.errorstring (tryError)}};
+	local (inputField = "<input type=\"" + type + "\" name=\"" + string.popFileFromAddress (adrnumber) + "\" size=\"" + size + "\" maxlength=\"" + maxlength + "\" value=\"" + string (adrnumber^) + "\">");
+	local (s = "<tr><td colspan=\"2\"><table><tr><td valign=\"middle\">" + prompt + ":</td><td valign=\"middle\">" + inputField + textToRight + "</tr></table></td></tr>");
+	return (error + "<tr><td align=\"" + labelAlign + "\" nowrap>" + prompt + ":</td><td align=\"left\" valign=\"top\" colspan=\"" + colspan + "\" width=\"70%\"><input type=\"" + type + "\" name=\"" + string.urlEncode (string.popFileFromAddress (adrnumber)) + "\" size=\"" + size + "\" maxlength=\"" + maxlength + "\" value=\"" + string (adrnumber^) + "\">" + textToRight + "</td></tr>");
+	return (error + s)}
+«bundle //debugging
+	«html.setPageTableAddress (@workspace.pt)
+	«numberPref ("Check for new mail-to-weblog messages every", @config.manila.prefs.mailToWeblogSecsBetwChecks, 30, 5600, textToRight:" seconds.")
+
+

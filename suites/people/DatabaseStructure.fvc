@@ -1,0 +1,34 @@
+FrontierVcsFile:3:optx:suites.people.DatabaseStructure
+
+user.people
+	users
+		user1
+			emailAddress
+			enabled
+			password
+			services
+				Service1
+					enabled (boolean)
+					data
+						[private user-specific data for this service...]
+	Services
+		ServiceOne
+			enabled (boolean)
+			virginUserTable
+			authenticateUser (script) (optional)
+			deleteUser (script) (optional)
+			newUser (script) (optional)
+			[private global data for this service...]
+	groups
+		group1
+			members
+				user1
+				user2
+				user3
+			services
+				service1
+					data
+						[group-specific data for this service]
+
+
+

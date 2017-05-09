@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.getObject
+
+on getObject (path, flmessages=false) {
+	«Changes
+		«5/5/07; 5:00:22 PM by DW
+			«If path doesn't begin with a slash, put a slash at the beginning of the path. Add optional flmessages param, default false.
+		«10/10/06; 12:03:40 PM by DW
+			«Created. For private data, you can't just use HTTP without the special headers that Amazon looks for. This is glue that does that connecting for you.
+	local (adrdata = s3.init (), response);
+	local (apiUrl = adrdata^.accounts.[adrdata^.currentaccount].apiurl);
+	if not (path beginswith "/") {
+		path = "/" + path};
+	if flmessages {
+		msg ("s3.getObject " + path)};
+	response = s3.httpClient ("GET", path);
+	«scratchpad.response = response
+	if flmessages {
+		msg ("")};
+	return (response.data)};
+bundle { //test code
+	«getObject ("/privateTestBucket/test1/apps/config.root")
+	getObject ("/privateTestBucket/test1/filelist.xml")}
+
+

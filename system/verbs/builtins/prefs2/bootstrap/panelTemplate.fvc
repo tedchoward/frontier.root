@@ -1,0 +1,8 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.prefs2.bootstrap.panelTemplate
+
+<div class="divPrefs">
+	<%panelText%>
+	</div>
+
+
+

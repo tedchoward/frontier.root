@@ -1,0 +1,12 @@
+FrontierVcsFile:3:optx:system.verbs.apps.winShell.data.scripts.expandEnvironmentStrings
+
+Function Main (s)
+	Dim shell
+	
+	Set shell = CreateObject ("WScript.Shell")
+	
+	Main = shell.ExpandEnvironmentStrings (s)
+End Function
+
+
+

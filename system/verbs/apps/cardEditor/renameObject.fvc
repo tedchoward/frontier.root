@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.renameObject
+
+on renameObject (param1, param2) {
+	return (appleEvent (cardEditor.id, 'IOWA', 'rnob', 'prm1', string (param1), 'prm2', string (param2)))}
+
+

@@ -1,0 +1,17 @@
+FrontierVcsFile:3:optx:system.verbs.apps.winShell.data.scripts.mapNetworkDrive
+
+Function Main (driveLetter, share)
+	' Map a share to a drive letter.
+	' driveLetter should be of the form Z:
+	' share should be of the form \\Server\\share
+	Dim network
+	
+	Set network = CreateObject ("Wscript.Network")
+	
+	network.MapNetworkDrive driveLetter, share
+	
+	Main = 1 ' Return true to Frontier
+End Function
+
+
+

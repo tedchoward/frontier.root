@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.rpcHandlers.members.addUser
+
+on addUser (groupname, mailaddress) {
+	local (adrmembers = mainResponder.members.getMembershipTable (groupname));
+	return (mainResponder.members.sendMail (mailaddress, adrmembers))}
+
+

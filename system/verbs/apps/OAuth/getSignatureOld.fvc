@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.OAuth.getSignatureOld
+
+on getSignature (adrparams, url, consumerSecret, tokenSecret="", method="GET") {
+	«Changes
+		«2/11/09; 7:50:52 PM by DW
+			«Created. 
+			«http://www.hueniverse.com/hueniverse/2008/10/beginners-gui-1.html
+	local (s = "");
+	for adr in adrparams {
+		s = s + nameof (adr^) + "=" + string.urlencode (adr^) + "&"};
+	if sizeof (s) > 0 {
+		s = string.delete (s, sizeof (s), 1)}; //drop the trailing ampersand
+	s = method + "&" + string.urlencode (url) + "&" + string.urlencode (s);
+	«wp.newtextobject (s, @scratchpad.sigparamstring); edit (@scratchpad.sigparamstring)
+	local (key = string.urlencode (consumerSecret) + "&" + string.urlencode (tokenSecret));
+	s = base64.encode (OAuth.getHmac (s, key), 255);
+	«clipboard.putvalue (s)
+	«wp.newtextobject (s, @scratchpad.sig); edit (@scratchpad.sig)
+	return (s)};
+bundle { //test code
+	dialog.alert (getSignature (@scratchpad.requestparams, "http://term.ie/oauth/example/request_token.php", "secret"))}
+
+

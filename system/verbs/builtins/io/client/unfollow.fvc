@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.unfollow
+
+on unfollow () {
+	«Changes
+		«9/3/10; 9:39:43 AM by DW
+			«Created. 
+	local (name);
+	bundle { //get name from buddy outline
+		local (adroutline = address (window.frontmost ()), lo = adroutline^);
+		local (oldtarget = target.set (@lo));
+		op.go (left, infinity);
+		name = searchengine.stripmarkup (op.getlinetext  ());
+		target.set (oldtarget)};
+	if dialog.ask ("Name of user to unfollow?", @name) {
+		local (adrdata = io.init (), now = clock.now ());
+		name = string.trimwhitespace (name);
+		local (username = adrdata^.client.prefs.username);
+		local (password = string (adrdata^.client.prefs.password));
+		local (server = string (adrdata^.client.prefs.server));
+		[server].io.unfollow (username, password, name);
+		dialog.alert ("Goodbye to " + name + "!")}};
+bundle { //test code
+	unfollow ()}
+
+

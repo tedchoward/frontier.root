@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.decodeString
+
+on decodeString (s) {
+	«Changes
+		«4/11/06; 7:08:32 PM by DW
+			«Created.
+	return (xml.entityDecode (s, true))}
+
+

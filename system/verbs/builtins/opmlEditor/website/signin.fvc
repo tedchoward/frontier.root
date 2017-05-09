@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.signin
+
+on signin () {
+	«Changes
+		«6/1/11; 11:13:03 AM by DW
+			«Sign-in page.
+	local (pta = html.getpagetableaddress ());
+	if pta^.method == "POST" {
+		scratchpad.signinparams = pta^};
+	pta^.title = "Sign in";
+	return (opmlEditor.member.signin ("index"))};
+bundle { //test code
+	html.setpagetableaddress (@scratchpad.signinparams);
+	signin ()}
+
+

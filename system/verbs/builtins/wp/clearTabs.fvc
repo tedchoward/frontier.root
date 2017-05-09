@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.wp.clearTabs
+
+on clearTabs () {
+	kernel (wp.cleartabs)}
+
+

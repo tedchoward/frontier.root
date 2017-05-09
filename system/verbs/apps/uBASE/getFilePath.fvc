@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.uBASE.getFilePath
+
+on getFilePath (fnum) {
+	return (systemEvent ('ubas', 'filp', 'fref', short (fnum)))}
+
+

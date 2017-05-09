@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.getTimeOut
+
+on getTimeOut (appID = WebStar.id) {
+	with objectModel, WebStar.eventInfo {
+		return (core.get (appID, timeOut))}}
+
+

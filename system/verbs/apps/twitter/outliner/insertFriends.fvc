@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.outliner.insertFriends
+
+«Changes
+	«4/28/07; 4:03:34 PM by DW
+		«Add missing creation of atts table.
+local (friends, adrfriend, atts, dir = right);
+new (tabletype, @atts);
+twitter.getfriends (@friends);
+«scratchpad.friends = friends
+for adrfriend in @friends {
+	op.insert (nameof (adrfriend^), dir); dir = down;
+	atts = adrfriend^;
+	atts.type = "twitterFriend";
+	atts.username = nameof (adrfriend^);
+	op.attributes.addgroup (@atts)};
+if dir == down {
+	op.go (left, 1)}
+
+

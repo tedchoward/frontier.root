@@ -1,0 +1,58 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.data.updateCommandScript
+
+on updateCommandScript (flconfirm=true) {
+	«Changes
+		«9/18/11; 8:59:35 AM by DW
+			«Log the update.
+		«7/24/08; 9:57:19 AM by DW
+			«Gracefully handle updating if there is no dotOpml.root to update.
+		«12/17/07; 12:55:59 PM by DW
+			«Maintain system.temp.ctNewParts. Something with a UI that wants to log this number can do so then delete it or zero it. When it's non-zero, log it again, and zero it or delete it. 
+		«5/6/07; 12:58:32 PM by DW
+			«Ooops. Missed the dialog.notify. :-)
+		«5/6/07; 12:51:33 PM by DW
+			«Add optional parameter, flconfirm, default true. If false, the update takes place with no dialogs.
+		«3/21/07; 11:22:40 AM by DW
+			«Re-enable updating of dotOpml.root, since the RSS-updating method is now available for that root.
+		«3/7/07; 10:35:28 AM by DW
+			«Change prompt to reflect new method of updating opml.root.
+			«Disable updating of dotOpml.root, since the update server is off the air.
+		«7/12/06; 10:17:06 AM by DW
+			«Created. 
+			«This script is copied into system.temp and then run in response to the File menu Update command. Called from Frontier.tools.windowTypes.commands.update.
+	local (servername, startticks = clock.ticks ());
+	if defined (user.rootUpdates.servers.opml.rssUrl) {
+		local (urllist = string.urlsplit (user.rootUpdates.servers.opml.rssUrl));
+		servername = urllist [2]}
+	else {
+		servername = user.rootUpdates.servers.opml.server};
+	local (flupdate = true);
+	if flconfirm {
+		flupdate = dialog.confirm ("Connect with " + servername + " to get the latest OPML Editor code?")};
+	if flupdate {
+		on updateRoot (adrinroot) {
+			local (ctparts = 0);
+			system.temp.update = rootupdates.update;
+			system.temp.update (adrinroot, true, @ctparts);
+			if ctparts > 0 {
+				filemenu.savemyroot (adrinroot)};
+			return (ctparts)};
+		local (ct1 = updateroot (@root), ct2=0);
+		if defined (dotOpmlSuite) { //7/24/08 by DW
+			ct2 = updateroot (@dotOpmlSuite)};
+		if flconfirm {
+			dialog.notify ((ct1+ct2) + " new or updated parts.")};
+		bundle { //12/17/07 by DW
+			if not defined (system.temp.ctNewParts) {
+				system.temp.ctNewParts = 0};
+			system.temp.ctNewParts = system.temp.ctNewParts + ct1 + ct2};
+		bundle { //log the update, 9/18/11 by DW
+			local (rootfname = file.filefrompath (Frontier.pathToRoot), ctparts = ct1 + ct2, s);
+			if ctparts > 0 {
+				if ctparts == 1 {
+					s = " new part."}
+				else {
+					s = " new parts."};
+				log2.add ("System", "Update", "Updated " + rootfname + ". " + ctparts + s, startticks)}}}}
+
+

@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.sys.dosBatchCommand
+
+on dosBatchCommand (cmdstring) {
+	«Changes
+		«11/28/08; 7:47:58 AM by DW
+			«Randomize the name of the batch file.
+		«11/22/08; 3:47:00 PM by DW
+			«Created. Run the string as a batch file.
+	if system.environment.isWindows {
+		local (ftmp = frontier.getsubfolder ("/ops/temp/") + "tmp" + clock.ticks () + ".bat");
+		file.writewholefile (ftmp, cmdstring);
+		launch.application (ftmp);
+		clock.waitseconds (1);
+		try {file.delete (ftmp)}}}
+«bundle //test code
+	«dosBatchCommand ("net stop apache2.2")
+	«dosBatchCommand ("net start apache2.2")
+
+

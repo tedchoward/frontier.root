@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:suites.mail.drivers.Eudora.setNotification
+
+on setNotification (flturnon) {
+	if flturnon {
+		Eudora.turnNotificationOn ()}
+	else {
+		Eudora.turnNotificationOff ()}}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.getAddress
+
+on getAddress (adrtable, name) { //return the address of the first object in the table with the indicated name
+	kernel (xml.getAddress)}
+
+

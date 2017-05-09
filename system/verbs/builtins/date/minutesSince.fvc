@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.date.minutesSince
+
+on minutesSince (when) {
+	«Changes
+		«4/12/13; 7:05:09 PM by DW
+			«Created.
+	return (number (clock.now () - when) / 60)}
+«bundle //test code
+	«dialog.alert (minutesSince (date.yesterday (clock.now ())))
+
+

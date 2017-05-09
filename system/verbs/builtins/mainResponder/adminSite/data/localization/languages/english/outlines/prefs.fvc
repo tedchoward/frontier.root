@@ -1,0 +1,244 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.mainResponder.adminSite.data.localization.languages.english.outlines.prefs
+
+Server Settings
+	Basic Settings
+		You can edit the contact information for the webmaster, SMTP server and serial number used for this server.
+		<%radio.prefs.stringPref ("Webmaster name", @user.prefs.name)%>
+		<%radio.prefs.stringPref ("Webmaster email address", @user.prefs.mailAddress)%>
+		<%radio.prefs.stringPref ("Organization", @user.prefs.organization)%>
+		<%radio.prefs.stringPref ("Outgoing (SMTP) mail server", @user.prefs.mailHost)%>
+		<%radio.prefs.stringPref ("Serial Number", @user.prefs.serialNumber)%>
+	Security
+		You can set security access controls on all content that the server renders. The values on this page control the global settings. The directory and script settings can be over-ridden at the site level, while IP address security is global.
+		<%mainResponder.adminSite.prefs.securityLevel ("Admin&nbsp;security&nbsp;level")%>
+		<%radio.prefs.checkboxPref ("Check this box to allow directory listings by default.", @config.mainresponder.globals.allowDirectoryListings)%>
+		<%radio.prefs.checkboxPref ("Check this box to allow script listings by default.", @config.mainresponder.globals.allowScriptListings)%>
+		<%radio.prefs.checkboxPref ("Check this box to allow scripts to run by default.", @config.mainresponder.globals.allowScriptsToRun)%>
+		<br />
+		<b>Blocking HTTP requests by IP address</b>
+		<%radio.prefs.checkboxPref ("Check this box to allow HTTP access <i>only</i> from the following IP addresses.", @config.mainresponder.prefs.flAllowByIpOnly)%>
+		<%radio.prefs.textAreaPref ("IP addresses<br>separated by<br>commas", @config.mainresponder.prefs.allowedIpAddresses)%>
+		<br />
+		<b>Membership</b>
+		<%radio.prefs.checkboxPref ("Check this box to use the more secure encrypted cookie format. The encrypted format does not store passwords in membership cookies. Instead it hashes the password, plus additional information, to make membership more secure.", @config.mainresponder.prefs.flMembershipHashedCookies)%>
+	Administrators
+		You can add or remove administrators access to the Frontier Admin Site or edit the information for an existing administrator. You can also grant access to the WebEdit server to an administrator.
+		<%mainResponder.adminSite.prefs.listAdministrators ()%>
+		<br /><%mainResponder.adminSite.prefs.addOrEditAdministrator ()%>
+	Domains
+		The settings on this page are used configure virtual domains and sub-sites. For each site hosted on your server, there's a domain, a path, and a collection of objects which comprise the site.
+		For a site hosted from an object database -- a Manila site for example, the objects will be specified by a database address. For a site hosted fom the filesystem, the objects will be specified by the path to a folder on disk.
+		To map a domain and path to a site, type the domain name, and the path under the domain where the site will be served. In the Object field, enter either an object database address or the path to a folder of files on disk. Then click the Add Site button to add the site to the hierarchy.
+		You can specify a redirect by entering the URL to redirect to, starting with http:\\// without a trailing slash, for example http:\\//www.example.com -- This will redirect all requests for the specified URL to the site of your choosing.
+		 <%local (pta = html.getPageTableAddress ()); pta^.flAddSubmitButton = false; if defined (pta^.postArgs.delete) {""} else {mainResponder.adminSite.prefs.addMappingToSiteTree () + "<br /><br />"}%>
+		<b>Domains on this server</b>
+		 <%mainResponder.adminSite.prefs.listDomains ()%>
+	Search Engine
+		You can enable and set up the search engine server on this page.
+		<%radio.prefs.checkboxPref ("Check this box to enable the search engine.", @config.mainResponder.prefs.flSearchEngine)%>
+		<%radio.prefs.stringPref ("Search page URL", @config.mainResponder.urls.searchHome,size:80, maxlength:300)%>
+		<%radio.prefs.numberPref ("Index stored pages every", @config.mainResponder.search.prefs.minutesBetweenIndexes, 1, textToRight:" minute(s).")%>
+		<%radio.prefs.checkboxPref ("Check this box if you want to store the full text of indexed pages, so that excerpts can be displayed in search results.", @config.mainResponder.search.prefs.flStoreFullText)%>
+		<%radio.prefs.checkboxPref ("Check this box to allow public search submissions.", @config.mainresponder.prefs.flAllowPublicSearchSubmissions)%>
+		<%radio.prefs.checkboxPref ("Check this box to enable search engine logging", @config.mainResponder.search.prefs.flLogEnabled)%>
+	MIME Types
+		 <%if defined (searchArgTable.itemToEdit) {"To change the MIME type associated with the ." + searchArgTable.itemToEdit + " extension, fill in the Type input box and click the Submit button."} else {"To add a new MIME type, fill in the suffix and its MIME type, then click the Add New Type button. To delete one or more types, check its checkbox and click the Delete button at the bottom of the page. To edit a type, click an Edit link on the right."}%>
+		<%mainResponder.adminSite.prefs.mimeTypes ()%>
+	Update Notification
+		Frontier can automatically connect to a server at UserLand each night, to check the availability of new features and bug fixes. When software updates are available, Frontier will notify you via email. It's recommended that you turn this feature on.
+		<%radio.prefs.checkboxPref ("Check this box to receive email notification when new software updates are available.", @config.mainResponder.prefs.flUpdateNightly)%>
+		<br />You can view a list of penging software updates, and optionally install them via the <%"<a href=\"" + mainResponder.adminSite.urls.updates + "\">"%>Updates page</a>.
+		<br /><b>Databases to update</b>
+		Check the box next to each database that you want to be updated when installing new software. It's strongly recommended that you enable updating all of these databases.
+		<%mainResponder.adminSite.prefs.dbToUpdateCheck ("Frontier.root")%>
+		<%mainResponder.adminSite.prefs.dbToUpdateCheck ("mainResponder.root")%>
+		<%mainResponder.adminSite.prefs.dbToUpdateCheck ("manila.root")%>
+		<%mainResponder.adminSite.prefs.dbToUpdateCheck ("prefs.root")%>
+	Backups
+		This page contains the global backup settings for Manila sites, Frontier databases, and discussion group archives in XML.
+		<br />
+		<b>Manila Sites</b>
+		For Manila sites which have backups enabled, Frontier can automatically backup the sites nightly. Backups are incremental -- only new or changed parts will be backed up.
+		<%radio.prefs.checkboxPref ("Check this box to automatically back up enabled Manila sites every night.", @config.manila.backups.flEnabled)%>
+		<%radio.prefs.stringPref ("Backup folder", @config.manila.backups.backupFolder, size:60)%>
+		<%radio.prefs.stringPref ("Send email notification to", @config.manila.backups.notifyList, size:35)%>
+		<%radio.prefs.numberPref ("Start backups at", @config.manila.backups.hourToBackUp, lowerbound:0, upperbound:23, textToRight:" hours after midnight.")%>
+		Note: You can manually backup any site whenever you want via the administrative interface for the site, accessed by clicking the site's name on the Admin <a href="/">home page</a>.
+		<br /><br /><B>Databases</b>
+		Frontier can automatically save all changed databases every minute, and make backup copies each night. It's strongly recommended that you enable the saving of changed databases every minute.
+		Depending on the size of your databases, nightly backups may take some time, so you may want to only enable this feature if your databases are small, or if the server traffic is low at night.
+		<%radio.prefs.checkboxPref ("Check this box to save all changed databases every minute.", @config.mainresponder.prefs.flSaveDatabasesEveryMinute)%>
+		<%radio.prefs.checkboxPref ("Check this box to back up all changed files in the Guest Databases folder every night?", @config.mainResponder.prefs.flBackupNightly)%>
+		<%radio.prefs.stringPref ("Backup folder", @config.mainResponder.prefs.backupFolder, size:60)%>
+		<br /><br /><b>Discussion group archives</b>
+		The discussion group archives feature saves an XML file for every discussion group message. Only new or changed discussion group messages will be archived in XML.
+		<%radio.prefs.checkboxPref ("Check this box to archive changes to discussion group messages in XML?", @config.mainResponder.prefs.flArchiveDiscuss)%>
+		<%radio.prefs.stringPref ("Archive folder", @config.mainResponder.prefs.discussArchiveFolder, size:60)%>
+	Logging and Statistics
+		Frontier can maintain logs detailing what happens on your server and statistics that provide a cumulative view. You can choose which logs and stats Frontier should maintain, and where to store the logs.
+		<br>
+		<%radio.prefs.checkboxPref ("Check this box to log every HTTP request.", @config.mainResponder.prefs.flLog)%>
+		<%radio.prefs.checkboxPref ("Check this box to log every XML-RPC and SOAP request.", @user.betty.prefs.flKeepServerLog)%>
+		<%radio.prefs.checkboxPref ("Check this box to log root updates.", @user.rootUpdates.prefs.flShowUpdatesToUser)%>
+		<%radio.prefs.checkboxPref ("Check this box to enable search engine logging", @config.mainResponder.search.prefs.flLogEnabled)%>
+		<%radio.prefs.checkboxPref ("Check this box to log scheduled tasks.", @user.scheduler.prefs.logInGuestDatabase)%>
+		<%radio.prefs.checkboxPref ("Check this box to close and re-open the log database every hour, to reclaim allocated memory.", @config.mainresponder.prefs.flLogReopenHourly)%>
+		<%radio.prefs.stringPref ("Log folder", @user.log.prefs.folder, size:70, maxlength:300)%>
+		<br>
+		<b>Common Log Format</b>
+		Common log format is a text file format used by popular web servers like Apache. Many log analysis programs used to generate traffic graphs and summaries can read this format. Settings in this section enable or disable the output of common log text files, and determine what information is included.
+		<%table.surePath ("system.temp.mainResponder.misc.flCommonLog"); local (adr=@system.temp.mainResponder.misc.flCommonLog, adrcallback=@user.webserver.postFilters.commonLog, s); if method != "POST" {adr^ = defined (adrcallback^)}; s=radio.prefs.checkboxPref ("Check this box to log HTTP requests in common log format.", adr); if method == "POST" {if adr^ {script.newScriptObject ("on commonLog (pta)\r\treturn (webserver.postFilters.commonLog (pta, true))", adrcallback)} else {if defined (adrcallback^) {delete (adrcallback)}}}; delete (adr); s%>
+		<%radio.prefs.checkboxPref ("Check this box to use common log date format.", @user.webserver.prefs.commonLog.flUseCommonLogDateFormat)%>
+		<%radio.prefs.checkboxPref ("Check this box to include virtual hosts.", @user.webserver.prefs.commonLog.flIncludeVirtualHosts)%>
+		<%radio.prefs.checkboxPref ("Check this box to include referers.", @user.webserver.prefs.commonLog.flIncludeReferers)%>
+		<%radio.prefs.checkboxPref ("Check this box to include User-Agents.", @user.webserver.prefs.commonLog.flIncludeUserAgents)%>
+		<br>
+		<b>Statistics</b>
+		Frontier can count hits on a per-domain basis, complie nightly discussion group stats, and write XML reports listing the most read sites.
+		<%radio.prefs.checkboxPref ("Check this box to compile discussion group stats every night.", @config.mainresponder.prefs.flDiscussStatsNightly)%>
+		<%radio.prefs.checkboxPref ("Check this box to count total hits for each domain hosted on this server.", @user.webserver.prefs.flDomainStats)%>
+		<%radio.prefs.checkboxPref ("Check this box to write nightly XML reports listing most-read sites.", @config.manila.prefs.flXmlSitesReport)%>
+	Database Subscriptions
+		You can publish a guest database and allow other people to subscribe to changes made to the guest database. Changes to the guest database made using WebEdit will be added to the updates flow for the database.<br /><br />
+		<%radio.prefs.checkboxPref ("Check this box to enable database subscriptions from this server to other copies of Frontier or Radio UserLand.", @config.mainresponder.prefs.flSubscriptions)%>
+		<br /><b>Subscribable databases</b>
+		Below is a list of all databases on this server. To enable or disable subscriptions for a given database, check or uncheck the box next to its name and click the Submit button below.<br /><br />
+		 <%mainResponder.adminSite.prefs.listSubscribableDatabases ()%>
+	WebEdit
+		WebEdit allows remote access to your databases, from one copy of Frontier to another. On this page you can enable and disable the WebEdit server, add users, edit user information, and manage the custody of checked-out objects.
+		 <%local (pta = html.getPageTableAddress ()); pta^.flAddSubmitButton = false; if not defined (system.temp.mainResponder.misc) {new (tableType, @system.temp.mainResponder.misc)}; ""%>
+		<%local (adrpref = @system.temp.mainResponder.misc.flWebEditEnabled, adrhandlers = @user.betty.rpcHandlers.webEdit); if method != "POST" {if defined (adrhandlers^) {adrpref^ = true} else {adrpref^ = false}}; local (s = radio.prefs.checkboxPref ("Check this box to enable the WebEdit server.", adrpref)); if method == "POST" {if adrpref^ {adrhandlers^ = @webeditServer.rpcHandlers.webEdit} else {try {delete (adrhandlers)}}}; s%>
+		<br /><input type="submit" value="Submit">
+		<br>
+		<b>Add User</b>
+		To add a new WebEdit user, enter the user's name, email address and password below, and click the Add User button.<br><br>
+		<%mainResponder.adminSite.prefs.addWebeditUser ()%>
+		<br>
+		<b>Current users</b>
+		Below is a list of users who currently have WebEdit access to this server. To remove a user, check the box next to the user's name, and then click the Remove Users button below.<br><br>
+		 <%mainResponder.adminSite.prefs.listWebeditUsers ()%>
+		<br>
+		<b>Objects</b>
+		The following objects have been checked out with WebEdit. To force the check-in of an object, check the box next to its name, and then click the Force Check-In button below.<br><br>
+		 <%mainResponder.adminSite.prefs.listObjects ()%>
+	Debugging
+		The settings on this page are for people who develop web applications in the Frontier environment. The debugging features help find problems with your code, and to isolate performance bottlenecks.
+		Note that enabling these features can degrade server performance, and cause Frontier to use more memory and disk space than normal, so you should only enable them if needed.
+		<br>
+		<b>mainResponder debugging</b>
+		<%radio.prefs.checkboxPref ("Check this box to run mainResponder in debug mode. This will cause low-level errors to display an error window in the Frontier application.", @config.mainresponder.prefs.flDebug)%>
+		<%radio.prefs.checkboxPref ("Check this box to copy the paramtable to scratchpad.params after every request.", @config.mainresponder.prefs.flKeepParamTable)%>
+		<br>
+		<b>Profiling</b>
+		Profiling allows you to find out what scripts and kernel verbs are being executed and for how long. It's a way of finding performance bottlenecks. With the feature enabled, you can view a web page showing the amount of time Frontier spent in each script and verb in processing the request by adding /profile/ to the begining of the path to the page.
+		<%radio.prefs.checkboxPref ("Check this box to enable profiling.", @config.mainresponder.prefs.flProfiling)%>
+		<br>
+		<b>Miscellaneous</b>
+		Below are miscellaneous debugging features which may be useful depending on the type of application you're developing.
+		<%radio.prefs.checkboxPref ("Check this box to record automatic database opens in system.temp.", @config.mainresponder.prefs.flLogDatabaseOpens)%>
+		<%radio.prefs.checkboxPref ("Check this box to log available memory.", @config.mainresponder.prefs.flLogMemavail)%>
+Manila
+	Preferences
+		This page contains basic Manila preferences, which apply to all Manila sites on this server.
+		<br>
+		<b>Email subscriptions</b>
+		The email subscriptions feature allows Manila site members to choose to receive responses to discussion group messages directly in email.
+		<%radio.prefs.checkboxPref ("Check this box to allow email subscriptions to discussion group messages.", @config.manila.prefs.flDiscussAllowEmailSubscriptions)%>
+		<br>
+		<b>Mail-to-Weblog</b>
+		The Mail-to-Weblog feature allows Managing Editors to configure Manila to periodically check an email account for new messages and post any messages whose subject matches their secret subject. 
+		<%radio.prefs.checkboxPref ("Check this box to allow Managing Editors to use the Mail-to-Weblog feature.", @config.manila.prefs.flMailToWeblogEnabled)%>
+		<%radio.prefs.numberPref ("Check for new mail-to-weblog messages every", @config.manila.prefs.mailToWeblogSecsBetwChecks, 30, 5600, textToRight:" seconds.")%>
+		<br>
+		<b>Radio hosting</b>
+		The Radio Hosting feature allows managing editors to configure their discussion group to host Radio UserLand comments.
+		<%radio.prefs.checkboxPref ("Check this box to enable Radio Hosting.", @config.manila.prefs.flRadioHostingEnabled)%>
+		<br>
+		<b>Weblogs.Com community</b>
+		<a href="http://www.weblogs.com/">Weblogs.Com</a> is a centralized service operated by UserLand that simply presents a list of weblogs that have changed in the last three hours. If this feature is enabled, managing editors can choose to have their sites automatically appear in the list of changed sites on Weblogs.Com, whenever their home page changes.
+		<%local (adrpref = @config.manila.prefs.flSendUpdateNoticesToUserLand); if not defined (adrpref^) {adrpref^ = false}; radio.prefs.checkboxPref ("Check this box to notify Weblogs.Com when Manila sites' home pages are updated.", adrpref)%>
+		<br>
+		<b>TrackBack</b>
+		Trackback is a set of specifications published by SixApart, the company that develops Movable Type, which is used to notify other sites when a post is created which links to the site. A TrackBack notification message is called a "ping".
+		For news item sites, Manila supports both outbound and inbound TrackBack pings, as well as auto-discovery.
+		<%radio.prefs.checkboxPref ("Check this box to enable TrackBack for news item sites.", @config.manila.prefs.flTrackbackEnabled)%>
+		<br>
+		<b>Radio Community Server integration</b>
+		RCS provides a list of updated sites, a page of rankings with the top-100 most read sites today and for all time, and also tracks referers for individual sites. These settings allow RCS to also track changes and statistics for the Manila sites on your server.
+		<%radio.prefs.checkboxPref ("Check this box if you want Manila sites to appear on the RCS updates page.", @config.manila.prefs.flRcsUpdatesListsManilaSites)%>
+		<%radio.prefs.checkboxPref ("Check this box if you want Manila sites to be included in the RCS rankings page.", @config.manila.prefs.flRcsStatsCountManilaSites)%>
+		<%radio.prefs.checkboxPref ("Check this box if you want RCS to track referers for Manila sites.", @config.manila.prefs.flRcsReferersCountManilaSites)%>
+		<br>
+		<b>Publish and Subscribe</b>
+		The Publish and Subscribe feature allows news readers and aggregators which support the feature to request notification from Manila whenever a site's RSS feed changes. When a feed changes, Manila sends a small XML-RPC or SOAP message to all subscribers notifying them of the change.
+		<%table.surePath ("system.temp.mainResponder.misc.flManilaPubSubEnabled"); local (adrpref = @system.temp.mainResponder.misc.flManilaPubSubEnabled, adrhandlers = @user.betty.rpcHandlers.manilaRss); if method != "POST" {if defined (adrhandlers^) {adrpref^ = true} else {adrpref^ = false}}; local (s = radio.prefs.checkboxPref ("Check this box to enable publish-and-subscribe for Manila RSS feeds.", adrpref)); if method == "POST" {if adrpref^ {adrhandlers^ = @manilaSuite.rss.rpcHandlers} else {try {delete (adrhandlers)}}}; s%>
+	Hosting
+		The hosting preferences let you choose the setup options for new sites on this server: who can create new sites, the domain of the sites and where the sites are created. You can also setup shared membership, default site language and editing tool, and customize the default home page text.
+		 <%mainResponder.adminSite.prefs.hosting ()%>
+	RPC Interfaces
+		XML-RPC and SOAP are open protocols, that allow software running on separate computers to make procedure calls over the Internet. Manila supports both XML-RPC and SOAP. You can enable or disable Manila's XML-RPC and SOAP interfaces using the settings on this page.
+		<br>
+		<%if not defined (system.temp.mainResponder.misc) {new (tableType, @system.temp.mainResponder.misc)}; local (adrpref = @system.temp.mainResponder.misc.flManilaRpcEnabled, adrhandlers = @user.betty.rpcHandlers.manila); if method != "POST" {if defined (adrhandlers^) {adrpref^ = true} else {adrpref^ = false}}; local (s = radio.prefs.checkboxPref ("Check this box to enable Manila's XML-RPC interfaces.", adrpref)); if method == "POST" {if adrpref^ {adrhandlers^ = @manilaSuite.rpcHandlers} else {try {delete (adrhandlers)}}}; s%>
+		<%local (adrpref = @system.temp.mainResponder.misc.flManilaSoapEnabled, adrhandlers = @user.soap.rpcHandlers.manila); if method != "POST" {if defined (adrhandlers^) {adrpref^ = true} else {adrpref^ = false}}; local (s = radio.prefs.checkboxPref ("Check this box to enable Manila's SOAP interfaces.", adrpref)); if method == "POST" {if adrpref^ {adrhandlers^ = @manilaSuite.rpcHandlers} else {try {delete (adrhandlers)}}}; s%>
+		<%local (adrpref = @system.temp.mainResponder.misc.flManilaBloggerApiEnabled, adrhandlers = @user.betty.rpcHandlers.blogger); if method != "POST" {if defined (adrhandlers^) {adrpref^ = true} else {adrpref^ = false}}; local (s = radio.prefs.checkboxPref ("Check this box to enable Manila's BloggerAPI interfaces.", adrpref)); if method == "POST" {if adrpref^ {adrhandlers^ = @manilaSuite.bloggerApi.rpcHandlers} else {try {delete (adrhandlers)}}}; s%>
+		<%local (adrpref = @system.temp.mainResponder.misc.flManilaMetaWeblogApiEnabled, adrhandlers = @user.betty.rpcHandlers.metaWeblog, adrsoaphandlers = @user.soap.rpcHandlers.metaWeblog); if method != "POST" {if defined (adrhandlers^) {adrpref^ = true} else {adrpref^ = false}}; local (s = radio.prefs.checkboxPref ("Check this box to enable the Meta-Weblog API for Manila.", adrpref)); if method == "POST" {if adrpref^ {adrhandlers^ = @manilaSuite.metaWeblogApi.rpcHandlers; adrsoaphandlers^ = @manilaSuite.metaWeblogApi.rpcHandlers} else {try {delete (adrhandlers)}; try {delete (adrsoaphandlers)}}}; s%>
+		<%local (adrpref = @system.temp.mainResponder.misc.flManilaPluginRpcEnabled); if method != "POST" {if defined (user.betty.rpcHandlers.manilaPlugins) {adrpref^ = true} else {adrpref^ = false}}; local (s = radio.prefs.checkboxPref ("Check this box to enable RPC interfaces for Manila Plug-ins.", adrpref)); if method == "POST" {if adrpref^ {manilaSuite.plugins.enableRpcHandlers ()} else {manilaSuite.plugins.disableRpcHandlers ()}}; s%>
+	Themes
+		This page lists all of the Manila Themes and Discussion Group Themes that are installed on this server. You can enable or disable a Theme by checking or un-checking the box next to its name, and clicking the Submit button at the bottom of the page.
+		<br>
+		 <%mainResponder.adminSite.prefs.themes ()%>
+	Static Files
+		<b>Static Rendering</b>
+		The Static Rendering feature allows pages in Manila sites to be rendered to disk, where they can be served by a static server.
+		<br>
+		<%radio.prefs.checkboxPref ("Check this box to enable static rendering.", @config.manila.prefs.flStaticRenderingEnabled)%>
+		<br>
+		<%radio.prefs.stringPref ("Folder for static rendering", @config.manila.prefs.staticRenderingFolder)%>
+		<%radio.prefs.stringPref ("URL for static rendering", @config.manila.prefs.staticRenderingUrl)%>
+		<br>
+		<b>Static Pictures</b>
+		Manila can write uploaded pictures to disk or a shared volume, where they can be served by a server that's optimized for serving image files.
+		<br>
+		<%radio.prefs.checkboxPref ("Check this box to enable the static pictures feature.", @config.manila.prefs.flWritePicturesToStaticServer)%>
+		<br>
+		<%radio.prefs.stringPref ("Folder for static pictures", @config.manila.prefs.staticFilesFolder)%>
+		<%radio.prefs.stringPref ("URL for static pictures", @config.manila.prefs.staticFilesUrl)%>
+		<br>
+		<b>Gems</b>
+		You can choose to allow Manila editors to upload files of any kind. These files will be written to disk, and are intended to be served by a static server like Apache or IIS.
+		<br>
+		<%radio.prefs.checkboxPref ("Check this box to allow editors to upload files of any type.", @config.manila.prefs.flGemsEnabled)%>
+		<br>
+		<%radio.prefs.stringPref ("Folder for Gems", @config.manila.prefs.gemsFolder)%>
+		<%radio.prefs.stringPref ("URL for Gems", @config.manila.prefs.gemsUrl)%>
+		<%mainResponder.adminSite.prefs.megabytePref ("Gems size limit", @config.manila.prefs.gemsLimit, texttoright:"MB")%>
+	Site Downloads
+		The Manila site download feature allows Manila site editors to download their sites as a Frontier database. On this page, you can enable or disable Manila site downloads, and specify the folder and URL from which the databases will be served.<br><br>
+		<%radio.prefs.checkboxPref ("Check this box to allow Manila editors to download their sites.", @config.manila.prefs.flSiteDownloadsEnabled)%>
+		<br>
+		<%radio.prefs.stringPref ("Folder for exported site databases", @config.manila.prefs.siteDownloadFolder)%>
+		<%radio.prefs.stringPref ("URL for site databases", @config.manila.prefs.siteDownloadUrl)%>
+		<br>
+		<%radio.prefs.checkboxPref ("Check this box if downloaded Manila sites will be served by Frontier. Un-check it if they will be served by a static server such as Apache or IIS.", @config.manila.prefs.flFrontierServesDownloadedSites)%>
+	Legal Macros
+		 <%mainResponder.adminSite.prefs.legalMacros ()%>
+	News Aggregator
+		<%xml.aggregator.init (); radio.prefs.checkboxPref ("Check this box to enable the news aggregator on this server. If it's enabled, Frontier will automatically scan subscribed channels once per hour.", @aggregatorData.prefs.enabled)%>
+		<br><b>Features for your users</b>
+		<%radio.prefs.checkboxPref ("Check this box to allow Managing Editors to subscribe to any news feed.", @config.manila.prefs.flAggregatorAllowAnyRssUrl)%>
+		<%radio.prefs.checkboxPref ("Check this box to automatically subscribe to all sites on this server.", @config.manila.prefs.flAggregatorSubAllSitesOnServer)%>
+		<br><b>When and how the aggregator runs</b>:
+		<br>At what minute past the top of each hour should the aggregator scan for news?
+		<%radio.prefs.numberPref ("Minute to scan", @aggregatorData.prefs.minuteToRead, upperbound:59)%>
+		<br>The aggregator is multi-threaded. This means it can read read several RSS feeds at the same time. The larger this number the quicker it will finish each scan, but it may make the server slower while the scan is running.
+		<%radio.prefs.numberPref ("Number of threads", @aggregatorData.prefs.maxThreads, lowerbound:1, upperbound:10)%>
+		<br><b>Archiving options</b>:
+		<br>The news aggregator can automatically delete old stories from the database. It is highly recommended that you enable this option.<br><br>
+		<%radio.prefs.checkboxPref ("Check this box to automatically delete old news items once an hour.", @aggregatorData.prefs.flArchive)%>
+		<br>How old must an item be (in hours) in order to be deleted?
+		<%radio.prefs.numberPref ("Hours before deletion", @aggregatorData.prefs.hoursBeforeArchive, lowerbound:1, upperbound:100)%>
+	Subscriptions
+		<%mainResponder.adminSite.prefs.subscriptions ()%>
+
+
+

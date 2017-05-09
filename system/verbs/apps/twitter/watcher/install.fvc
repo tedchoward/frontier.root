@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.watcher.install
+
+twitter.init ();
+local (adrtable = parentof (this^));
+user.scheduler.threads.twitterWatcher = adrtable;
+adrtable^.enabled = true;
+adrtable^.ct = 0;
+scheduler.monitorthreads ()
+
+

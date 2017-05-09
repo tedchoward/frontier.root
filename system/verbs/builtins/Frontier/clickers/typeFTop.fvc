@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.clickers.typeFTop
+
+on typeFTop (path) {
+	«open or run a file of type FTop, containing "fat page" data
+	return (Frontier.clickers.typeFATP (path))}
+
+

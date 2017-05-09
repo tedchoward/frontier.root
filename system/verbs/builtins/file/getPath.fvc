@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.getPath
+
+on getPath () {
+	kernel (file.getpath)}
+
+

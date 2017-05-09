@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.metaWeblog.newMediaObject
+
+on newMediaObject (name, type, bits, username=nil, password=nil, blogId=nil, adrdata=@metaweblog.data) {
+	«Changes
+		«1/31/08; 2:27:55 PM by DW
+			«Created. New glue for MetaWeblog API call, tested with wordpress.com.
+	local (url, struct);
+	metaWeblog.init ();
+	bundle { //set defaults
+		if username == nil {
+			username = user.metaWeblog.username};
+		if password == nil {
+			password = string (user.metaWeblog.password)};
+		if blogId == nil {
+			blogId = user.metaWeblog.blogId}};
+	bundle { //set up struct
+		new (tabletype, @struct);
+		struct.name = name;
+		struct.type = type;
+		struct.bits = bits};
+	url = "xmlrpc://" + adrdata^.server + ":" + adrdata^.port + adrdata^.rpcPath;
+	return ([url].metaWeblog.newMediaObject (string (blogid), username, password, struct))}
+«bundle //test code
+	«local (bits = file.readwholefile ("Macintosh HD:tmp.jpg"))
+	«scratchpad.mediaresult = metaweblog.newmediaobject ("tmp.jpg", "image/jpeg", bits, user.wordPress.blogs.default.username, user.wordPress.blogs.default.password, 1)
+
+

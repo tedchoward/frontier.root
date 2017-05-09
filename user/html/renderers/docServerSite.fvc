@@ -1,0 +1,46 @@
+FrontierVcsFile:3:scpt:user.html.renderers.docServerSite
+
+on docserversite (adroutline) {
+	«by the time we get it, the #directives have been removed
+		«it's also the target outline
+	op.firstsummit ();
+	op.fullexpand ();
+	on findhead (s) {
+		op.firstsummit ();
+		loop {
+			if op.getlinetext () == s {
+				return (true)};
+			if not op.go (down, 1) {
+				return (false)}}};
+	on gathersubtext () {
+		local (s = "");
+		if op.go (right, 1) {
+			loop {
+				if s == "" {
+					s = op.getlinetext ()}
+				else {
+					s = s + " " + op.getlinetext ()};
+				if op.countsubs (1) > 1 {
+					s = s + "<blockquote>" + gathersubtext () + "</blockquote>"};
+				if not op.go (down, 1) {
+					op.go (left, 1);
+					return (s)}}}};
+	local (htmltext = "");
+	on add (s) {
+		htmltext = htmltext + s + cr};
+	on basicItem (name) {
+		if findhead (name) {
+			s = gathersubtext ();
+			if s != "" {
+				s = "<b>" + name + "</b>" + "<blockquote>" + s + "</blockquote>";
+				add (s)}}};
+	basicItem ("Syntax");
+	basicItem ("Params");
+	basicItem ("Action");
+	basicItem ("Returns");
+	basicItem ("Examples");
+	basicItem ("Notes");
+	basicItem ("See Also");
+	return (htmltext)}
+
+

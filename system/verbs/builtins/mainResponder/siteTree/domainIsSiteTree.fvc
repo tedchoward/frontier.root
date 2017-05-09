@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.siteTree.domainIsSiteTree
+
+on domainIsSiteTree (adrdomain) {
+	«Changes
+		«8/6/02; 2:36:44 AM by JES
+			«Created.
+	if typeOf (adrdomain^) == tableType {
+		if defined (adrdomain^.siteTree) {
+			return (true)}};
+	return (false)}
+
+

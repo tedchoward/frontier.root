@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.getNthObject
+
+on getNthObject (param1) {
+	return (appleEvent (cardEditor.id, 'IOWA', 'gnob', 'prm1', long (param1)))}
+
+

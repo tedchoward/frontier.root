@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.countMailboxes
+
+on countMailboxes (mailfolderObj=nil) { « returns the number of mailboxes in a given mailfolder
+	if (mailfolderObj==nil) {
+		mailfolderObj = mailfolder[""]};
+	with objectModel, Eudora, eventInfo {
+		return (core.count (id, mailfolderObj, mailbox))}}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.nthField
+
+on nthField (s, chdelim, n) {
+	kernel (string.nthField)}
+
+

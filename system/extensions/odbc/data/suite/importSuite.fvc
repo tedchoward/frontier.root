@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.data.suite.importSuite
+
+on importSuite () {
+	return (menu.importSuite (@extensions.odbc, "ODBC QueryTool"))};
+importSuite()
+
+

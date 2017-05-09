@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.required.openDocument
+
+on openDocument (appID, file) {
+	return (appleEvent (appID, kAERequiredSuite, kAEOpenDocuments, '----', alias (file)))}
+
+

@@ -1,0 +1,39 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.getDefaultBrowser
+
+«Changes
+	«10/31/07; 8:41:20 AM by DW
+		«Change default browser to Firefox.
+			«Before this change it was MSIE, not even sure if they make an MSIE for the Mac these days, but it certainly isn't the default.
+	«4/2/07; 11:08:25 AM by DW
+		«Before putting up the getFileDialog, initialize the file location to the "".
+		«This was necessary to get it to work on Windows XP running inside Parallels on my MacBook.
+	«Friday, January 16, 1998 at 10:40:40 PM by PBS
+		«Gets the default browser.
+		«On Mac returns the app id.
+		«On Windows returns the full path.
+		«Changes:
+			«1/9/02; 12:01:23 PM by PBS
+				«On OS X MSIE is the default browser.
+case sys.os () {
+	"MacOS" { // get it from Internet Config
+		local (id = Netscape.id); «in case no pref in Internet Config
+		if system.environment.isCarbon {
+			id = Firefox.id}; //10/31/07 by DW
+		try {
+			local (rec = ic.geticpreference (ic.eventinfo.webHelper));
+			id = rec ['pCre']};
+		return (id)};
+	"Win95";
+	"WinNT" { // get it from the user
+		local (adr = @user.webBrowser.winDefaultBrowserApp);
+		if not defined (adr^) {
+			adr^ = ""};
+		if not file.exists (adr^) {
+			adr^ = file.findApplication ("htm")};
+		if not file.exists (adr^) {
+			adr^ = ""; //4/2/07 by DW
+			if not file.getFileDialog ("Where is your default web browser?", adr, "exe") {
+				return (false)}};
+		return (adr^)}}
+
+

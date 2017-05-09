@@ -1,0 +1,10 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.io.readme
+
+"io" stands for "instant outliner"
+	It was added as a builtin on 8/6/10 by DW
+	It builds on builtins.realtime, which is relatively new.
+Todo
+	io.buttons.instantOutline.["00001000\tSave"]
+
+
+

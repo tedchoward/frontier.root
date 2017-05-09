@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.getImageHeightWidth
+
+on getImageHeightWidth (f) {
+	«Changes
+		«5/10/09; 11:30:35 AM by DW
+			«Wrapper for height-width-getters for gifs and jpegs.
+	local (lowerf = string.lower (f));
+	if f endswith ".gif" {
+		return (html.getgifheightwidth (f))}
+	else {
+		return (html.getjpegheightwidth (f))}}
+«bundle //test code
+	«dialog.alert (getImageHeightWidth ("ohio:test.gif"))
+	«dialog.alert (getImageHeightWidth ("ohio:test.jpg"))
+
+

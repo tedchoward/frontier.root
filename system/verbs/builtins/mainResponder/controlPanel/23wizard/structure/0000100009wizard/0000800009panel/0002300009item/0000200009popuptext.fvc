@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.controlPanel.["#wizard"].structure.["00001000\twizard"].["00008000\tpanel"].["00023000\titem"].["00002000\tpopuptext"]
+
+You can choose to allow Manila editors to upload files of any kind that are written to disk to be served by a static server.
+
+

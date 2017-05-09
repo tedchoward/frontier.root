@@ -1,0 +1,35 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.adjix.pushParams
+
+on pushParams (email="", password="", apikey="", chfirst="&") {
+	«Changes
+		«8/25/09; 11:35:06 AM by DW
+			«Change "username" to "email."
+		«8/25/09; 11:29:25 AM by DW
+			«Fix URL-encoding bug.
+		«8/25/09; 9:19:35 AM by DW
+			«Cribbed from system.verbs.apps.trim.
+		«4/28/09; 10:25:52 AM by DW
+			«Add new optional param, chfirst. You can set it to ? if these are the first params you're pushing on the API url.
+		«4/3/09; 9:25:07 AM by DW
+			«Created. 
+	local (s = "", adrdata = adjix.init ());
+	bundle { //email, password
+		if email == "" {
+			if adrdata^.prefs.email != "" {
+				email = adrdata^.prefs.email}};
+		if password == "" {
+			if adrdata^.prefs.password != "" {
+				password = adrdata^.prefs.password}};
+		if (email != "") and (password != "") {
+			s = s + chfirst + "email=" + string.urlencode (email, true) + "&password=" + string.urlencode (password, true)}};
+	bundle { //api key
+		if apikey == "" {
+			if adrdata^.prefs.apiKey != "" {
+				apikey = adrdata^.prefs.apiKey}};
+		if apikey != "" {
+			s = s + "&api_key=" + string.urlencode (apikey, true)}};
+	return (s)};
+bundle { //test code
+	dialog.alert (pushparams ())}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.requestToFront
+
+on requestToFront () {
+	kernel (Frontier.requestToFront)}
+
+

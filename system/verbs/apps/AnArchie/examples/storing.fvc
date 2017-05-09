@@ -1,0 +1,5 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.AnArchie.examples.storing
+
+msg(anarchie.store("HD:foo", "netcom.com", "pub/leonardr/Aladdin/foo", "", "leonardr", "penguin*lust1"))
+
+

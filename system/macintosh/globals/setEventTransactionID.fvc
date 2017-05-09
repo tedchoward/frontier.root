@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.globals.setEventTransactionID
+
+on setEventTransactionID (id) {
+	kernel (lang.setEventTransactionID)}
+
+

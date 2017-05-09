@@ -1,0 +1,50 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.isEnabled
+
+on isEnabled (f) {
+	«Changes
+		«1/8/14; 9:06:07 AM by DW
+			«checkBoolean looks in user.tools.databases to find out if a tool is enabled. But the tool might have been re-enabled, by deleting the #enabled boolean at the top level of the file, or by setting it true. The way it worked, basically once a tool has been disabled it stays that way forever. Not cool. I rewrote checkBoolean to make it super simple. Maybe startup is slower, but at least it works. ;-)
+		«10/7/01; 8:34:11 PM by JES
+			«Respect the flEnabled flag in the tool's user table.
+		«Return true if a Tool is enabled, false otherwise. Tools are disabled when:
+			«1. There is a top-level item in the gdb named #enabled.
+			«2. #enabled is false.
+			«01/05/01; 5:12:27 PM by PBS
+	
+	local (flEnabled = true);
+	
+	if not (file.exists (f)) { //it's an error if the Tool doesn't exist
+		scriptError ("Can't determine if " + file.FileFromPath (f) + " is enabled because it doesn't exist.")};
+	
+	on checkBoolean () {
+		local (adrenabled = @[f].["#enabled"]);
+		if not defined (adrenabled^) {
+			return (true)};
+		return (adrenabled^); //1/8/14 by DW
+		
+		local (toolName = Frontier.tools.cleanToolName (file.fileFromPath (f)));
+		if defined (user.tools.databases.[toolName]) {
+			if not defined (user.tools.databases.[toolName].flEnabled) {
+				user.tools.databases.[toolName].flEnabled = true};
+			if not user.tools.databases.[toolName].flEnabled {
+				return (false)}};
+		if defined ([f].["#enabled"]) {
+			if not ([f].["#enabled"]) {
+				if defined (user.tools.databases.[toolName]) {
+					user.tools.databases.[toolName].flEnabled = false};
+				return (false)}};
+		return (true)};
+	
+	if not defined ([f]) { //is the gdb open?
+		fileMenu.open (f, true); //open hidden
+		flEnabled = checkBoolean ();
+		if not flEnabled {
+			fileMenu.close (f)}} //close it, it's not enabled
+	else {
+		flEnabled = checkBoolean ()};
+	
+	return (flEnabled)}
+«bundle //test code
+	«dialog.alert (isEnabled (user.tools.databases.outlineNamer.path))
+
+

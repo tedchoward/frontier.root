@@ -1,0 +1,50 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.openURL
+
+on openURL (s, openURLIn=nil) {
+	«Changes
+		«4/6/13; 11:25:41 AM by DW
+			«They seem to have shut off the GURL event in Chrome/Mac. So now we're doing the same thing through the Unix shell.
+				«http://threads2.scripting.com/2013/april/appleEventToBrowser
+		«7/12/12; 1:16:30 PM by DW
+			«A month ago we figured out how to open URLs in the default browser on Windows, which made it possible to open them in Chrome which does not support the DDE method. We now simplified so we always open URLs that way. Watch out for breakage. 
+				«http://worknotes.scripting.com/july2012/71312ByDw/newApproachInWebbrowseropenurlOnWindows
+		«6/11/12; 8:36:19 AM by DW
+			«Actually it's even easier to open a page in Chrome on Windows. Just send the URL to launch.application. 
+				«http://worknotes.scripting.com/june2012/61112ByDw/openingChromePagesEasier
+		«6/10/12; 7:50:20 PM by DW
+			«Added code to open urls in Chrome on Windows. I'm hopeful that it works. :-)
+				«http://worknotes.scripting.com/june2012/61012ByDw/openingUrlsInChromeOnWindows
+		«6/8/06; 7:06:45 AM by DW
+			«If it's Firefox on Windows, add a blank to the end of the URL to work around a bug in their DDE implementation. For background see the comments on this post.
+				«http://support.opml.org/2006/06/08#a1124
+	local (id = webBrowser.launch ());
+	if id == false or id == 'NONE' {
+		return (false)};
+	case sys.os () {
+		"MacOS" {
+			if id == 'rimZ' { //4/6/13 by DW
+				sys.unixshellcommand ("open -a 'Google Chrome' '" + s + "'")}
+			else {
+				return (appleEvent (id, 'GURL', 'GURL', '----', string (s), 'cwin', openUrlIn))}};
+		"Win95";
+		"WinNT" {
+			launch.application (s)}}}; //7/12/12 by DW
+			«bundle //old code -- 7/12/12 by DW
+				«if string.lower (id) contains "chrome" //6/10/12 by DW
+					«launch.application (s) //6/11/12 by DW
+					«
+					«local (f = frontier.getsubfolder ("/ops/tmp/") + random (0, infinity) + ".url")
+					«winshell.createUrlShortcut (f, s)
+					«launch.application (f)
+					«file.delete (f)
+					«
+					«return (s)
+				«if string.lower (id) contains "netscape"
+					«return (webBrowser.callBrowser (id, "WWW_OpenURL", s + ",,-1"))
+				«if string.lower (id) contains "firefox"
+					«s = s + " "
+				«return (webBrowser.callBrowser (id, "WWW_OpenURL", s))
+bundle { //test code
+	openurl ("http://scripting.com")}
+
+

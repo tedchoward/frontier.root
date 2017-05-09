@@ -1,0 +1,33 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.test
+
+on test () {
+	«Changes
+		«8/28/11; 4:57:15 PM by DW
+			«Created.
+	local (htmltext = "", indentlevel = 0);
+	on add (s) {
+		htmltext = htmltext + string.filledstring ("\t", indentlevel) + s + "\r"};
+	
+	add ("");
+	add ("<div class=\"divPrefs\">"); indentlevel++;
+	«add ("<div class=\"divPrefsHeader\">"); indentlevel++
+	add ("<div class=\"row\"><div style=\"float:left;\">Preferences > Basic settings</div><div style=\"float:right;\">Previous / Next</div></div>");
+	«add ("</div>"); indentlevel--
+	
+	add ("<div class=\"row\"><h3>Name, Mail address, Organization</h3></div>");
+	add ("<div class=\"row\">Please enter your name, mail address and organization. </div>");
+	
+	
+	«<tr><td align="right" nowrap>Name:</td><td valign="top" width="70%" colspan="1"><input type="text" name="user.prefs.name" size="50" maxlength="100" value="Dave Winer"></td></tr>
+		«
+	
+	add (string (scratchpad.outlinex));
+	
+	
+	add ("</div>"); indentlevel--;
+	
+	return (htmltext)};
+bundle { //test code
+	test ()}
+
+

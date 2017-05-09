@@ -1,0 +1,40 @@
+FrontierVcsFile:3:optx:system.verbs.apps.cardEditor.specifications.["rbg.xxx docserver source"]
+
+rgb.get
+	Syntax
+		rgb.get (rgb, adr1, adr2, adr3)
+	Parameters
+		rgb is a Macintosh rgb data type.
+		adr1 thru adr3 contain the addresses where the red, green and blue values will be stored.
+	Action
+		Copies the three components of the rgb into the locations pointed to by the addresses.
+	Returns
+		True.
+	Examples
+		rgb.get (examples.haircolor, @r, @g, @b); dialog.alert (r + ", " + g + ", " + b)
+			// true
+	See Also
+		rgb.set
+rgb.set
+	Syntax
+		rgb.set (redGun, greenGun, blueGun)
+	Parameters
+		redGun is a number that determines how much red color there is in the rgb value.
+		greenGun is a number that determines how much green color there is in the rgb value.
+		blueGun is a number that determines how much blue color there is in the rgb value.
+	Action
+		Creates an rgb value made up of the three components.
+	Returns
+		The newly created rgb value.
+	Notes
+		This verb is used to create an rgb value to be sent to an IAC-aware application.
+	Examples
+		rgb.set (0, 0, 0) Çblack
+			// 0,0,0
+		typeOf (rgb.set (0, 0, 0))
+			// cRGB
+	See Also
+		rgb.get
+
+
+

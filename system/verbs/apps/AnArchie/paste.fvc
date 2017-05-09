@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.AnArchie.paste
+
+on paste () { «paste into selection
+	return (appleEvent (AnArchie.id, 'core', 'past'))}
+
+

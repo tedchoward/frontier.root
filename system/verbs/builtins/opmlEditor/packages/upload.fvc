@@ -1,0 +1,31 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.packages.upload
+
+on upload () {
+	«Changes
+		«2/23/12; 10:25:46 AM by DW
+			«Created.
+	local (adrdata = opmleditor.init (), s3path = adrdata^.prefs.packagesPath, packagename = op.getlinetext (), ct = 0);
+	op.attributes.getone ("packageName", @packagename);
+	if dialog.ask ("Upload a package named:", @packagename) {
+		op.attributes.setone ("packageName", packagename);
+		s3path = s3path + packagename + "/";
+		local (lo = window.frontmost ()^);
+		target.set (@lo);
+		op.expand (1);
+		op.go (right, 1);
+		loop {
+			local (linetext = op.getlinetext (), fname = "part" + string.padwithzeros (++ct, 3));
+			local (bits = fatPages.buildFileAtts (string.popFileFromAddress (address (linetext))));
+			s3.newobject (s3path + fname, bits);
+			if not op.go (down, 1) {
+				op.go (left, 1);
+				break}};
+		bundle { //write out count.txt
+			«local (s = op.getsuboutline (), index)
+			«op.newoutlineobject (s, @index)
+			«s3.newobject (s3path + "index.opml", op.outlinetoxml (@index))
+			s3.newobject (s3path + "count.txt", string (ct))}}};
+bundle { //test code
+	upload ()}
+
+

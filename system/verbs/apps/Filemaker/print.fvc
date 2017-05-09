@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.print
+
+on print (obj) { «Print an object
+	return (appleEvent (Filemaker.id, 'aevt', 'pdoc', '----', objspec (obj)))}
+
+

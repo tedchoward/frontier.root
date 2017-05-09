@@ -1,0 +1,44 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.groups.pools.getAllPhotos
+
+on getAllPhotos (groupId, adrtable) {
+	«Changes
+		«8/11/10; 8:01:30 PM by DW
+			«If there's an error processing a page, keep going.
+		«8/10/10; 10:04:53 PM by DW
+			«Created. Returns a table with info about all the photos in a pool. Using the id you can download the pictures to a folder, or whatever.
+			«It may not immediately be obvious what the id of the group is. If you get the group displayed in your web browser, then locate the RSS feed, you'll see the id in the URL for the feed.
+				«For example here's the URL for the feed of the landing around the world pool.
+				«http://api.flickr.com/services/feeds/groups_pool.gne?id=726229@N24&lang=en-us&format=rss_200
+				«The id should be pretty obvious! :-)
+			«http://www.flickr.com/services/api/flickr.groups.pools.getPhotos.html
+	local (pagenum = 1, ctpages);
+	new (tabletype, adrtable);
+	loop {
+		local (mystruct);
+		new (tabletype, @mystruct);
+		mystruct.api_key = user.flickr.prefs.apiKey;
+		mystruct.auth_token = user.flickr.prefs.token;
+		mystruct.group_id = groupId;
+		mystruct.page = pagenum;
+		Flickr.signStruct (@mystruct);
+		local (s = [user.flickr.prefs.server].flickr.groups.pools.getPhotos (mystruct), xstruct);
+		try {
+			s = xml.entitydecode (s, true);
+			xml.compile (s, @xstruct);
+			«scratchpad.xstruct = xstruct
+			local (adrphotos = xml.getaddress (@xstruct, "photos"), i);
+			ctpages = adrphotos^.["/atts"].pages;
+			for i = 1 to sizeof (adrphotos^) {
+				local (adrphoto = @adrphotos ^ [i]);
+				if nameof (adrphoto^) endswith "photo" {
+					local (adrsub = @adrtable^.[string.padwithzeros (sizeof (adrtable^) + 1, 5)]);
+					adrsub^ = adrphoto^.["/atts"]}}};
+		if pagenum == ctpages {
+			break};
+		pagenum++}};
+bundle { //test code
+	«getAllPhotos ("726229@N24", @scratchpad.photos) //landing around the world pool
+	«getAllPhotos ("1447436@N22", @scratchpad.photos) //HTC Incredible pool
+	getAllPhotos ("1121198@N20", @scratchpad.photos)} //Let's Put Gruber to Work
+
+

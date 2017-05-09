@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.AnArchie.selectall
+
+on selectall () { «select all
+	return (appleEvent (AnArchie.id, 'core', 'slct'))}
+
+

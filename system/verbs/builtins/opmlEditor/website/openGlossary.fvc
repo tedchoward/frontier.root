@@ -1,0 +1,21 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.openGlossary
+
+on openGlossary () {
+	«Changes
+		«5/14/12; 11:04:18 AM by DW
+			«The core of the routine is factored, so it can be called from a menu command.
+				«http://worknotes.scripting.com/may2012/51412ByDw/openGlossaryCommand
+		«2/12/12; 3:37:33 PM by DW
+			«New way of getting server info.
+		«1/31/12; 8:53:17 PM by DW
+			«Make a call to the server to get the glossary OPML and open the outline. The Save button will then reverse the process.
+	local (pta = html.getpagetableaddress ());
+	frontier.bringtofront ();
+	opmlEditor.worldOutline.openGlossary ();
+	if defined (pta^.requestHeaders.Referer) {
+		webserver.redirect (pta, pta^.requestHeaders.Referer)};
+	return ("")};
+bundle { //test code
+	openGlossary ()}
+
+

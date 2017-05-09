@@ -1,0 +1,28 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.script.newScriptObject
+
+on newScriptObject (s, adr) {
+	«Changes
+		«9/29/10; 11:57:09 AM by DW
+			«Code cleanup.
+		«04/09/00; 12:02:58 PM by PBS
+			«(Try to) compile the script that's been created. This prevents unwanted compile-changes dialogs from showing up.
+		«3/7/99 by AR
+			«New verb for 6.0, creates a new script object at the specified address.
+			«This is a clone of op.newOutlineObject.
+	if defined (adr^) {
+		if typeof (adr^) != scriptType {
+			new (scriptType, adr)}}
+	else {
+		new (scriptType, adr)};
+	local (oldtarget = target.set (adr));
+	op.wipe ();
+	op.insert (s, down);
+	op.firstSummit ();
+	op.deleteLine ();
+	try {script.compile (adr)}; //04/09/00
+	try {target.set (oldtarget)};
+	return (true)}
+«bundle //test code
+	«newscriptobject ("return (false)", @scratchpad.testscript)
+
+

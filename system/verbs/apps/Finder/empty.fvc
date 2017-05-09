@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Finder.empty
+
+on empty (obj = nil) { «Empty the trash
+	if Finder.isScriptable () {
+		return (appleEvent (Finder.id, 'fndr', 'empt', '----', objspec(obj)))}
+	else {
+		return (Finder.emptyTrash ())}}
+
+

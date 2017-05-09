@@ -1,0 +1,34 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.thread.garbageCollect
+
+on garbageCollect (adrtable) {
+	«Changes
+		«6/10/11; 7:47:55 AM by DW
+			«Look at all but the latest version. If all the threads that accessed it are gone, we delete the version.
+	local (adrversions, adrversion, i, now = clock.now ());
+	xml.thread.initStruct (adrtable);
+	adrversions = @adrtable^.versions;
+	for i = sizeof (adrversions^) - 1 downto 1 {
+		local (flreclaim = true, adrid);
+		adrversion = @adrversions^ [i];
+		for adrid in @adrversion^.threadIds {
+			if thread.exists (nameof (adrid^)) {
+				flreclaim = false;
+				break}};
+		if flreclaim {
+			delete (adrversion)}
+		else {
+			adrversion^.stats.ctGarbageCollectVisits++;
+			adrversion^.stats.whenLastGarbageCollectVisit = now}};
+	
+	bundle { //delete dead thread id's in the most recent version
+		local (ctversions = sizeof (adrversions^));
+		if ctversions > 0 {
+			local (adrversion = @adrtable^.versions [ctversions], i, adrid);
+			for i = sizeof (adrversion^.threadIds) downto 1 {
+				adrid = @adrversion^.threadIds [i];
+				if not thread.exists (nameof (adrid^)) {
+					delete (adrid)}}}}};
+bundle { //test code
+	garbageCollect (@scratchpad.daveOutline)}
+
+

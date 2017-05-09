@@ -1,0 +1,61 @@
+FrontierVcsFile:3:scpt:suites.webEditServer.init
+
+on init () {
+	«Changes
+		«12/30/11; 8:51:03 AM by DW
+			«Init prefs and stats tables. Set these up so we can do automatic backups of objects as they're over-written.
+		«3/7/99 by PBS
+			«added more callbacks.
+		«10/17/98; 11:51:57 AM by DW
+			«Created.
+	people.newService ("WebEdit");
+	if not defined (user.webEditServer) {
+		new (tabletype, @user.webEditServer)};
+	bundle { //callbacks
+		if not defined (user.webEditServer.callbacks) {
+			new (tabletype, @user.webEditServer.callbacks)};
+		if not defined (user.webEditServer.callbacks.checkIn) {
+			new (tabletype, @user.webEditServer.callbacks.checkIn)};
+		if not defined (user.webEditServer.callbacks.preCheckIn) {
+			new (tabletype, @user.webEditServer.callbacks.preCheckIn)};
+		if not defined (user.webEditServer.callbacks.checkOut) {
+			new (tabletype, @user.webEditServer.callbacks.checkOut)};
+		if not defined (user.webEditServer.callbacks.preCheckOut) {
+			new (tabletype, @user.webEditServer.callbacks.preCheckOut)};
+		if not defined (user.webEditServer.callbacks.preDelete) {
+			new (tabletype, @user.webEditServer.callbacks.preDelete)};
+		if not defined (user.webEditServer.callbacks.delete) {
+			new (tabletype, @user.webEditServer.callbacks.delete)};
+		if not defined (user.webEditServer.callbacks.preGetFromServer) {
+			new (tabletype, @user.webEditServer.callbacks.preGetFromServer)};
+		if not defined (user.webEditServer.callbacks.getFromServer) {
+			new (tabletype, @user.webEditServer.callbacks.getFromServer)};
+		if not defined (user.webEditServer.callbacks.preRenderOnServer) {
+			new (tabletype, @user.webEditServer.callbacks.preRenderOnServer)};
+		if not defined (user.webEditServer.callbacks.renderOnServer) {
+			new (tabletype, @user.webEditServer.callbacks.renderOnServer)};
+		if not defined (user.webEditServer.callbacks.preUndoCheckOut) {
+			new (tabletype, @user.webEditServer.callbacks.preUndoCheckOut)};
+		if not defined (user.webEditServer.callbacks.undoCheckOut) {
+			new (tabletype, @user.webEditServer.callbacks.undoCheckOut)};
+		if not defined (user.webEditServer.callbacks.preSendToServer) { //PBS 3/9/99
+			new (tabletype, @user.webEditServer.callbacks.preSendToServer)};
+		if not defined (user.webEditServer.callbacks.sendToServer) { //PBS 3/9/99
+			new (tabletype, @user.webEditServer.callbacks.sendToServer)}};
+	bundle { //prefs, 12/30/11 by DW
+		if not defined (user.webEditServer.prefs) {
+			new (tabletype, @user.webEditServer.prefs)};
+		if not defined (user.webEditServer.prefs.flBackupObjects) {
+			user.webEditServer.prefs.flBackupObjects = false};
+		if not defined (user.webEditServer.prefs.backupFolder) {
+			user.webEditServer.prefs.backupFolder = frontier.getsubfolder ("/ops/WebEdit Backups/")}};
+	bundle { //stats, 12/30/11 by DW
+		if not defined (user.webEditServer.stats) {
+			new (tabletype, @user.webEditServer.stats)};
+		if not defined (user.webEditServer.stats.backupSerialnum) {
+			user.webEditServer.stats.backupSerialnum = 1}};
+	return (true)};
+bundle { //test code
+	init ()}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.AnArchie.close
+
+on close () { «close the front window
+	return (appleEvent (AnArchie.id, 'core', 'clos'))}
+
+

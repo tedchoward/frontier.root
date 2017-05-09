@@ -1,0 +1,31 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.updateUserProfile
+
+on updateUserProfile (username, password, name=nil, email=nil, url=nil, location=nil, description=nil) {
+	«Changes
+		«3/21/09; 10:42:28 PM by DW
+			«Created. Update a user's profile. 
+	local (posturl = "http://twitter.com/account/update_profile.xml?", params);
+	new (tabletype, @params);
+	if name != nil {
+		params.name = name};
+	if email != nil {
+		params.email = email};
+	if url != nil {
+		params.url = url};
+	if location != nil {
+		params.location = location};
+	if description != nil {
+		params.description = description};
+	if sizeof (params) > 0 {
+		local (adr);
+		for adr in @params {
+			posturl = posturl + nameof (adr^) + "=" + string.urlencode (adr^) + "&"};
+		posturl = string.delete (posturl, sizeof (posturl), 1)};
+	local (s = tcp.httpreadurl (posturl, username:username, password:password, method:"POST"));
+	xml.compile (s, @xstruct);
+	«scratchpad.xstruct = xstruct
+	return (true)}
+«bundle //test code
+	«updateUserProfile (user.twitter.prefs.username, user.twitter.prefs.password, location:"Bumfuck, Egypt")
+
+

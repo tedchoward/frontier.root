@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.data.standardMacros.docServerLink
+
+on docServerLink (verbname) {
+	return ("<a href=\"http://www.scripting.com/docserver/" + verbname + ".html\">" + verbname + "</a>")}
+
+

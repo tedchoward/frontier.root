@@ -1,0 +1,338 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.rss.getFeedItems
+
+on getFeedItems (url, adritems, adrfeedinfo, adrtext=nil, adrxstruct=nil) {
+	«Changes
+		«8/4/13; 8:22:50 PM by DW
+			«If the items table is undefined, create it. I got burned by this today, the error message said it's not a feed, but I hadn't created the items table. Hard to see how anything could break if we create it if it doesn't exist. ;-)
+		«9/21/12; 12:17:11 PM by DW
+			«Convert Atom "content" elements into string descriptions, not tables.
+				«http://worknotes.scripting.com/september2012/92112ByDw/processingRichAtomDescriptions
+		«9/5/12; 8:06:41 AM by DW
+			«Save the format, RSS or Atom in the feedInfo table. 
+				«http://threads2.scripting.com/2012/september/feedFormatNumbers
+		«5/17/12; 10:12:29 AM by DW
+			«New optional param, adrxstruct. If it's non-nil, we skip reading the feed, and just parse the struct that's passed to us.
+		«2/15/12; 10:01:53 AM by DW
+			«In Atom feed <entry>s -- if there's more than one link, use the one with rel == "alternate".
+				«http://worknotes.scripting.com/february2012/21512ByDw/problemsWithBlogspotAtomFeeds/
+		«11/27/11; 2:53:16 PM by DW
+			«There are Atom feeds, produced by Feedburner, that have link elements without rel attributes. We weren't dealing with them well. 
+		«11/25/11; 11:23:12 AM by DW
+			«Get pubDate, lastBuildDate, language, generator and docs RSS elements for the feedinfo table.
+		«Before 11/25/11
+			«11/21/11; 11:26:54 AM by DW
+				«If a feed has a microblog:archive structure, reflect that in the feedinfo "archive" sub-table.
+			«10/9/11; 10:22:10 AM by DW
+				«Get categories from Atom feeds.
+			«10/7/11; 10:58:22 AM by DW
+				«If you want to get pictures from a Flickr public feed, one generated from a tag, you have to use Atom. And Atom has funky enclosures, using a link element. (They didn't think RSS's enclosure was worth copying I guess.) I want the pictures from the #occuypwallstr tag on Flick, so I have to learn how to deal with Atom enclosures. 
+				«<link rel="enclosure" type="image/jpeg" href="http://farm7.static.flickr.com/6035/6220045354_4e021e6a6c_b.jpg" />
+			«5/6/10; 2:32:32 AM by DW
+				«A couple of fixes for stackoverflow.com Atom feeds. 
+				«Some Atom feeds don't use "content" to store the equiv of an RSS description, they use "summary" -- added a fix that accounts for this. Example -- stackoverflow.com. Also added a break in the loop that looks for the feed-level link, so we use the first one found as opposed to the last one. 
+				«Also on stackoverflow.com, they omit the "type" attribute on link elements. It seems they're the only ones who do this. Oy. Allow for it.
+			«2/4/10; 4:41:20 PM by DW
+				«Handle RDF-formatted feeds.
+			«11/5/09; 4:44:18 PM by DW
+				«Add optional parameter, adrtext. If not nil, use that text instead of reading it from the url. This saves multiple readings if we're sniffing at the text to figure out what it is.
+			«10/18/09; 6:36:06 PM by DW
+				«Although channel-level description is a required element, some feeds don't have it, so we default to the empty string if it's not present.
+			«9/17/09; 8:37:28 PM by DW
+				«Get the image from the feed, if it has one.
+			«9/16/09; 8:30:53 AM by DW
+				«Fix a dumb typo in the error message I just fixed. :-)
+			«9/16/09; 8:23:27 AM by DW
+				«Simplified the most common error message to remove these words: XML, RSS, Atom.
+			«9/16/09; 7:57:36 AM by DW
+				«Stop looking for the <lifeline> top-level element -- it didn't go anywhere. 
+			«9/15/09; 11:01:35 AM by DW
+				«Improve the error message if it's neither an RSS or Atom feed. Get the <category> element if one is present.
+			«9/4/09; 7:04:10 PM by DW
+				«Now supports Atom feeds. 
+			«7/21/09; 2:20:54 PM by DW
+				«Handle experimental "lifeLine" feeds.
+			«7/17/09; 11:09:04 AM by DW
+				«Cloud support. Implement a new sub-table of feedInfo table for each feed, cloud. It's present only if the feed has a cloud element.
+			«6/20/09; 7:40:14 PM by DW
+				«Run the text through xml.rss.data.replaceTable before compiling.
+			«6/16/09; 11:14:06 AM by DW
+				«Decode the entities in the strings. Don't create the feedInfo table if it's already been created.
+			«2/20/08; 10:40:21 AM by DW
+				«Created. A bottleneck for RSS 2.0 feed reading. Return most basic info about the feed, and a table containing the items sorted chronologically based on pubdate (if available), newest first.
+	local (xstruct, adrrss = nil, adratomfeed = nil, adrrdf = nil, flrss = true, flatom = false, flrdf = false, adrchannel);
+	on decode (s) {
+		return (xml.entitydecode (s, flAlphaEntities:true))};
+	bundle { //read feed into xstruct
+		if adrxstruct == nil {
+			local (s);
+			bundle { //get the text, 11/5/09 by DW
+				if adrtext == nil {
+					local (urllist);
+					try {
+						urllist = string.urlsplit (url)}
+					else {
+						urllist = string.urlsplit (url + "/")};
+					s =  tcp.httpClient (server:urllist [2], path:urllist [3], ctFollowRedirects:5, flMessages:false);
+					s = string.httpResultSplit (s)}
+				else {
+					s = string (adrtext^)}};
+			s = string.multiplereplaceall (s, @xml.rss.data.replaceTable, false); //6/20/09 by DW
+			adrxstruct = @xstruct;
+			xml.compile (s, adrxstruct)}};
+			«scratchpad.xstructFeedItems = xstruct
+	bundle { //fill feedinto table, set adrchannel
+		if not defined (adrfeedinfo^) {
+			new (tabletype, adrfeedinfo)};
+		bundle { //accept either <rss> or <feed> or <RDF>
+			try {
+				adrrss = xml.getaddress (adrxstruct, "rss");
+				bundle { //set format string, 9/5/12 by DW
+					if defined (adrrss^.["/atts"].version) {
+						adrfeedinfo^.format = "RSS " + adrrss^.["/atts"].version}
+					else {
+						adrfeedinfo^.format = "RSS"}}}
+			else {
+				try {
+					adratomfeed = xml.getaddress (adrxstruct, "feed");
+					flrss = false;
+					flatom = true;
+					adrfeedinfo^.format = "Atom"} //9/5/12 by DW
+				else {
+					try {
+						adrrdf = xml.getaddress (adrxstruct, "RDF"); //2/4/10 by DW
+						adrrss = adrrdf;
+						flrss = true;
+						flrdf = true;
+						adrfeedinfo^.format = "RSS 1.0"} //9/5/12 by DW
+					else {
+						scriptError ("Can't process the file because it doesn't appear to be a feed.")}}}};
+		if flrss {
+			adrchannel = xml.getaddress (adrrss, "channel");
+			adrfeedinfo^.title = decode (xml.getvalue (adrchannel, "title"));
+			adrfeedinfo^.link = decode (xml.getvalue (adrchannel, "link"));
+			bundle { //description, 10/18/09 by DW
+				try {
+					adrfeedinfo^.description = decode (xml.getvalue (adrchannel, "description"))}
+				else {
+					adrfeedinfo^.description = ""}};
+			bundle { //get category, 9/15/09 by DW
+				try {
+					adrfeedinfo^.category = decode (xml.getvalue (adrchannel, "category"))}
+				else {
+					adrfeedinfo^.category = ""}};
+			bundle { //cloud support, 7/17/09 by DW
+				try {
+					local (adrcloud = xml.getaddress (adrchannel, "cloud"));
+					on getatt (name) {
+						try {
+							return (xml.getattributevalue (adrcloud, name))}
+						else {
+							return ("")}};
+					new (tabletype, @adrfeedinfo^.cloud);
+					adrfeedinfo^.cloud.domain = getatt ("domain");
+					adrfeedinfo^.cloud.path = getatt ("path");
+					adrfeedinfo^.cloud.port = getatt ("port");
+					adrfeedinfo^.cloud.protocol = getatt ("protocol");
+					adrfeedinfo^.cloud.registerProcedure = getatt ("registerProcedure")}};
+			bundle { //get image, 9/17/09 by DW
+				try {
+					local (adrimage = xml.getaddress (adrchannel, "image"));
+					on getval (name, type=stringtype) {
+						try {
+							if type == longtype {
+								return (number (xml.getvalue (adrimage, name)))}
+							else {
+								return (decode (xml.getvalue (adrimage, name)))}}
+						else {
+							if type == longtype {
+								return (0)}
+							else {
+								return ("")}}};
+					new (tabletype, @adrfeedinfo^.image);
+					adrfeedinfo^.image.url = getval ("url");
+					adrfeedinfo^.image.title = getval ("title");
+					adrfeedinfo^.image.link = getval ("link");
+					adrfeedinfo^.image.height = getval ("height", longtype);
+					adrfeedinfo^.image.width = getval ("width", longtype)}};
+			bundle { //get archive, 11/21/11 by DW
+				try {
+					local (adrarchive = xml.getaddress (adrchannel, "archive"));
+					if defined (adrarchive^.["/atts"]) {
+						if defined (adrarchive^.["/atts"].namespace) {
+							if adrarchive^.["/atts"].namespace == "microblog:" {
+								new (tabletype, @adrfeedinfo^.archive);
+								adrfeedinfo^.archive.url = xml.getvalue (adrarchive, "url");
+								adrfeedinfo^.archive.filename = xml.getvalue (adrarchive, "filename");
+								adrfeedinfo^.archive.startDay = xml.getvalue (adrarchive, "startDay");
+								adrfeedinfo^.archive.endDay = xml.getvalue (adrarchive, "endDay")}}}}};
+			bundle { //get pubDate, lastBuildDate, other scalars 11/25/11 by DW
+				try {adrfeedinfo^.pubDate = date (decode (xml.getvalue (adrchannel, "pubDate")))};
+				try {adrfeedinfo^.lastBuildDate = date (decode (xml.getvalue (adrchannel, "lastBuildDate")))};
+				try {adrfeedinfo^.language = decode (xml.getvalue (adrchannel, "language"))};
+				try {adrfeedinfo^.generator = decode (xml.getvalue (adrchannel, "generator"))};
+				try {adrfeedinfo^.docs = decode (xml.getvalue (adrchannel, "docs"))}}}};
+	if flrss { //fill the items table
+		local (sorttable, adritemscontainer);
+		if not defined (adritems^) { //8/4/13 by DW
+			new (tabletype, adritems)};
+		bundle { //fill sorttable
+			local (i, adritem, now = clock.now (), pubdate);
+			adritemscontainer = adrchannel;
+			if flrdf {
+				adritemscontainer = adrrdf};
+			new (tabletype, @sorttable);
+			for i = 1 to sizeof (adritemscontainer^) {
+				adritem = @adritemscontainer^ [i];
+				if nameof (adritem^) endswith "item" {
+					try {
+						pubdate = date (xml.getvalue (adritem, "pubDate"))}
+					else {
+						pubdate = now};
+					sorttable.[string (i)] = pubdate}};
+			local (oldtarget = target.set (@sorttable));
+			table.sortby ("Value");
+			target.set (oldtarget)};
+			«scratchpad.sorrtable = sorttable
+		local (i, adritem, ct=0, ix);
+		new (tabletype, adritems);
+		for i = sizeof (sorttable) downto 1 {
+			ix = number (nameof (sorttable [i]));
+			adritem = @adritemscontainer^ [ix];
+			adritems^.[string.padwithzeros (++ct, 3)] = adritem^};
+		return (true)}; //finished dealing with RSS
+	if flatom {
+		adrfeedinfo^.title = decode (xml.getvalue (adratomfeed, "title"));
+		bundle { //get description from subtitle, if available
+			try {
+				adrfeedinfo^.description = decode (xml.getvalue (adratomfeed, "subtitle"))}
+			else {
+				adrfeedinfo^.description = ""}};
+		bundle { //loop to get the link
+			local (adr);
+			adrfeedinfo^.link = ""; //11/27/11 by DW -- default value
+			for adr in adratomfeed {
+				if nameof (adr^) endswith "link" {
+					try {
+						if xml.getattributevalue (adr, "rel") == "alternate" {
+							if xml.getattributevalue (adr, "type") == "text/html" {
+								adrfeedinfo^.link = decode (xml.getattributevalue (adr, "href"));
+								break}}}}}}; //5/6/10 by DW
+		bundle { //loop to get items
+			local (sorttable, now = clock.now ());
+			bundle { //fill sorttable
+				local (i, adr, pubdate);
+				new (tabletype, @sorttable);
+				for i = 1 to sizeof (adratomfeed^) {
+					adr = @adratomfeed^ [i];
+					if nameof (adr^) endswith "entry" {
+						try {
+							pubdate = date.iso8601StringToDate (xml.getvalue (adr, "published"))}
+						else {
+							pubdate = now};
+						sorttable.[string (i)] = pubdate}};
+				local (oldtarget = target.set (@sorttable));
+				table.sortby ("Value");
+				target.set (oldtarget)};
+				«scratchpad.sorrtable = sorttable
+			local (i, adritem, ct=0, ix, adrsub);
+			new (tabletype, adritems);
+			for i = sizeof (sorttable) downto 1 {
+				ix = number (nameof (sorttable [i]));
+				adritem = @adratomfeed^ [ix];
+				adrsub = @adritems^.[string.padwithzeros (++ct, 3)];
+				new (tabletype, adrsub);
+				xml.addvalue (adrsub, "title", xml.getvalue (adritem, "title"));
+				bundle { //get the description, 5/6/10 by DW and 9/21/12 by DW
+					local (s);
+					try {
+						s = xml.getvalue (adritem, "content");
+						if typeof (s) == tabletype {
+							table.assign (@s, xml.rss.getTextFromAtomContent (@s))};
+						xml.addvalue (adrsub, "description", s)}
+					else {
+						«msg (tryerror)
+						s = xml.getvalue (adritem, "summary");
+						xml.addvalue (adrsub, "description", s)}};
+				xml.addvalue (adrsub, "pubDate", date.netstandardstring (sorttable [i]));
+				«bundle //loop to get the link -- old way -- disabled
+					«local (adr)
+					«on getlinkatttype (adr) //5/6/10 by DW
+						«try
+							«return (xml.getattributevalue (adr, "type"))
+						«else
+							«return ("text/html")
+					«for adr in adritem
+						«if nameof (adr^) endswith "link"
+							«if xml.getattributevalue (adr, "rel") == "alternate"
+								«if getlinkatttype (adr) == "text/html"
+									«xml.addvalue (adrsub, "link", xml.getattributevalue (adr, "href"))
+				bundle { //loop to get the link
+					local (adr, ctlinks = 0);
+					for adr in adritem { //count the links
+						if nameof (adr^) endswith "link" {
+							ctlinks++}};
+					if ctlinks > 0 {
+						if ctlinks == 1 {
+							for adr in adritem {
+								if nameof (adr^) endswith "link" {
+									xml.addvalue (adrsub, "link", xml.getattributevalue (adr, "href"))}}}
+						else {
+							for adr in adritem {
+								if nameof (adr^) endswith "link" {
+									if xml.getattributevalue (adr, "rel") == "alternate" {
+										xml.addvalue (adrsub, "link", xml.getattributevalue (adr, "href"));
+										break}}}}}};
+				bundle { //get enclosure if it has one, 10/7/11 by DW
+					local (adr);
+					for adr in adritem {
+						if nameof (adr^) endswith "link" {
+							try {
+								if xml.getattributevalue (adr, "rel") == "enclosure" {
+									local (adrenclosure = xml.addtable (adrsub, "enclosure"), url = xml.getattributevalue (adr, "href"), type, length, atts);
+									bundle { //set type, length
+										try {
+											tcp.httpGetTypeLength (url, @type, @length, 3)}
+										else {
+											type = xml.getattributevalue (adr, "type");
+											length = 0}};
+									new (tabletype, @atts);
+									atts.url = url;
+									atts.type = type;
+									atts.length = length;
+									adrenclosure^.["/atts"] = atts}}}}};
+				bundle { //get categories, 10/9/11 by DW
+					local (adr);
+					for adr in adritem {
+						if nameof (adr^) endswith "category" {
+							local (adratts = @adr^.["/atts"], adrcat = xml.addvalue (adrsub, "category", adratts^.term));
+							if defined (adratts^.scheme) {
+								xml.addattribute (adrcat, "domain", adratts^.scheme)}}}};
+				bundle { //set guid
+					local (adrguid = xml.addtable (adrsub, "guid"));
+					new (tabletype, @adrguid^.["/atts"]);
+					adrguid^.["/atts"].isPermaLink = false;
+					adrguid^.["/pcdata"] = xml.getvalue (adritem, "id")}};
+			return (true)}}} //finished dealing with RSS
+«bundle //test code
+	«local (url = "http://www.npr.org/rss/podcast.php?id=13")
+	«url = "http://feeds.feedburner.com/inquisitr"
+	«url = "http://www.nytimes.com/services/xml/rss/userland/HomePage.xml"
+	«url = "http://static.lifeliner.org/dave/rss.xml"
+	«url = "http://annarbor.com/rss.xml"
+	«url = config.lifeLiner.stats.rssUrl
+	«url = "http://halleyscomment.blogspot.com/feeds/posts/default" //atom feed
+	«url = "http://news.google.com/news?ned=us&topic=h&output=atom"
+	«url = "http://howto.disqus.com/howto_rebooting_the_rss_cloud_88/latest.rss"
+	«url = "http://static.flickrfan.org/afp/fashion.xml"
+	«url = "http://static.lifeliner.org/lifeliner/rss.xml"
+	«url = "http://www.lockhartsteele.com/below14/index.rdf"
+	«url = "http://stackoverflow.com/feeds/tag/rss"
+	«url = "http://api.flickr.com/services/feeds/photos_public.gne?tags=occupywallst"
+	«url = "http://static.reallysimple.org/users/dave/linkblog.xml"
+	«url = "http://venitism.blogspot.com/feeds/posts/default"
+	«url = "http://feeds2.feedburner.com/WilliamCarletonCounselorLaw"
+	«if not defined (scratchpad.feed)
+		«new (tabletype, @scratchpad.feed)
+	«getfeeditems (url, @scratchpad.feed.items, @scratchpad.feed.info)
+
+

@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.thread.sleepSweet
+
+on sleepSweet (ctSecsBetwRuns) {
+	«Changes
+		«8/18/08; 11:18:38 AM by DW
+			«Rewrite with a simpler algorithm. There's still a "problem" with intervals that don't evenly divide 60, you get one extra run near the top of the minute, so for now stick with intervals that divide 60 evenly.
+		«8/18/08; 10:15:35 AM by DW
+			«Say you have a thread that runs every 10 seconds. Wouldn't it be nice if it always ran at 0, 10, 20, 30, 40, 50 seconds into each minute, exactly? Call this verb to do that for you. It returns when it's time for you to do your thing. I honestly couldn't think of a better name than sleepSweet. Hope you don't barf! :-)
+	local (day, month, year, hour, minute, second);
+	date.get (clock.now (), @day, @month, @year, @hour, @minute, @second);
+	local (secstosleep = ctSecsBetwRuns - ((second + ctSecsBetwRuns) % ctSecsBetwRuns));
+	thread.sleepfor (secstosleep)}
+«bundle //test code
+	«loop
+		«sleepSweet (15)
+		«msg (clock.now ())
+		«speaker.ouch ()
+		«thread.sleepfor (random (1, 3))
+
+

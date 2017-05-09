@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.wordPress.newMediaObject
+
+on newMediaObject (siteUrl, username, password, name, type, bits) {
+	«Changes
+		«11/11/09; 11:33:55 AM by DW
+			«Created. 
+	local (adrdata = wordPress.init (), objectdata);
+	local (adrsite = wordPress.getSiteData (siteurl), struct, rpcdata);
+	wordPress.getRpcData (siteurl, @rpcdata);
+	objectdata = metaWeblog.newMediaObject (name, type, bits, username, password, adrsite^.blogid, adrdata:@rpcdata);
+	return (objectdata.url)};
+bundle { //test code
+	local (f = "ohio:pictures:DSCN2944.JPG", fname = file.filefrompath (f));
+	local (bits = file.readwholefile (f), type = "image/jpeg");
+	webbrowser.openurl (newMediaObject ("http://unberkeley.com/", user.wordpress.prefs.username, user.wordpress.prefs.password, fname, type, bits))}
+
+

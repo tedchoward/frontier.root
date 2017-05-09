@@ -1,0 +1,50 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.tableInfoDialog
+
+on tableInfoDialog (adr) { «display an info dialog for the cell at adr
+	«bundle «old code
+		«local
+			«okitem = 1
+			«cellitem = 2
+			«tableitem = 3
+			«createditem = 4
+			«modifieditem = 5
+			«sizeitem = 6
+			«typeitem = 7
+		«on itemhit (itemnumber)
+			«case (itemnumber)
+				«-1 «initialize fields of the dialog
+					«local (cellname, s, time)
+					«cellname = nameOf (adr^)
+					«s = "Info for \"" + cellname + "\" cell:"
+					«dialog.setValue (cellitem, s)
+					«s = string (adr) - cellname
+					«s = string.delete (s, sizeof (s), 1)
+					«dialog.setValue (tableitem, s)
+					«time = timeCreated (adr)
+					«if time != 0
+						«dialog.setValue (createditem, time)
+					«else
+						«dialog.setValue (createditem, "n/a")
+					«time = timeModified (adr)
+					«if time != 0
+						«dialog.setValue (modifieditem, time)
+					«else
+						«dialog.setValue (modifieditem, "n/a")
+					«dialog.setValue (sizeitem, sizeof (adr^))
+					«dialog.setValue (typeitem, "'" + typeOf (adr^) + "'")
+					«return (true) «keep processing the dialog
+				«okitem
+					«return (false) «stop processing the dialog
+		«return (dialog.run (516, okitem, @itemhit))
+	try {
+		card.run (@system.cards.tableInfoDialog)}
+	else {
+		local (s = "");
+		s = s + "Address:\t" + adr + "\r";
+		s = s + "Created:\t" + timeCreated (adr) + "\r";
+		s = s + "Modified:\t" + timeModified (adr) + "\r";
+		s = s + "Size:\t" + sizeOf (adr^) + "\r";
+		s = s + "Type:\t'" + typeOf (adr^) + "'\r";
+		dialog.notify (s)}}
+
+

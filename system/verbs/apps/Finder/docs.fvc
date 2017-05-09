@@ -1,0 +1,696 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Finder.docs
+
+Finder.about
+	Syntax
+		Finder.about ()
+	Parameters
+		None required.
+	Action
+		Displays the Finder’s “About” window showing all open applications, the amount of memory they are using, the amount they have been allocated, and other useful information. It also brings the Finder to the front.
+	Returns
+		True
+	Examples
+		Finder.about ()
+			» true
+	Notes
+		• This old verb is retain for compatibility.  If you use only the scriptable Finder, consider using the scriptable Finder implementation of the verb:
+			Finder.open (objspec (Finder.aboutThisMacintosh))
+Finder.alias
+	Syntax
+		Finder.alias (path)
+	Parameters
+		path is the path to a file or folder of which you wish to create an alias.
+	Action
+		Executes the “Make Alias” command on the indicated file or folder.
+	Returns
+		True
+	Examples
+		Finder.alias ("System:System Folder:Control Panels:Views")
+			» true
+		Creates an alias of your Views Control Panel, which you can then move into the Apple Items folder in your System Folder.
+	Notes
+		With the Scriptable Finder, consider using Finder.make (Finder.aliasFile, withData: finderSpec (path)) instead.  If you do, you can also set properties of the alias.
+	See Also
+		Finder.make
+		file.newAlias
+Finder.bringToFront
+	Syntax
+		Finder.bringToFront ()
+	Parameters
+		None required.
+	Action
+		Makes the Finder the frontmost application.
+	Returns
+		True
+	Examples
+		Finder.bringToFront ()
+			» true
+	Notes
+		You don’t often need to use this verb in conjunction with the other Finder verbs. Those that should or must bring Finder to the front do so automatically.
+	See Also
+		sys.bringAppToFront
+Finder.changeView
+	Syntax
+		Finder.changeView (pathToFolder, viewID)
+	Parameters
+		pathToFolder is the path name of the folder whose Finder window view you wish to set.
+		viewID is a number between 0 and 8 that determines the viewing method for files and folders in the window at pathToFolder.
+	Action
+		Sets the viewing method of the Finder window pathToFolder to a view that depends on the value of viewID, which can have the following values.
+		• 0 = Small Icon
+		• 1 = Icon
+		• 2 = Name
+		• 3 = Date Last Modified
+		• 4 = Size
+		• 5 = Kind
+		• 6 = Comments
+		• 7 = Label
+		• 8 = Version
+	Returns
+		True
+	Examples
+		Finder.changeView ("System:", 4)
+			» true
+		All files and folders in the disk icon’s window are shown in order by size.
+		
+		Finder.changeView ("System:System Folder:Preferences:", 8)
+			» true
+		All files and folders in this folder are now shown in order by version number.
+	Notes
+		• Supplying a number outside the range of 0–8 has no effect on the view and returns true.
+		• If the window at pathToFolder is not open, this verb opens it before changing its view.
+		• You can use this verb to select a view that is not available on the Finder’s View menu.
+		• With Scriptable Finder, consider setting the "view" property of the folder (using the same values as above)
+	See Also
+		Finder.set
+Finder.cleanup
+	Syntax
+		Finder.cleanup (referenceToObject, viewID)
+	Parameters
+		referenceToObject is either objSpec (all) or a reference to a folder or window, or a reference to an item, or a list of any of those (see notes)
+		viewID determines the sorting of the items in the folder after the items are moved.  It may be
+		• a number between 2 and 8 (from the list for Finder.changeView ()); or
+		• one of the names name, modificationDate, size, kind, comment, labelIndex, version; or
+		• the string4 value corresponding with those names (see Finder.defs.cleanupCodes); or
+		• Not present, which is the same as using name.
+	Action
+		Moves each affected icon to a grid position in its folder’s window (or on the desktop), ordered according to the value of the viewID parameter.
+	Returns
+		A reference (or list of references) to the objects which were cleaned up
+	Errors
+		It is an error to attempt to clean up icons in a window which is not open.
+		It is an error to attempt to clean up a window which is not shown in Icon or Small Icon form.
+		It is an error to attempt to clean up window[all] if a Control Panel window is open.  But other open windows will be cleaned up.
+	Examples
+		cleanup (containerWindow[all], name)
+			will rearrange the icons in all of Finder's open windows which are viewed by icon or small icon, ordering them by name.
+		cleanup (window["Vashon"].folder["Test"])
+			because the window named "Vashon" is open, this moves the icon for the folder "Test" to the nearest available grid position...it does not affect items contained in the folder.
+		cleanup (window["Vashon"].folder["Test"].contents)
+			If the window for folder test is open, cleans up the icons it contains, putting them at the nearest grid points since no ordering is given.
+		cleanup (objSpec (all))
+			Untested (because things are on my desktop where I want them).  Alleged to be like selecting something on the desktop, holding down the Option key, and selecting Clean Up All from the Special menu.
+	Notes
+		• Scriptable Finder only.
+		• The Finder window in which changes are to be made must be open.
+		• If you specify one or more folders among the objects to be cleaned up, and their windows are not open, the folder icons are moved in the containing window.
+		• If you specify one or more folders among the objects to be cleaned up, and their windows are open, the icons are moved in the folders’ windows.
+		• If you specify a Finder window, the icons it contains are cleaned up.
+		• The list of specifiers can mention completely unrelated items, such as items found on two or more different volumes.
+		• cleanup (objSpec (desktop), name) is alleged to be an alternate way to say cleanUp (objSpec (all))
+		• All examples assume that they are contained within a
+			with objectModel, Finder
+		• It is better to use containerWindow[all] rather than window[all] to clean up all windows.  The window[all] form will cause an error if a Control Panel is open.
+Finder.close
+	Syntax
+		Finder.close (referenceToWindows)
+	Parameters
+		referenceToWindows (under non-Scriptable Finder) is the path name of the folder whose Finder window you wish to close.  Only one allowed.
+		referenceToWindows (under Scriptable Finder) is an object specifier of a Finder window or of the object whose window is to be closed, or a list of such specifiers.
+	Action
+		Closes each Finder window mentioned or implied in referenceToWindows.
+	Returns
+		Non-Scriptable Finder:  True
+		Scriptable Finder:  an object specifier for the window which was closed, or a list of such specifiers.
+	Errors
+		With the Scriptable Finder, it is an error to try to close a window which is not open.
+	Examples
+		Finder.close ("System:")
+			» true (non-Scriptable Finder)  or the object specifier startupDisk.window or disk["System"].window
+			Closes the window showing the contents of the disk volume “System.”
+		Finder.close ( {window["Test"], disk["Vashon"].folder["Frontier 3.0"]} ) « requires Scriptable Finder, windows are open.
+			» {startupDisk.folder ["Test"].window, startupDisk.folder ["Frontier 3.0"].window}
+	Notes
+		• If the Finder window at referenceToWindows is not open, the non-Scriptable Finder opens it and then closes it.
+		• The examples assume they are within a
+			with objectModel, Finder
+	See Also
+		Finder.open
+		Finder.closeInfo
+Finder.closeInfo
+	Syntax
+		Finder.closeInfo (path)
+	Parameters
+		path is the path name pointing to the volume, folder, or file whose “Get Info” window you wish the Finder to close.
+	Action
+		Closes the “Get Info” window for the item at path. The Finder also brings itself to the front.
+	Returns
+		True
+	Examples
+		Finder.closeInfo ("System:")
+			» true
+		Closes the Get Info window for the disk volume “System.”
+	Notes
+		• If the Get Info window for the item at path is not open, the Finder opens it and then closes it.
+		• Retained for compatibility with the non-Scriptable Finder.  Can be replaced by a close of an object specifier for the information window of an item, with Scriptable Finder 
+			close (startupDisk.file["MyTest"].informationWindow)
+			close (window["MyTest Info"])
+	See Also
+		Finder.getInfo
+		Finder.open
+		Finder.close
+Finder.computer
+	Syntax
+		Finder.computer (x, has)
+	Parameters
+		x, a string4 which is the Gestalt selector to be tested
+		has, optional...if present it is a number which forms a mask against which the result from Gestalt is tested
+	Action
+		Calls the Macintosh toolbox routine Gestalt passing x as the selector.
+	Returns
+		If the has parameter is absent, returns the result from the Gestalt call.
+		If the has parameter is present, tests the has parameter against the result from Gestalt, returning true if every 1 bit in has is matched by a 1 bit in the result, otherwise returning false.
+	Errors
+		It is an error if the selector x is unknown to Gestalt, or if Gestalt reports any other error.
+	Examples
+		Finder.computer ('qd  ')  « version number of QuickDraw
+			// 567
+		string.hex (Finder.computer ('os  '))  « various feature flags for the operating system
+			// "0x6FFF"
+		Finder.computer ('os  ', 3)
+			// » true  (on machines which can run Frontier)
+		Finder.computer ('os  ', 0x8000)
+			// false
+	Notes
+		• Scriptable Finder only
+		• Can be addressed to a Finder on a remote Macintosh, whereas gestalt () is limited to the machine on which Frontier is running.
+	See Also
+		Gestalt
+Finder.count
+	Syntax
+		Finder.count (obj, each)
+	Parameters
+		obj is an object specifier for some Finder object, or a list of such objects.
+		each is a string4 which identifies what kind of objects contained by obj should be counted.
+	Action
+		Counts the kind of object indicated by each in the object specified by obj.
+	Returns
+		The count of the number of objects of type each in the object obj.  If obj is a list, the SUM of the number of objects of interest in each container object is returned.
+	Examples
+		with objectModel, Finder {count (desktop, disk)}
+			// 4
+	Errors
+		It is an error if obj does not exist or if each represents a type which obj cannot contain.
+	Notes
+		• Scriptable Finder only.
+		• The behavior of returning the sum of the counts when the first parameter is a list seems to be an error and might change in the future.
+Finder.dataSize
+	Syntax
+		Finder.dataSize (obj, as)
+	Parameters
+		obj  is an object specifier for the Finder object of interest (or a list of objects of interest)
+		as  optional...if present the reported size is based on the object as coerced to the indicated type
+	Action
+		Determines the size of the data which would be returned by get (obj, as).
+	Returns
+		Returns the size in bytes of the data which would be returned by get (obj, as), or a list of the sizes.
+	Errors
+		It is an error if the object whose size is requested does not exist
+	Examples
+		with objectModel, Finder {dataSize (disk[1])}
+			// 70  « disk happens to have a 5 character name
+		with objectModel, Finder {dataSize (disk[1].folder[1].item[1])}
+			// 220  « more complex object specifier
+		with objectModel, Finder {dataSize (disk[1].folder[1].item[1], aliasType)}
+			// 154
+		with objectModel, Finder {dataSize (get (disk[1].folder[1].file[all]), stringType)}
+			// » {48, 35, 36}
+			// Gets object specifiers for all <3> files in the folder,
+			// then asks for the datasize of the objects in that list
+	Notes
+		• Scriptable Finder only.
+		• Relatively uninteresting in real scripting.
+		• It is never the size of a file’s contents, use file.size () for that.
+	See Also
+		file.size
+Finder.delete
+	Syntax
+		Finder.delete (obj)
+	Parameters
+		obj is an object specifier for a deletable Finder object, or a list of such specifiers (it may also be an alias or fileSpec or path name string in most cases).
+	Action
+		Moves the specified objects to the trash.  Despite the name, does not actually delete them [use Finder.empty ()].
+	Returns
+		An object specifier for the “deleted” object (based on its new location in the trash), or a list of such specifiers.
+	Errors
+		It is an error to attempt to delete a window or other non-deletable object
+	Examples
+		with objectModel, Finder { delete (startupdisk.folder["Test"].file["xxx"]) } « moves to trash
+			// trash.file ["xxx"]
+		with objectModel, Finder { file.delete (get (startupdisk.folder["Test"].file["xxx"], stringType)) }
+			// true  « This has actually deleted the file without disturbing other items already in the trash
+	Notes
+		• Scriptable Finder only.
+		• It is impolite for a script to empty the trash after deleting files, if the trash was not empty previously, without asking permission.
+		• If you want a single-step delete, use file.delete () or file.deleteFolder ().  If you have a Finder-style specifier for the object, you can use Finder.get (myObj, stringType) to get its path to pass to the file verb.
+	See Also
+		file.delete
+		file.deleteFolder
+Finder.drag
+	Syntax
+		Finder.drag (sourcePath, destPath)
+	Parameters
+		sourcePath is the path to the file or folder you wish to copy.
+		destPath is the path to the place where the contents of sourcePath are to be copied.
+	Action
+		Copies the file or folder in sourcePath to folder or volume at destPath. If a file or folder of the same name already exists in destPath, this verb confirms your desire to replace it.
+	Returns
+		True
+	Examples
+		Finder.drag ("System:System Folder:System", "System:ResEdit Folder:")
+			» true
+			Makes a copy of the System file so you can work with it in ResEdit.
+		Finder.drag ("System:System Folder:Passwords", "MyOTherDisk:System:A Safe Place:")
+			» true
+			The file called “Passwords” in your System Folder is copied to a safe place on another hard disk for backup.
+	Notes
+		• You can use Finder.drag across volumes.
+		• Supported on non-Scriptable Finder.
+		• New scripts for Scriptable Finder should probably use other verbs instead, such as Finder.move () and Finder.duplicate ()
+	See Also
+		Finder.move
+		Finder.duplicate
+Finder.duplicate
+	Syntax
+		Finder.duplicate (path, duplicateTo, replacing)
+	Parameters
+		path is the path name of the folder, document, or application of which you wish the Finder to make a copy (For the Scriptable Finder, path may also be a list of items to duplicate).
+		duplicateTo (Scriptable Finder only) if present names the container into which the duplicate item(s) are placed.
+		replacing (Scriptable Finder only) if present may be false (the default), true, conflicts, or existingItems...any of the last three causes existing items to be replaced by the newly-created items
+	Action
+		The original Finder creates a copy of the object at path, adding the word “Copy” to the end of its name.
+		The Scriptable Finder does the same if the duplicateTo parameter is not given (but will copy multiple items in different containers)
+		If the duplicateTo parameter is included, the copied items go into the designated container.
+		If duplicateTo is a list of containers, copies of the items to duplicate appear in each of the containers
+		If replacing is false or not included, it is an error if there already exists a conflicting item (except when the Finder’s Duplicate menu command action is specified by omitting duplicateTo and replacing)
+	Errors
+		It is an error to use the duplicateTo parameter with the replacing parameter omitted or false, if there is already an existing item with the same name in the duplicateTo container
+		It is an error if the duplicateTo parameter is other than a container
+	Returns
+		Original Finder:  true; Scriptable Finder:  an object specifier (or list of specifiers) for the newly created item(s)
+	Examples
+		Finder.duplicate ("System:Frontier Folder:Frontier.root") « original or Scriptable Finder
+			» true (original Finder) or startupDisk.folder["Frontier Folder"].file["Frontier.root"] (Scriptable Finder)
+		Finder.duplicate ("System:Frontier Folder:Frontier.root", "System:Backup Root:", true)
+			» startupDisk.folder[Backup Root].file["Frontier.root"]  (prior backup deleted)
+	Notes
+		• The only form for use with the non-Scriptable Finder is Finder.duplicate (path)
+		• If a copy of the file already exists, this verb with only the path parameter behaves like the Finder and names the new copy by adding a number to the end of the name (e.g., “Frontier.root Copy 2”).
+	See Also
+		file.copy
+Finder.empty
+	Syntax
+		Finder.empty (trashObject)
+	Parameters
+		trashObject (usually omitted).  The word trash, referring to the trash on the local Macintosh.
+	Action
+		With no parameter or the parameter trash, empties the trash on the local machine.
+	Returns
+		An object specifier for the trash which was emptied
+	Notes
+		It is possible to empty trash on remote Macintosh machines, but I have not found the necessary coding to do so in Frontier.
+Finder.emptyTrash
+	Syntax
+		Finder.emptyTrash ()
+	Parameters
+		None required.
+	Action
+		Empties the trash without confirmation.
+	Returns
+		True
+	Examples
+		Finder.emptyTrash ()
+			» true
+	Notes
+		For use with the Scriptable Finder, new scripts should use the Finder.empty () verb, instead.
+	See Also
+		Finder.empty
+Finder.get
+	Syntax
+		Finder.get (obj, as)
+	Parameters
+		obj specifies the thing to get or a list of things to get
+		as  [optional] if present, specifies the form in which to get the object(s).  aliasType, filespecType, and stringType are often useful.  objspecType is the default.
+	Action
+		Returns the requested thing or list of things.
+	Returns
+		The requested thing or list of things.
+	Errors
+		It is an error if the requested thing (or one of the requested things) does not exist.
+		It is an error if the requested thing cannot be returned in the form requested (eg, a window cannot be returned as a string)
+	Examples
+		get ("Vashon:Test")
+			// startupDisk.folder ["Test"]
+		get (startupDisk.folder["Test"], stringType)
+			// "Vashon:Test:"
+		get (disk ["Vashon"].folder ["Test"].window.bounds)
+			// {153,437,416,779}
+		with objectModel, Finder { get (disk[all].name) }
+			// {"Sucia", "Lopez", "Blake", "Vashon"}
+	Notes
+		• Scriptable Finder only.
+		• All the examples need with objectModel, Finder { ... }
+	See Also
+		Finder.set
+Finder.getInfo
+	Syntax
+		Finder.getInfo (path)
+	Parameters
+		path is the path name pointing to the volume, folder, or file for which you wish the Finder to open its “Get Info” window.
+	Action
+		Opens the “Get Info” window for the object at path. Brings the Finder to the front automatically.
+	Returns
+		True
+	Examples
+		Finder.getInfo ("System:System Folder:System")
+			» true
+		Finder comes to front and opens its Get Info window on the System file.
+	Notes
+		• Finder does not open the folder(s) in which the object at path is stored.
+		• This verb is retained for use with the original Finder.  For the Scriptable Finder, consider opening the informationWindow of some object, instead.
+	See Also
+		Finder.closeInfo
+Finder.grow
+	Syntax
+		Finder.grow (pathToFolder, horiz, vert)
+	Parameters
+		pathToFolder is the path name of the folder whose Finder window you wish to resize.
+		horiz is a number indicating the number of pixels wide you wish the window to be.
+		vert is a number indicating the number of pixels high you wish the window to be.
+	Action
+		Resizes the window associated with the folder at pathToFolder so that it is vert pixels high and horiz pixels wide.
+	Returns
+		True
+	Examples
+		Finder.grow ("System:System Folder", 200, 300)
+			» true
+	Notes
+		• If the folder or volume is not already open in a window, this verb opens the window first and then resizes it.
+		• This verb is retained for use with the original Finder.  For the Scriptable Finder, consider doing a set of the bounds, position, or size property of the window associated with some container.
+	See Also
+		Finder.setPosition
+		Finder.zoomWindow
+		Finder.set
+Finder.move
+	Syntax
+		Finder.move (path, moveTo, replacing)
+	Parameters
+		path (original Finder) is the path to the file or folder you wish to relocate.
+		moveTo (original Finder) is the path to the folder where the contents of sourcePath are to be moved.
+		path (Scriptable Finder) the path or other specification of the item to move, or a list of one or more items to move
+		moveTo (Scriptable Finder) a specification of the container to which to move the items
+		replacing (Scriptable Finder ONLY, optional) if false or absent do not replace existing items, if true, conflicts, or existingItems replace any existing items
+	Action
+		Moves the contents of path to the container at moveTo.
+	Errors
+		With Scriptable Finder, it is an error if the replacing parameter is absent or false and duplicate items already exist in the moveTo container.
+	Returns
+		True (original Finder)
+		(Scriptable Finder) A Finder specifier or list of specifers for the moved items in their new location
+	Examples
+		Finder.move ("System:System Folder:Passwords", "System:A Safe Place:")
+			» true
+			The file called “Passwords” in your System Folder is moved to a safe place, where all good passwords should be!
+	Notes
+		• With the original Finder, Finder.move () cannot be used to move files between volumes. Use Finder.drag for this purpose but remember that dragging leaves the original file in place.
+		• With the Scriptable FInder, Finder.move () will copy the items to the desired container, but not remove them from their orignal container.
+		• It is possible but not generally useful to specify a list of containers in the moveTo parameter.  If you do, the items are moved multiple times, ending in the last container in the list.
+	See Also
+		file.copy
+		Finder.drag
+		Finder.duplicate
+		file.delete
+Finder.open
+	Syntax
+		Finder.open (path, using)
+	Parameters
+		path is the path name of a file, folder, or volume you wish to open.  With Scriptable Finder, path may also be a list of items to open, and may be a Finder specifier, alias, filespec, or pathString.
+		using (Scriptable Finder only, optional) the application to be used to open the item(s) specified by path
+	Action
+		(Original Finder) Has the same effect as choosing “Open” from the Finder’s File menu, with the indicated item selected.
+		(Scriptable Finder) If the using parameter is not specified, same as original Finder...with the replacing parameter, the effect is the same as dragging an item or items onto the indicated application.
+	Returns
+		Original Finder  true
+		Scriptable Finder  a specifier or list of specifiers for the items which were opened.
+	Examples
+		Finder.open ("System:")
+			» true
+			Opens a Finder window on the volume “System.”
+		
+		Finder.open ("System:Frontier Folder:UserLand™ Frontier")
+			» true
+			Since an application is named, Finder “opens” (i.e., launches) it.
+		
+		Finder.open ("System:Documents:Memo to Boss")
+			» true
+			Since a document is named, Finder launches the application used to create it.
+		Finder.open ("System.Documents:Memo to Boss", "System:SimpleText")
+			» startupDisk.folder ["Documents"].file["Memo to Boss"]
+			The memo is opened using SimpleText, regardless of what application saved it as a TEXT or PICT file
+	Notes
+		Anything the Finder can open — including desk accessories, font files, sound files, or Control Panels (cDEVs) — can be opened with this verb.
+	See Also
+		Launch verbs
+		Finder.close
+Finder.pageSetup
+	Syntax
+		Finder.pageSetup (pathToFolder)
+	Parameters
+		pathToFolder is the path name of the folder, whose Finder window you wish to invoke a Page Setup dialog box for.
+	Action
+		Opens a Page Setup dialog box for the folder or volume displayed in the window at pathToFolder. It also brings Finder to the front.
+	Returns
+		True
+	Examples
+		Finder.pageSetup ("System:Documents:Test Document")
+			» true
+		Finder displays a Page Setup dialog for the folder’s window.
+	Notes
+		• There is no Scriptable Finder equivalent.  The original Finder verb still works but...
+		• WARNING.  With at least some versions of Finder and System, this verb has crashed the Scriptable Finder on my Power Macintosh.
+	See Also
+		Finder.printWindow
+Finder.print
+	Syntax
+		Finder.print (obj)
+	Parameters
+		(Original Finder) obj is the path name to a document you wish to print from the Finder.
+		(Scriptable Finder) obj is the same as with the original Finder, or a specifier for a file or container (or a list of such specifiers).
+	Action
+		(Original Finder) The effect is the same as selecting the item in Finder, then selecting Print from Finder's File menu.
+		(Scriptable Finder) For each file specified by obj, the effect is as above.  For each container, the effect is like having that container's window in front and selecting PrintWindow from Finder's File menu.
+	Returns
+		(Original Finder)  true
+		(Scriptable Finder)  a specifier or list of specifiers of the items and container windows printed
+	Examples
+		Finder.print ("System:Documents:Sample Memo")
+			» true  « original Finder; or
+			» startupDisk.folder["Documents"].file["Sample Memo"]
+	Errors
+		If you attempt to print an unprintable object (such as a folder or an application), Finder.print does not print but this is not an error.
+		Scriptable Finder reports an error if you specify a non-existent item to print.
+	Notes
+		If the document in path was created by an application that cannot be found, the Finder produces an error and notifies the user of a need to be brought to the front.
+	See Also
+		Finder.printWindow
+Finder.printWindow
+	Syntax
+		Finder.printWindow (pathToFolder)
+	Parameters
+		pathToFolder is the path name of the Finder window whose contents you wish to print.
+	Action
+		Opens the folder’s window if it is not yet open and invokes the Finder’s Print Window command from the File menu, bringing the Finder to the front. This displays a print dialog, with which the user must interact to carry out the printing.
+	Returns
+		True
+	Examples
+		Finder.printWindow ("System:System Folder:Control Panels:")
+			» true
+	Notes
+		• This verb works with the original Finder.
+		• For the Scriptable Finder, it is probably better to use Finder.print (), specifying some open window.
+	See Also
+		Finder.bringToFront
+		Finder.print
+Finder.putAway
+	Syntax
+		Finder.putAway (path)
+	Parameters
+		With original Finder: path is the path to a folder or file that has been previously moved to the desktop or into the Trash and which you now wish to return to its proper window and Finder location.
+		With Scriptable Finder: path is a specifier for some object, or a suitable list.
+	Action
+		Moves the folder or file in path to the location from which it was previously moved.
+		With Scriptable Finder, putAway can also be used to eject and unmount removeable volumes.
+	Returns
+		With the original Finder:  true
+		With the scriptable Finder:  a specifier (or list) for the object(s) put away, in their new location.
+	Errors
+		With Scriptable Finder, it is an error to put away something which does not exist as you specify it.
+	Examples
+		Finder.putAway ("System:Desktop Folder:Temporary Folder:")
+			» true
+		The folder “Temporary Folder” is restored to its original position at the top level of the disk volume “System.”
+	Notes
+		• In the original Finder, executing Finder.putAway on an object that has not been dragged to the Macintosh desktop or the Trash has no effect and returns true.
+		• Scriptable Finder uses the desktop as the default container for objects...so most objects to be put away can be specified in the form file["foo"].
+Finder.restart
+	Syntax
+		Finder.restart ()
+	Parameters
+		None required.
+	Action
+		Restarts the Macintosh after quitting all open programs and, if appropriate, asking the user to confirm the saving or loss of changes.
+	Returns
+		Nothing
+	Examples
+		Finder.restart ()
+	See Also
+		Finder.shutDown
+Finder.reveal
+	Syntax
+		Finder.reveal (path)
+	Parameters
+		path is the path to an object you wish to display in its folder’s window.
+		With Scriptable Finder, path may also be a specifier for that object (or a suitable list)
+	Action
+		Scrolls to and selects the object at path in its folder’s window, opening the window if necessary first. It also brings the Finder to the front.
+	Returns
+		With the original Finder:  true
+		With the scriptable Finder:  a specifier (or list) for the revealed object(s)
+	Examples
+		Finder.reveal ("System:Frontier Folder:UserLand Frontier™")
+			» true
+		The window for the folder “Frontier Folder” opens and scrolls to make the application “UserLand Frontier™” visible. Then it selects this application.
+Finder.set
+	Syntax
+		Finder.set (obj, setTo)
+	Parameters
+		obj specifies the thing to set (generally a property of some Finder object)
+		setTo is the value to which the property is to be set
+	Action
+		Sets the value of obj (usually a property) to the value specified
+	Returns
+		True
+	Errors
+		It is an error if obj does not exist or cannot be set to the value setTo.
+	Examples
+		set (window["Test"].zoomed, true)
+			// true
+		set (window["Missing"].zoomed, true)
+			// an error, because there is no window named "Missing" open in Finder
+	Notes
+		• Scriptable Finder only.
+		• Examples need with objectModel, Finder { ... }
+	See Also
+		Finder.get
+Finder.setPosition
+	Syntax
+		Finder.setPosition (pathToFolder, horiz, vert)
+	Parameters
+		pathToFolder is the path name of the folder whose Finder window you wish to move.
+		horiz is a number indicating the horizontal location in pixels where you want the window’s upper left corner located.
+		vert is a number indicating the vertical location in pixels where you want the window’s upper left corner located.
+	Action
+		Moves the window associated with the folder at pathToFolder so that its upper left corner is horiz pixels to the right of the left edge of the display and vert pixels below the top edge of the display.
+	Returns
+		True
+	Examples
+		Finder.setPosition ("System:", 5, 40)
+			» true
+		This script opens the Finder window on the volume “System” and positions it so that its upper left corner is near the upper left corner of the screen.
+	Notes
+		• With the Scriptable Finder, suggest Finder.set (window["foo"].postion, {h, v}) {or set the window's bounds to move and resize}.
+		• Unlike its manual equivalent in the Finder, it is possible with this verb to move the window completely off the screen. You must be careful not to permit this, nor to make the title bar inaccessible without being aware of the situation and correcting it
+		• If the window for pathToFolder is not open when this verb is called, it will be opened by the Finder.
+	See Also
+		Finder.grow
+		Finder.zoomWindow
+		Finder.set
+Finder.showClipboard
+	Syntax
+		Finder.showClipboard ()
+	Parameters
+		None required.
+	Action
+		Opens a window in which you can view the contents of the system Clipboard. It also brings the Finder to the front
+	Returns
+		True
+	Examples
+		Finder.showClipboard ()
+	Notes
+		• With the Scriptable Finder, you can use:
+		     with objectModel, Finder { open (clipboard) }
+		• It is harmless to use the Finder.showClipboard verb when the Clipboard is already visible.
+	See Also
+		Finder.open
+Finder.shutDown
+	Syntax
+		Finder.shutDown ()
+	Parameters
+		None required.
+	Action
+		Shuts down the Macintosh after quitting all open programs and, if appropriate, asking the user to confirm the saving or loss of changes.
+	Returns
+		Nothing
+	Examples
+		Finder.shutDown ()
+	See Also
+		Finder.restart
+Finder.sleep
+	Syntax
+		Finder.sleep ()
+	Parameters
+		None required.
+	Action
+		Causes a Macintosh Portable, Macintosh Power Book, or other system that understands the “Sleep” command to blank its display and enter power-conserving mode.
+	Returns
+		True
+	Examples
+		Finder.sleep ()
+			» true
+	See Also
+		Finder.restart
+		Finder.shutDown
+Finder.zoomWindow
+	Syntax
+		Finder.zoomWindow (pathToFolder, zoom)
+	Parameters
+		pathToFolder is the path name of the folder whose window you wish to zoom in or out.
+		zoom is a boolean value indicating whether to zoom the window out (if true) or in (if false).
+	Action
+		Changes the zoomed state of the window displaying the folder at pathToFolder, if necessary, to in or out, depending on the value in zoom. It opens the window if necessary.
+	Returns
+		True
+	Examples
+		Finder.zoomWindow ("System Folder:", true)
+			» true
+		Zooms System Folder’s window open if it isn’t already.
+		
+		Finder.zoomWindow ("System Folder:", false)
+			» true
+		Zooms System Folder’s window in (to its original, un-zoomed size) if it isn’t already.
+	Notes
+		• With Scriptable Finder, you can set the window's zoomed property to true or false using Finder.set ()
+		• This verb emulates the behavior of the zoom icon in a Macintosh window, acting as a toggle. Zooming behavior is slightly different between System 6 and System 7.
+
+
+

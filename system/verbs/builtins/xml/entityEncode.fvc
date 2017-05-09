@@ -1,0 +1,65 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.entityEncode
+
+on entityEncode (s, flAlphaEntities = false) {
+	«Changes
+		«12/4/10; 4:29:34 AM by DW
+			«Fixed a boundary error in numeric substitution. If we were encoding the last character in the string, it would fail. Surprising this bug lasted this long? Weird. 
+		«11/17/10; 4:52:59 PM by DW
+			«Recoded numeric substitution code to be twice as fast.
+				«bundle //numeric subs -- old code
+					«local (i = 1, num)
+					«while i <= sizeof (s)
+						«num = number (s [i])
+						«if num >= 128
+							«s = string.delete (s, i, 1)
+							«s = string.insert ("&#" + num + ";", s, i)
+							«i = i + 5
+						«i++
+		«1/21/09; 4:05:56 AM by DW
+			«Encode ampersands first, so that we don't encode ampersands that are part of numeric entities.
+		«9/13/07; 7:49:38 PM by DW
+			«Encode & before other alpha entities, to avoid multiple encoding. 
+		«11/14/2000; 5:55:38 PM by DW
+			«Encode alpha entitites. See the comment at the head of xml.entityEncode.
+		«10/22/99; 2:14:49 PM by DW
+			«In some circumstances, sending non-escaped eight-bit ASCII characters causes XML parsers to reject the XML, esp if no character encoding is specified. This can be a problem when you're accepting text that could have been entered on a Mac or a PC or whatever, and you don't know what the characters mean, so you don't know how to declare the encoding. In those cases, we still want to be able to send the text, so we "entity-encode" the text, as specified in the XML spec on the W3C site.
+			«This new verb processes the input string, and returns a string with all high-bit characters replaced with the equivalent encoding. 
+			«http://www.w3.org/TR/1998/REC-xml-19980210#wf-Legalchar
+	if flAlphaEntities { //1/21/09 by DW
+		s = string.replaceall (s, "&", "&amp;")};
+	bundle { //numeric subs
+		if sizeof (s) > 0 {
+			local (i = 1, ch128 = char (128), ch);
+			loop {
+				ch = s [i];
+				if ch >= ch128 {
+					s = string.delete (s, i, 1);
+					s = string.insert ("&#" + number (ch) + ";", s, i);
+					i = i + 5};
+				if ++i > sizeof (s) {
+					break}}}};
+	bundle { //encode alpha entities
+		if flAlphaEntities {
+			s = string.replaceall (s, "<", "&lt;");
+			s = string.replaceall (s, ">", "&gt;");
+			s = string.replaceall (s, "\"", "&quot;");
+			s = string.replaceall (s, "'", "&apos;")}};
+	return (s)};
+bundle { //test code
+	dialog.alert (entityEncode ("Cultural Transparency  Risk = Upward MobilityÔaªbø"));
+	return;
+	
+	local (s, sx, tc, i);
+	tc = clock.ticks ();
+	s = "If the decision is spending our grandchildren's money on blowing up Iraq, or making them healthier or better educated -- I don't think it's much of a choice -- do you? Yet the Republicans seem to spend freely to kill Iraqis and fight <i>against</i> investing in America. We build new infrastructure in Iraq, and then blow it up, but we won't build new infrastructure in the US, at all. This is lunacy. We are collectively out of our minds if we let this happen.";
+	s = string.replaceall (s, "e", char (191));
+	for i = 1 to 100 {
+		scratchpad.sx = entityencode (s, true)};
+	dialog.alert (clock.ticks () - tc);
+	return;
+	
+	
+	dialog.alert (entityEncode ("Social Media ³Experts² are the Cancer of Twitter (and Must Be Stopped)"))}
+	«dialog.alert (entityEncode ("Olejov·¯ \"skvrna\" na Labi z¯ejmÏ do NÏmecka nedopluje¯Ìjna 1999 13:49", true))
+
+

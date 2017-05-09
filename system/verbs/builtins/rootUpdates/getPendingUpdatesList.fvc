@@ -1,0 +1,45 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.rootUpdates.getPendingUpdatesList
+
+on getPendingUpdatesList (adrUpdatesTable, rssUrl, databasesToUpdate) {
+	«Changes
+		«8/5/04; 11:09:35 PM by JES
+			«Change initial whenLastUpdatesRead date to 8/4/04.
+		«12/17/03; 1:34:37 AM by JES
+			«Created. Read the RSS fead that lists pending root updates.
+	local (flRead = false);
+	if not defined (adrUpdatesTable^) {
+		new (tableType, adrUpdatesTable)};
+	if not defined (adrUpdatesTable^.pendingUpdates) {
+		new (tableType, @adrUpdatesTable^.pendingUpdates)};
+	if not defined (adrUpdatesTable^.whenLastUpdatesRead) {
+		adrUpdatesTable^.whenLastUpdatesRead = date.set (4, 8, 2004, 0, 0, 0)};
+	if adrUpdatesTable^.whenLastUpdatesRead < date.yesterday (clock.now ()) { //read up to once every 24 hours
+		flRead = true};
+	if flRead { //read the feature list RSS feed, and populate the pendingUpdates table
+		adrUpdatesTable^.whenLastUpdatesRead = clock.now ();
+		bundle { //read the updates into the pendingUpdates table
+			local (services); new (tableType, @services); //a spoofed temporary services table
+			new (tableType, @services.[rssUrl]);
+			on storyArrivedCallback (adrservice, adrstory) {
+				adrUpdatesTable^.pendingUpdates.[nameOf (adrstory^)] = adrstory^};
+			new (tableType, @adrUpdatesTable^.pendingUpdates);
+			bundle { //read the RSS feed using xml.rss.readService
+				xml.rss.readService (rssUrl, @services, "http://frontier.userland.com/howToUpdate?hash=" + string.hashmd5 (user.prefs.serialNumber), @storyArrivedCallback, true)}}};
+	bundle { //delete any updates that we already have
+		local (db, lastUpdate);
+		for db in databasesToUpdate { //get lowest update date -- lowest common denominator
+			try {
+				local (adrprefs = @user.rootUpdates.servers.[db]);
+				if typeOf (lastUpdate) == unknownType {
+					lastUpdate = date (adrprefs^.lastUpdate)}
+				else {
+					if date (adrprefs^.lastUpdate) < lastUpdate {
+						lastUpdate = date (adrprefs^.lastUpdate)}}}};
+		local (ctupdates = sizeOf (adrUpdatesTable^.pendingUpdates), i);
+		for i = ctupdates downto 1 { //delete updates before lastUpdate
+			local (adr = @adrUpdatesTable^.pendingUpdates[i]);
+			if date (adr^.data.pubDate) < lastUpdate {
+				delete (adr)}}};
+	return (sizeOf (adrUpdatesTable^.pendingUpdates))}
+
+

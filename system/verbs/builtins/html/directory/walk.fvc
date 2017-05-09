@@ -1,0 +1,271 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.directory.walk
+
+on walk (adrxstruct, path, adrcrumblist, adrlastxstruct, adrOpmlUrl, adrhtmltext, adratts) {
+	«Changes
+		«9/11/12; 5:36:19 PM by DW
+			«Change the way we test to see if we're looking at an outline node. The way we were doing it was very old, dating back over ten years, and it was seeing "htmlcache" as an outline node. Not good. Now we give a better error message when we fall off the tree during the walk.
+				«http://worknotes.scripting.com/september2012/91112ByDw/walkCleanup
+		«5/31/12; 11:46:29 AM by DW
+			«Support for callbacks.
+		«5/29/12; 3:47:05 PM by DW
+			«When computing the next and prev urls, we need to decode the headline of the thing we're pointing to. Also, if it has a name att, use that instead.
+		«5/28/12; 1:57:38 PM by DW
+			«Look for name attributes as we're doing the walk.
+				«http://worknotes.scripting.com/may2012/52812ByDw/finishInvariantNames
+		«5/20/12; 1:30:48 PM by DW
+			«Minor changes for new template structures.
+				«http://worknotes.scripting.com/may2012/52012ByDw/releasingParts
+		«4/24/12; 9:23:48 AM by DW
+			«Major rewrite. http://worknotes.scripting.com/april2012/42412ByDw/rewriteOfHtmldirectorywalk
+				«Also, removed adrrules parameter, and adrhtmltext and adratts are no longer optional. I want to remove the tests for adratts being nil. It never is. 
+		«4/23/12; 11:31:10 AM by DW
+			«That was too harsh. If the size of path is zero, it's okay to go straight in the open architecture node renderer.
+		«4/23/12; 11:20:07 AM by DW
+			«Commented the bundle at the top, that checks at the beginning of the walk if node has a type attribute and if so it passes it off to the node rendering code and returns. But what if there's a non-empty remaining path? 
+				«http://worknotes.scripting.com/april2012/42312ByDw/twoProblemsInOutlineRendering
+		«3/25/12; 10:28:45 AM by DW
+			«Fixed the long-standing inline outline nodetype problem. 
+				«http://worknotes.scripting.com/march2012/32512ByDw/inlineOutlineNodetypes/
+		«3/24/12; 1:35:35 PM by DW
+			«Set adratts^.remainingPath just before calling html.directory.viewNodetype, so it is available to outline rendering, for example.
+				«http://worknotes.scripting.com/march2012/32412ByDw/linksThatGoIntoOutlines/
+		«Thru 3/24/12
+			«3/12/12; 11:21:57 AM by DW
+				«Set the pointer to the parent to nil when we pass through a node with a domain attribute.
+					«http://worknotes.scripting.com/march2012/31212ByDw/problemOnPrevnextLinks
+			«3/11/12; 6:01:47 PM by DW
+				«New directory attribute points to the parent of the node we stopped on. Used in the Prev/Next macro.
+			«2/15/12; 3:02:33 PM by DW
+				«Comment code at the end that looks for rules at the final level. We aren't looking for rules here at all, and it's very old code and has an arcane way of walking the tree that trips hard over htmlCache nodes.
+			«2/10/12; 11:07:58 AM by DW
+				«Set pta^.code to 404 if we fell off the structure while taking the walk. 
+			«1/25/12; 1:19:54 PM by DW
+				«Set the pageTitle attribute.
+					«http://worknotes.scripting.com/january2012/12512ByDw/pagetitleInDefaultTemplate/
+			«1/25/12; 10:55:42 AM by DW
+				«If, during the walk, we encounter a node with a domain attribute equal to the host header on the request, add a pointer to the node in adratts^.adrDomainRoot.
+			«1/6/12; 9:42:14 AM by DW
+				«Updates to work with multiple roots.
+			«12/6/11; 8:07:09 PM by DW
+				«Updated with support for outline nodetypes.
+			«10/24/11; 6:33:31 PM by DW
+				«Support for the flMenuFromOutline attribute.
+			«7/31/11; 6:03:05 PM by DW
+				«A thumbList nodetype acts as an include if there's more to the path. See flemulateinclude, below.
+			«7/28/11; 1:23:03 PM by DW
+				«Allow attributes to be used inside raw HTML nodes. The usual <%syntax%> for referencing them.
+			«7/2/11; 10:36:21 AM by DW
+				«As we're doing the walk, accept an exact match with the linetext. This makes it possible to create a section of an outline that maps files that used to exist in an Apache directory to their own names. 
+			«7/1/11; 7:01:46 PM by DW
+				«Support for the new experimental "redirect" nodetype.
+			«6/27/11; 10:35:57 PM by DW
+				«Eliminated many parameter, part of the cleanup of html.directory.viewDirectory.
+			«6/25/11; 9:09:57 AM by DW
+				«Error messages are wrapped in a <div class="directoryErrorMessage"> element.
+			«6/20/11; 8:08:47 AM by DW
+				«Code cleanup, removed commented-out code.
+			«6/15/11; 3:45:00 PM by DW
+				«When there's an error displaying a node, show the error where the node would be displayed, instead of displaying a void.
+			«6/13/11; 9:25:54 AM by DW
+				«Fixed a bug where the URL of the current OPML file wasn't being set. This problem was introduced when I removed the lower-level cache on the 9th.
+			«6/11/11; 1:30:16 PM by DW
+				«Pass adratts to the getNodeText callbacks.
+			«6/9/11; 6:26:53 PM by DW
+				«First parameter changes from the address of an outline to the address of an xstruct.
+			«6/8/11; 12:30:24 PM by DW
+				«New support for stylesheet outline attribute.
+			«5/24/11; 11:34:57 AM by DW
+				«Some atts are cumulative, like styles. 
+					«If you attach an attribute to a node named styles, it is added at the end of the accumulated styles attribute, and the result is inserted inside <style></style> in the head section of the HTML for the page.
+			«5/20/11; 10:26:43 AM by DW
+				«Perhaps the beginning of a cool feature. As we do the walk, we accumulate attributes from the nodes we visit into a table, pointed to by adratts. The renderer can choose to pay attention to some or all of these values.
+			«5/6/11; 8:05:40 AM by DW
+				«Open architecture nodetypes! :-) If we don't support the nodetype natively, look in config.htmlDirectory.callbacks.getNodeText for a script with the name of the nodetype. If it's there, call it, and let it generate the node's text. Very hot. 
+			«5/4/11; 1:12:25 PM by DW
+				«New optional param, adrhtmltext. If non-nil the caller is ready to accept a node of type html. We return the raw HTML that's to be displayed. There's room for other html-generating nodetypes in the code.
+			«4/19/11; 3:49:11 AM by DW
+				«Support for OPML 2.0 "include" nodes.
+			«6/5/02; 4:19:22 PM by JES
+				«New optional parameter, adrInSiteInclusionCallback, is the address of a script which dives into an in-site inclusion -- a path-part which begins with the '~' character.
+			«11/6/2000; 12:48:20 PM by DW
+				«Created. adrdiscussiongroup and msgnum specify a message that contains an OPML document.
+				«path is a relative path into the document. We do the walk and return the address of the item it refers to, or scriptError if it doesn't exist.
+				«When looking, we only consider the first word of each item, so the path is made up of first words.
+			«11/16/2000; 7:41:36 AM by DW
+				«Added adrlastxstruct parameter. It points to the xstruct containing the last node in the walk. This is where we get the owner information, last modified, etc. It has to come from the walk.
+			«11/18/2000; 5:24:28 PM by DW
+				«Added adrrulestable parameter. When we return it contains a set of values, not unlike a paramtable, that controls the rendering of the directory.
+			«11/25/2000; 9:09:47 AM by DW
+				«Support cross-website inclusion. See call to manilasuite.directory.getInclusionFromCache.
+			«11/26/2000; 7:27:13 PM by DW
+				«Run off the directories table.
+			«11/29/2000; 5:31:38 PM by DW
+				«Initially, a hyphen was a special character, we'd truncate everything after the hyphen when constructing a URL. This makes it difficult to include hypens, so I took the rule out today.
+				«Fixed breakage reported by Brent. There was a missing call to manilaSuite.directory.initDirectoryTable when we traverse a squiggled link. As a result, adrdirectoryinfo pointed into the wrong table, so it's not surprising that it couldn't find what it was looking for.
+			«12/14/2000; 8:50:13 AM by DW
+				«Add a parameter, the address of the url of the OPML file containing the source for the page. It must be initialized to point to the Manila dg message containing the outline, if the walk goes into an included opml file, it changes the url accordingly.
+	local (adrdata = html.directory.init (), pta = html.getpagetableaddress (), origpath = path, nomad, adrnodeoutline = nil, pathforoutline = "");
+	on decode (s) { //5/29/12 by DW
+		return (xml.entityDecode (s, flAlphaEntities:true))};
+	adrlastxstruct^ = adrxstruct;
+	adratts^.adrdirectoryparent = nil;
+	bundle { //set nomad
+		nomad = xml.getaddress (adrxstruct, "opml");
+		nomad = xml.getaddress (nomad, "body")};
+	bundle { //callbacks -- 5/31/12 by DW
+		local (adrscript);
+		for adrscript in @adrdata^.callbacks.walk {
+			if defined (adrscript^) {
+				while typeof (adrscript^) == addresstype {
+					adrscript = adrscript^};
+				try {
+					if adrscript^ (nomad, path, adratts, adrhtmltext) { //one of the callbacks did the rendering
+						return (nomad)}}}}};
+	bundle { //if the body has a type att, use the open architecture rendering
+		if sizeof (path) == 0 {
+			adratts^.remainingPath = path;
+			if html.directory.viewNodetype (nomad, adratts, adrhtmltext) {
+				return (nomad)}}};
+	on addnodeatts (adrnode) { //5/20/11 by DW
+		local (adrnodeatts = @adrnode^.["/atts"]);
+		if defined (adrnodeatts^) {
+			local (adr, attname, attvalue);
+			for adr in adrnodeatts {
+				attname = nameof (adr^);
+				attvalue = decode (adr^);
+				case string.lower (attname) {
+					"styles" { //this is a cumulative value -- 5/24/11 by DW
+						scratchpad.attname = attname;
+						if defined (adratts^.styles) {
+							adratts^.styles = adratts^.styles + " " + attvalue}
+						else {
+							adratts^.styles = attvalue};
+						scratchpad.stylesval = adratts^.styles};
+					"stylesheet" { //6/8/11 by DW
+						local (s = "<link href=\"" + attvalue + "\" rel=\"stylesheet\" type=\"text/css\">\r");
+						if defined (adratts^.stylesheet) {
+							adratts^.stylesheet = adratts^.stylesheet + " " + s}
+						else {
+							adratts^.stylesheet = s}};
+					"flmenufromoutline" { //10/24/11 by DW
+						adratts^.flMenuFromOutline = attvalue;
+						adratts^.adrMenuNode = adrnode};
+					"domain" { //1/25/12 by DW
+						local (pta = html.getpagetableaddress ());
+						if defined (pta^.host) {
+							if string.lower (attvalue) == string.lower (pta^.host) {
+								adratts^.adrDomainRoot = adrnode;
+								adratts^.adrDirectoryParent = nil}}}} //3/12/12 by DW
+				else {
+					adratts^.[attname] = attvalue}}}};
+	while path != "" {
+		if path beginswith "/" {
+			path = string.delete (path, 1, 1)};
+		local (s = string.lower (string.nthfield (path, "/", 1)), adr, flfound = false);
+		path = string.delete (path, 1, sizeof (s));
+		for adr in nomad {
+			if nameof (adr^) endswith "outline" { //it's an outline -- 9/11/12 by DW
+				local (adrnomadatts = @adr^.["/atts"], flmatch = false, linetext, text);
+				bundle { //set flmatch, linetext, text -- 5/28/12 by DW
+					linetext = decode (adrnomadatts^.text);
+					text = string.lower (html.directory.getcanonicalname (linetext));
+					if defined (adrnomadatts^.name) and (string.lower (adrnomadatts^.name) == s) {
+						flmatch = true}
+					else {
+						if (text == s) or (string.lower (linetext) == s) {
+							flmatch = true}}};
+				if flmatch {
+					adratts^.adrdirectoryparent = nomad;
+					nomad = adr;
+					addnodeatts (nomad); //5/20/11 by DW
+					try {
+						if defined (nomad^.["/atts"].type) {
+							local (nodetype = nomad^.["/atts"].type);
+							on jumpthrough () {
+								local (url = nomad^.["/atts"].url, adrxstruct);
+								html.directory.getInclusionXstruct (url, @adrxstruct);
+								nomad = xml.getaddress (adrxstruct, "opml");
+								nomad = xml.getaddress (nomad, "body");
+								adrlastxstruct^ = adrxstruct;
+								adrOpmlUrl^ = url}; //12/14/2000 by DW
+							on viewnode () {
+								if adrhtmltext != nil { //caller ready to accept html-generating nodes
+									adratts^.remainingPath = path; //3/24/12 by DW
+									
+									
+									bundle { //set adratts^.breadcrumbs, 5/4/12 by DW
+										local (crumbstring = "");
+										if (sizeof (adrcrumblist^) != adratts^.ctsteps) and (pta^.directoryAtts.adrdirectoryparent != nil) {
+											crumbstring = "<div class=\"divBreadCrumbs\">" + html.directory.getBreadcrumbString (adrcrumblist^ + {linetext}, pta^.uri, true, adratts^.ctsteps, false) + "</div>"};
+										adratts^.breadcrumbs = crumbstring};
+									bundle { //next-prev, 3/11/12 by DW
+										adratts^.urlNext = "";
+										adratts^.urlPrev = "";
+										
+										if pta^.directoryAtts.adrdirectoryparent != nil {
+											local (adrp = parentof (nomad^), ix = indexof (nomad^), sizep = sizeof (adrp^), adrprev, adrnext, urlparent);
+											bundle { //set urlparent
+												local (url = pta^.uri);
+												if url endswith "/" {
+													url = string.mid (url, 1, sizeof (url) - 1)};
+												loop {
+													if (sizeof (url) == 0) or (url [sizeof (url)] == "/") {
+														break};
+													url = string.mid (url, 1, sizeof (url) - 1)};
+												urlparent = url};
+											on geturl (ix) {
+												local (adr);
+												if (ix < 1) or (ix > sizep) {
+													return ("")};
+												adr = @adrp^ [ix];
+												try {
+													local (adrmyatts = @adr^.["/atts"], name); //5/29/12 by DW
+													if defined (adrmyatts^.name) {
+														name = decode (adrmyatts^.name)}
+													else {
+														name = html.directory.getcanonicalname (decode (adrmyatts^.text))};
+													return (urlparent + name)}; //5/29/12 by DW
+												return ("")};
+											adratts^.urlPrev = geturl (ix - 1);
+											adratts^.urlNext = geturl (ix + 1)}};
+									
+									
+									html.directory.viewNodetype (nomad, adratts, adrhtmltext);
+									adrnodeoutline = nil}};
+							case nodetype {
+								"include" {
+									jumpthrough ()};
+								«"outline"
+									«adrnodeoutline = nomad
+									«pathforoutline = path
+									«jumpthrough ()
+								"outline"; //5/16/12 by DW -- remove exception for outline types
+								"index"; //5/11/12 by DW
+								"thumbList" {
+									if sizeof (path) > 0 {
+										jumpthrough ()}
+									else {
+										viewnode ()}}}
+							else {
+								viewnode ()}}};
+					flfound = true;
+					linetext = string.trimwhitespace (linetext);
+					adrcrumblist^ = adrcrumblist^ + {linetext};
+					adratts^.pageTitle = linetext; //1/25/12 by DW
+					break}}};
+		if not flfound {
+			local (pta = html.getpagetableaddress ());
+			pta^.code = 404; //2/10/12 by DW
+			scriptError ("Can't find the directory element because there is no item at \"" + origpath + "\". We lost the path here: \"" + s + "\".")}};
+	bundle { //special case for paths into outline, 12/6/11 by DW
+		if adrnodeoutline != nil {
+			worldOutlineSuite.viewOutlineCallback (adrnodeoutline, adratts, adrhtmltext, pathforoutline)}};
+	return (nomad)};
+bundle { //test code
+	local (crumblist, adrtoss, opmlUrl);
+	local (adroutline = @system.temp.windowTypes.windows.["0000001"].window);
+	local (path = "/directoriesAtUserland/radioUserland");
+	msg (walk (adroutline, "test", path, @crumblist, @adrtoss, @scratchpad.rules, @opmlUrl));
+	edit (@scratchpad.rules)}
+
+

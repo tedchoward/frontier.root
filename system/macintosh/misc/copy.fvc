@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.misc.copy
+
+on copy (appID) { «Copy an object to the clipboard
+	return (appleEvent (appID, 'misc', 'copy'))}
+
+

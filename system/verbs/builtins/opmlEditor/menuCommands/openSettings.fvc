@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.openSettings
+
+on openSettings () {
+	«Changes
+		«4/24/12; 5:27:13 PM by DW
+			«Created.
+	opmlEditor.init ();
+	webbrowser.openurl (opmlEditor.data.urls.settingsPage);
+	webbrowser.bringtofront ()}
+«bundle //test code
+	«openSettings ()
+
+

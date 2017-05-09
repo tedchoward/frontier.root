@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.getStatus
+
+on getStatus (id, adrtable) {
+	«Changes
+		«11/19/09; 2:20:10 PM by DW
+			«If the tweet had geo data, the table has a geo sub-table with latitude and longitude values.
+		«5/27/09; 8:13:14 PM by DW
+			«Created. Get the data for a single status.
+				«http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-statuses%C2%A0show
+	local (apiurl = "http://twitter.com/statuses/show/" + id + ".xml", xmltext, xstruct);
+	new (tabletype, adrtable);
+	xmltext = tcp.httpreadurl (apiurl);
+	xml.compile (xmltext, @xstruct);
+	«scratchpad.statusstruct = xstruct
+	local (adrstatus = xml.getaddress (@xstruct, "status"));
+	adrtable^.createdAt = twitter.getTwitterTime (xml.getvalue (adrstatus, "created_at"));
+	adrtable^.text = xml.getvalue (adrstatus, "text");
+	twitter.extractUserInfo (adrstatus, adrtable, false);
+	try { //11/19/09 by DW -- get geo sub-table, if geo data is present
+		local (geodata);
+		new (tabletype, @geodata);
+		twitter.getGeoData (adrstatus, @geodata);
+		adrtable^.geo = geodata}};
+bundle { //test code
+	getStatus ("5870356917", @scratchpad.status)}
+
+

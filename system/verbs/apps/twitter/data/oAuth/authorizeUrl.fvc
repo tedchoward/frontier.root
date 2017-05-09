@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.apps.twitter.data.oAuth.authorizeUrl
+
+http://api.twitter.com/oauth/authorize
+
+

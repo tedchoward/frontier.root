@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.init
+
+
+«This script must be run to complete the installation of Regex.
+
+bundle { // delete 1.x versions of Regex in root.suites
+	local (adrTable = @root.suites.regex);
+	if defined (adrTable^) {
+		delete (adrTable)}};
+
+bundle { // delete old (beta) startup script if present
+	local (adrScript = @user.callbacks.startup.initRegex);
+	if defined (adrScript^) {
+		delete (adrScript)}};
+
+bundle { // install new startup script if needed
+	local (adrScript = @user.callbacks.startup.installRegexDLL);
+	if not defined (adrScript^) {
+		new (scriptType, adrScript);
+		local (oldTarget = target.set (adrScript));
+		op.setLineText ("regex.data.installDLL ()");
+		script.compile (adrScript);
+		try { target.set (oldTarget) }}};
+
+regex.data.installDLL ();
+
+return (regex.data.dllpath)
+
+

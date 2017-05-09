@@ -1,0 +1,68 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.buildRss
+
+on buildRss (adrchanges) {
+	«Changes
+		«9/19/11; 9:01:17 PM by DW
+			«rootdomain comes from the user's server-side prefs.
+		«7/19/11; 11:42:51 AM by DW
+			«Add a cloud element for realtime updates.
+		«7/17/11; 2:23:23 PM by DW
+			«The feed is formed from the blogpost type nodes posted to the outline. May later extend it to other document types, such as howto and html.
+	local (timetable, xmltext, now = clock.now (), rootdomain = user.opmlEditor.worldOutline.stats.userPrefs.domain, maxitems = 30, ctitems = 0);
+	opmlEditor.worldOutline.init ();
+	bundle { //fill timetable
+		new (tabletype, @timetable);
+		for adr in adrchanges {
+			timetable.[nameof (adr^)] = date (adr^.atts.created)};
+		local (oldtarget = target.set (@timetable));
+		table.sortby ("Value");
+		target.set (oldtarget)};
+		«scratchpad.timetable = timetable
+	bundle { //build feed xmltext
+		local (indentlevel = 0);
+		on add (s, flskipifempty=false) {
+			xmltext = xmltext + string.filledstring ("\t", indentlevel) + s + "\r"};
+		on encode (s) {
+			if system.environment.isMac {
+				return (xml.entityEncode (latinToMac.macToLatin (s), true))}
+			else {
+				return (xml.entityEncode (s, true))}};
+		add ("<?xml version=\"1.0\"?>");
+		add ("<rss version=\"2.0\">"); indentlevel++;
+		add ("<channel>"); indentlevel++;
+		bundle { //add header elements
+			add ("<title>" + encode ("Feed for " + string.upper (user.opmlEditor.worldOutline.prefs.username) + "'s World Outline") + "</title>");
+			add ("<link>http://" + rootdomain + "/</link>");
+			add ("<description>The newest blogopost and howto nodes posted to the root outline of " + rootdomain + ".</description>");
+			add ("<language>en-us</language>");
+			add ("<pubDate>" + date.netstandardstring (now)  + "</pubDate>");
+			add ("<lastBuildDate>" + date.netstandardstring (now)  + "</lastBuildDate>");
+			add ("<generator>" + frontier.getprogramname () + "</generator>");
+			add ("<docs>http://cyber.law.harvard.edu/rss/rss.html</docs>"); //3/12/11 by DW
+			bundle { //add cloud, 7/19/11 by DW
+				with user.opmlEditor.worldOutline.prefs.cloud {
+					add ("<cloud domain=\"" + server + "\" port=\"" + port + "\" path=\"" + path + "\" registerProcedure=\"" + registerProcedure + "\" protocol=\"" + protocol + "\" />")}}};
+		bundle { //add items
+			local (ix, adritem);
+			for ix = sizeof (timetable) downto 1 {
+				if ctitems++ >= maxitems {
+					break};
+				adritem = @adrchanges^.[nameof (timetable [ix])];
+				add ("<item>"); indentlevel++;
+				add ("<title>" + encode (adritem^.atts.text) + "</title>");
+				add ("<link>" + encode (adritem^.url) + "</link>");
+				add ("<guid>" + encode (adritem^.url) + "</guid>");
+				add ("<description>" + encode (adritem^.firstSubText) + "</description>");
+				bundle { //pubDate
+					if defined (adritem^.atts.pubDate) {
+						add ("<pubDate>" + adritem^.atts.pubDate + "</pubDate>")}
+					else {
+						add ("<pubDate>" + adritem^.atts.created + "</pubDate>")}};
+				add ("</item>"); indentlevel--}};
+		add ("</channel>"); indentlevel--;
+		add ("</rss>"); indentlevel--;
+		return (xmltext)}};
+bundle { //test code
+	wp.newtextobject (buildRss (@scratchpad.changes), @scratchpad.rsstext)}
+
+

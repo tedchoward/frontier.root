@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.split
+
+local (s = "<title>test</title>\r<body>\rtest body\r</body>");
+dialog.notify (regex.split ("<[^>]*>", @s));
+dialog.notify (regex.split ("(<[^>]*>)", @s))
+
+

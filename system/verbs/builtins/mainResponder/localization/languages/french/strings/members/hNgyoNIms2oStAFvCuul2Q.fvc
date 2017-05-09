@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.french.strings.members.checkMembershipWrongEmailAddress
+
+Impossible de vous envoyer le cookie correspondant &agrave; [[mailaddress]] car il n'y a pas de compte correspondant &agrave; cette adresse de courriel.
+
+

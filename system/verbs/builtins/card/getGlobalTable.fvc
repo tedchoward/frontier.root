@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.getGlobalTable
+
+on getGlobalTable () {
+	return (system.misc.paths.cardPath)}
+
+

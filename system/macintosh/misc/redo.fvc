@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.misc.redo
+
+on redo (appID) { «Reverse the action of the immediately preceeding undo
+	return (appleEvent (appID, 'misc', 'redo'))}
+
+

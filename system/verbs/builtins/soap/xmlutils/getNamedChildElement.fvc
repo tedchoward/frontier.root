@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.xmlutils.getNamedChildElement
+
+on getNamedChildElement (adrelement, localpart) {
+	if (typeOf (adrelement^) != tableType) {
+		return (false)};
+	try {
+		return (xml.getAddress (adrelement, localpart))};
+	return (false)}
+
+

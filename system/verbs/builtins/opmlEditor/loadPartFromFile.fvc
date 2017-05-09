@@ -1,0 +1,59 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.loadPartFromFile
+
+on loadPartFromFile (f) {
+	«Changes
+		«5/27/12; 12:48:12 PM by DW
+			«Back up the part before updating in a calendar-structured folder.
+		«9/21/10; 9:55:19 AM by DW
+			«Use string processing to get rid of the file part of the address. The problem is the file might not exist on the machine the part is being loaded on and string.popfilefromaddress won't work in that context. Have to fall back to strings.
+		«9/21/10; 9:31:46 AM by DW
+			«Fix a minor coding error.
+		«9/21/10; 9:13:42 AM by DW
+			«A missing routine in the export builtins table, but rather than screw with such ancient code that so much is built on, let's start fresh here.
+				«The diff is that we do two things that its loader doesn't:
+				«1. table.surepath
+				«2. string.popfilefromaddress
+				«This means we can import into tables that don't exist and do it in guest databases as well.
+	local (startticks = clock.ticks (), bits = string (file.readwholefile (f)), atts, now = clock.now ());
+	bits = string.replaceAll (bits, cr + lf, cr);
+	bits = string.replaceAll (bits, lf, cr);
+	if fatPages.getPageAtts (@bits, @atts) {
+		if defined (atts.pageData) {
+			local (x = atts.objectType, objectType);
+			local (prefix = "application/x-frontier-");
+			if x beginsWith prefix {
+				objectType = string.delete (x, 1, sizeof (prefix));
+				local (data = binary (base64.decode (atts.pageData)));
+				setBinaryType (@data, objectType);
+				bundle { //get rid of file part of address
+					local (ix = string.patternmatch ("\"].", atts.adrPageData));
+					if ix != 0 {
+						atts.adrPageData = string.delete (atts.adrPageData, 1, ix + 2)}};
+				«atts.adrPageData = string.popfilefromaddress (atts.adrPageData)
+				
+				bundle { //back up the part first, 5/27/12 by DW
+					local (adr = address (atts.adrPageData));
+					if defined (adr^) {
+						local (suffix = Frontier.getFileSuffix (typeof (adr^), true), adrparent = parentof (adr^));
+						if sizeof (suffix) > 0 {
+							suffix = "." + suffix};
+						local (fname = nameof (adr^) + "." + user.opmlEditor.stats.partBackupSerialnum++);
+						if adrParent != nil {
+							if (not table.inguestdatabase (adr)) or (adrparent != table.getrootaddress (adr)) {
+								local (dottedname = nameOf (adrParent^) + '.' + fname);
+								if (sizeof (dottedname) + sizeof (suffix) + 1) < (32 - sizeof (suffix)) {
+									fname = dottedname}}};
+						local (f = user.opmlEditor.prefs.partsFolder + "archive" + file.getpathchar () + file.getdatepath () + fname + suffix);
+						file.surefilepath (f);
+						export.sendobject (adr, f);
+						user.opmlEditor.stats.whenLastPartBackup = now}};
+				
+				table.surePath (string (atts.adrPageData));
+				unpack (@data, atts.adrPageData);
+				bundle { //log it
+					local (htmltext = "Loaded part \"" + atts.adrPageData + ".\" Size = " + sizeof (data) + " bytes.");
+					log2.add ("OPML Editor", "Load", htmltext, startticks)}}}}};
+bundle { //test code
+	loadPartFromFile ("Macintosh HD:test2.ftsc")}
+
+

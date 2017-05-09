@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.getAs
+
+on getAs (obj, as) { «Get the data for an object
+	return (core.getAs (Fetch.id, obj, as))}
+
+

@@ -1,0 +1,62 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.viewDomains
+
+on viewDomains () {
+	«Changes
+		«5/5/12; 10:24:42 AM by DW
+			«Lowercase the domain names.
+		«5/4/12; 8:46:03 AM by DW
+			«Show domains with errors in red.
+		«3/19/12; 1:18:12 PM by DW
+			«Added classes so we could fix alignment errors in the template.
+		«2/16/12; 11:49:53 AM by DW
+			«Created.
+	local (adrdata = frontier.opendatafile ("domainStats", defined (system.temp.opmlEditor.stats.flStatsFileOpen)));
+	local (adrrankings = @adrdata^.today.rankings, sortedrankings, i, adr, domain);
+	
+	bundle { //build sortedrankings
+		local (oldtarget);
+		sortedrankings = adrrankings^;
+		oldtarget = target.set (@sortedrankings);
+		table.sortby ("Value");
+		target.set (oldtarget)};
+	
+	system.temp.opmlEditor.stats.flStatsFileOpen = true;
+	local (htmltext = "", indentlevel = 0);
+	on add (s) {
+		htmltext = htmltext + (string.filledstring ("\t", indentlevel) + s + "\r");};
+	
+	add (string (opmlEditor.data.outlines.domainsIntro));
+	add ("<div class=\"divDomainsPage\">"); indentlevel++;
+	add ("<table class=\"" + webApp.data.tableClass + " domainTable\">"); indentlevel++;
+	bundle { //column headers
+		add ("<thead>"); indentlevel++;
+		add ("<tr>"); indentlevel++;
+		add ("<th class=\"domainName\">Domain</th>");
+		add ("<th class=\"domainHits\">Today</th>");
+		add ("<th class=\"domainHits\">All-time</th>");
+		add ("</tr>"); indentlevel--;
+		add ("</thead>"); indentlevel--};
+	for i = sizeof (sortedrankings) downto 1 {
+		add ("<tr>"); indentlevel++;
+		adr = @sortedrankings [i];
+		domain = string.lower (nameof (adr^)); //5/5/12 by DW
+		bundle { //domain name column, 5/3/12 by DW
+			local (errorclass = "");
+			if defined (system.temp.mainresponder.hostsNotFound.[domain]) {
+				errorclass = " class=\"domainError\""};
+			add ("<td class=\"domainName\"><a" + errorclass + " href=\"http://" + domain + "/\">" + domain + "</a></td>")};
+		add ("<td class=\"domainHits\">" + string.addcommas (adr^) + "</td>");
+		add ("<td class=\"domainHits\">" + string.addcommas (adrdata^.domains.[domain].stats.ctHitsAllTime) + "</td>");
+		bundle { //urls/referrers links
+			local (link1 = "<a href=\"statsUrls?domain=" + domain + "\">U</a>");
+			local (link2 = "<a href=\"statsReferrers?domain=" + domain + "\">R</a>");
+			add ("<td class=\"domainLink\">" + link1 + "&nbsp;&nbsp;" + link2 + "</td>")};
+		add ("</tr>"); indentlevel--};
+	add ("</table>"); indentlevel--;
+	add ("</div>"); indentlevel--;
+	
+	return (htmltext)};
+bundle { //test code
+	viewDomains ()}
+
+

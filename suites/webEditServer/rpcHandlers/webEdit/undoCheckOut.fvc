@@ -1,0 +1,30 @@
+FrontierVcsFile:3:scpt:suites.webEditServer.rpcHandlers.webEdit.undoCheckOut
+
+on undoCheckOut (userName, password, adrObject) {
+	«Undo a checkout.
+	
+	local (adrCallback = @user.webEditServer.callbacks.undoCheckOut);
+	local (adrPreCallback = @user.webEditServer.callbacks.preUndoCheckOut);
+	local (now = clock.now ());
+	
+	if not (people.authenticateUser (userName, password, "WebEdit")) {
+		scriptError ("Can't check in " + adrObject + " because an invalid username or password was supplied.")};
+	
+	adrObject = webEditServer.fixGuestDbAdr (adrObject);
+	
+	«Make sure the object is checked out by this user.
+		«You can only delete objects you've checked out.
+	if not (custody.isCheckedOutByUser (adrObject, userName)) {
+		return ("Can't undo check-out for " + adrObject + " because " + userName + " has not checked it out.")};
+	
+	webEditServer.callbackLoop (adrPreCallback, adrObject, userName, now, "");
+	
+	custody.undoCheckOut (userName, password, string (address (adrObject)));
+	
+	webEditServer.callbackLoop (adrCallback, adrObject, userName, now, "");
+	
+	filemenu.saveMyRoot (adrobject);
+	
+	return (adrObject + "'s check-out has been undone.")}
+
+

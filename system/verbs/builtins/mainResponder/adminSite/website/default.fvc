@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.adminSite.website.default
+
+on default () {
+	«Changes
+		«6/6/02; 12:05:18 PM by JES
+			«Created.
+	local (pta = html.getPageTableAddress ());
+	pta^.title = "Sites on this server";
+	
+	local (htmltext = "", indentlevel = 0);
+	on add (s) {
+		htmltext = htmltext + (string.filledString ("\t", indentlevel) + s + "\r\n");};
+	
+	if defined (pta^.searchArgTable.site) { //manage one site
+		local (adrcache = mainResponder.adminSite.macros.initSiteListCache ());
+		local (adrinfo = @adrcache^.sites.[pta^.searchArgTable.site]);
+		add (mainResponder.adminSite.macros.manageSite (adrinfo))}
+	else { //list sites
+		table.assign (@pta^.template, string (pta^.homeTemplate^));
+		add (mainresponder.adminSite.macros.listSites ())};
+	
+	return (htmltext)}
+
+

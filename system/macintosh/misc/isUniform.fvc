@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.misc.isUniform
+
+on isUniform (appID, obj, prop) { «Is the value of the specified property the same for all objects in the set?
+	return (appleEvent (appID, 'misc', 'isun', '----', objspec (obj), 'kprp', string4 (prop)))}
+
+

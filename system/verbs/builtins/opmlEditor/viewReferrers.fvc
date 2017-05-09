@@ -1,0 +1,56 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.viewReferrers
+
+on viewReferrers (domain) {
+	«Changes
+		«6/15/12; 2:40:59 PM by DW
+			«Keep the length of the display for the referers reasonable so the table doesn't get too wide.
+		«3/27/12; 1:07:46 PM by DW
+			«Wrap the table in a div so the styles are properly attached to it.
+		«2/16/12; 3:22:49 PM by DW
+			«Created.
+	local (adrdata = frontier.opendatafile ("domainStats", defined (system.temp.opmlEditor.stats.flStatsFileOpen)));
+	local (adrdomain = @adrdata^.domains.[domain], now = clock.now ());
+	local (adrtoday = mainresponder.calendar.getdayaddress (@adrdomain^.calendar, now));
+	local (sortedrankings, i, adr, referrer, reffordisplay, maxreferrerlength = 80);
+	
+	bundle { //build sortedrankings
+		local (oldtarget);
+		sortedrankings = adrtoday^.referrers;
+		oldtarget = target.set (@sortedrankings);
+		table.sortby ("Value");
+		target.set (oldtarget)};
+	
+	system.temp.opmlEditor.stats.flStatsFileOpen = true;
+	local (htmltext = "", indentlevel = 0);
+	on add (s) {
+		htmltext = htmltext + (string.filledstring ("\t", indentlevel) + s + "\r");};
+	
+	add (string (opmlEditor.data.outlines.domainsIntro));
+	add ("<div class=\"divDomainsPage\">"); indentlevel++; //3/27/12 by DW
+	add ("<table class=\"" + webApp.data.tableClass + " domainTable\">"); indentlevel++;
+	bundle { //column headers
+		add ("<thead>"); indentlevel++;
+		add ("<tr>"); indentlevel++;
+		add ("<th class=\"domainName\">Referrer</th>");
+		add ("<th class=\"domainHits\">Hits</th>");
+		add ("</tr>"); indentlevel--;
+		add ("</thead>"); indentlevel--};
+	for i = sizeof (sortedrankings) downto 1 {
+		add ("<tr>"); indentlevel++;
+		adr = @sortedrankings [i];
+		referrer = nameof (adr^);
+		bundle { //set reffordisplay, 6/15/12 by DW
+			reffordisplay = referrer;
+			if sizeof (reffordisplay) > maxreferrerlength {
+				reffordisplay = string.mid (reffordisplay, 1, maxreferrerlength) + "..."}};
+		add ("<td class=\"domainName\"><a href=\"" + referrer + "\">" + reffordisplay + "</a></td>");
+		add ("<td class=\"domainHits\">" + adr^ + "</td>");
+		add ("</tr>"); indentlevel--};
+	add ("</table>"); indentlevel--;
+	add ("</div>"); indentlevel--;
+	
+	return (htmltext)};
+bundle { //test code
+	viewReferrers ()}
+
+

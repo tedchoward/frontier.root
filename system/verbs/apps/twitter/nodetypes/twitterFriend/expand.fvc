@@ -1,0 +1,32 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.nodetypes.twitterFriend.expand
+
+«Changes
+	«4/29/07; 9:00:06 AM by DW
+		«If there's no link, don't make it a link node.
+local (dir = right, i, s, url, lenurl, atts);
+new (tabletype, @atts);
+atts.type = "link";
+twitter.getusertimeline (op.getlinetext (), @timeline);
+op.deletesubs ();
+for i = sizeof (timeline) downto 1 {
+	adritem = @timeline [i];
+	s = adritem^.text;
+	url = "";
+	ix = string.patternmatch ("http://", string.lower (s));
+	if ix > 0 {
+		lenurl = sizeof (s) - ix + 1;
+		url = string.mid (s, ix, lenurl);
+		s = string.delete (s, ix, lenurl);
+		if sizeof (s) == 0 { //url must have been at beginning
+			s = adritem^.text}};
+	s = string.trimwhitespace (s);
+	op.insert (s, dir); dir = down;
+	if sizeof (url) > 0 { //4/29/07 by DW
+		atts.url = url;
+		op.attributes.addgroup (@atts)}};
+	«msg (adritem^.text)
+op.go (left, 1);
+msg ("");
+return (true)
+
+

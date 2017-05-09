@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.windowTypes.openWindow
+
+on openWindow (adrWindow) {
+	«8/10/01; 6:54:12 PM by JES
+		«Opens a closed or hidden windowType window, setting its title, and read-only status according to windowType attributes.
+	local (flReadOnly = false, windowTitle = nil);
+	window.attributes.getOne ("flReadOnly", @flReadOnly, adrWindow);
+	window.attributes.getOne ("title", @windowTitle, adrWindow);
+	edit (adrWindow, windowTitle, flReadOnly)}
+
+

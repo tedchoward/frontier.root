@@ -1,0 +1,7 @@
+FrontierVcsFile:3:wptx:websites.samples.bitOfText
+
+<!-- This text is used in one of the test pages. -->
+
+{states.nthState (25)} "Netscape" http://www.scripting.com/ hello world!
+
+

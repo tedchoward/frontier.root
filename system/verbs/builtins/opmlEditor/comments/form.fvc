@@ -1,0 +1,23 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.opmlEditor.comments.form
+
+<style>
+	.divOpmlComments {
+		padding-top: 30px;
+		}
+	.commentbutton {
+		font-family: Arial;
+		font-size: 15px;
+		}
+	</style>
+<div class="divOpmlComments">
+	<form action="http://127.0.0.1:5337/opmlEditor/comments/open">
+		<%hiddenfields%>
+		<button class="commentButton btn btn-success" type="submit">
+			<i class="icon-star-empty icon-white" style="margin-right: 7px;"></i>
+			OPML
+			</button>
+		</form>
+	</div>
+
+
+

@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.getCardBackColor
+
+on getCardBackColor () {
+	local (atts);
+	if not cardEditor.getCardAttributes (@atts) {
+		return ("")};
+	return (atts.bakc)}
+
+

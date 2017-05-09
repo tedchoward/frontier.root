@@ -1,0 +1,43 @@
+FrontierVcsFile:3:optx:suites.people.webAdmin.["#template"]
+
+{pageheader ("Web Admin: People: " + title)}
+<table border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td width=100 align=left valign=top> <!-- Navbar control row -->
+			&nbsp;<br>
+			{spacePixels (100)}<br>
+			&nbsp;<a href="http://www.scripting.com/frontier5/">{imageRef ("frontierAdmin")}</a>
+		</td>
+		<td width=40> <!-- Gutter control row -->
+			{spacePixels (40)}
+		</td>
+		<td align=left valign=top>
+			<b>Web Admin: People</b>
+			<hr noshade size=1>
+			<h2>{title}</h2>
+		</td>
+	</tr>
+	<tr>
+		<td valign=top align=left width=100>
+			<b>
+			{peopleNavbar ()}
+			</b>
+		</td>
+		<td width=40> <!-- Gutter -->
+			&nbsp;
+		</td>
+		<td valign=top align=left> <!-- Content -->
+			{spacePixels (300)}<br>
+			{bodytext}
+			<p>
+			<hr noshade size=1>
+			<font size=-1 face="Arial, Verdana, Geneva">
+				© Copyright 1998 UserLand Software, Inc. All Rights Reserved.
+			</font>
+		</td>
+	</tr>
+</table>
+{pagefooter ()}
+
+
+

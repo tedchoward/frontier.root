@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.buttons.workspace.["00002000\tBlorkmark"]
+
+«Changes
+	«6/7/11; 8:58:16 AM by DW
+		«Created. 
+thread.callscript (@opmlEditor.worldOutline.markHeadline, {})
+
+

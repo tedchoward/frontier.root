@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Finder.delete
+
+on delete (obj) { «Delete an element from an object
+	return (appleEvent (Finder.id, 'core', 'delo', '----', Finder.finderSpec (obj)))}
+
+

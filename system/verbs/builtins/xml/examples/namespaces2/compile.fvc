@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.examples.namespaces2.compile
+
+with xml.examples.namespaces2 {
+	xml.compile (string (taggedtext), @scratchpad.tableStructure);
+	edit (@scratchpad.tableStructure)}
+
+

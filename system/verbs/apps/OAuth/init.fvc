@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.OAuth.init
+
+on init () {
+	«Changes
+		«2/12/09; 1:59:00 PM by DW
+			«Created. 
+	local (adrconfig = @config.oauth);
+	if not defined (adrconfig^) {
+		new (tabletype, adrconfig)};
+	if not defined (adrconfig^.apps) {
+		new (tabletype, @adrconfig^.apps)};
+	if not defined (adrconfig^.prefs) {
+		new (tabletype, @adrconfig^.prefs)};
+	if not defined (adrconfig^.stats) {
+		new (tabletype, @adrconfig^.stats)};
+	return (adrconfig)};
+bundle { //test code
+	init ()}
+
+

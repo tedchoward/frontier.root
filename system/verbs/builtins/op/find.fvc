@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.find
+
+on find (searchstring, wholewords=user.prefs.search.wholewords, casesensitive=user.prefs.search.casesensitive) {
+	kernel (op.find)}
+
+

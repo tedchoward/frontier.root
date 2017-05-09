@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.danish.strings.news.cantEditNonexistantStory
+
+Can't edit the story because there is no story at [[pathToStory]].
+
+

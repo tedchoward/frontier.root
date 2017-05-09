@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.search.utilities.assureIndex
+
+on assureIndex (indexName=nil) {
+	local (indexPath = mainResponder.search.utilities.getIndexPath (indexName));
+	if defined ([indexPath]) { //is Index.root already open?
+		return (true)};
+	if file.exists (indexPath) { //does Index.root exist?
+		fileMenu.open (indexPath, true); //it does, open it
+		return (true)};
+	
+	«Create a new Index.root.
+	fileMenu.new (indexPath);
+	window.hide (@[indexPath]);
+	new (tableType, @[indexPath].pageInfo);
+	new (tableType, @[indexPath].index);
+	fileMenu.save (indexPath);
+	return (true)}
+
+

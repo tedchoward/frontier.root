@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.test.attr
+
+on attr (x) { «return the request attribute of the event we're handling
+	return (getEventAttribute (x))}
+
+

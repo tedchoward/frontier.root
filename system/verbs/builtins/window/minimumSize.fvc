@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.window.minimumSize
+
+on minimumSize (adrwindow, hmin, vmin) {
+	«Changes
+		«7/5/10; 10:07:23 AM by DW
+			«Enforce a minimum size for the window.
+	local (h, v);
+	window.getsize (adrwindow, @h, @v);
+	if h < hmin {
+		h = hmin};
+	if v < vmin {
+		v = vmin};
+	window.setsize (adrwindow, h, v)}
+«bundle //test code
+	«minimumSize (@system.temp.scripting2.editor.blogroll.outline, 500, 400)
+
+

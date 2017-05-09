@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.netEvents.closeStream
+
+on closeStream (stream) { «Close a stream and delete the table representing it.
+	if defined (user.netEvents.listens.[stream]) {
+		delete (@user.netEvents.listens.[stream])};
+	return (appleEvent (netEvents.id, 'WAPI', 'CLOS',  '----', long (stream)))}
+
+

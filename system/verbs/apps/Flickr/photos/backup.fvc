@@ -1,0 +1,55 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.photos.backup
+
+on backup (id, folder) {
+	«Changes
+		«11/23/07; 7:04:57 PM by DW
+			«Return the sub-folder we create, used in the logging code.
+		«11/23/07; 6:23:05 PM by DW
+			«Minor cleanup, eliminate some old debugging code.
+		«11/7/07; 6:59:26 PM by DW
+			«Amazingly, sometimes Flickr doesn't give us the "original" picture in the getSizes call, so I went back to downloading all the sizes they give us. I can't imagine why they aren't giving us the original, we could get it by scraping. Oy.
+		«11/7/07; 6:34:06 PM by DW
+			«Sometimes Flickr doesn't return the originalformat attribute. Instead of getting the file extension there, we get it from the extension of the file we download.
+		«11/5/07; 10:20:50 AM by DW
+			«Only download the Original size, not all the shrunken and squeezed versions.
+		«11/5/07; 9:04:40 AM by DW
+			«Instead of writing an fttb file, which would only be readable by Frontier and its derivatives, convert it to XML, in a format that could be read in any language. 
+		«8/22/07; 9:03:27 PM by DW
+			«Minor tweaks & fixes.
+		«8/22/07; 8:33:55 PM by DW
+			«Created.
+				«http://www.flickr.com/services/api/flickr.photos.getInfo.html
+	local (photoinfo, sizes);
+	Flickr.photos.getInfo (id, nil, @photoinfo);
+	Flickr.photos.getSizes (id, @sizes);
+	local (whenCreated = photoinfo.dates.taken);
+	bundle { //find folder, by date
+		local (day, month, year, hour, minute, second, pc = file.getpathchar ());
+		date.get (whenCreated, @day, @month, @year, @hour, @minute, @second);
+		on pad (num) {
+			return (string.padwithzeros (num, 2))};
+		local (fname = photoinfo.title);
+		if sizeof (fname) > 31 {
+			fname = string.mid (fname, 1, 31)};
+		folder = folder + year + pc + pad (month) + pc + pad (day) + pc + fname + pc};
+	local (f = folder + "metadata.xml");
+	file.surefilepath (f);
+	file.writewholefile (f, table.tabletoxml (@photoinfo));
+	for adrsize in @sizes {
+		local (ext = string.lastfield (adrsize^.source, "."));
+		f = folder + nameof (adrsize^) + "." + ext;
+		if not file.exists (f) {
+			«msg (f)
+			file.writewholefile (f, tcp.httpreadurl (adrsize^.source, flMessages:false));
+			file.setcreated (f, whenCreated);
+			file.setmodified (f, whenCreated)}};
+	file.setcreated (folder, whenCreated);
+	file.setmodified (folder, whenCreated);
+	return (folder)}
+«bundle //test code
+	«local (folder = "Macintosh HD:Don't Back Up:Flickr backup:", adr)
+	«window.about ()
+	«for adr in @scratchpad.photosrecent
+		«backup (adr^.id, folder)
+
+

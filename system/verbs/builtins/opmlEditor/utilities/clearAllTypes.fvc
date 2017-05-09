@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.utilities.clearAllTypes
+
+on clearAllTypes () {
+	«Changes
+		«7/23/12; 5:25:54 PM by DW
+			«A utility script to remove the types on all headlines subordinate to the cursor headline, at all levels. 
+				«http://worknotes.scripting.com/july2012/72312ByDw/clearAllTypesBelowHere
+	on dolevel () {
+		op.expand (1);
+		if op.go (right, 1) {
+			loop {
+				op.attributes.deleteone ("type");
+				op.attributes.deleteone ("name");
+				clock.waitsixtieths (3);
+				dolevel ();
+				if not op.go (down, 1) {
+					break}};
+			op.go (left, 1)}};
+	dolevel ()};
+bundle { //test code
+	clearAllTypes ()}
+
+

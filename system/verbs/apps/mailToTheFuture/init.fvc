@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.mailToTheFuture.init
+
+if not defined (user.mailToTheFuture) {
+	new (tabletype, @user.mailToTheFuture)};
+if not defined (user.mailToTheFuture.username) {
+	user.mailToTheFuture.username = user.prefs.mailaddress};
+if not defined (user.mailToTheFuture.password) {
+	user.mailToTheFuture.password = ""}
+
+

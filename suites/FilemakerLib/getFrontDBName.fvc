@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:suites.FilemakerLib.getFrontDBName
+
+on getFrontDBName (reportError = false) {
+	on doIt () {
+		with objectModel, filemaker {
+			return (get (database [1].name))}};
+	if reportError {
+		return (doIt ())}
+	else {
+		try {
+			return (doIt ())}
+		else {
+			return (false)}}}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.unmountVolume
+
+on unmountVolume (path) {
+	kernel (file.unmountVolume)}
+
+

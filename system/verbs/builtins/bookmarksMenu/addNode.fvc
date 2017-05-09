@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.bookmarksMenu.addNode
+
+local (adrmenu = bookmarksMenu.init ());
+local (adr = table.getCursorAddress ());
+
+local (logic, title);
+
+bundle { // if the nodeType defines a getBookmarkLogic script, use that
+	local (adrNodeType);
+	if Frontier.tools.nodeTypes.findNodeType (adradrtable: @adrNodeType) {
+		if defined (adrNodeType^.getBookmarkLogic) {
+			adrNodeType^.getBookmarkLogic (@logic, @title);
+			return (bookmarksMenu.addBookmark (@logic, @title))}}};
+bundle { // if there's a builtin script for the nodeType at builtinNodeTypes.nodeTypes.[type], use that
+	local (type);
+	if op.attributes.getOne ("type", @type) {
+		if defined (bookmarksMenu.builtinNodeTypes.nodeTypes.[type]) {
+			bookmarksMenu.builtinNodeTypes.nodeTypes.[type] (@logic, @title);
+			return (bookmarksMenu.addBookmark (@logic, @title))}}};
+bundle { // if the node has a URL attribute, bookmark the URL
+	local (url);
+	if op.attributes.getOne ("url", @url) {
+		logic = "bookmarksMenu.openUrl (\"" + url + "\", \"<<title>>\")";
+		title = op.getlinetext ();
+		return (bookmarksMenu.addBookmark (@logic, @title))}}
+
+

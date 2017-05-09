@@ -1,0 +1,49 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.updateUser
+
+on updateUser (adrupdate) {
+	«Changes
+		«5/9/11; 7:25:09 PM by DW
+			«Call the callback routines. They receive the address of the user's table who updated.
+		«5/9/11; 4:22:30 PM by DW
+			«Comment debugging code.
+		«8/21/10; 5:11:04 PM by DW
+			«Toss my outline if the update came from another computer. When I receive a new outline, if it's from me, if I have an outline window open, if the two outlines are not identical, toss the local copy of the outline. 
+		«7/15/10; 10:55:55 AM by DW
+			«Created. 
+	local (adrdata = io.init ());
+	local (username = adrupdate^.username, startticks = clock.ticks ());
+	local (adruser = io.client.initUser (username));
+	op.xmltooutline (adrupdate^.data, @adruser^.outline);
+	bundle { //op.xmltooutline leaves the window open
+		if window.isopen (@adruser^.outline) { //7/5/10 by DW
+			window.close (@adruser^.outline)}};
+	adruser^.stats.ctTicksOutlineCompile = clock.ticks () - startticks;
+	adruser^.stats.whenLastUpdate = clock.now ();
+	adruser^.stats.ctUpdates++;
+	adruser^.stats.flDirty = true;
+	io.client.boldenBuddy (username);
+	bundle { //toss my outline if the update came from another computer, 8/21/10 by DW
+		if username == adrdata^.client.prefs.username { //it's my outline that's updating
+			if defined (system.temp.io.myOutline) { //my outline window is open
+				local (fldelete = false);
+				if defined (system.temp.io.myOpml) {
+					if adrupdate^.data != system.temp.io.myOpml { //the update came from another computer
+						fldelete = true};
+					delete (@system.temp.io.myOpml)}
+				else {
+					fldelete = true};
+				if fldelete {
+					delete (@system.temp.io.myOutline)}}}};
+				«bundle //debug code
+					«new (tabletype, @scratchpad.comparisons); scratchpad.comparisons.opml1 = adrupdate^.data; scratchpad.comparisons.opml2 = system.temp.io.myOpml
+	bundle { //callbacks, 5/9/11 by DW
+		local (adrscript);
+		for adrscript in @adrdata^.client.callbacks.buddyUpdated {
+			while typeof (adrscript^) == addresstype {
+				adrscript = adrscript^};
+			try {
+				adrscript^ (adruser)}}}};
+bundle { //test code
+	updateuser (@system.temp.realtime.client.updates.["0001249"])}
+
+

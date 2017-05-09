@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.getActions
+
+on getActions (appID = WebStar.id) { «gets WebSTAR action settings
+	with objectModel, WebStar.eventInfo {
+		return (core.get (appID, actions))}}
+
+

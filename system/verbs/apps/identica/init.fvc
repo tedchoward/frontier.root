@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.identica.init
+
+«Changes
+	«7/2/08; 3:18:27 PM by DW
+		«Created.
+if not defined (user.identica) {
+	new (tabletype, @user.identica)};
+bundle { //prefs
+	if not defined (user.identica.prefs) {
+		new (tabletype, @user.identica.prefs)};
+	if not defined (user.identica.prefs.username) {
+		user.identica.prefs.username = ""};
+	if not defined (user.identica.prefs.password) {
+		user.identica.prefs.password = ""};
+	if not defined (user.identica.prefs.timeoutsecs) {
+		user.identica.prefs.timeoutsecs = 180}};
+bundle { //stats
+	if not defined (user.identica.stats) {
+		new (tabletype, @user.identica.stats)};
+	if not defined (user.identica.stats.ctPosts) {
+		user.identica.stats.ctPosts = 0}}
+
+

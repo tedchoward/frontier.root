@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.log2.utilities.fixtables
+
+«Changes
+	«3/1/11; 9:51:39 AM by DW
+		«Some of my log tables were created without "htmltext" elements. This script goes through all the tables and adds one if it isn't there.
+local (ct = 0);
+on visit (adritem) {
+	if not defined (adritem^.htmltext) {
+		adritem^.htmltext = "";
+		ct++};
+	return (true)};
+mainresponder.calendar.visitReverseChronologic (@config.log.calendar, @visit);
+dialog.alert (ct)
+
+

@@ -1,0 +1,16 @@
+FrontierVcsFile:3:optx:system.verbs.apps.netEvents.examples.scriptingPaths
+
+/
+/test/rez.setResourceAttributes.html
+/test/rez.putStringResource.html
+/test/rez.resourceExists.html
+/test/rez.putResource.html
+/test/rez.putNamedResource.html
+/test/rez.namedResourceExists.html
+/test/rez.getStringResource.html
+/test/rez.getResourceAttributes.html
+/test/rez.getResource.html
+/test/rez.getNthResType.html
+
+
+

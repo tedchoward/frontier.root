@@ -1,0 +1,5 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.tcp.im.builtinResponders.blogger.data.helpText
+
+Usage: blogger [login | logoff | post | setServer | help] text...
+
+

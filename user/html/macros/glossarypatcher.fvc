@@ -1,0 +1,45 @@
+FrontierVcsFile:3:scpt:user.html.macros.glossarypatcher
+
+«scan the fully rendered page for [[#glossPatch xxx|yyy]]
+	«generate relative href's for these references
+	«Sun, Nov 3, 1996: if xxx is empty, just generate the URL, not an href
+		«This supports the JavaScript popup menu in the DaveNet website
+	«Author: Dave Winer, dwiner@well.com
+with html.data.page {
+	local (pattern = "[[#glossPatch ");
+	local (ix, ixstart, ixend);
+	loop {
+		ixstart = string.patternmatch (pattern, renderedtext);
+		if ixstart == 0 {
+			break};
+		ix = ixstart + sizeof (pattern);
+		loop { «find the ]], when loop completes, ix points at second ]
+			if ix > sizeof (renderedtext) {
+				ix = sizeof (renderedtext);
+				break};
+			if string.nthchar (renderedtext, ix) == ']' {
+				if string.nthchar (renderedtext, ix - 1) == ']' {
+					ixend = ix;
+					break}};
+			ix++};
+		local (url = "", nomad = adrobject);
+		loop {
+			nomad = parentof (nomad^);
+			if nomad == parentOf (html.data.page.ftpsite^) {
+				break};
+			url = "../" + url};
+		
+		local (s, linetext, patch);
+		s = string.mid (renderedtext, ixstart, ixend - ixstart + 1);
+		s = string.delete (s, 1, sizeof (pattern));
+		url = url + string.nthfield (s, '|', 2) + ".html";
+		linetext = string.nthfield (s, '|', 1);
+		if linetext == "" {
+			patch = url}
+		else {
+			patch = "<a href=\"" + url + "\">" + linetext + "</a>"};
+		
+		renderedtext = string.delete (renderedtext, ixstart, ixend - ixstart + 1);
+		renderedtext = string.insert (patch, renderedtext, ixstart)}}
+
+

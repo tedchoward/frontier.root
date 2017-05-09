@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.["DDE "].["Ack "]
+
+on ['Ack '] (x, rInfo, sInfo, RetVal, ack, item) { «ack for execute only
+	«msg ("Received Ack: " + ack + ", " + retval)
+	if not DDE.waitingForAck {
+		return (false)};
+	if (DDE.senderInfo != rInfo) || (DDE.receiverInfo != sInfo) {
+		return (false)};
+	DDE.waitingForAck = false; «we've got it now
+	DDE.receivedAck = boolean (ack);
+	return (true)}
+
+

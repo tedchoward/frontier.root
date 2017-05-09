@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.xmlutils.declareNamespaceInElement
+
+on declareNamespaceInElement (adrelement, prefix, URI) {
+	return (soap.xmlutils.addAttributeValue (adrelement, "xmlns" + ":" + prefix, URI))}
+
+

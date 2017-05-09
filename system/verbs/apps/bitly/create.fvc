@@ -1,0 +1,64 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.bitly.create
+
+on create (longUrl, username=nil, apiKey=nil) {
+	«Changes
+		«9/11/11; 8:38:37 AM by DW
+			«Rewritten to use new bitly API. If we were able to shorten the url, we return it. Otherwise we return the original url.
+				«http://code.google.com/p/bitly-api/wiki/ApiDocumentation#/v3/shorten
+				«old code
+					«try //4/1/09 by DW
+						«if user.trim.prefs.flHijackBitly
+							«return (trim.create (longurl))
+					«return (tcp.httpreadurl ("http:/bit.ly/api?url=" + string.urlencode (longUrl)))
+		«4/1/09; 11:50:35 AM by DW
+			«If user.trim.prefs.flHijackBitly is defined and true, shoot the url through tr.im.
+		«7/8/08; 12:25:04 PM by DW
+			«Created. Bitly is an url-shortening service with lots of professional features. You could use it for a serious web app that wants to monitor its usage. This glue script creates a short url from a long one.
+	local (adrdata = bitly.init (), apiurl = "http://" + adrdata^.prefs.apiDomain + "/v3/shorten");
+	local (now = clock.now (), startticks = clock.ticks (), xstruct);
+	on encode (s) {
+		return (string.urlencode (s, true))};
+	if adrdata^.prefs.enabled {
+		bundle { //set defaults
+			if username == nil {
+				username = adrdata^.prefs.username};
+			if apiKey == nil {
+				apiKey = adrdata^.prefs.apiKey}};
+		bundle { //build apiurl
+			apiurl = apiurl + "?login=" + encode (username);
+			apiurl = apiurl + "&apiKey=" + encode (apiKey);
+			apiurl = apiurl + "&longUrl=" + encode (longUrl);
+			apiurl = apiurl + "&format=xml"};
+		bundle { //make the call, result goes in xstruct
+			local (xmltext = tcp.httpreadurl (apiurl, 3, false));
+			xml.compile (xmltext, @xstruct)};
+		bundle { //walk xstruct, build return table, return shortened url
+			local (adrresponse = xml.getaddress (@xstruct, "response"));
+			local (statusCode = xml.getvalue (adrresponse, "status_code"));
+			if statusCode != 200 {
+				adrdata^.stats.ctErrors++;
+				adrdata^.stats.whenLastError = now;
+				adrdata^.stats.lastErrorMsg = xml.getvalue (adrresponse, "status_txt");
+				return (longUrl)};
+			local (adrbitlydata = xml.getaddress (adrresponse, "data"));
+			local (adrday = mainresponder.calendar.getdayaddress (@adrdata^.calendar, now));
+			local (adrtable = @adrday^.[string.padwithzeros (sizeof (adrday^) + 1, 5)]);
+			new (tabletype, adrtable);
+			adrtable^.longUrl = longUrl;
+			adrtable^.shortUrl = xml.getvalue (adrbitlydata, "url");
+			adrtable^.hash = xml.getvalue (adrbitlydata, "hash");
+			adrtable^.globalHash = xml.getvalue (adrbitlydata, "global_hash");
+			adrtable^.newHash = xml.getvalue (adrbitlydata, "new_hash");
+			adrtable^.ctTicks = clock.ticks () - startticks;
+			adrdata^.stats.ctCreates++;
+			adrdata^.stats.whenLastCreate = now;
+			adrdata^.stats.lastShortUrl = adrtable^.shortUrl;
+			adrdata^.stats.lastLongUrl = longUrl;
+			adrdata^.stats.ctTicksLastCall = adrtable^.ctTicks;
+			return (adrtable^.shortUrl)}}
+	else {
+		return (longUrl)}};
+bundle { //test code
+	clipboard.putvalue (create ("http://worknotes.scripting.com/september2011/91111ByDw/rebootingWithBitly"))}
+
+

@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BarChart.newWindow
+
+on newWindow (ctbars, title, units) { «create a new BarChart window
+	if not app.newWindow (title) {
+		return (false)};
+	if not BarChart.setBarCount (ctbars) {
+		return (false)};
+	return (BarChart.setUnits (units))}
+
+

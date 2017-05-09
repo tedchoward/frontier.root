@@ -1,0 +1,28 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webserver.apache.s3backup.backup
+
+on backup (flstartup=false) {
+	«Changes
+		«6/7/09; 7:12:43 AM by DW
+			«Created. 
+	local (adrdata = webserver.apache.s3backup.init (), f, ct=0, startticks = clock.ticks ());
+	adrdata^.stats.ctChecks++;
+	adrdata^.stats.whenLastCheck = clock.now ();
+	log2.add ("webserver.apache", "s3 backup started", "", startticks);
+	on dofolder (folder) {
+		local (f);
+		fileloop (f in folder) {
+			try {
+				if file.isfolder (f) {
+					dofolder (f)}
+				else {
+					try {
+						«scratchpad.f = f
+						ct++;
+						webserver.apache.s3backup.checkFile (f, flstartup, adrdata)}}}}};
+	dofolder (adrdata^.prefs.folder);
+	adrdata^.stats.ctSecsLastBackup = number (clock.now () - adrdata^.stats.whenLastCheck);
+	log2.add ("webserver.apache", "s3 backup complete", ct + " files checked.", startticks)};
+bundle { //test code
+	backup (false)}
+
+

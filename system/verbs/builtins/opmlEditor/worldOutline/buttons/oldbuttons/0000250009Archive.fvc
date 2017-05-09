@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.buttons.oldbuttons.["00002500\tArchive"]
+
+«Changes
+	«11/2/11; 10:19:51 AM by DW
+		«Archive button for world outline editor.
+thread.callscript (@opmlEditor.worldOutline.archiveSubOutline, {})
+
+

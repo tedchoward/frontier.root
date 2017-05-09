@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:workspace.userlandSamples.soapValidatorScripts.soapValidatorHandlers.easyStructTest
+
+on easyStructTest (stooges) {
+	return (stooges.moe + stooges.larry + stooges.curly)}
+
+

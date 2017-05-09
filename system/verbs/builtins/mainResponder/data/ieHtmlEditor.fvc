@@ -1,0 +1,194 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.mainResponder.data.ieHtmlEditor
+
+<table id="editorTable" width="500" cellpadding="2" cellspacing="0" border="1" bgcolor="gainsboro">
+	<tr><td>
+		<div id="tb2" style="width: 100%;height:25;overflow:hidden;background:gainsboro;" onselectstare="return false" ondragstart="return false">
+			<table cellspacing="2" cellpadding="0" style="padding-top: 1pt;margin-bottom: 2pt"><tr><td valign="middle" nowrap>
+				<select onchange="format('formatBlock',this[this.selectedIndex].value);this.selectedIndex=0" STYLE="font:8pt verdana,arial,sans-serif;background:#FFFFFF">
+					<option selected>Paragraph...
+					<option value="<P>">Normal &lt;P&gt;
+					<option value="<H1>">Heading 1 &lt;H1&gt;
+					<option value="<H2>">Heading 2 &lt;H2&gt;
+					<option value="<H3>">Heading 3 &lt;H3&gt;
+					<option value="<H4>">Heading 4 &lt;H4&gt;
+					<option value="<H5>">Heading 5 &lt;H5&gt;
+					<option value="<H6>">Heading 6 &lt;H6&gt;
+					<option value="<PRE>">Pre &lt;PRE&gt;
+					<option value="removeFormat">Clear Formatting
+					</select>
+				<select onchange="format('fontname',this[this.selectedIndex].value);this.selectedIndex=0" STYLE="font:8pt verdana,arial,sans-serif;background:#FFFFFF">
+					<option selected>Font...
+					<option value="Geneva,Arial,Sans-Serif">Arial
+					<option value="Verdana,Geneva,Arial,Helvetica,Sans-Serif">Verdana
+					<option value="Times New Roman,Times,Serif">Time
+					<option value="Courier, Monospace">Courier
+					</select>
+				<select onchange="format('fontSize',this[this.selectedIndex].text);this.selectedIndex=0" STYLE="font:8pt verdana,arial,sans-serif;background:#FFFFFF">
+					<option>Size...<option>1<option>2<option>3<option>4<option>5<option>6<option>7
+					</select>
+				<select onchange="format('forecolor',this[this.selectedIndex].style.color);this.selectedIndex=0" STYLE="font:8pt verdana,arial,sans-serif;background:#FFFFFF">
+					<option selected>Color...
+					<option style="color:blue;background-color:gainsboro">Color...</option>
+					<option style="color:black">black</option>
+					<option style="color:darkslategray">darkslategray</option>
+					<option style="color:red">red</option>
+					<option style="color:maroon">maroon</option>
+					<option style="color:lightpink">lightpink</option>
+					<option style="color:purple">purple</option>
+					<option style="color:blue">blue</option>
+					<option style="color:darkblue">darkblue</option>
+					<option style="color:teal">teal</option>
+					<option style="color:skyblue">skyblue</option>
+					<option style="color:green">green</option>
+					<option style="color:seagreen">seagreen</option>
+					<option style="color:olive">olive</option>
+					<option style="color:orange">orange</option>
+					<option style="color:darkgoldenrod">darkgoldenrod</option>
+					<option style="color:gray">gray</option>
+					</select>
+				</td></tr></table>
+			</div>
+		<div id=idBox style="width: 100%;text-align: left; ;visibility: hidden, height:25;overflow:hidden;background:gainsboro" ID=htmlOnly>
+			<script>
+				var buttons=new Array(24,23,23,4,23,23,23,4,23,23,23,23,4,23);
+				var action=new Array("bold","italic","underline","","justifyleft","justifycenter","justifyright","","insertorderedlist","insertunorderedlist","outdent","indent","","createLink");
+				var tooltip=new Array("Bold Text","Italic Text","Underline Text","","Left Justify","Center Justify","Right Justify","","Ordered List","Unordered List","Remove Indent","Indent","","Create Hyperlink");
+				var left=0
+				var s="";
+				for (var i=0;i<buttons.length;i++) {
+					s+="<span style='position:relative;height:26;width: " + buttons[i] + "'><span style='position:absolute;margin:0px;padding:0;height:26;top:0;left:0;width:" + (buttons[i]) + ";clip:rect(0 "+buttons[i]+" 25 "+0+");overflow:hidden'><img border='0' src='/mainresponderResources/toolbars/htmlEditor' style='position:absolute;top:0;left:-" + left + "' width=290 height=50";
+					if (buttons[i]!=4) {
+						s+=" onmouseover='this.style.top=-25' onmouseout='this.style.top=0' onclick=\"";
+						
+						if (action[i]!="createLink") 
+							s+="format('" + action[i] + "');this.style.top=0\" ";
+						else
+							s+="createLink();this.style.top=0\" ";
+							
+						s+="TITLE=\"" + tooltip[i] + "\"";
+						}
+					
+					s+="></span></span>";
+					left+=buttons[i] ;
+					}
+				document.write(s);
+				</script>
+			</div>
+		<iframe name="idEdit" frameborder="1" width="100%" height="300"></iframe>
+		</td></tr>
+	</table>
+<input checked type="radio" name="rMode" id="mW" onclick="setMode(true)"><label class="current" for="mw" id="modeA" style="font:bold 10pt verdana,geneva,arial,sans-serif">WYSIWYG</label> <input type=radio name="rMode" id="mH" onclick="setMode(false)"><label for="mH" id="modeB" style="font:bold 10pt verdana,geneva,arial,sans-serif">Source</label>
+<div id="messageText" width="100%" style="visibility:hidden;position:absolute;">[[messageText]]</div>
+<SCRIPT>
+	<!--
+	var rightCaret = String.fromCharCode (62);
+	var bLoad=false;
+	var sHeader="<BODY STYLE=\"font:12pt times new roman,times,serif\"" + rightCaret;
+	var bMode=true;
+	var sel=null;
+	var strErr="Can't perform formatting action because the editor isn't in WYSIWYG mode.";
+	function format(what,opt) {
+		if (!bMode) {
+			alert(strErr);idEdit.focus();
+			return;
+			}
+		if (opt=="removeFormat") {
+			what=opt;
+			opt=null;
+			}
+		if (bMode) {
+			if (opt==null)
+				idEdit.document.execCommand(what);
+			else
+				idEdit.document.execCommand(what,"",opt);
+			var s=idEdit.document.selection.createRange(),p=s.parentElement()  
+			if ((p.tagName=="FONT") && (p.style.backgroundColor!=""))
+				p.outerHTML=p.innerHTML;
+			idEdit.focus();
+			} 
+		sel=null
+		}
+	function getEl(sTag,start) {
+		while ((start!=null) && (start.tagName!=sTag))
+			start = start.parentElement;
+		return start;
+		}
+	function createLink() {
+		if (!bMode)
+		{
+			alert(strErr);
+			idEdit.focus();
+			return;
+		}
+		var isA = getEl("A",idEdit.document.selection.createRange().parentElement());
+		var str=prompt("Enter a URL to link to:",isA ? isA.href : "http:\/\/");
+		if ((str!=null) && (str!=("http:" + "//")))
+		{
+			if (idEdit.document.selection.type=="None")
+			{
+				var sel=idEdit.document.selection.createRange();
+				sel.pasteHTML("<A HREF=\""+str+"\""+rightCaret+str+"</A"+rightCaret+" ");
+				sel.select();
+			}
+			else
+				format("CreateLink",str);
+		}
+		else
+			idEdit.focus();
+		}
+	function setMode(bNewMode) {
+		if (bNewMode!=bMode) {
+			if (bNewMode) {
+				var sContents=idEdit.document.body.innerText;
+				idEdit.document.open();
+				idEdit.document.write(sHeader);
+				idEdit.document.close();
+				idEdit.document.body.innerHTML=sContents;
+				}
+			else {
+				var fonts=idEdit.document.body.all.tags("FONT");
+				
+				for (var i=0;i<fonts.length;i++)
+					if (fonts[i].style.backgroundColor!="")
+						fonts[i].outerHTML=fonts[i].innerHTML;
+				var sContents=idEdit.document.body.innerHTML;
+				idEdit.document.open();
+				idEdit.document.write("<BODY style=\"font:10pt courier, monospace\""+rightCaret);
+				idEdit.document.close();
+				idEdit.document.body.innerText=sContents;
+				}
+			bMode=bNewMode;
+		}
+		modeA.className=bMode?"current":"";
+		modeB.className=bMode?"":"current";
+		idEdit.focus();
+		}
+	\//-->
+	</SCRIPT>
+<script for=window event=onload>
+	<!--
+	idEdit.document.designMode='On';
+	bLoad=true;
+	idBox.style.visibility='';
+	if (messageText.innerText != '') {
+		try {
+			document.frames('idEdit').document.write (messageText.innerText);
+			} catch (e) {}
+		}
+	\//-->
+	</script>
+<script for=window event=onresize>
+	<!--
+	if (messageText.innerText != '') {
+		try {
+			editorTable.style.width="100%";
+			if (editorTable.scrollWidth < 500) {
+				editorTable.style.width = 500;
+				}
+			} catch (e) {}
+		}
+	\//-->
+	</script>
+
+
+

@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.rss.moduleDrivers.["http3A//webns.net/mvcb/"].init
+
+on init (adrservice) {
+	«Changes
+		«10/8/02; 4:33:28 PM by JES
+			«Created.
+	local (adrcompilation = @adrservice^.compilation);
+	if not defined (adrcompilation^) {
+		new (tableType, adrcompilation)};
+	local (adrdata = @adrcompilation^.mvcb);
+	if defined (adrdata^) {
+		delete (adrdata)};
+	return}
+
+

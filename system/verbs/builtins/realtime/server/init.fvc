@@ -1,0 +1,65 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.server.init
+
+on init (adrdata) {
+	«Changes
+		«9/1/10; 5:55:18 PM by DW
+			«Init the "userfollows" callback.
+		«8/13/10; 2:24:16 PM by DW
+			«Init calendar structure.
+		«8/11/10; 3:50:08 PM by DW
+			«Init log.
+		«7/26/10; 6:47:38 PM by DW
+			«Init adrdata^.server.stats.whenLastDeleteInboxes, adrdata^.server.stats.ctDeleteInboxes.
+		«7/26/10; 6:33:04 PM by DW
+			«Init adrdata^.server.prefs.ctSecsReclaimInbox, the number of seconds before we reclaim an inbox.
+		«7/19/10; 9:10:45 AM by DW
+			«Created. 
+	if not defined (adrdata^.server) {
+		new (tabletype, @adrdata^.server)};
+	bundle { //prefs
+		if not defined (adrdata^.server.prefs) {
+			new (tabletype, @adrdata^.server.prefs)};
+		if not defined (adrdata^.server.prefs.enabled) {
+			adrdata^.server.prefs.enabled = false};
+		if not defined (adrdata^.server.prefs.ctSecsTimeout) {
+			adrdata^.server.prefs.ctSecsTimeout = 180};
+		if not defined (adrdata^.server.prefs.ctSecsReclaimInbox) { //7/26/10 by DW
+			adrdata^.server.prefs.ctSecsReclaimInbox = 60 * 60 * 24 * 3};
+		if not defined (adrdata^.server.prefs.ctSecsDelayOnError) { //8/8/10 by DW
+			adrdata^.server.prefs.ctSecsDelayOnError = 60};
+		bundle { //log, 8/11/10 by DW
+			if not defined (adrdata^.server.prefs.log) {
+				new (tabletype, @adrdata^.server.prefs.log)};
+			if not defined (adrdata^.server.prefs.log.enabled) {
+				adrdata^.server.prefs.log.enabled = false};
+			if not defined (adrdata^.server.prefs.log.f) {
+				adrdata^.server.prefs.log.f = ""}}};
+	bundle { //stats
+		if not defined (adrdata^.server.stats) {
+			new (tabletype, @adrdata^.server.stats)};
+		if not defined (adrdata^.server.stats.ctMessages) {
+			adrdata^.server.stats.ctMessages = 0};
+		if not defined (adrdata^.server.stats.ctErrors) {
+			adrdata^.server.stats.ctErrors = 0};
+		if not defined (adrdata^.server.stats.ctDeleteInboxes) {
+			adrdata^.server.stats.ctDeleteInboxes = 0};
+		if not defined (adrdata^.server.stats.whenLastDeleteInboxes) {
+			adrdata^.server.stats.whenLastDeleteInboxes = date (0)}};
+	bundle { //callbacks
+		if not defined (adrdata^.server.callbacks) {
+			new (tabletype, @adrdata^.server.callbacks)};
+		if not defined (adrdata^.server.callbacks.validatePassword) {
+			new (tabletype, @adrdata^.server.callbacks.validatePassword)};
+		if not defined (adrdata^.server.callbacks.userFollows) { //returns true if one user follows another
+			new (tabletype, @adrdata^.server.callbacks.userFollows)}};
+	if not defined (adrdata^.server.users) {
+		new (tabletype, @adrdata^.server.users)};
+	if not defined (adrdata^.server.calendar) { //8/13/10 by DW
+		new (tabletype, @adrdata^.server.calendar)};
+	bundle { //install RPC handlers
+		if not defined (user.betty.rpcHandlers.realtime) {
+			user.betty.rpcHandlers.realtime = @realtime.server.rpcHandlers}}};
+bundle { //test code
+	init (@realtimeData)}
+
+

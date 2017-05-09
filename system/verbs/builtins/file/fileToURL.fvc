@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.fileToURL
+
+on fileToURL (f) {
+	«Changes
+		«8/10/08; 8:10:31 PM by DW
+			«Simplified.
+			«Old code...
+				«local (s = "file://")
+				«local (pc = file.getPathChar ())
+				«local (i, field, ctfields = string.countFields (f, pc))
+				«for i = 1 to ctfields
+					«field = string.nthField (f, pc, i)
+					«if sys.os () beginsWith "Win"
+						«if i == 1
+							«field = field - ":"
+					«s = s + "/" + field
+				«if file.exists (f)
+					«if file.isFolder (f)
+						«s = s + "/"
+				«return (s)
+	return ("file:///" + string.replaceall (f, file.getpathchar (), "/"))}
+«bundle «test code
+	«webbrowser.openurl (filetourl ("Macintosh HD:Users:davewiner:Desktop:Podcatcher:test1:cn08jul25.mp3"))
+	«dialog.alert (fileToURL (websites.["#data"].f))
+	«dialog.alert (fileToURL (frontier.getprogrampath ()))
+
+

@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.data.nodeTypes.thumbList.expand
+
+on expand () {
+	«Changes
+		«12/20/11; 11:35:16 AM by DW
+			«Created.
+	return (Frontier.tools.data.nodeTypes.include.expand ())};
+bundle { //test code
+	expand ()}
+
+

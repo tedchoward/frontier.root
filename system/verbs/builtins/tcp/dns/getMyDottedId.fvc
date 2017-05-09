@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.dns.getMyDottedId
+
+on getMyDottedId () { //return the dotted id of the system we're running on
+	«5/7/00; 11:24:17 AM by DW
+		«http://docserver.userland.com/tcp/dnsGetMyDottedId
+		«This code was popping up everywhere, and it was possible to optimize it. By caching the IP address in system.temp, the tick count went from 104 to 5. Well worth doing if you have code that needs to know the IP address.
+		«Important note: We don't guarantee that system.temp.myIpAddress will stay at this location. If you want the IP address of the machine you're running on, call this script. (Note to UserLand people, it really should be in system.environment.)
+	if not defined (system.temp.myIpAddress) {
+		system.temp.myIpAddress = tcp.addressDecode (tcp.myAddress ())};
+	return (system.temp.myIpAddress)}
+«bundle //test code
+	«local (tc = clock.ticks ())
+	«for i = 1 to 1000
+		«getMyDottedId ()
+	«dialog.alert (clock.ticks () - tc)
+
+

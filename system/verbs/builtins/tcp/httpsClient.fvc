@@ -1,0 +1,56 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.httpsClient
+
+on httpsClient (method="GET", server="", port=nil, path="", proxy=user.webBrowser.proxy.domain, proxyPort=user.webBrowser.proxy.port, proxyUserName=user.webBrowser.proxy.userName, proxyPassword=user.webBrowser.proxy.password, data="", datatype="", username="", password="", adrHdrTable=nil, cookiesOn=false, debug=false, timeOutTicks=60*30, flMessages=true, ctFollowRedirects=0, flJustHeaders=false, flAcceptOpml=false, flUseProxy=nil, adrRedirectInfo=nil) {
+	«Changes
+		«7/11/11; 7:31:14 PM by DW
+			«Mac-only HTTPS client. Same parameter list as tcp.httpClient. For Windows HTTPS use TLS. Eventually we should merge the two into this script, but for now, we simply do the Mac version. As Ted Howard notes below, only some of the parameters are actually implemented. Had to add a check to see if path begins with a slash -- if not we add one. 
+		«7/11/11; 2:15:01 PM by TCH
+			«Created. Method signature copied from tcp.httpClient, not all parameters are used currently. Params implemented: method, server, port, path, data, datatype, username, password, adrHdrTable.
+	if system.environment.isMac {
+		local (commandStr = "", responseData);
+		on add (s) {
+			commandStr = commandStr + s};
+		bundle { //init command with method and full url
+			add ("curl -X " + method + " https://" + server);
+			if port != nil {
+				add (":" + port)};
+			if not (path beginswith "/") { //7/11/11 by DW
+				path = "/" + path};
+			add (path)};
+		bundle { //basic auth
+			if (sizeof (username) > 0) or (sizeof (password) > 0) {
+				add (" --basic -u \"" + username + ":" + password + "\"")}};
+		bundle { //add headers
+			on addHeader (name, value) {
+				add (" -H \"" + name + ": " + value + "\"")};
+			if adrHdrTable != nil {
+				if sizeof (data) > 0 {
+					adrHdrTable^.["Content-Type"] = datatype;
+					adrHdrTable^.["Content-Length"] = sizeof (data)};
+				local (i);
+				for i = 1 to sizeof (adrHdrTable^) {
+					local (headerName = nameOf (adrHdrTable^ [i]));
+					addHeader (headerName, adrHdrTable^ [i])}}
+			else {
+				if sizeof (data) > 0 {
+					addHeader ("Content-Type", datatype);
+					addHeader ("Content-Length", sizeof (data))}}};
+		bundle { //data
+			if sizeof (data) > 0 {
+				bundle { //change tabs, returns, linefeeds to spaces, escape double-quotes
+					local (t);
+					new (tabletype, @t);
+					t.["\t"] = " ";
+					t.["\r\n"] = " ";
+					t.["\r"] = " ";
+					t.["\n"] = " ";
+					«t.["\""] = "'"
+					t.['"'] = "\\" + '"';
+					data = string.multipleReplaceAll (data, @t, false)};
+				add (" -d \"" + data + "\"")}};
+		responseData = sys.unixShellCommand (commandStr);
+		return (responseData)}
+	else {
+		scripterror ("Can't make the HTTPS request because the verb is only implemented on Macintosh OS.")}}
+
+

@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.setupPrefs
+
+on setupPrefs () {
+	«Changes
+		«2/11/12; 6:53:08 PM by DW
+			«Called from the prefs outline. We copy the current server prefs into known locations. They are copied back out when the user posts the form, by opmlEditor.worldOutline.validatePrefs
+	local (adrdata = opmlEditor.worldOutline.init (), domain, now = clock.now ());
+	local (adrtemptable = @system.temp.worldoutline.serverPrefs);
+	new (tabletype, adrtemptable);
+	domain = adrdata^.prefs.defaultServer;
+	if sizeof (domain) > 0 {
+		local (adrserver = @adrdata^.servers.[domain]);
+		adrtemptable^.username = adrserver^.username;
+		adrtemptable^.password = string (adrserver^.password)}
+	else {
+		adrtemptable^.username = "";
+		adrtemptable^.password = ""};
+	adrtemptable^.domain = domain;
+	return ("")};
+bundle { //test code
+	setupPrefs ()}
+
+

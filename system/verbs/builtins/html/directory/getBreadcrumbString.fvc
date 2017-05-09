@@ -1,0 +1,71 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.directory.getBreadcrumbString
+
+on getBreadcrumbString (crumblist, uri, flDirectoryHomeUrlEndsWithSlash=false, ctsteps=0, flIncludeLastElement=true) {
+	«Changes
+		«4/26/12; 9:20:40 AM by DW
+			«New optional param, flIncludeLastElement, if false, we omit the last element in the list.
+		«9/23/11; 9:46:01 AM by DW
+			«Change the final element in the breadcrumb string from an <a> element to a <span> element. It was getting the properties of links, but it's not a link. It's just text. 
+		«6/29/11; 3:59:14 AM by DW
+			«Eliminate searchArgs param.
+		«6/3/11; 6:51:55 AM by DW
+			«If the URI ends with a slash, pop it off. 
+		«5/25/11; 10:20:21 AM by DW
+			«Added classes.
+				«Old code:
+					«local (crumbstring = "", ctcrumbs = sizeof (crumblist))
+					«on popuri (uri, levels)
+						«return (html.directory.popuri (uri, levels))
+					«if ctcrumbs == 0
+						«crumbstring = "<b>Top</b>"
+					«else
+						«local (i, slash = "", topstring = "Top", loopstart = 1, toplink)
+						«if flDirectoryHomeUrlEndsWithSlash
+							«slash = "/"
+						«
+						«if ctsteps > 0
+							«topstring = crumblist [ctsteps]
+							«loopstart = ctsteps + 1
+						«
+						«toplink = "<a class=\"directoryCrumbLink\" href=\"" + popuri (uri, ctcrumbs) + slash + searchArgs + "\">" + topstring + "</a> > "
+						«crumbstring = crumbstring + toplink
+						«
+						«for i = loopstart to ctcrumbs - 1
+							«crumbstring = crumbstring + "<a class=\"directoryCrumbLink\" href=\"" + popuri (uri, ctcrumbs - i) + searchArgs + "\">" + string.replaceall (crumblist [i], " ", "&nbsp;") + "</a> > "
+						«crumbstring = crumbstring + "<b>" + crumblist [ctcrumbs] + "</b>"
+					«return (crumbstring)
+		«5/11/11; 12:08:07 PM by DW
+			«New optional parameter, ctsteps. If we came in through domain-mapping, it's the number of elements at the beginning of the crumblist that we ignore.  
+		«5/11/11; 12:07:49 PM by DW
+			«Added change notes header.
+	local (crumbstring = "", ctcrumbs = sizeof (crumblist), divider = "<span class=\"spnCrumbDivider\"> > </span>", searchargs = "");
+	if uri endswith "/" { //6/3/11 by DW
+		uri = string.delete (uri, sizeof (uri), 1)};
+	on popuri (uri, levels) {
+		return (html.directory.popuri (uri, levels))};
+	if ctcrumbs == 0 {
+		crumbstring = "<a class=\"aTopCrumb\">Top</a>"}
+	else {
+		local (i, slash = "", topstring = "Top", loopstart = 1, toplink);
+		if flDirectoryHomeUrlEndsWithSlash {
+			slash = "/"};
+		
+		if ctsteps > 0 {
+			topstring = crumblist [ctsteps];
+			loopstart = ctsteps + 1};
+		
+		toplink = "<a class=\"aTopCrumb\" href=\"" + popuri (uri, ctcrumbs) + slash + searchArgs + "\">" + topstring + "</a>" + divider;
+		crumbstring = crumbstring + toplink;
+		
+		for i = loopstart to ctcrumbs - 1 {
+			crumbstring = crumbstring + "<a class=\"aPreviousCrumb\" href=\"" + popuri (uri, ctcrumbs - i) + searchArgs + "\">" + string.replaceall (crumblist [i], " ", "&nbsp;") + "</a>" + divider};
+		bundle { //last element, 4/26/12 by DW
+			if flIncludeLastElement {
+				crumbstring = crumbstring + "<span class=\"aCurrentCrumb\">" + crumblist [ctcrumbs] + "</span>"}
+			else {
+				crumbstring = string.mid (crumbstring, 1, sizeof (crumbstring) - sizeof (divider))}}};
+	return (crumbstring)}
+«bundle //test code
+	«dialog.alert (getBreadcrumbString ({"United States", "Western States", "California"}, "/us/west/ca"))
+
+

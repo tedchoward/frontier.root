@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.getSetting
+
+on getSetting (x) {
+	with objectModel, Eudora, eventInfo {
+		return (get (setting [long (x)]))}}
+
+

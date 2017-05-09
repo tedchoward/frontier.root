@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.watcher.script
+
+loop {
+	twitter.init ();
+	twitter.watcher.ct++;
+	twitter.watcher.watch ();
+	thread.sleepfor (user.twitter.prefs.watcher.ctSecsBetweenChecks)}
+
+

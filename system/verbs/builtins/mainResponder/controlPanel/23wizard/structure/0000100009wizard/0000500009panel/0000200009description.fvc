@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.controlPanel.["#wizard"].structure.["00001000\twizard"].["00005000\tpanel"].["00002000\tdescription"]
+
+You can set security access controls on all content that the server renders. The values on this page control the global settings. The directory and script settings can be over-ridden at the site level, while IP address security is global.
+
+

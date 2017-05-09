@@ -1,0 +1,30 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.blorkmark.init
+
+on init () {
+	«Changes
+		«7/15/11; 9:24:01 AM by DW
+			«Add blorkmark.com to the set of domains we can use for blorkmarks. 
+		«7/12/11; 12:39:44 PM by DW
+			«Created.
+	local (adrdata = @user.opmleditor.blorkmark);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //domains
+		on checkdomain (name, server) {
+			local (adr = @adrdata^.domains.[name]);
+			if not defined (adr^) {
+				adr^ = server}};
+		if not defined (adrdata^.domains) {
+			new (tabletype, @adrdata^.domains)};
+		checkdomain ("blorkmark.com", "xmlrpc://blorkmarkserver.scripting.com/RPC2");
+		checkdomain ("blorkmark.net", "xmlrpc://blorkmarkserver.scripting.com/RPC2");
+		checkdomain ("blorkosphere.com", "xmlrpc://blorkmarkserver.scripting.com/RPC2");
+		checkdomain ("mageddon.org", "xmlrpc://blorkmarkserver.scripting.com/RPC2")};
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)}};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

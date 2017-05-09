@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.examples.randomColorLoop
+
+local (item = cardeditor.getnthselectedobject (1));
+local (ct = 0);
+loop {
+	on randomcolor () {
+		on randomgun () {
+			return (random (-32000, 32000))};
+		return (rgb.set (randomgun (), randomgun (), randomgun ()))};
+	cardeditor.setobjectfillcolor (item, randomcolor ());
+	cardeditor.setobjecttext ("count", ct++)}
+
+

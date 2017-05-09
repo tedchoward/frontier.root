@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.data.standardMacros.include
+
+on include (f) {
+	return (string (file.readwholefile (f)))}
+
+

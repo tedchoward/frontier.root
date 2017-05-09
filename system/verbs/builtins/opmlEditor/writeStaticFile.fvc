@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.writeStaticFile
+
+on writeStaticFile (path, data) {
+	«Changes
+		«4/8/12; 5:05:02 PM by DW
+			«Make sure the URL for local files agrees with the pref setting for the server's external name. 
+				«http://worknotes.scripting.com/april2012/4912ByDw/river2FreshInstallStaticRiverUrl/
+		«9/13/11; 9:17:50 AM by DW
+			«A bottleneck for OPML Editor apps to write static files. It's configured by the opmlEditor prefs system. Nothing much for the app to do. 
+	bundle { //4/8/12 by DW
+		user.opmlEditor.staticText.locations.filesystem.prefs.url = "http://" + user.opmlEditor.prefs.server.externalDomainName + "/"};
+	return (statictext.write (@user.opmleditor.statictext, path, data))}
+«bundle //test code
+	«writeStaticFile ("hello.text", "hello world!")
+
+

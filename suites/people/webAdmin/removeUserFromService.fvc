@@ -1,0 +1,7 @@
+FrontierVcsFile:3:wptx:suites.people.webAdmin.removeUserFromService
+
+#title "Remove User From Service"
+{removeUserFromService ()}
+{goBack ()}
+
+

@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:suites.odbEditor.editors.Card.traps.swin
+
+on swin (carddata, adrobject) {
+	adrobject^ = carddata;
+	fileMenu.save ();
+	return (true)}
+
+

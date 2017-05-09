@@ -1,0 +1,328 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.userland.cleanRoot
+
+«Changes
+	«10/20/09; 10:29:10 AM by DW
+		«Open the about window by default at startup in the OPML Editor.
+	«2/11/09; 10:48:54 AM by DW
+		«Delete user.flickr.
+	«8/15/08; 5:54:28 AM by DW
+		«Don't init user.rootupdates, delete the prefs table and the flags table.
+	«8/4/08; 10:09:12 AM by DW
+		«Delete user.opmlEditor.
+	«8/4/08; 7:32:34 AM by DW
+		«Delete user.bookmarksMenu.
+	«7/30/08; 8:29:57 AM by DW
+		«Missed one use of shipfolder. Commented out.
+	«7/30/08; 8:07:23 AM by DW
+		«shipfolder is obsolete. Don't save the bundled tools (there are none).
+	«7/27/08; 6:42:43 PM by DW
+		«Init user.webserver.stats.domains. 
+	«7/27/08; 2:21:28 PM by DW
+		«To nuke the scheduler startup dialog, set user.scheduler.prefs.confirmStartupTasks to false.
+	«7/27/08; 10:28:18 AM by DW
+		«On Windows, load mascot.jpg into userland table.
+	«7/27/08; 9:44:17 AM by DW
+		«Allow for the possibility that there is no dotOpml.root, programmersMenu.root or newsRiver.root.
+	«6/2/06; 8:19:53 AM by DW
+		«Save the notepad in the parent folder of the ship folder.
+		«Clean up various stuff in dotOpml.root.
+	«6/11/05; 9:42:27 AM by DW
+		«Delete various opml.root stuff.
+	«6/7/05; 10:27:15 AM by DW
+		«Delete bookmarks menu, custom menu.
+	«2/1/05; 10:22:48 AM by DW
+		«Update for the OPML editor.
+	«8/18/02; 5:05:04 PM by JES
+		«Delete the RCS Backups, Manila Backups and backups folders from the Frontier folder. Initialize user.prefs.serialNumber to the empty string. Set up the port 5335 HTTP server at user.inetd.config.http2.
+	«run this script to clean up the root for release
+		«DW 1/1/96: MacBird 1.0 Release
+		«DW 4/1/96: Brought back stuff from 3.0
+		«DW 4/20/96: Frontier 4.0b5 release
+		«DW 11/5/97 Frontier 5.0a11
+
+local (pc = file.getpathchar ());
+bundle { //before anything save-copy this root
+	local (oldtarget = target.set (@root));
+	if system.environment.isMac {
+		filemenu.savecopy ("Macintosh HD:safe.root")};
+	if system.environment.isWindows {
+		filemenu.savecopy ("C:\\safe.root")};
+	target.set (oldtarget)};
+local (savedprefs = user.prefs);
+local (savedwebeditprefs = user.webedit);
+«local (shipfolder)
+«if system.environment.isMac
+	«shipfolder = "Macintosh HD:OPML Work:Shipping:OPML:"
+«if system.environment.isWindows
+	«shipfolder = "C:\\OPML Work\\Shipping\\OPML\\"
+«try //disable threads
+	«user.scheduler.prefs.runThreads = false
+	«scheduler.monitorThreads ()
+try {delete (@user.flickr)}; //2/11/09 by DW
+try {delete (@user.bookmarksMenu)}; //8/4/08 by DW
+try {delete (@user.opmlEditor)}; //8/4/08 by DW
+try {delete (@user.menus.bookmarkMenu)};
+try {delete (@user.menus.customMenu)};
+try {delete (@user.webBrowser.winDefaultBrowserApp)};
+bundle { //init user.webbrowser.proxy
+	user.webbrowser.proxy.domain = "";
+	user.webbrowser.proxy.enabled = false;
+	user.webbrowser.proxy.password = "";
+	user.webbrowser.proxy.username = ""};
+bundle { //load the image from the Appearance folder, 7/27/08 by DW 
+	if system.environment.iswindows {
+		local (f = frontier.pathstring + "Appearance" + pc + "html" + pc + "mascot.jpg");
+		if file.exists (f) {
+			local (adrimage = @userland.opmlEditorMascotImage);
+			adrimage^ = file.readwholefile (f);
+			setBinaryType (adrimage, "JPEG")}}};
+Frontier.enableAgents (false);
+inetd.stop ();
+bundle { «initialize the quick script window
+	window.quickScript ();
+	clipboard.putvalue ("dialog.notify (\"Hello World!\")");
+	editmenu.selectall ();
+	editmenu.paste ();
+	window.close ("Quick Script")};
+«bundle //set up the root window
+	«local (oldtarget = target.set ("root"))
+	«op.firstSummit ()
+	«op.fullCollapse ()
+	«op.findNext ("suites")
+	«wp.setTextMode (false)
+	«op.expand (1)
+	«window.zoom (window.frontmost ())
+	«op.collapse ()
+	«target.set (oldtarget)
+bundle { //save a copy of notepad outline, then empty it, 2/1/05; 10:22:48 AM by DW
+	local (pc = file.getpathchar ());
+	local (f = file.folderfrompath (frontier.pathstring) + "Saved notedpads" + pc + "notepad" + clock.ticks () + ".opml");
+	local (xmltext = op.outlinetoxml (@workspace.notepad));
+	file.surefilepath (f);
+	file.writewholefile (f, xmltext);
+	new (outlineType, @workspace.notepad)};
+bundle { «clear the path for all apps in the apps table
+	local (adrappstable = @system.verbs.apps, i);
+	for i = 1 to sizeof (adrappstable^) {
+		local (adrappinfo = @adrappstable^ [i].appInfo);
+		if defined (adrappinfo^) {
+			adrappinfo^.path = ""}}};
+bundle { «clean passwords out of user.html.sites table
+	local (i);
+	for i = 1 to sizeof (user.html.sites) {
+		if defined (user.html.sites [i].password) {
+			user.html.sites [i].password = ""}}};
+«bundle «initialize stuff in the webServer suite
+	«webServer.preferences.hostname = ""
+	«webServer.preferences.rootPath = ""
+bundle { «set up user.html
+	user.html.prefs = userland.htmlprefs; «initialize user.html.prefs table
+	new (outlinetype, @user.html.changedPages);
+	new (tableType, @user.html.images)};
+«edit (@frontier.version)
+Frontier.shipdate = clock.now ();
+userland.initialLastUpdateTime = date.netStandardString (Frontier.shipDate);
+user.prefs.search.winStandardFindCommand = false;
+user.prefs.agentsEnabled = true;
+user.prefs.dialogs.jumpAddress = "workspace";
+user.prefs.firstRootRun = true;
+user.prefs.serialNumber = "";
+user.prefs.frontierIsServer = false;
+user.prefs.flShortTimeStamp = false;
+user.prefs.flWinStandardMaximize = true;
+try {delete (@user.prefs.portForwardingAdminPassword)};
+bundle { //set up trial version info
+	try {delete (@userland.trialVersion)};
+	user.prefs.serialNumber = ""};
+bundle { //set up webserver, betty, rootUpdates, people, custody, and WebEdit
+	on nuke (name) {
+		if defined (user.[name]) {
+			delete (@user.[name])};
+		return (true)};
+	«nuke ("webserver")
+	nuke ("betty");
+	nuke ("people");
+	nuke ("custody");
+	nuke ("webEdit");
+	nuke ("webEditServer");
+	«nuke ("rootUpdates")
+	nuke ("databases");
+	nuke ("backups");
+	nuke ("batchExporter");
+	nuke ("export");
+	nuke ("xmlStorageSystem");
+	nuke ("photoFan"); //7/30/08 by DW
+	
+	try {delete (@user.scheduler.tasks)}; //PBS 07/06/00: let the user.scheduler.tasks table get re-initialized
+	try {delete (@user.scheduler.everyMinute)};
+	try {delete (@user.scheduler.threads)};
+	try {delete (@user.scheduler.hourly)};
+	try {delete (@user.scheduler.overnight)};
+	
+	bundle { //user.manila
+		new (tableType, @user.manila);
+		new (tableType, @user.manila.data);
+		new (tableType, @user.manila.data.sites);
+		new (tableType, @user.manila.prefs);
+		user.manila.prefs.lastSiteUrl = "http://"};
+	
+	webserver.init ();
+	betty.init ();
+	people.init ();
+	custody.init ();
+	webEdit.init ();
+	webEditServer.init ();
+	«rootUpdates.init ()
+	try {delete (@user.rootupdates.prefs)}; //8/15/08 by DW
+	try {delete (@user.rootupdates.flags)}}; //8/15/08 by DW
+	«bundle //disabled -- 4/17/05; 9:07:38 AM by DW
+		«user.inetd.config.http = webserver.data.inetd.config.http
+		«user.inetd.config.http2 = webserver.data.inetd.config.http2 //port 5335 server
+		«if system.environment.isCarbon
+			«user.inetd.config.http.port = 8080
+			«user.inetd.config.http.apparentPort = 80
+		«user.inetd.config.http.timeout = 30
+		«user.inetd.config.http.startup = true
+		«user.inetd.config.http.count = 30
+		«user.inetd.config.http2.timeout = 30
+		«user.inetd.config.http2.startup = true
+		«user.inetd.config.http2.count = 30
+		«new (tableType, @user.inetd.listens)
+«bundle //initialize responders
+	«user.webserver.responders.websiteFramework.data.docTree.samples = @websites.samples
+	«try
+		«delete (@user.webserver.responders.websiteFramework.data.docTree.allSites)
+	«try
+		«delete (@user.webserver.responders.websiteFramework.data.docTree.contents)
+
+filemenu.save ();
+
+bundle { //8.0 stuff
+	«bundle //user.odbEditors
+		«new (tableType, @user.odbEditors)
+		«new (tableType, @user.odbEditors.data)
+		«new (tableType, @user.odbEditors.data.openFiles)
+		«user.odbEditors.openFiles.data.serialnum = 1
+		«user.odbEditors.openFiles.data.TextEditor = ""
+		«user.odbEditors.textFileExtension = ".html"
+	try {delete (@user.odbEditors)};
+	bundle { //user.netEvents
+		try {delete (@user.netEvents)}};
+	bundle { //user.xmlStorageSystem
+		try {delete (@user.xmlStorageSystem)}};
+	try {delete (@user.tools)};
+	new (tabletype, @user.scheduler.threads);
+	frontier.tools.init ();
+	Frontier.tools.thread.ct = 0;
+	Frontier.tools.thread.enabled = true};
+bundle { //7/27/08 by DW
+	user.scheduler.prefs.confirmStartupTasks = false;
+	user.webserver.stats.domains.default.bytes = 0;
+	user.webserver.stats.domains.default.hits = 0;
+	user.webserver.stats.domains.default.ticks = 0};
+bundle { //OPML editor stuff, 2/1/05; 10:29:04 AM by 
+	user.prefs.flShortTimeStamp = true;
+	user.prefs.flWinStandardMaximize = false;
+	user.prefs.openAboutWindow = true; //10/20/09 by DW
+	try {delete (@user.mdiWindow)};
+	try {delete (@user.folderWatcher)}};
+bundle { //Delete various opml.root stuff, 6/11/05; 9:43:00 AM by DW
+	try {delete (@Frontier.tools.data.nodeTypes.buddyOutlineElement)};
+	try {delete (@Frontier.tools.data.nodeTypes.buddySubscriberElement)}};
+bundle { //clean up various stuff in dotOpml.root, 6/2/06 by DW
+	try {delete (@dotOpmlSuite.mdiWindow.images.newsRiver)};
+	try {delete (@dotOpmlSuite.mdiWindow.pages.newsRiver)}};
+bundle { //save-copy shipping databases
+	local (oldtarget = target.set (@root));
+	local (fsave = frontier.pathstring + "virgin.root");
+	file.surefilepath (fsave);
+	filemenu.savecopy (fsave);
+	«file.copy (fsave, frontier.pathstring + "virgin.root")
+	
+	«if defined (dotOpmlSuite) //7/27/08 by DW
+		«target.set (@dotOpmlSuite)
+		«fsave = shipfolder + "Guest Databases" + pc + "apps" + pc + "Tools" + pc + "dotOpml.root"
+		«file.surefilepath (fsave)
+		«filemenu.savecopy (fsave)
+	«if defined (programmersMenuSuite) //7/27/08 by DW
+		«target.set (@programmersMenuSuite)
+		«filemenu.savecopy (shipfolder + "Guest Databases" + pc + "apps" + pc + "Tools" + pc + "programmersMenu.root")
+	«if defined (newsRiverSuite) //7/27/08 by DW
+		«target.set (@newsRiverSuite)
+		«filemenu.savecopy (shipfolder + "Guest Databases" + pc + "apps" + pc + "Tools" + pc + "newsRiver.root")
+	
+	target.set (oldtarget);
+	};
+	«file.openfolder (shipfolder)
+user.webedit = savedwebeditprefs;
+user.prefs = savedprefs;
+«bundle //copy shipfolder to place to test it
+	«try
+		«file.deletefolder ("H:\\Junk\\OPML\\")
+		«file.copy (shipfolder, "H:\\Junk\\OPML\\")
+		«file.openfolder ("H:\\Junk\\OPML\\")
+«bundle //PBS 07/05/00: delete unwanted databases
+	«on visitProc (f)
+		«if not (string.lower (f) == string.lower (Frontier.getFilePath ()))
+			«fileMenu.close (f)
+	«table.visitOpenDatabases (@visitProc, true) //close open gdbs
+	«local (f)
+	«local (folder = Frontier.getSubFolder ("")) //path to Guest Databases folder
+	«fileloop (f in folder, infinity)
+		«local (fname = file.fileFromPath (f))
+		«local (lowerName = string.lower (fname))
+		«lowerName = lowerName - file.getPathChar ()
+		«case lowerName
+			«"thexmlfiles.root"
+			«"manila.root"
+			«"mainresponder.root"
+			«"prefs.root"
+				«continue
+		«file.delete (f)
+	«folder = Frontier.getSubFolder ("ops")
+	«fileloop (f in folder)
+		«local (fname = file.fileFromPath (f))
+		«if f endsWith ".root"
+			«try {file.delete (f)}
+		«if file.isFolder (f)
+			«if f contains "theme"
+				«continue
+			«try {file.deleteFolder (f)}
+	«file.emptyFolder (folder) //delete everything in the ops folder
+	«folder = Frontier.getSubFolder ("www")
+	«fileloop (f in folder)
+		«local (fname = file.fileFromPath (f))
+		«if f endsWith ".root"
+			«if not (f contains "prefs")
+				«try {file.delete (f)}
+		«if file.isFolder (f)
+			«if f contains "theme"
+				«continue
+			«try {file.deleteFolder (f)}
+	«local (pc = file.getPathChar ())
+	«local (sourceFolder = file.getSystemDisk () + "VirginDatabases" + pc)
+	«folder = Frontier.getSubFolder ("apps")
+	«file.emptyFolder (folder)
+	«file.copy (sourceFolder + "mainResponder.root", folder)
+	«file.copy (sourceFolder + "manila.root", folder)
+	«folder = Frontier.getSubFolder ("apps/Tools/")
+	«file.copy (sourceFolder + "TheXmlFiles.root", folder)
+	«file.copy (sourceFolder + "serverMonitor.root", folder)
+	«file.copy (sourceFolder + "radioCommunityServer.root", folder)
+	«
+	«folder = Frontier.getSubFolder ("www")
+	«file.emptyFolder (folder)
+	«file.copy (sourceFolder + "prefs.root", folder)
+	«
+	«folder = Frontier.getSubFolder ("ops")
+	«file.emptyFolder (folder)
+	«file.copy (sourceFolder + "ops" + pc, folder)
+	«
+	«try {file.deleteFolder (frontier.pathString + "RCS Backups" + file.getPathChar ())}
+	«try {file.deleteFolder (frontier.pathString + "Manila Backups" + file.getPathChar ())}
+	«try {file.deleteFolder (frontier.pathString + "backups" + file.getPathChar ())}
+
+msg ("Finished.");
+return (true)
+
+

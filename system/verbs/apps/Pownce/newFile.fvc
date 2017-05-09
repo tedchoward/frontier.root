@@ -1,0 +1,65 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Pownce.newFile
+
+on newFile (f, bodytext, username=nil, password=nil, postTo="all") {
+	«Changes
+		«3/3/08; 7:08:50 PM by DW
+			«Created.
+	local (apiurl = "http://api.pownce.com/2.0/send/file.xml", server, path, t, boundary);
+	bundle { //set server, path
+		local (urllist = string.urlsplit (apiurl));
+		server = urllist [2];
+		path = urllist [3]};
+	bundle { //set username, password, if nil
+		if username == nil {
+			username = user.pownce.prefs.username};
+		if password == nil {
+			password = user.pownce.prefs.password}};
+	bundle { //set up the parameters table
+		new (tabletype, @t);
+		t.note_to = postTo;
+		t.note_body = bodytext;
+		t.app_key = user.pownce.prefs.appKey};
+	bundle { //build boundary
+		local (i);
+		boundary = "";
+		for i = 1 to 5 {
+			boundary = boundary + string.innerCaseName (states.nthState (random (1, 50)))};
+		boundary = string.hashmd5 (boundary)};
+	local (type = "multipart/form-data; boundary=" + boundary, body = "");
+	bundle { //build body
+		local (indentlevel = 0);
+		on add (s) {
+			body = body + string.filledstring ("\t", indentlevel) + s + "\r\n"};
+		for adr in @t {
+			add ("--" + boundary);
+			add ("Content-Disposition: form-data; name=\"" + nameof (adr^) + "\"");
+			add ("");
+			add (adr^)};
+		bundle { //add the file
+			local (type);
+			add ("--" + boundary);
+			add ("Content-Disposition: form-data; name=\"media_file\"; filename=\"" + file.filefrompath (f) + "\"");
+			bundle { //set type
+				local (ext = string.lastfield (f, "."));
+				type = "text/plain";
+				try {type = user.webserver.prefs.ext2MIME.[ext]}};
+			add ("Content-Type: " + type);
+			add ("");
+			add (string (file.readwholefile (f)));
+			add ("--" + boundary + "--")}};
+	body = string.delete (body, sizeof (body) - 2, 2);
+	«wp.newtextobject (body, @scratchpad.body)
+	local (result = tcp.httpclient ("POST", server, 80, path, datatype:type, data:body, debug:false, username:username, password:password, timeOutTicks:60*60*60));
+	wp.newtextobject (result, @scratchpad.posttext)};
+	«edit (@scratchpad.posttext)
+	«result = string.httpResultSplit (result)
+	«xml.compile (result, @xstruct)
+	«local (adrrsp = xml.getaddress (@xstruct, "rsp"))
+	«local (photoid = xml.getvalue (adrrsp, "photoid"))
+	«return (photoid)
+bundle { //test code
+	f = "ohio:clintonConferenceCall.mp3";
+	bodytext = "A campaign conference call MP3 from the Clinton campaign. Good news, we have a partner, a huge media company that decided to work with the bloggers. More to come.";
+	newFile (f, bodytext)}
+
+

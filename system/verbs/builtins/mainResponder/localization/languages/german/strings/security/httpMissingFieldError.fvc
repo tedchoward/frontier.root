@@ -1,0 +1,5 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.localization.languages.german.strings.security.httpMissingFieldError
+
+Der Request konnte vom Server nicht verarbeitet werden, weil das ben&ouml;tigte Feld [[field]] nicht im Authorization-Header vorkam.
+
+

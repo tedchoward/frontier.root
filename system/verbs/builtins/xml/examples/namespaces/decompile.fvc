@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.examples.namespaces.decompile
+
+with xml.examples.namespaces {
+	wp.newtextobject (xml.decompile (@tableStructure), @xText)}
+
+

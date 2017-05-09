@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.undo
+
+on undo () { «Undoes the effects of the last command, if possible.
+	return (appleEvent (BBEdit.id, 'misc', 'undo'))}
+
+

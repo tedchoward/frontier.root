@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.pocalypse.view
+
+on view () {
+	«Changes
+		«3/30/12; 10:46:43 AM by DW
+			«Created.
+	local (adroutline = address (window.frontmost ()), lo = adroutline^, atts);
+	target.set (@lo);
+	op.go (left, infinity);
+	op.attributes.getall (@atts);
+	webbrowser.openurl (atts.url);
+	webbrowser.bringtofront ()};
+bundle { //test code
+	view ()}
+
+

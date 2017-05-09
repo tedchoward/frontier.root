@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.menu.setScript
+
+on setScript (val) {
+	kernel (menu.setscript)}
+
+

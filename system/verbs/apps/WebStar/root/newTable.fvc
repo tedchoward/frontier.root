@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.root.newTable
+
+on newTable (adrserver, path) {
+	return (appleEvent (adrserver, 'ODBF', 'NEWT', '----', string (path)))}
+
+

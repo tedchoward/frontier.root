@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fatPages.fileIsFat
+
+on fileIsFat (f) {
+	local (s = fatPages.readSourceFile (f));
+	return (fatPages.dataIsFat (@s))}
+
+

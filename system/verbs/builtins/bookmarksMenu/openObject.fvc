@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.bookmarksMenu.openObject
+
+on openObject (adr, windowtitle) {
+	edit (adr, windowTitle)}
+
+

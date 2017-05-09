@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.server.deleteOldInboxes
+
+on deleteOldInboxes () {
+	«Changes
+		«7/26/10; 6:58:11 PM by DW
+			«Count individual deletions, not calls to this routine.
+		«7/26/10; 6:54:30 PM by DW
+			«Count the number of inbox deletions.
+		«7/26/10; 6:30:03 PM by DW
+			«If an inbox hasn't been checked in N hours, it's deemed old and can be reclaimed. 
+	local (adrdata = realtime.init (), adruser, now = clock.now (), i);
+	adrdata^.server.stats.whenLastDeleteInboxes = now;
+	local (ctsecsmax = adrdata^.server.prefs.ctSecsReclaimInbox);
+	for adruser in @adrdata^.server.users {
+		for i = sizeof (adruser^.inboxes) downto 1 {
+			local (adrinbox = @adruser^.inboxes [i]);
+			local (ctsecs = number (now - adrinbox^.stats.whenLastCheck));
+			if ctsecs > ctsecsmax {
+				adrdata^.server.stats.ctDeleteInboxes++;
+				delete (adrinbox)}}}};
+bundle { //test code
+	deleteOldInboxes ()}
+
+

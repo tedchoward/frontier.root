@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.AnArchie.about
+
+on about () { «open the about box
+	return (appleEvent (AnArchie.id, 'core', 'abou'))}
+
+

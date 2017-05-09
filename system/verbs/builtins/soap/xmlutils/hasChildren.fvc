@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.xmlutils.hasChildren
+
+on hasChildren (adrelement) {
+	return (boolean (soap.xmlutils.getFirstChildElement (adrelement)))}
+
+

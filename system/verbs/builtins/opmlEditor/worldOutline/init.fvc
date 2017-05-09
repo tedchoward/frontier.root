@@ -1,0 +1,116 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.init
+
+on init () {
+	«Changes
+		«12/18/13; 11:23:40 AM by DW
+			«Init prefs.flDialogAfterSave to false. Useful when working in libraries -- no beeps. ;-)
+		«12/14/12; 12:14:43 PM by DW
+			«Init items for history.
+				«http://worknotes.scripting.com/december2012/121412ByDw/historyFunctionInEditor
+		«10/5/12; 2:46:26 PM by DW
+			«Init newPostType pref.
+				«http://worknotes.scripting.com/october2012/10512ByDw/worldoutlineButtons
+		«9/4/12; 6:02:55 PM by DW
+			«Init user.worldOutline.buttons table. Init system.temp.opmlEditor.worldOutline table.
+		«3/7/12; 9:07:51 PM by DW
+			«Init the templates table.
+		«2/22/12; 10:22:19 PM by DW
+			«Arrrgh. Mis-spelled "tabletype." 
+		«2/22/12; 6:19:50 PM by DW
+			«Make sure system.temp.worldoutline exists.
+		«2/11/12; 4:28:31 PM by DW
+			«Convert to the new multi-server setup.
+		«1/11/12; 6:07:54 PM by DW
+			«Install the bookmark handler for root outlines.
+		«11/25/11; 9:23:16 AM by DW
+			«Init flOpenOnLaunch pref.
+		«11/25/11; 8:49:47 AM by DW
+			«Move worldOutlineFont pref into this table.
+		«11/3/11; 9:53:59 AM by DW
+			«Init prefs for keeping a local copy of archived outlines. 
+		«7/19/11; 10:04:01 AM by DW
+			«Init cloud prefs.
+		«7/3/11; 8:46:17 PM by DW
+			«Init pgfSerialNum stat, install opInsertCallback.
+		«6/14/11; 9:03:38 AM by DW
+			«Init a new pref, domain.
+		«6/6/11; 9:35:16 AM by DW
+			«Created.
+	local (adrdata = @user.opmlEditor.worldOutline);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)};
+		if not defined (adrdata^.prefs.defaultServer) { //2/11/12 by DW
+			adrdata^.prefs.defaultServer = ""};
+		if not defined (adrdata^.prefs.headerFont) { //11/25/11 by DW
+			if defined (user.opmlEditor.prefs.worldOutlineHeaderFont) {
+				adrdata^.prefs.headerFont = user.opmlEditor.prefs.worldOutlineHeaderFont;
+				delete (@user.opmlEditor.prefs.worldOutlineHeaderFont)}
+			else {
+				adrdata^.prefs.headerFont = "Fontdiner Swanky"}};
+		if not defined (adrdata^.prefs.flOpenOnLaunch) { //11/25/11 by DW
+			adrdata^.prefs.flOpenOnLaunch = false};
+		if not defined (adrdata^.prefs.newPostType) { //10/5/12 by DW
+			adrdata^.prefs.newPostType = "thread"};
+		if not defined (adrdata^.prefs.flDialogAfterSave) { //12/18/13 by DW
+			adrdata^.prefs.flDialogAfterSave = false};
+		bundle { //cloud, 7/19/11 by DW
+			if not defined (adrdata^.prefs.cloud) {
+				new (tabletype, @adrdata^.prefs.cloud)};
+			if not defined (adrdata^.prefs.cloud.server) {
+				adrdata^.prefs.cloud.server = "rpc.rsscloud.org"};
+			if not defined (adrdata^.prefs.cloud.port) {
+				adrdata^.prefs.cloud.port = 5337};
+			if not defined (adrdata^.prefs.cloud.path) {
+				adrdata^.prefs.cloud.path = "/rsscloud/pleaseNotify"};
+			if not defined (adrdata^.prefs.cloud.protocol) {
+				adrdata^.prefs.cloud.protocol = "http-post"};
+			if not defined (adrdata^.prefs.cloud.registerProcedure) {
+				adrdata^.prefs.cloud.registerProcedure = ""}};
+		bundle { //local archive, 11/3/11 by DW
+			if not defined (adrdata^.prefs.flArchivedOutlinesLocally) { //11/3/11 by DW
+				adrdata^.prefs.flArchivedOutlinesLocally = true};
+			if not defined (adrdata^.prefs.folderLocalArchive) { //11/3/11 by DW
+				adrdata^.prefs.folderLocalArchive = frontier.getSubFolder ("/ops/worldOutline/archive/")}}};
+		«bundle //no longer initialized -- multi-server setup -- 2/11/12 by DW
+			«if not defined (adrdata^.prefs.username)
+				«adrdata^.prefs.username = ""
+			«if not defined (adrdata^.prefs.password)
+				«adrdata^.prefs.password = ""
+			«if not defined (adrdata^.prefs.server)
+				«adrdata^.prefs.server = ""
+			«if not defined (adrdata^.prefs.domain) //6/13/11 by DW
+				«adrdata^.prefs.domain = ""
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)};
+		if not defined (adrdata^.stats.pgfSerialnum) { //7/3/11 by DW
+			adrdata^.stats.pgfSerialnum = 1};
+		if not defined (adrdata^.stats.ctHistoryAdds) { //12/13/12 by DW
+			adrdata^.stats.ctHistoryAdds = 1}};
+	bundle { //misc
+		if not defined (user.callbacks.opInsert.worldOutline) { //7/3/11 by DW
+			user.callbacks.opInsert.worldOutline = @opmlEditor.worldOutline.opInsertCallback};
+		if not defined (user.callbacks.addBookmark.worldOutline) { //1/11/12 by DW
+			user.callbacks.addBookmark.worldOutline = @opmlEditor.worldOutline.addBookmarkCallback};
+		if not defined (system.temp.worldOutline) { //2/22/12 by DW
+			new (tabletype, @system.temp.worldOutline)};
+		if not defined (adrdata^.history) { //12/13/12 by DW
+			new (tabletype, @adrdata^.history)}};
+	if not defined (adrdata^.workspace) {
+		new (outlinetype, @adrdata^.workspace)};
+	if not defined (adrdata^.servers) { //2/11/12 by DW
+		new (tabletype, @adrdata^.servers)};
+	if not defined (adrdata^.templates) { //3/7/12 by DW
+		new (tabletype, @adrdata^.templates)};
+	if not defined (adrdata^.buttons) { //9/4/12 by DW
+		new (tabletype, @adrdata^.buttons)};
+	if not defined (system.temp.opmlEditor.worldOutline) { //9/4/12 by DW
+		new (tabletype, @system.temp.opmlEditor.worldOutline)};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

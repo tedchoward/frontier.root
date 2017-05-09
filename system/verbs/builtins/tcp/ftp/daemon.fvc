@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.ftp.daemon
+
+on daemon (stream, refcon) {
+	system.temp.ftpClientListens.[refcon].stream = stream;
+	system.temp.ftpClientListens.[refcon].ready = true}
+
+

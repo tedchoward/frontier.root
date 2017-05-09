@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.close
+
+on close () {
+	return (appleEvent (0, card.id, 'clos'))}
+
+

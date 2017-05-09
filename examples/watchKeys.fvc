@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:examples.watchKeys
+
+if kb.cmdKey () {
+	dialog.alert ("You pressed the Command key!")};
+if kb.controlKey () {
+	dialog.alert ("You pressed the Control key!")};
+if kb.optionKey () {
+	dialog.alert ("You pressed the Option key!")};
+if kb.shiftKey () {
+	dialog.alert ("You pressed the Shift key!")}
+
+

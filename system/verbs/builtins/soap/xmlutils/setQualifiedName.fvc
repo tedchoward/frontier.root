@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.xmlutils.setQualifiedName
+
+on setQualifiedName (adrmsg, localpart, namespaceURI = false) {
+	if (namespaceURI) {
+		return (soap.xmlutils.namespaceURIToPrefix (adrmsg, namespaceURI) + ":" + localpart)};
+	return (localpart)}
+
+

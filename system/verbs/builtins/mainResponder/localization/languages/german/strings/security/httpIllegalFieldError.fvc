@@ -1,0 +1,5 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.localization.languages.german.strings.security.httpIllegalFieldError
+
+Der Request konnte vom Server nicht verarbeitet werden, weil der Authorization-Header das unzul&auml;ssige Feld [[field]] enthielt.
+
+

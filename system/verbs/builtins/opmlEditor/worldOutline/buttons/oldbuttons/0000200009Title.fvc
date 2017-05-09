@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.buttons.oldbuttons.["00002000\tTitle"]
+
+«Changes
+	«8/16/12; 1:14:51 PM by DW
+		«Also set the title attribute of the window.
+			«http://worknotes.scripting.com/august2012/81612ByDw/preservingTitleOverSave
+	«12/30/11; 11:22:23 AM by DW
+		«Created. 
+local (adrwindow = window.frontmost (), title = window.gettitle (adrwindow));
+if dialog.ask ("New title for outline?", @title) {
+	window.settitle (adrwindow, title);
+	window.attributes.setOne ("title", title, adrwindow)}
+
+

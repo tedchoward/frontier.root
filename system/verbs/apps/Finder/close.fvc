@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Finder.close
+
+on close (obj) { «Close an object
+	if Finder.isScriptable () {
+		return (appleEvent (Finder.id, 'core', 'clos', '----', Finder.finderSpec (obj)))}
+	else {
+		return (Finder.windowVerb ('clos', obj))}}
+
+

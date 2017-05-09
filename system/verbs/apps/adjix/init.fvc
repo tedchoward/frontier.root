@@ -1,0 +1,46 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.adjix.init
+
+on init () {
+	«Changes
+		«8/25/09; 8:36:14 AM by DW
+			«Created. 
+	local (adrdata = @config.adjix);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)};
+		if not defined (adrdata^.prefs.partnerID) {
+			adrdata^.prefs.partnerID = ""};
+		if not defined (adrdata^.prefs.email) {
+			adrdata^.prefs.email = ""};
+		if not defined (adrdata^.prefs.password) {
+			adrdata^.prefs.password = ""};
+		if not defined (adrdata^.prefs.apiKey) {
+			adrdata^.prefs.apiKey = "503c256ad3184fa4b7f4112b08cbd555"}};
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)};
+		if not defined (adrdata^.stats.ctCreates) {
+			adrdata^.stats.ctCreates = 0};
+		if not defined (adrdata^.stats.whenLastCreate) {
+			adrdata^.stats.whenLastCreate = date (0)};
+		if not defined (adrdata^.stats.calendar) {
+			new (tabletype, @adrdata^.stats.calendar)};
+		if not defined (adrdata^.stats.ctCreateErrors) {
+			adrdata^.stats.ctCreateErrors = 0};
+		if not defined (adrdata^.stats.whenLastCreateError) {
+			adrdata^.stats.whenLastCreateError = date (0)};
+		if not defined (adrdata^.stats.ctGetAccountUrls) {
+			adrdata^.stats.ctGetAccountUrls = 0};
+		if not defined (adrdata^.stats.whenLastGetAccountUrls) {
+			adrdata^.stats.whenLastGetAccountUrls = date (0)};
+		if not defined (adrdata^.stats.ctGetAccountUrlsErrors) {
+			adrdata^.stats.ctGetAccountUrlsErrors = 0};
+		if not defined (adrdata^.stats.whenLastGetAccountUrlsError) {
+			adrdata^.stats.whenLastGetAccountUrlsError = date (0)}};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

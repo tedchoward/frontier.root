@@ -1,0 +1,22 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.addAttribute
+
+on addAttribute (adritem, name, value) {
+	«Changes
+		«5/13/12; 2:23:40 PM by DW
+			«If the item doesn't have an atts sub-table, create it.
+		«10/9/11; 10:06:20 AM by DW
+			«A very basic XML routine that was missing. I love filling these gaps! :-)
+	if typeof (adritem^) != tabletype { //convert it
+		local (origvalue = adritem^);
+		delete (adritem);
+		new (tabletype, adritem);
+		adritem^.["/pcdata"] = origvalue;
+		new (tabletype, @adritem^.["/atts"])};
+	local (adratts = @adritem^.["/atts"]);
+	if not defined (adratts^) {
+		new (tabletype, adratts)};
+	adratts^.[name] = value};
+bundle { //test code
+	addAttribute ()}
+
+

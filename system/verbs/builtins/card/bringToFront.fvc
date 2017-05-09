@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.bringToFront
+
+on bringToFront () {
+	card.details.notsupported ("bringToFront")}
+
+

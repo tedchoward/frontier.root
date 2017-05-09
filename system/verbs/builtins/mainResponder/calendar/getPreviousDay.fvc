@@ -1,0 +1,21 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.calendar.getPreviousDay
+
+on getPreviousDay (adrcal, theDate) {
+	«Changes
+		«1/16/09; 9:15:02 AM by DW
+			«Created. Get the previous day from the calendar structure. Loop until a date that exists is found. 
+			«We had the analogous routine for getting the next day, why shouldn't we have one that gets the previous day? The key feature of this verb is that we loop until we find a real day.
+	local (firstdate = mainresponder.calendar.getfirstday (adrcal), nomad = theDate);
+	loop {
+		if nomad < firstdate {
+			scripterror ("Can't get the previous day in the calendar because the calendar doesn't contain any elements before " + firstdate + ".")};
+		try {
+			sizeof (mainresponder.calendar.getDayAddress (adrcal, nomad, false)^); //scripterror if doesn't exist
+			return (nomad)};
+		nomad = date.yesterday (nomad)}}
+«bundle //test code
+	«local (adrcal = @config.twitterCalendar.users.davewiner.calendar)
+	«local (d = date ("1/14/09"))
+	«dialog.alert (getPreviousDay (adrcal, d))
+
+

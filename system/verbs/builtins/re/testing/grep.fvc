@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.re.testing.grep
+
+local (theList = {"aa", "aab", "a", "ab", ""});
+local (patternRef);
+
+patternRef = re.compile ("^aa");
+dialog.notify (re.grep (patternRef, theList));
+dialog.notify (re.grep (patternRef, theList, flIncludeMatches:false));
+dialog.notify (re.grep (patternRef, re.join (cr, theList) + cr));
+dialog.notify (re.grep (patternRef, re.join (cr, theList) + cr, flIncludeMatches:false))
+
+

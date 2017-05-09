@@ -1,0 +1,33 @@
+FrontierVcsFile:3:scpt:user.html.renderers.ideaListRenderer
+
+on ideaListRenderer (adroutline) { «renders user.websites.midas.odb.ideas
+	op.firstsummit ();
+	op.fullexpand ();
+	local (level = 0);
+	on visit () {
+		loop {
+			local (hassubs = op.countSubs (1) > 0);
+			local (s = "");
+			s = s + "<table><tr>";
+			if level > 0 { «add a dummy cell to do the indentation
+				local (indentpixels = 25 * level);
+				s = s + "<td width=" + indentpixels + ">";
+				s = s + html.data.standardMacros.spacePixels (indentpixels);
+				s = s + "</td>"};
+			local (linetext = op.getlinetext ());
+			if hassubs {
+				linetext = "<b>" + linetext + "</b>"};
+			s = s + "<td>" + linetext + "</td></tr></table>";
+			op.setlinetext (s);
+			if hassubs {
+				op.go (right, 1);
+				level++;
+				visit ();
+				level--;
+				op.go (left, 1)};
+			if not op.go (down, 1) {
+				break}}};
+	visit ();
+	return (string (adroutline^))}
+
+

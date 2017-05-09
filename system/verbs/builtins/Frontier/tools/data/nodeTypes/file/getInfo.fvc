@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.data.nodeTypes.file.getInfo
+
+local (infotext =  "");
+on add (s) {
+	infotext = infotext + s + "\r"};
+local (atts);
+if op.attributes.getall (@atts) {
+	try {add ("Url: " + atts.url)};
+	try {add ("Updated: " + date (atts.whenLastUploaded))};
+	dialog.notify (infotext)}
+
+

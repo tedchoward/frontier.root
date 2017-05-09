@@ -1,0 +1,125 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.log.addToOutline
+
+on addToOutline (item, flHourlyRoll=true, outlineUrl=nil, logname="default", startticks=nil) {
+	«Changes
+		«4/21/09; 2:40:27 PM by DW
+			«Call log.init.
+		«6/14/05; 8:14:24 PM by DW
+			«Optional outlineUrl param, defaults nil. If not nil, it represents the outline that's being logged about, for example it might be the outline being uploaded. 
+		«6/13/05; 5:20:43 AM by DW
+			«Created. A modern version of outline-based logging.
+	on savelog () {
+		system.temp.log.addsSinceSave = 0; //reset counter
+		on pad (num) {
+			return (string.padwithzeros (num, 2))};
+		local (day, month, year, hour, minute, second);
+		date.get (now, @day, @month, @year, @hour, @minute, @second);
+		local (f = user.log.prefs.folder + year + "." + pad (month) + "." + pad (day));
+		if logname == "default" {
+			f = f  + ".opml"}
+		else {
+			f = f  + "-" + logname + ".opml"};
+		file.surefilepath (f);
+		file.writewholefile (f, op.outlinetoxml (adroutline))};
+	local (now = clock.now ());
+	local (adroutline = @user.log.outlines.[logname]);
+	log.init (); //4/21/09 by DW
+	
+	«semaphores.lock (string (adroutline), 3600)
+	bundle { //start outline fresh if new day
+		local (flnewday = false, theDay = date.day (now));
+		if not defined (system.temp.log.dayLastLogAdd) {
+			system.temp.log.dayLastLogAdd = 0};
+		if theDay != system.temp.log.dayLastLogAdd {
+			flnewday = true};
+		if flnewday {
+			try {savelog ()};
+			new (outlinetype, adroutline);
+			system.temp.log.lasthour = 0};
+		system.temp.log.dayLastLogAdd = theDay};
+	
+	if not defined (adroutline^) {
+		system.temp.log.lasthour = 0;
+		new (outlinetype, adroutline)};
+	local (oldtarget = target.set (adroutline));
+	on additem (item, dir) {
+		local (secs = "");
+		bundle { //set secs
+			if startticks != nil {
+				local (s = string (double (clock.ticks () - startticks) / 60));
+				local (lod = string.nthfield (s, ".", 1));
+				local (rod = string.nthfield (s, ".", 2));
+				if sizeof (rod) > 3 {
+					rod = string.mid (rod, 1, 3)}
+				else {
+					if sizeof (rod) < 3 {
+						rod = string.padwithzeros (rod, 3)}};
+				secs = lod + "." + rod}};
+		op.insert (item + " at " + date.timestring (now, true) + ", " + secs + " secs.", dir);
+		if outlineUrl != nil {
+			local (atts);
+			new (tabletype, @atts);
+			atts.type = "link";
+			atts.url = outlineUrl;
+			op.attributes.addgroup (@atts)}};
+	if flHourlyRoll {
+		local (day, month, year, hour, minute, second, flroll = false, insertdir = up);
+		date.get (now, @day, @month, @year, @hour, @minute, @second);
+		if not defined (system.temp.log.lasthour) {
+			flroll = true}
+		else {
+			flroll = (hour != system.temp.log.lasthour)};
+		if flroll {
+			op.firstsummit ();
+			op.insert (date.timestring (date.set (day, month, year, hour, 0, 0), false), up);
+			insertdir = right}
+		else {
+			op.firstsummit ();
+			insertdir = right};
+		additem (item, insertdir);
+		system.temp.log.lasthour = hour}
+	else {
+		op.firstsummit ();
+		additem (item, up)};
+	target.set (oldtarget);
+	if system.temp.log.addsSinceSave++ > user.log.prefs.addsBetweenSaves {
+		savelog ()}};
+	«semaphores.unlock (string (adroutline))
+	«local (oldTarget = target.get ())
+		«if not defined (adroutline^)
+			«new (outlineType, adroutline)
+			«if flViewLog
+				«edit (adroutline)
+		«on addstring (s)
+			«s = s + "; on " + now
+			«if op.getlinetext () == ""
+				«op.setlinetext (s)
+			«else
+				«op.insert (s, up)
+		«target.set (adroutline)
+		«op.firstSummit ()
+		«case typeof (item)
+			«stringtype
+				«addstring (item)
+			«listtype
+				«if sizeOf (item) > 0
+					«local (i, dir = right)
+					«addstring (item [1])
+					«for i = 2 to sizeof (item)
+						«op.insert (item [i], dir)
+						«dir = down
+					«if dir == down
+						«op.go (left, 1)
+		«else
+			«try
+				«addstring (string (item))
+		«target.set (oldTarget)
+		«if flViewLog
+			«edit (adroutline)
+bundle { //test code
+	local (tc = clock.ticks () - 150);
+	for i = 1 to 1 {
+		local (item = states.nthstate (random (1, 50)));
+		addToOutline (item, startticks:tc)}}
+
+

@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.outlinerSetCollapse
+
+on outlinerSetCollapse () {
+	«Changes
+		«9/30/12; 11:30:52 AM by DW
+			«Created.
+				«http://worknotes.scripting.com/september2012/93012ByDw/newSetCollapseMenuCommand
+	local (fl, lt = op.getlinetext ());
+	case dialog.threeWay ("Set the collapse attribute of \"" + lt + "\" to?", "'True'", "'False'", "Cancel") {
+		1 { //Yes
+			fl = true};
+		2 { //No
+			fl = false};
+		3 { //Cancel
+			return}};
+	op.attributes.setone ("collapse", fl)}
+«bundle //test code
+	«outlinerSetCollapse ()
+
+

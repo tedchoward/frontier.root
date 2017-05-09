@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:examples.readAllText
+
+f = "System:System Folder:textfile";
+if file.open (f) {
+	while not file.endOfFile (f) {
+		msg (file.readLine (f))};
+	file.close (f)}
+
+

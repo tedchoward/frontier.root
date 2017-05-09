@@ -1,0 +1,33 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.getSubFolder
+
+on getSubFolder (path) {
+	«Changes
+		«8/16/08; 9:31:44 PM by DW
+			«Changed frontier.getfilepath to frontier.getprogrampath. 
+		«8/15/08; 5:23:17 AM by DW
+			«Instead of using frontier.pathstring as the basefolder, compute the location. I think there are places where this code runs before startup.startupScript and frontier.pathstring has not yet been correctly set. I'm seeing parts from rootupdates ending up in odd places and it calls this verb to locate the ops folder.
+		«8/15/08; 4:58:52 AM by DW
+			«Minor code cleanup, no change in functionality.
+		«12/13/98; 7:01:34 AM by DW
+			«A new core verb, we are going to move all UserLand-managed folders in to this folder. Others are welcome to do so too.
+	local (pc = file.getPathChar (), basefolder = file.folderfrompath (frontier.getprogrampath ()));
+	local (folder = basefolder + "Guest Databases" + pc);
+	if not (file.exists (folder)) {
+		local (nirvanaFolder = basefolder + "Nirvana Server" + pc);
+		if file.exists (nirvanaFolder) { //grandfather-in a very old concept, 8/15/08 by DW
+			folder = nirvanaFolder}
+		else {
+			file.newFolder (folder)}};
+	path = string.popLeading (path, "/");
+	path = string.replaceall (path, "/", pc);
+	folder = folder + path;
+	if not (folder endswith pc) {
+		folder = folder + pc};
+	if not (file.exists (folder)) {
+		file.sureFilePath (folder);
+		file.sureFolder (folder)};
+	return (folder)}
+«bundle //test code
+	«dialog.alert (getSubFolder ("/ops/datafiles/"))
+
+

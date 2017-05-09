@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fileSynch.backup
+
+local (folder = user.fileSynch.synchPoints.["Amazon S3"].prefs.folder);
+local (pc = file.getpathchar ());
+folder = folder + "backups" + pc;
+if not defined (scratchpad.filesynchbackupserialnum) {
+	scratchpad.filesynchbackupserialnum = 0};
+scratchpad.filesynchbackupserialnum++;
+filemenu.save ();
+local (serialnum = scratchpad.filesynchbackupserialnum);
+local (subfolder = folder + "backup #" + string.padwithzeros (serialnum, 3) + pc);
+local (f = subfolder + "builtins.fileSynch.fttb");
+file.surefilepath (f);
+export.sendobject (@fileSynch, f);
+f = subfolder + "apps.s3.fttb";
+export.sendobject (@s3, f);
+fileSynch.thread.wake ()
+
+

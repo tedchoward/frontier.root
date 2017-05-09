@@ -1,0 +1,177 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.nodeTypes.callbacks.opRightClick
+
+on opRightClick (adradrmenu) {
+	«Changes
+		«4/24/12; 11:05:11 AM by DW
+			«Callbacks added as window attributes.
+				«http://worknotes.scripting.com/april2012/42412ByDw/rightclickCallbacks
+		«5/11/11; 9:02:24 AM by DW
+			«Commented command to set nodetype to "html" -- we have a more general menu command that allows you to set the nodetype to whatever you like.
+		«5/4/11; 12:43:04 PM by DW
+			«New local, flHaveNodetype -- true if the outline node has a type attribute. New command, to set the type att to "html".
+		«4/1/10; 9:46:40 AM by DW
+			«If the window had an "adrRightClickMenu" attribute, we would always insert the menu down from the cursor, which wouldn't work if it was the first item in the menu. Now we check and add it to the right if it's the first one.
+		«11/11/09; 7:01:04 PM by DW
+			«If the attached window menu does't exist, don't bomb. Eliminate the Get Info command. Redundant with Debug.
+		«3/19/06; 3:04:47 PM by DW
+			«Add Feed and Add Inclusion commands appear for the first time. You only have the choice to add an inclusion if you've got the globals set up for OPML 2.0 outlines.
+		«8/2/05; 12:22:13 PM by DW
+			«If the window has its own menu, insert it. 
+			«To see the other side look at dotOpmlSuite.blog.openTodaysOutline.
+		«7/1/05; 6:57:05 PM by DW
+			«If there's a menubar object at system.temp.opRightClick.catMenubar, insert it at the end of the right click menu.
+		«3/25/02; 8:49:42 PM by JES
+			«Add the Post to Weblog command, if running in Radio.
+		«6/23/01; 12:38:36 AM by JES
+			«If a nodeType has a getBookmarkLogic script, then flbookmarkpossible is true. Call builtins.bookmarksMenu.add to add a bookmark, instead of Frontier.tools.commands.addBookmark.
+		«12/30/00; 8:02:50 PM by JES
+			«Only add the Add Link command for nodes which are links, or which have no type.
+		«12/18/00; 8:52:54 PM by JES
+			«Script for the Add Bookmark command calls playlist.bookmark.addNodeItem. Make it possible to bookmark a Manila site's homepage, templates, and siteStructureMessage nodes.
+		«Saturday, December 02, 2000 at 2:46:18 PM by PBS
+			«Add an Add Link... command when:
+				«It's an outline.
+				«The outline is not read only.
+				«There are no subheads.
+		«Monday, September 18, 2000 at 5:28:05 AM by DW
+			«The code for Expand All Subheads was wrong, it was only expanding one level of subheads. 
+	local (adrMenu = @system.temp.rightClickMenu, atts);
+	local (flSubsExpanded = op.subsExpanded ()); //do we need Expand or Collapse menu item?
+	local (flHasSubs = (op.countSubs (1) > 0)); //has subheads?
+	local (flHasSubSubs = (op.countSubs (1) != op.countSubs (2)));
+	local (flReadOnly = false);
+	if not date.versionLessThan (Frontier.version (), "7.0b17") {
+		flReadOnly = window.isReadOnly (target.get ())};
+	local (windowType = typeOf (target.get ()^));
+	local (flbookmarkpossible);
+	bundle { //set flbookmarkpossible
+		flbookmarkpossible = false;
+		try {
+			local (adr = table.getCursorAddress ());
+			if typeof (adr) == addresstype {
+				flbookmarkpossible = typeof (adr^) == tabletype}};
+		if not flbookmarkpossible {
+			local (url);
+			flbookmarkpossible = op.attributes.getOne ("url", @url)}};
+		«if not flbookmarkpossible //12/18/00 JES: bookmarks are possible for homepage, template and siteStructureMessage nodes
+			«local (type, url)
+			«if op.attributes.getOne ("type", @type)
+				«flbookmarkpossible = string.lower (type) == "manilahomepage"
+				«if not flbookmarkpossible
+					«flbookmarkpossible = string.lower (type)  == "manilatemplate"
+				«if not flbookmarkpossible
+					«flbookmarkpossible = string.lower (type)  == "manilasitestructuremessage"
+	
+	local (nodeType, flHaveNodetype);
+	op.attributes.getall (@atts); //4/24/12 by DW
+	flHaveNodetype = op.attributes.getOne ("type", @nodeType);
+	
+	local (flnewmenu = true);
+	bundle { //add commands pertinent to the type
+		local (adrtable);
+		if Frontier.tools.nodetypes.findnodetype (nodeType, @adrtable) {
+			local (adrtypemenu = @adrtable^.rightClickMenu);
+			if defined (adrtypemenu^) {
+				adrmenu^ = adrtypemenu^;
+				flnewmenu = false};
+			if defined (adrtable^.getBookmarkLogic) {
+				flbookmarkpossible = true}
+			else { //it might be a builtin node type
+				if defined (bookmarksMenu.builtinNodeTypes.nodeTypes) {
+					local (nodeType = nameOf (adrtable^));
+					if defined (bookmarksMenu.builtinNodeTypes.nodeTypes.[nodeType]) {
+						flbookmarkpossible = true}}}}};
+	if flnewmenu {
+		new (menubartype, adrmenu)};
+	local (oldtarget = target.set (adrmenu));
+	local (menuname = "Right-Click Menu");
+	op.firstSummit ();
+	op.setLineText (menuname);
+	
+	bundle { //add the users right-click menu if it's been edited
+		local (adrusermenu = @user.tools.menus.rightclickmenu);
+		if defined (adrusermenu^) {
+			if timemodified (adrusermenu) > (timecreated (adrusermenu) + 5) {
+				op.insertoutline (adrusermenu, right)}}};
+	
+	on addCommand (itemName, scriptString) {
+		menu.addMenuCommand (adrMenu, menuName, itemName, scriptString)};
+	on addSeparator () {
+		op.insert ("-", down)};
+	bundle { //add basic outlining/text commands
+		if system.environment.isRadio { //Post to Weblog command
+			addCommand ("Post to Weblog", "radio.outliner.menuCommands.postToWeblog ()")};
+		
+		if flHasSubs { //Expand and Collapse menu items
+			if flSubsExpanded { //Collapse
+				menu.addMenuCommand (adrMenu, menuName, "Collapse", "op.collapse ()")}
+			else {
+				addCommand ("Expand", "op.expand (1)")};
+			if flHasSubSubs or (not flSubsExpanded) {
+				if flSubsExpanded {
+					addSeparator ()};
+				addCommand ("Expand All Subheads", "op.expand (infinity)")}}
+		else { //Add Link, Add Feed commands
+			if windowType == outlineType {
+				if not flReadOnly {
+					local (lowernodetype = string.lower (nodeType));
+					if (nodeType == nil) or (lowernodetype == "link") {
+						addCommand ("Add Link...", "Frontier.tools.commands.addLink ()")};
+					if (nodeType == nil) or (lowernodetype == "rss") {
+						addCommand ("Add Feed...", "Frontier.tools.commands.addFeed ()")};
+					if defined (user.prefs.flGenerateOpml2) {
+						if user.prefs.flGenerateOpml2 {
+							if (nodeType == nil) or (lowernodetype == "include") {
+								addCommand ("Add Inclusion...", "Frontier.tools.commands.addInclusion ()")}}}}}};
+		
+		«bundle //outline commands that are present whether or not the node has subs, 5/4/11 by DW
+			«if windowType == outlineType
+				«if not flHaveNodetype
+					«addSeparator ()
+					«addCommand ("Make HTML node...", "Frontier.tools.commands.setHtmlNode ()")
+		
+		bundle { //if the window has its own menu, insert it, 8/2/05; 12:22:13 PM by DW
+			local (adrwinmenu);
+			if window.attributes.getone ("adrRightClickMenu", @adrwinmenu) {
+				try { //11/11/09 by DW -- maybe the menu doesn't exist
+					local (themenu = adrwinmenu^, dir = down);
+					«dialog.alert (op.level ())
+					if op.level () == 1 { //4/1/10 by DW
+						dir = right};
+					op.insertoutline (@themenu, dir)}}};
+		
+		addSeparator ();
+		if not flReadOnly { //Cut command
+			addCommand ("Cut", "editMenu.cut ()")};
+		addCommand ("Copy", "editMenu.copy ()");
+		if not flReadOnly { //Paste command
+			addCommand ("Paste", "editMenu.paste ()")};
+		if flbookmarkpossible {
+			addSeparator ();
+			addCommand ("Add Bookmark...", "bookmarksMenu.addNode ()")};
+		
+		if nodeType != "" { //display node type string in dialog box; Get Info, Debug commands
+			addSeparator ();
+			«addCommand ("Get Info", "Frontier.tools.nodeTypes.getInfo ()") //11/11/09 by DW -- commented
+			addCommand ("Debug", "op.attributes.getall (@scratchpad.atts); edit (@scratchpad.atts); window.zoom (@scratchpad.atts)")}};
+	bundle { //if there's a category menu, add it -- 7/1/05 by DW
+		if defined (system.temp.opRightClick.catMenubar) {
+			addSeparator ();
+			op.insertoutline (@system.temp.opRightClick.catMenubar, down)}};
+	bundle { //if the window has a right-click callback, call it -- 4/24/12 by DW
+		local (adrscript);
+		if window.attributes.getone ("rightClickCallback", @adrscript) {
+			while typeof (adrscript^) == addresstype {
+				adrscript = adrscript^};
+			adrscript^ (adrmenu, @atts)}};
+	
+	try {target.set (oldTarget)};
+	
+	adradrmenu^ = adrmenu;
+	return (true)}
+«bundle //test code
+	«local (adrmenu)
+	«opRightClick (@adrmenu)
+	«edit (adrmenu)
+
+

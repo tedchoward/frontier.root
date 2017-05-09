@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.httpLog
+
+on httpLog () {
+	«Changes
+		«11/14/11; 4:07:56 PM by DW
+			«Change the page title to HTTP Log.
+		«11/14/11; 12:03:37 PM by DW
+			«Created.
+	local (pta = html.getpagetableaddress ());
+	pta^.title = "HTTP Log";
+	return (opmlEditor.httpLog.viewHttpLog ())}
+«bundle //test code
+	«httpLog ()
+
+

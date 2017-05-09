@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.close
+
+on close (obj) { «Close an object
+	return (appleEvent (Eudora.id, 'core', 'clos', '----', objspec (obj)))}
+
+

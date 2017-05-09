@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.setObjectLanguage
+
+on setObjectLanguage (name, idLanguage) {
+	new (tableType, @atts);
+	atts.lang = number (idLanguage);
+	return (cardEditor.setObjectAttributes (name, @atts))}
+
+

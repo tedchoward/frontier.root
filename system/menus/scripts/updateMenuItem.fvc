@@ -1,0 +1,26 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.updateMenuItem
+
+«Menu formula for the Update Frontier.root... menu item.
+	«The frontmost database might be a guest database,
+	«in which case the menu item might be Update DocServer.root...
+	«If the About Window or other non-database window is in front,
+	«then the command remains Update Frontier.root...
+	«Mon, Feb 22, 1999 at 1:09:33 PM by PBS
+
+local (adr = window.frontMost ());
+local (dbPath, dbName);
+local (ellipsis = "...");
+if system.environment.isMac {
+	ellipsis = "..."};
+
+local (command = "Update Frontier.root" + ellipsis);
+
+if defined (adr^) {
+	dbPath = table.getRootAddress (adr);
+	dbPath = window.getFile (dbPath);
+	dbName = file.fileFromPath (dbPath);
+	command = "Update " + dbName + ellipsis};
+
+return (command)
+
+

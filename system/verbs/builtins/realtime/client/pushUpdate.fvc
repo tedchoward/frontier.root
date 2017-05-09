@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.client.pushUpdate
+
+on pushUpdate (htmltext, type, data) {
+	«Changes
+		«7/20/10; 8:49:44 AM by DW
+			«Created. 
+	local (adrdata = realtime.init (), username, password, server);
+	username = adrdata^.client.prefs.username;
+	password = string (adrdata^.client.prefs.password);
+	server = string (adrdata^.client.prefs.server);
+	[server].realtime.pushUpdate (username, password, htmltext, type, data)};
+bundle { //test code
+	pushUpdate ("Oh the buzzing of the bees", "test", random (1, 100000))}
+
+

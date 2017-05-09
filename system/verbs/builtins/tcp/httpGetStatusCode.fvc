@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.httpGetStatusCode
+
+on httpGetStatusCode (httpResult) {
+	«Changes
+		«8/6/08; 8:31:29 AM by DW
+			«Return the status code of the HTTP request, something like 200, 301, 404, etc.
+	return (string.nthField (httpResult, ' ', 2))}
+«bundle //test code
+	«dialog.alert (httpGetStatusCode (tcp.httpClient ("HEAD", "scripting.com"))) //200
+	«dialog.alert (httpGetStatusCode (tcp.httpClient (server:"scripting.com", path:"hitler"))) //404
+
+

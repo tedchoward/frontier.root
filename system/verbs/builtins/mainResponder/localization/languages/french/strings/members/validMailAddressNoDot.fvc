@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.french.strings.members.validMailAddressNoDot
+
+Impossible d'envoyer un courriel car le nom de domaine [[domain]] ne contient pas de point.
+
+

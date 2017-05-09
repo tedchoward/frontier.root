@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.utilities.convertWorldOutlineServersTable
+
+on convertWorldOutlineServersTable () {
+	«Changes
+		«2/11/12; 3:48:17 PM by DW
+			«Created.
+	local (adrdata = opmlEditor.worldOutline.init ());
+	if defined (adrdata^.prefs.domain) {
+		local (domain = adrdata^.prefs.domain);
+		if sizeof (domain) > 0 { //it's been configured
+			local (adrservers = @adrdata^.servers);
+			if not defined (adrservers^) {
+				new (tabletype, adrservers)};
+			local (adrdefaultserver = @adrservers^.[domain]);
+			if not defined (adrdefaultserver^) {
+				new (tabletype, adrdefaultserver);
+				adrdefaultserver^.server = adrdata^.prefs.server; delete (@adrdata^.prefs.server);
+				adrdefaultserver^.username = adrdata^.prefs.username; delete (@adrdata^.prefs.username);
+				adrdefaultserver^.password = adrdata^.prefs.password; delete (@adrdata^.prefs.password);
+				delete (@adrdata^.prefs.domain);
+				adrdata^.prefs.defaultServer = domain}}}};
+bundle { //test code
+	convertWorldOutlineServersTable ()}
+
+

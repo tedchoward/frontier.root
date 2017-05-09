@@ -1,0 +1,5 @@
+FrontierVcsFile:3:list:system.verbs.builtins.tcp.im.rpi.testing.["tests.base64"]
+
+{"simple text", "Hello & stuff", "Hello &amp; stuff", "Hello &amp;amp; stuff!", "&quot; \"", "' < >", "¿ r È you being served?"}
+
+

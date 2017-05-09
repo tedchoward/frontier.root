@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.controlPanel.["#tools"].addInsLinks
+
+«Build the links to add-ins.
+	«11/10/99; 1:56:19 AM by PBS
+
+if defined (config.mainResponder.controlPanel.wizards) {
+	local (i);
+	local (adrTable = @config.mainResponder.controlPanel.wizards);
+	local (listOfNames = {});
+	for i = 1 to sizeOf (adrTable^) {
+		local (adrItem = @adrTable^ [i]);
+		local (itemName = nameOf (adrItem^));
+		listOfNames = listOfNames + itemName};
+	if sizeOf (listOfNames) > 0 {
+		local (htmlText);
+		htmlText = "<b>Add-ins</b><br>";
+		local (oneItem);
+		local (pta = html.getPageTableAddress ());
+		local (currentLink = string.urlDecode (pta^.pathArgs));
+		for oneItem in listOfNames {
+			if string.lower (oneItem) == string.lower (currentLink) {
+				htmlText = htmlText + oneItem + "<br>"}
+			else {
+				htmlText = htmlText + "<a href=\"addIn$" + string.urlEncode (oneItem) + "\">" + oneItem + "</a><br>"}};
+		htmlText = htmlText +"<p>";
+		return (htmlText)}};
+return ("")
+
+

@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.wordPress.getPost
+
+on getPost (siteUrl, username, password, postid, adrstruct) {
+	«Changes
+		«10/28/09; 12:04:50 PM by DW
+			«Created. 
+	local (adrdata = wordPress.init (), rpcdata);
+	local (adrsite = wordPress.getSiteData (siteurl));
+	wordPress.getRpcData (siteurl, @rpcdata);
+	metaweblog.getpost (postId, username, password, adrsite^.blogId, adrstruct, @rpcdata)};
+bundle { //test code
+	getpost ("http://rebootnews.wordpress.com/", user.wordpress.prefs.username, user.wordpress.prefs.password, 9, @scratchpad.wpstruct)}
+
+

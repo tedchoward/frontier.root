@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.doScript
+
+on doScript (scriptName) { «Execute a script
+	setEventInteraction (false);
+	return (appleEvent (Filemaker.id, 'misc', 'dosc', '----', scriptName))}
+
+

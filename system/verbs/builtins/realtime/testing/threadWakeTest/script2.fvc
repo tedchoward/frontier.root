@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.testing.threadWakeTest.script2
+
+«Changes
+	«8/15/10; 8:32:47 PM by DW
+		«Created. 
+thread.wake (realtime.testing.threadWakeTest.idthread)
+	«true
+
+

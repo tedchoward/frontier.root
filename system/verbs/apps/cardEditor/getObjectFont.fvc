@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.getObjectFont
+
+on getObjectFont (name, adrFontName, adrFontSize, adrFontStyle) {
+	local (atts);
+	if not cardEditor.getObjectAttributes (name, @atts) {
+		return (false)};
+	adrFontName^ = atts.font;
+	adrFontSize^ = atts.size;
+	adrFontStyle^ = atts.styl;
+	return (true)}
+
+

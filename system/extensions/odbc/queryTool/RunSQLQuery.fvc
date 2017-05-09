@@ -1,0 +1,46 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.queryTool.RunSQLQuery
+
+«Script to call any SQL string located at odbc.queryTool.SQLQuery
+local {
+	dsn = user.prefs_odbc.dsn;
+	uid = user.prefs_odbc.uid;
+	pwd = user.prefs_odbc.pwd;
+	resultType = "Text";
+	result;
+	i = 0;
+	sqlstr = string(odbc.queryTool.SQLQuery)};
+
+if defined(user.prefs_odbc.formatResults) {
+	resultType = user.prefs_odbc.formatResults};
+result = odbc.execute (dsn, uid, pwd, sqlstr, resultType);
+
+j = sizeOf(sqlstr);
+z=1;
+while z != 0 {
+	z = string.patternmatch("/*", sqlstr);
+	t = string.patternmatch("*/", sqlstr);
+	sqlstr = string.delete (sqlstr, z, t-z+2)};
+sqlstr = string.replaceAll(sqlstr, "\r\r", "\r");
+
+target.set(@odbc.queryTool.QueryResult);
+wp.go(down, infinity);
+wp.go(right, infinity);
+wp.insert("\r\r---------------------------------- NEW QUERY ----------------------------------\r");
+if (user.prefs_odbc.showQuery) { «Clean up the query and show it above the results
+	local (z=1, t=0, tempstr="");
+	while z != 0 {
+		z = string.patternmatch("/*", sqlstr);
+		t = string.patternmatch("*/", sqlstr);
+		sqlstr = string.delete (sqlstr, z, t-z+2)};
+	tempstr = string.replaceAll(sqlstr, "\r\r", "\r");
+	while (tempstr != sqlstr) {
+		sqlstr=tempstr;
+		tempstr = string.replaceAll(sqlstr, "\r\r", "\r")};
+	wp.insert("QUERY STRING:\r-------------\r"+sqlstr+"\r-------------\r\r")};
+wp.insert(result);
+target.clear();
+edit (@odbc.queryTool.QueryResult);
+
+«toys.listToOutline (labeledResult, @scratchpad.odbcOutline)
+
+

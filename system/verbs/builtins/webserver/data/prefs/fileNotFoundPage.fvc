@@ -1,0 +1,17 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.webserver.data.prefs.fileNotFoundPage
+
+<HTML>
+<HEAD><TITLE>File Not Found</TITLE></HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<H1>404 File Not Found</H1>
+
+<BLOCKQUOTE>
+The page http://<!--#serverName--><!--#scriptName--> does not exist.
+<P>
+Please notify the webmaster of any broken links.
+</BLOCKQUOTE>
+
+</BODY>
+</HTML>
+
+

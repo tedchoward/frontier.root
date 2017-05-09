@@ -1,0 +1,6 @@
+FrontierVcsFile:3:wptx:suites.people.webAdmin.viewService
+
+#title "View Service"
+{viewService ()}
+
+

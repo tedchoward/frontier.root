@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:workspace.userlandSamples.soapValidatorScripts.soapValidatorHandlers.moderateSizeArrayCheck
+
+on moderateSizeArrayCheck (myArray) {
+	return (myArray [1] + myArray [sizeof (myArray)])}
+
+

@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.simpleDb.getOneAttribute
+
+on getOneAttribute (domain, itemName, attName, adrval, adrerrorstring=nil) {
+	«Changes
+		«1/12/08; 9:40:25 AM by DW
+			«Created.
+	local (t, xstruct);
+	new (tabletype, @t);
+	t.DomainName = domain;
+	t.ItemName = itemName;
+	t.AttributeName = attName;
+	if s3.simpleDb.httpClient ("GetAttributes", @t, adrerrorstring, @xstruct) {
+		local (adrresponse = xml.getaddress (@xstruct, "GetAttributesResponse"));
+		local (adrresult = xml.getaddress (adrresponse, "GetAttributesResult"), adr);
+		for adr in adrresult {
+			if nameof (adr^) endswith "Attribute" {
+				adrval^ = xml.getvalue (adr, "Value");
+				return (true)}}};
+	return (false)};
+bundle { //test code
+	local (es, attval);
+	if getOneAttribute ("flickrFanData", "Dave Winer", "whenFirstPing", @attval, @es) {
+		dialog.alert (attval)}
+	else {
+		dialog.alert (es)}}
+
+

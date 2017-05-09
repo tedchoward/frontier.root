@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:suites.opmlServer.macPortForward
+
+on macPortForward (sourcePort = 80, destinationPort = 5338) {
+	«Changes
+		«6/4/06; 8:27:08 AM by PM
+			«Adapted from userland.portForward.
+	local (sourceAddr="any");
+	if not defined (user.prefs.portForwardingAdminPassword) {
+		local (adminPassword = "");
+		Frontier.bringToFront ();
+		if not dialog.getPassword ("Admin password (for port forwarding)?", @adminPassword) {
+			return (false)};
+		user.prefs.portForwardingAdminPassword = binary (adminPassword);
+		filemenu.save ()};
+	
+	local (pw = string (user.prefs.portForwardingAdminPassword), s);
+	s = sys.unixShellCommand ("echo \"" + pw + "\" | sudo -S /usr/sbin/sysctl -w net.inet.ip.forwarding=1");
+	if s == "" {
+		scriptError ("Can't start up the OPML Server because port forwarding failed.")};
+	s = s + sys.unixShellCommand ("sudo /sbin/ipfw add 102 fwd 127.0.0.1," + destinationPort + " tcp from any to " + sourceAddr + " " + sourcePort + " in");
+	s = s + sys.unixShellCommand ("sudo -K"); //drop our privs
+	return (true)}
+
+

@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.simpleDb.deleteDomain
+
+on deleteDomain (name, adrerrorstring=nil) {
+	«Changes
+		«1/4/08; 4:12:16 PM by DW
+			«Created.
+	local (t);
+	new (tabletype, @t);
+	t.DomainName = name;
+	return (s3.simpleDb.httpClient ("DeleteDomain", @t, adrerrorstring))};
+bundle { //test code
+	deleteDomain ("Iowa")}
+
+

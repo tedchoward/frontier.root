@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.returnText
+
+on returnText (dsn=user.prefs_odbc.dsn, uid=user.prefs_odbc.uid, pwd=user.prefs_odbc.pwd, sql, columnDelim=user.prefs_odbc.columnDelim, rowDelim=user.prefs_odbc.rowDelim) {
+	«Obsolete. Use odbc.execute().
+	«Saturday, August 08, 1998 at 11:48:14 PM by HA
+	
+	odbc.execute (dsn, uid, pwd, sql, "text")}
+
+

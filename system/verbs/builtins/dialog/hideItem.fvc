@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.dialog.hideItem
+
+on hideItem (itemnumber) {
+	kernel (dialog.hideitem)}
+
+

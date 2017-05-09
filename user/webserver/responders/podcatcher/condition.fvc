@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:user.webserver.responders.podcatcher.condition
+
+(string.lower (path) beginsWith "/podcatcher/")
+
+

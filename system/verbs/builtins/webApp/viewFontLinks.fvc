@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webApp.viewFontLinks
+
+on viewFontLinks () {
+	«Changes
+		«9/1/11; 7:13:09 PM by DW
+			«Include a call to this from the template to get links to the fonts used by the webApp stylesheet.
+	return (string (webApp.data.fontLinks))};
+bundle { //test code
+	viewFontLinks ()}
+
+

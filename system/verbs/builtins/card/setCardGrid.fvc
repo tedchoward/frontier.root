@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.setCardGrid
+
+on setCardGrid (gridOn, gridVisible, gridUnits) {
+	local (atts);
+	new (tableType, @atts);
+	atts.grid = boolean (gridOn);
+	atts.grvs = boolean (not gridVisible);
+	atts.grun = number (gridUnits);
+	return (card.setCardAttributes (@atts))}
+
+

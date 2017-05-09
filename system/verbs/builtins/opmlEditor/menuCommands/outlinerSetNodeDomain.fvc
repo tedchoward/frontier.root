@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.outlinerSetNodeDomain
+
+on outlinerSetNodeDomain () {
+	«Changes
+		«5/20/12; 6:50:02 PM by DW
+			«Use the text from the headline in the prompt for the domain. 
+		«11/25/11; 8:57:52 AM by DW
+			«We were using user.opmlEditor.prefs.worldOutlineServer as the location of the server. This is not the correct place to look. However, we shouldn't be calling the server on this command. It should just set the attribute on the node and that's all.
+		«7/14/11; 8:59:13 AM by DW
+			«Don't require the domain to be one of the ones we manage. That's what the Blorkmark button in the outline window is for.
+		«5/23/11; 1:10:23 AM by DW
+			«Experimental feature. If the domain ends with "blorkmark.com" and if everything is properly configured, we try to map the domain. 
+		«5/14/11; 2:07:00 PM by DW
+			«Super-hack for a testing. If domainServerSuite.addRecord is defined, we shoot the domain up to the server for possible consideration. 
+		«5/8/11; 7:40:13 PM by DW
+			«Code for the Set node domain command in the Outliner menu.
+	local (adrdata = opmlEditor.worldOutline.init (), domain);
+	opmleditor.init ();
+	op.attributes.getone ("domain", @domain);
+	if dialog.ask ("Domain for \"" + op.getlinetext () + "\"?", @domain) {
+		op.attributes.setone ("domain", domain)}};
+bundle { //test code
+	outlinerSetNodeDomain ()}
+
+

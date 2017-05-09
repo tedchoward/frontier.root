@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:user.webserver.responders.blockKiddies.methods.any
+
+on any (pta) {
+	pta^.code = 200;
+	pta^.responseHeaders.["Content-Type"] = "text/html";
+	pta^.responseBody = string ("<html><body><h1>Access denied, try again later.</h1></body><html>");
+	return (true)}
+
+

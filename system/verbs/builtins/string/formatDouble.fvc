@@ -1,0 +1,21 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.formatDouble
+
+on formatDouble (num, placesRightOfDecimal=3) {
+	«Changes
+		«12/9/10; 12:34:17 PM by DW
+			«Changed the constant "00" to a string.filledstring. placesRightOfDecimal wasn't always a parameter, it was hardcoded to 3. Now the 0-padding has to allow for values other than 3.
+		«12/7/10; 5:47:04 PM by DW
+			«Send us a double and we'll send back a nicely formatted number without a huge number of places to the right of the decimal point. This code was being cribbed, it should be factored.
+	local (s = string (num));
+	if s contains "." {
+		local (lod = string.nthfield (s, ".", 1));
+		local (rod = string.nthfield (s, ".", 2) + string.filledstring ("0", placesRightOfDecimal - 1));
+		if sizeof (rod) > placesRightOfDecimal {
+			rod = string.mid (rod, 1, placesRightOfDecimal)};
+		return (lod + "." + rod)}
+	else {
+		return (s)}}
+«bundle //test code
+	«dialog.alert (formatDouble (double (random (1, clock.ticks ())) / 1000, 7))
+
+

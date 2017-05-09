@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.uBASE.deleteRecord
+
+on deleteRecord (fnum, key) {
+	return (systemEvent ('ubas', 'dele', 'fref', short (fnum), 'key ', string (key)))}
+
+

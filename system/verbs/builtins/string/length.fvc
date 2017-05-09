@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.length
+
+on length (n) {
+	kernel (string.length)}
+
+

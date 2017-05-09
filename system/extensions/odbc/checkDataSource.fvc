@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.checkDataSource
+
+on checkDataSource (dsn) {
+	«Deprecated
+	return(DSExists (dsn))}
+
+

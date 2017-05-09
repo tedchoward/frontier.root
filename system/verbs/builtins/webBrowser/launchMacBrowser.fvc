@@ -1,0 +1,36 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.launchMacBrowser
+
+on launchMacBrowser () {
+	«Changes
+		«10/31/07; 8:48:46 AM by DW
+			«A rock-solid 2007 way to launch a Mac browser, subject to user preferences. Hah!
+	if not defined (user.webbrowser.preferredBrowsers) {
+		user.webbrowser.preferredBrowsers = {"safari", "firefox"}};
+	on isAppRunningNow (appname) {
+		local (ctapps = sys.countApps (), n);
+		for n = 1 to ctapps {
+			local (nthapp = sys.getNthApp (n));
+			if string.lower (nthapp) contains string.lower (appname) {
+				«msg (nthapp)
+				return (true)}};
+		return (false)};
+	bundle { //if any browsers are running now, don't bother launching
+		local (appname);
+		for appname in user.webbrowser.preferredBrowsers {
+			if isAppRunningNow (appname) {
+				return (true)}}};
+	bundle { //try to find an app in the Applications folder and launch it
+		local (appname, f, fname);
+		local (appsfolder = file.getspecialfolderpath ("", "Applications", false));
+		for appname in user.webbrowser.preferredBrowsers {
+			fileloop (f in appsfolder) {
+				fname = file.filefrompath (f);
+				if string.lower (fname) contains string.lower (appname) {
+					«msg (f)
+					launch.application (f);
+					return (true)}}}};
+	return (false)};
+bundle { //test code
+	launchMacBrowser ()}
+
+

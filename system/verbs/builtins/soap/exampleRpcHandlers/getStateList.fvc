@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.exampleRpcHandlers.getStateList
+
+on getStateList (numlist) {
+	local (num, namelist = {});
+	for num in numlist {
+		namelist = namelist + states.nthState (num)};
+	return (namelist)}
+
+

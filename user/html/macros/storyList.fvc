@@ -1,0 +1,65 @@
+FrontierVcsFile:3:scpt:user.html.macros.storyList
+
+on storyList (adrtable, urlprefix="") {
+	«Sun, Aug 10, 1997 at 10:17:05 AM by DW -- added urlprefix
+		«used in user.websites.gimme5.default
+		«you can correctly point to a page in a subdirectory
+	local (adroutline = @scratchpad.tempoutline);
+	new (outlinetype, adroutline);
+	target.set (adroutline);
+	editmenu.setfont ("monaco");
+	editmenu.setfontsize (9);
+	
+	bundle { «build the outline, ;-separated fields, date first, address of object second
+		local (i, firstline = true);
+		for i = 1 to sizeof (adrtable^) {
+			local (adritem = @adrtable^ [i]);
+			if string.lower (nameof (adritem^)) contains "default" { «don't include the home page
+				continue};
+			local (day, month, year, hour, minute, second);
+			date.get (timeCreated (adritem), @day, @month, @year, @hour, @minute, @second);
+			
+			local (s = "");
+			on num (x) {
+				return (string.padwithzeros (x, 2))};
+			s = s + num (year) + ";" + num (month) + ";" + num (day) + ";";
+			s = s + num (hour) + ";" + num (minute) + ";" + num (second) + ";";
+			s = s + string (adritem) + ";";
+			
+			if firstline {
+				firstline = false;
+				op.setlinetext (s)}
+			else {
+				op.insert (s, down)}}};
+	
+	op.sort ();
+	op.go (down, infinity);
+	
+	local (htmltext = "");
+	bundle { «build the page from the outline
+		local (adritem, datestring, title, url, link);
+		on add (s) {
+			htmltext = htmltext + s};
+		on td (s, bgcolor) {
+			add ("<td valign=top bgcolor=" + bgcolor + ">" + s + "</td>")};
+		add ("<table cellspacing=0 cellpadding=3 border=0>\r");
+		loop {
+			adritem = address (string.nthfield (op.getlinetext (), ';', 7));
+			add ("\t<tr>");
+			datestring = string.nthfield (timeCreated (adritem), ';', 1);
+			td ("<code>" + datestring + "</code>", "white");
+			title = html.getOneDirective ("#title", string (adritem^));
+			url = nameOf (adritem^) + html.getPref ("fileextension");
+			link = "<a href=\"" + urlprefix + url + "\">" + title + "</a>";
+			td (link, "white");
+			add ("</tr>\r");
+			msg (adritem);
+			if not op.go (up, 1) {
+				break}};
+		add ("</table>\r")};
+	
+	target.clear ();
+	delete (adroutline);
+	return (htmltext)}
+
+

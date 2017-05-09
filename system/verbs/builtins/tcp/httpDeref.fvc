@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.httpDeref
+
+on httpDeref (url) {
+	«Changes
+		«5/30/08; 10:40:12 AM by DW
+			«Turn off messages, place the body in a try.
+		«5/30/08; 10:05:50 AM by DW
+			«Created for the NewsJunk project, probably useful in other contexts.
+			«Some sites use redirects in their feeds to allow them to monitor clicks, but I don't like flowing my users through them, so this script checks to see if its a redirect, and returns the page it points to.
+	try {
+		local (urllist = string.urlsplit (url));
+		local (s = tcp.httpClient (server:urllist [2], path:urllist [3], ctFollowRedirects:0, flMessages:false));
+		local (code = string.nthField (s, ' ', 2));
+		if (code == 301) or (code == 302) or (code == 303) {
+			local (t);
+			string.httpResultSplit (s, @t);
+			«scratchpad.headers = t
+			if defined (t.location) {
+				return (t.location)}}};
+	return (url)};
+bundle { //test code
+	local (url = "http://feeds.feedburner.com/~r/PoliticalWire/~3/301331700/warner_rated_more_favorably_than_gilmore_in_virginia.html");
+	url = httpDeref (url);
+	webbrowser.openurl (url);
+	dialog.alert (httpDeref (url))}
+
+

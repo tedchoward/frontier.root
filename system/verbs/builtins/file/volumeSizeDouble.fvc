@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.volumeSizeDouble
+
+on volumeSizeDouble (path) { //6.1
+	kernel (file.volumesizedouble)}
+
+

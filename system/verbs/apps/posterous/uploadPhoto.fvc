@@ -1,0 +1,59 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.posterous.uploadPhoto
+
+on uploadPhoto (f, adrresponse=nil, username="", password="", title="", body="", source="", sourceLink="") {
+	«Changes
+		«11/20/09; 12:59:06 PM by DW
+			«The username and password must be a Twitter username and password. Posterous credentials don't work.
+				«http://blog.posterous.com/posterous-api-were-a-direct-replacement-for-t
+		«5/11/09; 10:29:36 AM by DW
+			«The response table contains a boolean, flerror. If there's an error, we return a code, which is a number, and msg an explanatory string. If there's no error, we return an id, and the url of the picture.
+		«5/2/09; 12:02:39 PM by DW
+			«Created. Returns true if it worked, false otherwise. 
+				«http://www.posterous.com/api/twitter
+	local (adrdata = posterous.init (), apiurl = "http://posterous.com/api/upload");
+	if adrresponse != nil {
+		new (tabletype, adrresponse)};
+	if username == "" {
+		username = user.twitter.prefs.username};
+	if password == "" {
+		password = string (user.twitter.prefs.password)};
+	if source == "" {
+		source = "OPML Editor"};
+	if sourceLink == "" {
+		sourceLink = "http://editor.opml.org/"};
+	local (params);
+	new (tabletype, @params);
+	params.username = username;
+	params.password = password;
+	if title != "" {
+		params.message = title}
+	else {
+		params.message = file.filefrompath (f)};
+	if source != "" {
+		params.source = source};
+	if sourceLink != "" {
+		params.sourceLink = sourceLink};
+	local (s = tcp.httpPostMultipart (apiurl, f, "", "", @params, "media"), xstruct);
+	«wp.newtextobject (s, @scratchpad.posterousResult)
+	try {
+		xml.compile (s, @xstruct);
+		local (adrrsp = xml.getaddress (@xstruct, "rsp"));
+		case xml.getattributevalue (adrrsp, "stat") {
+			"ok" {
+				if adrresponse != nil {
+					adrresponse^.id = xml.getvalue (adrrsp, "mediaid");
+					adrresponse^.url = xml.getvalue (adrrsp, "mediaurl");
+					adrresponse^.flerror = false};
+				return (true)};
+			"fail" {
+				if adrresponse != nil {
+					local (adrerr = xml.getaddress (adrrsp, "err"));
+					adrresponse^.code = number (xml.getattributevalue (adrerr, "code"));
+					adrresponse^.msg = xml.getattributevalue (adrerr, "msg");
+					adrresponse^.flerror = true}}}};
+	return (false)};
+bundle { //test code
+	uploadPhoto ("ohio:light.gif", @scratchpad.response);
+	edit (@scratchpad.response)}
+
+

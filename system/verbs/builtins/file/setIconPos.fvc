@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.setIconPos
+
+on setIconPos (path, h, v) {
+	kernel (file.seticonpos)}
+
+

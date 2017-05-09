@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.OAuth.testing.twitter
+
+«Changes
+	«2/28/09; 8:05:04 PM by DW
+		«Fix mistake that prevented this sample script from working correctly. Embarassing! :-)
+	«2/12/09; 2:35:29 PM by DW
+		«Get the user's timeline, using the OAuth method. 
+«local (url = user.twitter.prefs.friendstimelineurl)
+«url = url + "?oauth_token=" + OAuth.testing.apps.twitter.accesstoken
+«local (s = tcp.httpreadurl (url))
+«wp.newtextobject (s, @OAuth.testing.result)
+«return
+
+local (endpoint = user.twitter.prefs.friendstimelineurl, params, adrapp = @OAuth.testing.apps.twitter);
+new (tabletype, @params);
+OAuth.authenticatedCall (endpoint, @params, adrapp^.consumerkey, adrapp^.consumersecret, adrapp^.accesstoken, adrapp^.accesstokensecret, @scratchpad.twitterresultoauth);
+edit (@scratchpad.urloauth)
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.data.standardMacros.biggerFont
+
+on biggerfont (s) {
+	local (fonton = "<font size=+2><b>", fontoff = "</b></font>");
+	return (fonton + s + fontoff)}
+
+

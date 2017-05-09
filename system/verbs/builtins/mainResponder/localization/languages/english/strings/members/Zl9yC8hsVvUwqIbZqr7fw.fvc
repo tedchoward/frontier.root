@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.english.strings.members.checkMembershipWrongPassword
+
+Can't send you the cookie for [[args.mailaddress]] because the password is incorrect.
+
+

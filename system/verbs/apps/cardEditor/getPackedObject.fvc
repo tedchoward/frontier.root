@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.getPackedObject
+
+on getPackedObject (param1) {
+	return (appleEvent (cardEditor.id, 'IOWA', 'gpob', 'prm1', string (param1)))}
+
+

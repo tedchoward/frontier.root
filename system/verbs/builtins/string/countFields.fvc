@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.countFields
+
+on countFields (s, chdelim) {
+	kernel (string.countFields)}
+
+

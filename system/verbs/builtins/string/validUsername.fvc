@@ -1,0 +1,48 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.validUsername
+
+on validUsername (username, minchars=1, maxchars=32, adrerrorstring=nil) {
+	«Changes
+		«6/15/12; 3:10:25 PM by DW
+			«Return true if it's a valid username, false otherwise. A username has no blanks in it, and only alpha and numeric characters. It must be at least one character long and no more than 32 characters (both are parameters).
+	local (es, ctchars, i, ch);
+	if adrerrorstring == nil {
+		adrerrorstring = @es};
+	username = string.trimwhitespace (username);
+	ctchars = sizeof (username);
+	if minchars < 1 {
+		minchars = 1};
+	if username contains " " {
+		adrerrorstring^ = "Usernames can not contain blanks.";
+		return (false)};
+	if ctchars < minchars {
+		if minchars == 1 {
+			adrerrorstring^ = "Usernames must contain at least 1 character."}
+		else {
+			adrerrorstring^ = "Usernames must contain at least " + minchars + " characters."};
+		return (false)};
+	if ctchars > maxchars {
+		if maxchars == 1 {
+			adrerrorstring^ = "Usernames may contain at most 1 character."}
+		else {
+			adrerrorstring^ = "Usernames may contain at most " + maxchars + " characters."};
+		return (false)};
+	for i = 1 to ctchars {
+		ch = username [i];
+		if not (string.isalpha (ch) or string.isnumeric (ch)) {
+			adrerrorstring^ = "Usernames may contain only alphabetic and numeric characters.";
+			return (false)}};
+	return (true)}
+«bundle //test code
+	«local (errorstring)
+	«if not validUsername ("Horror Show", adrerrorstring: @errorstring)
+		«dialog.alert (errorstring)
+	«if not validUsername ("xyz123", adrerrorstring: @errorstring)
+		«dialog.alert (errorstring)
+	«if not validUsername ("xy<123", adrerrorstring: @errorstring)
+		«dialog.alert (errorstring)
+	«if not validUsername ("xy<123", minchars: 18, adrerrorstring: @errorstring)
+		«dialog.alert (errorstring)
+	«if not validUsername ("xy<123", maxchars: 1, adrerrorstring: @errorstring)
+		«dialog.alert (errorstring)
+
+

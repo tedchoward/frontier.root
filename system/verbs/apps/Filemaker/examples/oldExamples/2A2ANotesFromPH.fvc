@@ -1,0 +1,15 @@
+FrontierVcsFile:3:wptx:system.verbs.apps.Filemaker.examples.oldExamples.["**NotesFromPH"]
+
+Note that this more recent version of filemaker glue uses an eventInfo table.
+
+To make the older examples work you need to change lines that look like:
+
+with objectModel, Filemaker
+ 
+to:
+
+with objectModel, Filemaker, eventInfo
+
+Sat, Mar 9, 1996 at 12:43:41 PM by PH
+
+

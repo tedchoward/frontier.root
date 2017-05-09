@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.core.quit
+
+on quit (appID, saving = nil) { «Perform tasks before termination, then terminate
+	return (appleEvent (appID, 'aevt', 'quit', 'savo', enum (saving)))}
+
+

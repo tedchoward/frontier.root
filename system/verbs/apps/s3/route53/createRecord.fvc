@@ -1,0 +1,83 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.createRecord
+
+on createRecord (domainname, name, value, type, ttl=300, comment=nil, flSynch=true, adrresponse=nil) {
+	«Changes
+		«7/17/11; 10:08:35 AM by DW
+			«Better error message when there was a problem allocating the domain. Basically the message is this -- couldn't create the blorkmark you asked us to for any number of reasons, most likely you gave us a domain we don't know about, or the name you're asking for has already been allocated. At this point we don't understand the protocol Amazon has well enough to say for sure what it is that went wrong.
+		«6/21/11; 12:53:21 PM by DW
+			«If flSynch is true, we wait for the server to say the change is no longer pending.
+		«6/20/11; 5:52:14 PM by DW
+			«Created.
+	local (bodytext, requesttext, now = clock.now (), atts, idHostedZone);
+	bundle { //init adrresponse
+		if adrresponse != nil {
+			new (tabletype, adrresponse)}};
+	bundle { //set idHostedZone
+		idHostedZone = s3.route53.getZoneId (domainname)};
+	bundle { //build the <Change> element in bodytext
+		local (t);
+		new (tabletype, @t);
+		t.name = name + "." + domainname;
+		t.value = value;
+		t.type = type;
+		t.ttl = ttl;
+		bodytext = string.multiplereplaceall (string (s3.route53.data.createTemplate), @t, false, "<%", "%>")};
+	bundle { //build the requesttext element in requesttext
+		local (t);
+		new (tabletype, @t);
+		bundle { //set comment
+			if comment == nil {
+				comment = "Record created by " + frontier.getprogramname () + " on " + date.netstandardstring (now) + "."};
+			t.comment = comment};
+		t.bodytext = bodytext;
+		requesttext = string.multiplereplaceall (string (s3.route53.data.requestEnvelope), @t, false, "<%", "%>");
+		wp.newtextobject (requesttext, @scratchpad.requesttext)};
+	bundle { //sent the request to Amazon
+		local (s, xstruct);
+		s = s3.route53.httpClient ("2011-05-05/hostedzone/" + idHostedZone + "/rrset", "POST", requesttext);
+		s = string.httpResultSplit (s);
+		xml.compile (s, @xstruct);
+		«scratchpad.route53xstruct = xstruct
+		
+		bundle { //see if it was an error, 7/17/11 by DW
+			local (adrexception, errorstring = "", amazonmessage, adrerrorresponse, adrerror);
+			try { //AccessDeniedException
+				adrexception = xml.getaddress (@xstruct, "AccessDeniedException");
+				amazonmessage = xml.getvalue (adrexception, "Message");
+				errorstring = "Couldn't allocate the name \"" + name + "." + domainname + "\" because there was an error: \"" + amazonmessage + ".\""};
+			if sizeof (errorstring) > 0 {
+				scripterror (errorstring)};
+			
+			try { //Error
+				adrerrorresponse = xml.getaddress (@xstruct, "ErrorResponse");
+				adrerror= xml.getaddress (adrerrorresponse, "Error");
+				amazonmessage = xml.getvalue (adrerror, "Message");
+				errorstring = "Couldn't allocate the name \"" + name + "." + domainname + "\" because there was an error: \"" + amazonmessage + ".\""};
+			if sizeof (errorstring) > 0 {
+				scripterror (errorstring)}};
+		
+		bundle { //fill in fields of atts
+			local (adrchangeresponse = xml.getaddress (@xstruct, "ChangeResourceRecordSetsResponse"));
+			local (adrchangeinfo = xml.getaddress (adrchangeresponse, "ChangeInfo"));
+			new (tabletype, @atts);
+			atts.id = xml.getvalue (adrchangeinfo, "Id");
+			atts.status = xml.getvalue (adrchangeinfo, "Status");
+			atts.whenSubmitted = date.iso8601StringToDate (xml.getvalue (adrchangeinfo, "SubmittedAt"))}};
+	bundle { //if synchronous, wait for the change to be made
+		if flSynch {
+			local (idchange = string.lastfield (atts.id, "/"), changeatts);
+			atts.ctSecondsWaited = 0;
+			loop {
+				changeatts = s3.route53.getChange (idchange);
+				if changeatts.status == "INSYNC" {
+					atts.status = changeatts.status;
+					break};
+				atts.ctSecondsWaited++;
+				clock.waitseconds (1)}}};
+	if adrresponse != nil {
+		adrresponse^ = atts};
+	return (true)};
+bundle { //test code
+	createRecord ("blorkmark.net", "test13", "twitter.com", "CNAME", adrresponse:@scratchpad.response)}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.window.open
+
+on open (adr, flReadOnly=false, adrButtonTable=nil) {
+	kernel (window.open)}
+
+

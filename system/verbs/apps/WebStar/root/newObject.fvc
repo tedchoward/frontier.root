@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.root.newObject
+
+on newObject (server, path, value, mimetype) {
+	webstar.root.newTable (server, path);
+	webstar.root.setValue (server, path + ".data", value);
+	webstar.root.setValue (server, path + ".mime", mimetype);
+	return (true)}
+
+

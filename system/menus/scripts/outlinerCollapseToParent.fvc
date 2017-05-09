@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.outlinerCollapseToParent
+
+system.menus.scripts.mustBeOutline ();
+if op.go (left, 1) {
+	op.collapse ()}
+else {
+	scriptError ("The outline cursor is on a summit, it has no parent.")}
+
+

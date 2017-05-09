@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.opInsertCallback
+
+on opInsertCallback () {
+	«Changes
+		«1/11/12; 6:36:06 PM by DW
+			«Recognize root outline windows as part of the world outline.
+		«7/3/11; 8:40:02 PM by DW
+			«Created.
+	local (adrdata = opmlEditor.worldOutline.init (), flWorldOutline);
+	bundle { //set flWorldOutline, 1/11/12 by DW
+		if window.attributes.getone ("urlOutline", @url) {
+			flWorldOutline = true}
+		else {
+			if address (window.frontmost ()) == @adrdata^.workspace {
+				flWorldOutline = true}
+			else {
+				flWorldOutline = false}}};
+	if flWorldOutline {
+		op.attributes.setone ("created", date.netstandardstring (clock.now ()));
+		op.attributes.setone ("pgfnum", adrdata^.stats.pgfSerialnum++);
+		return (false)}}
+«bundle //test code
+	«opInsertCallback ()
+
+

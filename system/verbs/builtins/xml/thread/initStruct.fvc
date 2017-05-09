@@ -1,0 +1,21 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.thread.initStruct
+
+on initStruct (adrtable) {
+	«Changes
+		«6/10/11; 7:20:28 AM by DW
+			«Created.
+	if not defined (adrtable^) {
+		new (tabletype, adrtable)};
+	if not defined (adrtable^.versions) {
+		new (tabletype, @adrtable^.versions)};
+	bundle { //stats
+		if not defined (adrtable^.stats) {
+			new (tabletype, @adrtable^.stats)};
+		if not defined (adrtable^.stats.serialnum) {
+			adrtable^.stats.serialnum = 1};
+		if not defined (adrtable^.stats.ctAccesses) {
+			adrtable^.stats.ctAccesses = 0}}};
+bundle { //test code
+	initStruct (@scratchpad.daveOutline)}
+
+

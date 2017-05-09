@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.rez.namedResourceExists
+
+on namedResourceExists (path, resourcetype, name) {
+	kernel (rez.namedresourceexists)}
+
+

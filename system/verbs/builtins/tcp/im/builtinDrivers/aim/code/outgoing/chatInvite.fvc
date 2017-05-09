@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.code.outgoing.chatInvite
+
+on chatInvite(adrSelf, room, imess, buddies) {
+	tcp.im.builtinDrivers.aim.code.core.flap_to_toc(adrSelf, 2,"toc_chat_invite "+tcp.im.builtinDrivers.aim.code.util.normalize(room) +" "+ tcp.im.builtinDrivers.aim.code.util.encode(imess)+" "+ tcp.im.builtinDrivers.aim.code.util.normbuds(buddies));
+	
+	return(true)}
+
+

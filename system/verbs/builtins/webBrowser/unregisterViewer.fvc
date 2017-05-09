@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.unregisterViewer
+
+on unregisterviewer (x, unregisterviewerFor) { «Notifies that the sending application is no longer wishes to handle documents of the specified MIMEType.
+	case sys.os () {
+		"MacOS" {
+			return (appleEvent (user.webBrowser.currentid, 'WWW!', 'UNVW', '----', x, 'MIME', string (unregisterviewerFor)))}}}
+
+

@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:user.betty.rpcHandlers.examples.getStateStruct
+
+on getStateStruct (statestruct) {
+	local (i, s = "");
+	for i = 1 to sizeof (statestruct) {
+		s = s + states.nthState (statestruct [i]) + ","};
+	return (string.poptrailing (s, ","))}
+
+

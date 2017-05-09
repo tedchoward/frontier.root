@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FinderClassic.windowVerb
+
+on windowVerb (verbid, windowpath) { «common code for FinderWindow verbs
+	local (fwindow);
+	if not Finder.makeWindow (windowpath, 0, @fwindow) {
+		return (false)};
+	return (finderEvent (Finder.id, Finder.class, verbid, '----', fwindow))}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.commercial.newTable.openDocument
+
+on openDocument (file) {
+	return (required.openDocument (Sample.id, file))}
+
+

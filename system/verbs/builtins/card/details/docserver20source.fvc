@@ -1,0 +1,220 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.card.details.["docserver source"]
+
+card.getCardAttributes
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getCardAttributes
+card.getCardBackColor
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getCardBackColor
+card.getCardGrid
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getCardGrid
+card.getCardSize
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getCardSize
+card.getObjectAttributes
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getObjectAttributes
+card.getObjectEnabled
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getObjectEnabled
+card.getObjectFillColor
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getObjectFillColor
+card.getObjectFlag
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getObjectFlag
+card.getObjectFont
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getObjectFont
+card.getObjectFrame
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getObjectFrame
+card.getObjectFrameColor
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getObjectFrameColor
+card.getObjectJustification
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getObjectJustification
+card.getObjectLanguage
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getObjectLanguage
+card.getObjectRect
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getObjectRect
+card.getObjectScript
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getObjectScript
+card.getObjectSeeThru
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getObjectSeeThru
+card.getObjectShadowDepth
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getObjectShadowDepth
+card.getObjectText
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getObjectText
+card.getObjectTextColor
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getObjectTextColor
+card.getObjectType
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getObjectType
+card.getObjectVisible
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.getObjectVisible
+card.invalObject
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.invalObject
+card.setCardAttributes
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setCardAttributes
+card.setCardBackColor
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setCardBackColor
+card.setCardGrid
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setCardGrid
+card.setCardSize
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setCardSize
+card.setObjectAttributes
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setObjectAttributes
+card.setObjectEnabled
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setObjectEnabled
+card.setObjectFillColor
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setObjectFillColor
+card.setObjectFlag
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setObjectFlag
+card.setObjectFont
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setObjectFont
+card.setObjectFrame
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setObjectFrame
+card.setObjectFrameColor
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setObjectFrameColor
+card.setObjectJustification
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setObjectJustification
+card.setObjectLanguage
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setObjectLanguage
+card.setObjectRect
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setObjectRect
+card.setObjectScript
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setObjectScript
+card.setObjectSeeThru
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setObjectSeeThru
+card.setObjectShadowDepth
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setObjectShadowDepth
+card.setObjectText
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setObjectText
+card.setObjectTextColor
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setObjectTextColor
+card.setObjectType
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setObjectType
+card.setObjectVisible
+	Notes
+		This verb performs exactly the same function as cardEditor verb with the same name. Use this verb in scripts linked into Iowa objects.
+	See Also
+		cardEditor.setObjectVisible
+
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.getMaxListens
+
+on getMaxListens (appID = WebStar.id) {
+	with objectModel, WebStar.eventInfo {
+		return (core.get (appID, maxListens))}}
+
+

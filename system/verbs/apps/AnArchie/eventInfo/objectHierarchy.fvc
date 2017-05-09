@@ -1,0 +1,13 @@
+FrontierVcsFile:3:optx:system.verbs.apps.AnArchie.eventInfo.objectHierarchy
+
+fileDescriptor -- describes a file location
+	Properties:
+		host -- host to connect to
+		path -- path to file
+		name -- file name
+		isDirectory -- is it a file or directory
+		size -- size of the file
+		modification -- modification date?
+
+
+

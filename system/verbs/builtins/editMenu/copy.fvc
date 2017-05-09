@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.editMenu.copy
+
+on copy () {
+	kernel (editmenu.copy)}
+
+

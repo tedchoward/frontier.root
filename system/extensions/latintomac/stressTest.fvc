@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.extensions.latintomac.stressTest
+
+local (i, j, k, reps = 1000, stringsize = 5);
+local (hexlist = {"A", "B", "C", "D", "E", "F"});
+for i = 1 to reps {
+	local (latintext, mactext, mactext2, mimetext);
+	for j = 1 to stringsize {
+		mactext = mactext + char (random (0, 255))};
+	latintext = latintomac.mactolatin (mactext);
+	msg (i + " " + mactext + " " + latintext);
+	mactext2 = latintomac.convert (latintext);
+	if mactext2 != mactext {
+		dialog.notify ("Problem with converting " + mactext);
+		break};
+	mimetext = "=";
+	for k = 1 to 2 {
+		local (rand = random (0, 15));
+		if rand > 9 {
+			rand = hexlist [rand - 9]};
+		mimetext = mimetext + string (rand)};
+	msg (latintomac.mimetolatin (mimetext));
+	msg (latintomac.mimetomac (mimetext))}
+
+

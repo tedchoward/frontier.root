@@ -1,0 +1,116 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.everyMinute
+
+on everyMinute () {
+	«Changes
+		«8/28/12; 3:22:05 PM by DW
+			«Comment out the code in the earlier change.
+				«http://worknotes.scripting.com/august2012/82812ByDw/undoConfigmainresponderdomainsFix
+		«8/28/12; 1:27:38 PM by DW
+			«Undo the last change. Caused all kinds of problems! Ouch.
+		«8/28/12; 12:57:19 PM by DW
+			«Make sure our domain is defined in config.mainresponder.domains.
+		«6/20/12; 7:54:12 PM by DW
+			«Maintenence flag to make default font sizes on the Mac more readable.
+		«3/23/12; 1:03:31 PM by DW
+			«Maintenence flag to install scheduler2.showAttsInAboutWindow.
+				«http://worknotes.scripting.com/march2012/32312ByDw/viewingAttributes/
+		«3/21/12; 1:46:04 PM by DW
+			«Maintenence flag to set user.prefs.opmlOwnerId to the empty string if its value is http://blogs.opml.org/mail/podmonster.
+				«http://worknotes.scripting.com/march2012/32112ByDw/userprefsopmlownerid/
+		«Before 3/21/12
+			«2/12/12; 3:38:39 PM by DW
+				«Maintenence flag to convert user data for multiple worldoutline servers.
+			«5/6/11; 3:44:32 PM by DW
+				«Maintenence flag to set user.prefs.flGenerateOpml2 true.
+			«4/7/11; 8:18:19 AM by DW
+				«If enabled, update open tools.
+			«3/29/11; 11:38:16 AM by DW
+				«Maintenence flag to upgrade to scheduler2.
+			«9/18/10; 8:33:32 AM by DW
+				«Call opmlEditor.loadPartsFromFolder every minute.
+			«1/18/10; 11:23:13 AM by DW
+				«Maintenence check, if config.mainResponder.prefs.flSaveDatabasesEveryMinute is true, set it false. We don't need two bits saving the databases every minute. 
+			«12/28/09; 8:27:33 AM by DW
+				«Call opmlEditor.runScriptsFolder every minute.
+			«10/31/09; 11:42:39 AM by DW
+				«Maintenence flag -- Fix config.mainresponder.domains.default and delete websiteframework pointers to tables that don't exist.
+			«9/18/09; 9:41:14 AM by DW
+				«Maintenence flag -- Set user.prefs.flMainResponderHandlesErrors true, for standard of web server error handling.
+			«9/17/09; 7:26:30 AM by DW
+				«Use opmlEditor.updateMainRoot to update opml.root.
+			«8/16/08; 10:37:14 PM by DW
+				«Add maintenence scripts section.
+			«8/4/08; 6:04:02 AM by DW
+				«Fixed error -- we were setting lastUpdate in the top-level of user.opmlEditor instead of in the stats table.
+			«8/2/08; 8:05:03 PM by DW
+				«Update tools that registered in addition to opml.root.
+			«8/2/08; 12:16:26 PM by DW
+				«Nightly updates for opml.root.
+			«7/30/08; 9:50:52 AM by DW
+				«Code that runs once every minute.
+	opmlEditor.init ();
+	user.opmlEditor.stats.ctEveryMinutes++; //12/28/09 by DW
+	opmlEditor.runScriptsFolder (); //12/28/09 by DW
+	opmlEditor.loadPartsFromFolder (); //9/18/10 by DW
+	if user.opmlEditor.prefs.flNightlyUpdate {
+		local (now = clock.now ());
+		if date.hour (now) == user.opmlEditor.prefs.hourToUpdate {
+			if not date.sameday (now, user.opmlEditor.stats.whenLastUpdate) { //time to do the update
+				user.opmlEditor.stats.whenLastUpdate = now; filemenu.save ();
+				opmlEditor.updateMainRoot (); //9/17/09 by DW
+				opmlEditor.updateTools (); //8/2/08 by DW
+				if user.opmlEditor.prefs.flUpdateOpenTools { //4/7/11 by DW
+					opmlEditor.updateOpenTools ()}}}};
+	bundle { //maintenence checks
+		if not defined (user.opmlEditor.flags.cleanupGuestDatabasesFolder) {
+			try {opmlEditor.maintenence.cleanupGdbFolder ()};
+			user.opmlEditor.flags.cleanupGuestDatabasesFolder = clock.now ()};
+		if not defined (user.opmlEditor.flags.betterWebServerErrorHandling) { //9/18/09 by DW
+			user.prefs.flMainResponderHandlesErrors = true; //see comment in mainresponder.respond
+			user.opmlEditor.flags.betterWebServerErrorHandling = clock.now ()};
+		if not defined (user.opmlEditor.flags.fixShipShopPaths) { //10/31/09 by DW
+			try {opmlEditor.maintenence.fixShipShopPaths ()};
+			user.opmlEditor.flags.fixShipShopPaths = clock.now ()};
+		if not defined (user.opmlEditor.flags.fixSaveDatabases) { //1/18/10 by DW
+			try {
+				if config.mainResponder.prefs.flSaveDatabasesEveryMinute {
+					config.mainResponder.prefs.flSaveDatabasesEveryMinute = false}};
+			user.opmlEditor.flags.fixSaveDatabases = clock.now ()};
+		if not defined (user.opmlEditor.flags.upgradeToScheduler2) { //3/29/11 by DW
+			user.tools.prefs.flUseScheduler2 = true;
+			user.opmlEditor.flags.upgradeToScheduler2 = clock.now ()};
+		if not defined (user.opmlEditor.flags.upgradeToOPML2) { //5/6/11 by DW
+			user.prefs.flGenerateOpml2 = true;
+			user.opmlEditor.flags.upgradeToOPML2 = clock.now ()};
+		if not defined (user.opmlEditor.flags.convertWorldOutlineServersTable) { //2/11/12 by DW
+			opmlEditor.utilities.convertWorldOutlineServersTable ();
+			user.opmlEditor.flags.convertWorldOutlineServersTable = clock.now ()};
+		if not defined (user.opmlEditor.flags.fixOpmlOwnerId) { //3/21/12 by DW
+			if user.prefs.opmlOwnerId == "http://blogs.opml.org/mail/podmonster" {
+				user.prefs.opmlOwnerId = ""};
+			opmlEditor.utilities.convertWorldOutlineServersTable ();
+			user.opmlEditor.flags.fixOpmlOwnerId = clock.now ()};
+		if not defined (user.opmlEditor.flags.installAttsInAboutWindow) { //3/23/12 by DW
+			if not defined (user.scheduler2.callbacks.statusMessage.showAtts) {
+				user.scheduler2.callbacks.statusMessage.showAtts = @scheduler2.showAttsInAboutWindow};
+			user.opmlEditor.flags.installAttsInAboutWindow = clock.now ()};
+		if not defined (user.opmlEditor.flags.fixDefaultFontSizeMac) { //6/20/12 by DW
+			if system.environment.isMac {
+				user.prefs.fonts.menuBarFontSize = 14;
+				user.prefs.fonts.outlineFontSize = 14;
+				user.prefs.fonts.scriptFontSize = 14;
+				user.prefs.fonts.tableFontSize = 14;
+				user.prefs.fonts.wptextFontSize = 14};
+			user.opmlEditor.flags.fixDefaultFontSizeMac = clock.now ()}}}
+	«bundle //make sure our domain is defined in config.mainresponder.domains, 8/28/12 by DW
+		«local (adrloc = @user.opmlEditor.staticText.locations.filesystem)
+		«if adrloc^.prefs.enabled
+			«local (urllist = string.urlsplit (adrloc^.prefs.url), domain = urllist [2], adrdomain = @config.mainresponder.domains.[domain])
+			«if defined (adrdomain^) //undo the change 
+				«delete (adrdomain)
+			«if not defined (adrdomain^)
+				«adrdomain^ = adrloc^.prefs.path
+«bundle //test code
+	«everyMinute ()
+
+

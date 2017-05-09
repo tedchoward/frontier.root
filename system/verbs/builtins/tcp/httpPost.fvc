@@ -1,0 +1,35 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.httpPost
+
+on httpPost (url, adrparamtable=nil, username="", password="", adrcode=nil) {
+	«Changes
+		«9/13/09; 9:37:38 AM by DW
+			«New optional parameter returns the HTTP result code. Follow redirects. 
+		«7/15/09; 8:35:03 AM by DW
+			«Created. A super-simple interface to HTTP POST. It can get richer with optional parameters, over time, as necessary.
+	local (body, urllist, type = "application/x-www-form-urlencoded");
+	bundle { //get body
+		body = "";
+		if adrparamtable != nil {
+			local (adr);
+			for adr in adrparamtable {
+				local (s = string.urlencode (nameof (adr^)) + "=" + string.urlencode (adr^));
+				if sizeof (body) == 0 {
+					body = s}
+				else {
+					body = body + "&" + s}}}};
+	bundle { //get urllist
+		try {
+			urllist = string.urlsplit (url)}
+		else {
+			urllist = string.urlsplit (url + "/")}};
+	local (s = tcp.httpclient ("POST", server:urllist [2], path:urllist [3], datatype:type, data:body, ctFollowRedirects:5, debug:false, username:username, password:password));
+	if adrcode != nil {
+		adrcode^ = tcp.httpGetStatusCode (s)};
+	return (string.httpResultSplit (s))}
+«bundle //test code
+	«local (url = "http://rpc.rsscloud.org:5337/rsscloud/postUpdate", params)
+	«new (tabletype, @params)
+	«params.url = "http://static.lifeliner.org/davewiner/rss.xml"
+	«dialog.alert (httpPost (url, @params))
+
+

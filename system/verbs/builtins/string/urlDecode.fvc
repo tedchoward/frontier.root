@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.urlDecode
+
+on urlDecode (s) {
+	kernel (string.urlDecode)}
+
+

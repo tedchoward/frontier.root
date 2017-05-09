@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.data.standardMacros.pageFooter
+
+on pageFooter () {
+	local (htmltext = "");
+	on add (s) {
+		htmltext = htmltext + s};
+	add ("</body>\r</html>");
+	return (htmltext)}
+
+

@@ -1,0 +1,56 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.httpChanged
+
+on httpChanged (url, adrpagetext=nil, adrwhenchanged=nil) {
+	«Changes
+		«2/26/13; 5:57:38 PM by DW
+			«The cache becomes persistent because a reboot of Frontier shouldn't cause a change. Keep more stats. New optional param, the address of a place to store the time of the last change to the url, which behaves like an etag. 
+		«2/24/13; 11:50:18 AM by DW
+			«New verb. Return true if the content at the specified address has changed. If it change, and adrpagetext is non-nil, return the text of the page in adrpagetext. 
+	local (adrtmptable, etag = "", code, s, now = clock.now (), adrurl);
+	bundle { //set up tmp table
+		adrtmptable = @config.tcp;
+		if not defined (adrtmptable^) {
+			new (tabletype, adrtmptable)};
+		adrtmptable = @adrtmptable^.httpChangedUrls;
+		if not defined (adrtmptable^) {
+			new (tabletype, adrtmptable)}};
+	bundle { //get etag
+		if defined (adrtmptable^.[url]) {
+			if defined (adrtmptable^.[url].etag) {
+				etag = adrtmptable^.[url].etag}}};
+	bundle { //make request
+		local (headers, urllist = string.urlsplit (url), code, s);
+		new (tabletype, @headers);
+		if sizeof (etag) > 0 {
+			headers.["If-None-Match"] = etag};
+		s = tcp.httpClient (server:urllist [2], path:urllist [3], timeOutTicks:60*30, flmessages:false, adrHdrTable:@headers, ctFollowRedirects:3);
+		code = string.nthField (s, ' ', 2);
+		s = string.httpResultSplit (s, @headers);
+		if adrpagetext != nil {
+			adrpagetext^ = s};
+		bundle { //set up table for this url
+			adrurl = @adrtmptable^.[url];
+			if not defined (adrurl^) {
+				new (tabletype, adrurl);
+				adrurl^.ctChecks = 0;
+				adrurl^.ctChanges = 0;
+				adrurl^.whenLastChange = now};
+			if defined (headers.eTag) {
+				adrurl^.etag = headers.eTag};
+			adrurl^.whenLastCheck = now;
+			adrurl^.ctChecks++};
+		if code == 304 { //no change
+			if adrwhenchanged != nil {
+				adrwhenchanged^ = adrurl^.whenLastChange};
+			return (false)};
+		adrurl^.ctChanges++;
+		adrurl^.whenLastChange = now;
+		if adrwhenchanged != nil {
+			adrwhenchanged^ = now};
+		return (true)}};
+bundle { //test code
+	local (pagetext);
+	dialog.alert (httpChanged ("http://static.scripting.com/denver/wo/dave/2013/02/19/archive057.opml", @pagetext));
+	wp.newtextobject (pagetext, @scratchpad.pagetext)}
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:wptx:user.html.templates.plainText
+
+{pageheader (title)}
+{bodytext}
+{pagefooter ()}
+
+

@@ -1,0 +1,36 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.prefs2.bootstrap.stylesAndScripts
+
+<style>
+	.divTabsFromOutline {
+		font-size: 18px;
+		}
+	.divTabsFromOutline p {
+		font-size: 18px;
+		line-height: 140%;
+		padding-bottom: 5px;
+		}
+	.divTabsFromOutline textarea {
+		font-size: 18px;
+		line-height: 140%;
+		}
+	.divTabsFromOutline label {
+		font-size: 18px;
+		}
+	.divTabsFromOutline input {
+		}
+	.divTabsFromOutline .xlarge {
+		font-size: 18px;
+		line-height: 140%;
+		height: 140%;
+		width: 450px;
+		}
+	.divTabsFromOutline .uneditable-input {
+		font-size: 18px;
+		line-height: 140%;
+		height: 140%;
+		width: 450px;
+		}
+	</style>
+
+
+

@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.openAttributesWindow
+
+on openAttributesWindow () {
+	«Changes
+		«7/16/11; 8:31:39 AM by DW
+			«Added error-checking to the View Attributes command.
+		«7/15/11; 7:04:44 PM by DW
+			«Created.
+	local (adrwindow);
+	bundle { //error checking
+		on error () {
+			scripterror ("Can't open the attributes window because the front window does not contain an outline.")};
+		try {
+			adrwindow = address (window.frontmost ());
+			if typeof (adrwindow^) != outlinetype {
+				error ()}}
+		else {
+			error ()}};
+	opmleditor.init ();
+	opmlEditor.opCursorMovedCallback ();
+	edit (@system.temp.opmlEditor.attsWindow, "Outline attributes")};
+bundle { //test code
+	openAttributesWindow ()}
+
+

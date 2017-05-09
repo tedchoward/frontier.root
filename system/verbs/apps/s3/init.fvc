@@ -1,0 +1,62 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.init
+
+on init () {
+	«Changes
+		«4/6/12; 3:27:17 PM by DW
+			«Init new callbacks table. 
+				«http://worknotes.scripting.com/april2012/4612ByDw/callbackOnS3synchfolderuploadfile/
+		«9/2/11; 4:42:17 PM by DW
+			«Commented call to thread.getStackDump. 
+		«7/12/11; 11:58:55 AM by DW
+			«Add stats table, init route53 code.
+		«10/26/10; 8:29:48 AM by DW
+			«Create a prefs table, start with a pref that determines whether we create and watch a folder on the desktop.
+		«12/30/09; 9:51:20 AM by DW
+			«Init user.s3.accounts.default.defaultBucket to three random state names concatenated.
+	if not defined (user.s3) {
+		new (tabletype, @user.s3)};
+	bundle { //prefs
+		if not defined (user.s3.prefs) {
+			new (tabletype, @user.s3.prefs)};
+		if not defined (user.s3.prefs.flSynchFolder) {
+			user.s3.prefs.flSynchFolder = false}};
+	bundle { //stats
+		if not defined (user.s3.stats) {
+			new (tabletype, @user.s3.stats)};
+		if not defined (user.s3.stats.ctInits) {
+			user.s3.stats.ctInits = 0}};
+		«if not defined (user.s3.stats.stackDump)
+			«thread.getStackDump (@user.s3.stats.stackDump)
+	bundle { //accounts
+		if not defined (user.s3.accounts) {
+			new (tabletype, @user.s3.accounts)};
+		if not defined (user.s3.accounts.default) {
+			new (tabletype, @user.s3.accounts.default)};
+		if not defined (user.s3.accounts.default.AWSAccessKeyId) {
+			user.s3.accounts.default.AWSAccessKeyId = ""};
+		if not defined (user.s3.accounts.default.SecretAccessKey) {
+			user.s3.accounts.default.SecretAccessKey = ""};
+		if not defined (user.s3.accounts.default.apiUrl) {
+			user.s3.accounts.default.apiUrl = "http://s3.amazonaws.com"};
+		if not defined (user.s3.accounts.default.timeOutSecs) {
+			user.s3.accounts.default.timeOutSecs = 180};
+		if not defined (user.s3.accounts.default.defaultBucket) { //12/30/09 by DW
+			on randomstate () {
+				return (states.nthstate (random (1, 50)))};
+			user.s3.accounts.default.defaultBucket = string.innercasename (randomstate () + " " + randomstate () + " " + randomstate ())}};
+	bundle { //callbacks, 4/6/12 by DW
+		if not defined (user.s3.callbacks) {
+			new (tabletype, @user.s3.callbacks)};
+		if not defined (user.s3.callbacks.afterSynchFolderUpload) {
+			new (tabletype, @user.s3.callbacks.afterSynchFolderUpload)}};
+	bundle { //misc
+		if not defined (user.s3.currentAccount) {
+			user.s3.currentAccount = "default"};
+		s3.route53.init ()}; //7/12/11 by DW
+	user.s3.stats.ctInits++;
+	user.s3.stats.whenLastInit = clock.now ();
+	return (@user.s3)};
+bundle { //test code
+	init ()}
+
+

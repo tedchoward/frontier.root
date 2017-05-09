@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.countMailfolders
+
+on countMailfolders () { « returns the number of mailfolders
+	with objectModel, Eudora, eventInfo {
+		return (core.count (id, mailfolder[""], mailfolder))}}
+
+

@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.getCardSize
+
+on getCardSize (adrWidth, adrHeight) {
+	local (atts);
+	if not card.getCardAttributes (@atts) {
+		return (false)};
+	adrWidth^ = atts.rbor;
+	adrHeight^ = atts.bbor;
+	return (true)}
+
+

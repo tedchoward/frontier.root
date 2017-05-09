@@ -1,0 +1,36 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.tcp.im.builtinDrivers.jabber.code.examples.rpc.rpcDocs
+
+#title "rpc"
+jabber.rpc
+	Syntax
+		rpc ( jabberId, procedureName = "", adrParamList = nil,  flDebug = false, secondsToTimeOut = user.jabber.prefs.idTableRetainSeconds, flAsync = false, adrCallback = nil, extraInfo = nil, adrTimeoutCallback = nil, id = nil, adrErrorCallback = nil, connection = default)
+	Params
+		jabberId is the jabberId to send the RPC request to.
+		procedureName is the name of an XML-RPC procedure that you want run by the recipient. It defaults to the empty string (probably an error).
+		adrParamList is the address of a list. These are the parameters that will be sent with the procedure call. It defaults to an empty list (no params).
+		flDebug is currently ignored, but could definately place copies of the RPC calls in the scratchpad in another release.
+		secondsToTimeOut is the number of seconds before a synchronous request times out with a scriptError, or an async request is discarded. It defaults to the default length of an idTable, which is stored in user.jabber.prefs.idTableRetainSeconds. This is generally a better value for asynchronous use, as it will tend to be some number of hours or days, so for synchronous use, you'd probably want to specify a much shorter time. For asynchronous calls, this value will only have the granularity of the jabber agent, which currently runs once per minute.
+		flAsync is a boolean. If true, this will be an asynchrous call. This flag defaults to false.
+		adrCallback is an address to the script that will be called when an asynchronous call completes. It will be passed three parameters. The first will be the results of the RPC call. The second is an address, an idTable token (which is an address to a table). The third is the extraInfo provided to the rpc call. The routine pointed to by this address must not be local to the script calling jabber.rpc because the routine won't be around when the actual RPC results are received; the routine must be in Frontier.root or in a guest database. This can be nil, in which case no script will be called when the RPC results are returned, discarding them.
+		extraInfo is extra information that will be provided to async handlers when called. extraInfo is provided for general compatibility with other RPC mechanisms that Frontier uses, but for a native Jabber RPC approach, it's better to use the idTable, which is indeed exactly how this is implemented; the extraInfo is stored in idTable^.extraInfo.
+		adrTimeoutCallback is an address to a script that will be called if the asyncronous call times out. It will be called with one parameter, an idTable token (which is an address to a table). After this script terminates, the idTable will be deleted.
+		id is an idTable address which you want to use for this RPC request. It <i>must</i> be unique to this RPC call, or results may get crossed. By default, the RPC system will create its own id. By passing in an idTable, you can use that table to store any data you may wish to retain across the call, which is espcially useful in conjunction with asynchronous calls.
+		adrErrorCallback is an address to a script that will be called if an asynchronous call results in a fault. It will be called with three parameters: the idTable address, the fault code, and the fault string. After this script completes, the idTable will be deleted.
+		connection is the address of a connection table to use. It defaults to the framework-maintained connection.
+	Action
+		Send the rpc request to the recipient specified by the host, username, and resource, and passes the result back.
+	Returns
+		Nothing.
+	Examples
+		&nbsp;&nbsp;&nbsp;&#187; local(params = {22});<br />&nbsp;&nbsp;&nbsp;&#187; jabber.rpc(connectionReference, "jabber.xlogs.net", "jeremy", "examples.getStateName", @params)
+			&quot;Michigan&quot;
+	Errors
+		If the result of the synchronous call is an error, this script will scriptError with the error of the RPC call.
+		If the call times out on a synchronous call, the script will scriptError.
+	Notes
+		Parameter compatibility w/ bett.rpc.client: Worthwhile or waste of time? This can't be wrapped into xml.rpc anyhow, because of the necessity of the connection reference. FIXME: Resolve this.
+	See Also
+		<a href="http://docserver.userland.com/betty/rpcclient">betty.rpc.client</a>, <a href="http://docserver.userland.com/xml/rpc">xml.rpc</a>, <a href="../scns">SCNS support for Jabber</a>
+
+
+

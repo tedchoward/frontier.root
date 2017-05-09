@@ -1,0 +1,26 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.OAuth.getHmac
+
+on getHmac (data, key) {
+	«Changes
+		«3/27/06; 5:57:47 PM by LMO
+			«Initial implementation, stolen from Digest::HMAC in Perl
+	local (BLOCK_SIZE=64);
+	on sha1 (data) {
+		«See: http://www.spicynoodles.net/projects/crypto.html
+		return (crypto.hashSHA1(data, false))};
+	local(k_ipad, k_opad, i);
+	if string.length (key) > BLOCK_SIZE {
+		key = sha1 (key)};
+	for i = 0 to BLOCK_SIZE-1 {
+		if i < string.length(key) {
+			«XOR characters of the key
+			k_char = string.nthChar(key, i+1);
+			k_ipad = k_ipad + char(bit.logicalXor(k_char, char(0x36)));
+			k_opad = k_opad + char(bit.logicalXor(k_char, char(0x5c)))}
+		else {
+			«Pad out the rest of the block size length
+			k_ipad = k_ipad + char(0x36);
+			k_opad = k_opad + char(0x5c)}};
+	return (sha1 (k_opad + sha1 (k_ipad + data)))}
+
+

@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.windowTypes.init
+
+if not defined (system.temp.windowTypes) {
+	new (tableType, @system.temp.windowTypes)};
+if not defined (system.temp.windowTypes.windows) {
+	new (tableType, @system.temp.windowTypes.windows)};
+return (@system.temp.windowTypes.windows)
+
+

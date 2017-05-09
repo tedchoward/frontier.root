@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.odbEditor.editors.AppleScript.traps.EDcl
+
+on FCls (fsFileBeingClosed) {
+	return (true)}
+
+

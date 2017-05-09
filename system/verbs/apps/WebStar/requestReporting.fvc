@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.requestReporting
+
+on requestReporting (messages, status, id, client_version, appID = WebStar.id) { «Request real-time status reports be sent to caller
+	return (appleEvent (appID, 'WWW‡', 'RqRp', 'Kmsg', boolean (messages), 'Ksta', boolean (status), 'Kpid', long (id), 'Kver', client_version))}
+
+

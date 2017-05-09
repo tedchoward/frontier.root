@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.root.close
+
+on close (adrserver) {
+	return (appleEvent (adrserver, 'ODBF', 'CLOS'))}
+
+

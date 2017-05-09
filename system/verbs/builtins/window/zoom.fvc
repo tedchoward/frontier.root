@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.window.zoom
+
+on zoom (adr) {
+	kernel (window.zoom)}
+
+

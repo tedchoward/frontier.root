@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.doMenu
+
+on doMenu (x) { «Execute a menu command
+	return (appleEvent (FileMaker.id, 'misc', 'menu', '----', x))}
+
+

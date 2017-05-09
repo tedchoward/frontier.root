@@ -1,0 +1,135 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.httpLog.postFilterCallback
+
+on postFilterCallback (pta) {
+	«Changes
+		«2/16/12; 9:29:25 AM by DW
+			«Gather domain-level stats.
+		«11/26/11; 10:10:19 PM by DW
+			«Start gathering stats.
+		«11/13/11; 7:31:26 PM by DW
+			«Created.
+	local (now = clock.now ());
+	«if not defined (scratchpad.httplogparams)
+		«scratchpad.httplogparams = pta^
+	bundle { //log the HTTP request
+		if user.opmlEditor.prefs.flLogHttpRequests {
+			local (adrlog = log.addToGuestDatabase ("http", flHourlyRoll: true));
+			bundle { //set up data table
+				local (adrdata = @adrlog^.data);
+				new (tabletype, adrdata);
+				adrdata^.client = pta^.client;
+				adrdata^.code = pta^.code;
+				adrdata^.host = pta^.host;
+				adrdata^.method = pta^.method;
+				adrdata^.path = pta^.path;
+				adrdata^.port = pta^.port;
+				adrdata^.searchArgs = pta^.searchArgs;
+				adrdata^.responder = pta^.responder;
+				adrdata^.ctResponseChars = sizeof (pta^.responseBody);
+				adrdata^.requestBody = pta^.requestBody;
+				adrdata^.when = now;
+				bundle { //userAgent
+					if defined (pta^.requestHeaders.["User-Agent"]) {
+						adrdata^.userAgent = pta^.requestHeaders.["User-Agent"]}
+					else {
+						adrdata^.userAgent = ""}};
+				bundle { //ctTicks
+					if defined (pta^.stats.requestProcessingStarted) {
+						adrdata^.ctTicks = clock.ticks () - pta^.stats.requestProcessingStarted}
+					else {
+						adrdata^.ctTicks = 0}};
+				bundle { //url
+					local (url = "http://" + pta^.host);
+					if pta^.port != 80 {
+						if not (url contains ":") {
+							url = url + ":" + pta^.port}};
+					adrdata^.url = url + pta^.path};
+				bundle { //urlRedirect
+					local (code = number (pta^.code));
+					if (code >= 300) and (code <= 399) {
+						adrdata^.urlRedirect = pta^.responseHeaders.URI}}}}};
+	bundle { //stats, 11/26/11 by DW
+		user.opmlEditor.stats.http.ctHitsAlltime++;
+		bundle { //ctHitsToday
+			if not date.sameday (now, user.opmlEditor.stats.http.whenLastHit) {
+				user.opmlEditor.stats.http.ctHitsToday = 1;
+				user.opmlEditor.stats.http.ctDays++}
+			else {
+				user.opmlEditor.stats.http.ctHitsToday++}};
+		user.opmlEditor.stats.http.whenLastHit = now;
+		if not defined (user.opmlEditor.stats.http.whenFirstHit) {
+			user.opmlEditor.stats.http.whenFirstHit = now}};
+	bundle { //domain-level stats in domainStats.root, 2/16/12 by DW
+		if sizeof (pta^.host) > 0 {
+			local (adrdata = frontier.opendatafile ("domainStats", defined (system.temp.opmlEditor.stats.flStatsFileOpen)));
+			system.temp.opmlEditor.stats.flStatsFileOpen = true;
+			local (url = "http://" + pta^.host + pta^.uri, adrdomain);
+			if not defined (adrdata^.domains) {
+				new (tabletype, @adrdata^.domains)};
+			bundle { //init the domain table
+				adrdomain = @adrdata^.domains.[pta^.host];
+				if not defined (adrdomain^) {
+					new (tabletype, adrdomain)};
+				if not defined (adrdomain^.calendar) {
+					new (tabletype, @adrdomain^.calendar)};
+				bundle { //prefs
+					if not defined (adrdomain^.prefs) {
+						new (tabletype, @adrdomain^.prefs)}};
+				bundle { //stats
+					if not defined (adrdomain^.stats) {
+						new (tabletype, @adrdomain^.stats)};
+					if not defined (adrdomain^.stats.ctHitsAllTime) {
+						adrdomain^.stats.ctHitsAllTime = 0};
+					adrdomain^.stats.ctHitsAllTime++}};
+			bundle { //per-day stuff
+				local (adrday = mainResponder.calendar.getDayAddress (@adrdomain^.calendar, now));
+				bundle { //stats
+					if not defined (adrday^.stats) {
+						new (tabletype, @adrday^.stats)};
+					if not defined (adrday^.stats.ctHitsToday) {
+						adrday^.stats.ctHitsToday = 0};
+					adrday^.stats.ctHitsToday++};
+				bundle { //urls
+					local (adrurl);
+					if not defined (adrday^.urls) {
+						new (tabletype, @adrday^.urls)};
+					adrurl = @adrday^.urls.[pta^.uri];
+					if defined (adrurl^) {
+						adrurl^++}
+					else {
+						adrurl^ = 1}};
+				bundle { //referrers
+					if defined (pta^.requestHeaders.Referer) {
+						local (adrreferrer);
+						if not defined (adrday^.referrers) {
+							new (tabletype, @adrday^.referrers)};
+						adrreferrer = @adrday^.referrers.[pta^.requestHeaders.Referer];
+						if defined (adrreferrer^) {
+							adrreferrer^++}
+						else {
+							adrreferrer^ = 1}}}};
+			bundle { //the today table
+				if not defined (adrdata^.today) {
+					new (tabletype, @adrdata^.today)};
+				if not defined (adrdata^.today.calendar) {
+					new (tabletype, @adrdata^.today.calendar)};
+				bundle { //rankings
+					local (adrrankings = @adrdata^.today.rankings);
+					bundle { //make sure it's defined, roll-over on day-change
+						if defined (adrrankings^) {
+							if not date.sameday (timecreated (adrrankings), now) { //time to roll-over
+								local (adrday = mainresponder.calendar.getdayaddress (@adrdata^.today.calendar, date.yesterday (now), true));
+								adrday^ = adrrankings^;
+								new (tabletype, adrrankings)}}
+						else {
+							new (tabletype, adrrankings)}};
+					bundle { //bump counter
+						local (adrrank = @adrrankings^.[pta^.host]);
+						if defined (adrrank^) {
+							adrrank^++}
+						else {
+							adrrank^ = 1}}}}}}}
+«bundle //test code
+	«postFilterCallback (@scratchpad.httplogparams)
+
+

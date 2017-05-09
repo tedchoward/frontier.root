@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.identica.getTimeLine
+
+on getTimeLine (adrtimeline, username=user.identica.prefs.username, password=user.identica.prefs.password, server="identi.ca") {
+	«Changes
+		«3/12/09; 5:41:15 AM by DW
+			«New optional param, server, allows you to post to another instance of Laconica.
+		«7/17/08; 10:02:05 PM by DW
+			«Created. Returns the 20 most recent statuses posted by the authenticating user and that user's friends. This is the equivalent of /home on the Web. 
+	local (url = "http://" + server + "/api/statuses/friends_timeline.xml");
+	return (twitter.gettimeline (adrtimeline, true, username, password, url))}
+«bundle //test code
+	«getTimeLine (@scratchpad.identicatimeline, server:"home.smallpicture.com")
+
+

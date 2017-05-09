@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.prefs.validateTwitterLogin
+
+on validateTwitterLogin () {
+	«Changes
+		«8/6/08; 7:50:26 AM by DW
+			«Created. 
+	local (pta = html.getpagetableaddress ());
+	if pta^.method == "POST" {
+		if twitter.authenticate (user.twitter.prefs.username, user.twitter.prefs.password) {
+			s = "<font color=\"green\">The username/password combination checks out with Twitter.</font>"}
+		else {
+			s = "<font color=\"red\">Twitter rejected the username/password combination.</font>"};
+		return (s)}
+	else {
+		return ("")}}
+
+

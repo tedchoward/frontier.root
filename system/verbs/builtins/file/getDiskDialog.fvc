@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.getDiskDialog
+
+on getDiskDialog (prompt, adr) {
+	kernel (file.getdiskdialog)}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.queue
+
+on queue (obj, queueFor = nil) { «Queue a message to be sent
+	return (appleEvent (Eudora.id, 'CSOm', 'eQue', '----', objspec (obj), 'eWhn', long (queueFor)))}
+
+

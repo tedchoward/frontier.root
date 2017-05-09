@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.kBytes
+
+on kBytes (num) {
+	local (x = number (num) / 1024);
+	if num > (x * 1024) {
+		x++};
+	return (string (x) + "K")}
+
+

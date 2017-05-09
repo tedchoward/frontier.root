@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.code.sampleCallbacks.config
+
+on CONFIG (adrSelf, data) {
+	return(msg("on config"))}
+
+

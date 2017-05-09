@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:user.html.macros.spacelines
+
+on spacelines (ctlines) {
+	local (s = "", i);
+	for i = 1 to ctlines {
+		s = s + "<br>"};
+	return (s)}
+
+

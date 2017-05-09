@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.unqueue
+
+on unqueue (obj) { «Remove a message from the queue, so it won¹t be sent
+	return (appleEvent (Eudora.id, 'CSOm', 'eUnQ', '----', objspec (obj)))}
+
+

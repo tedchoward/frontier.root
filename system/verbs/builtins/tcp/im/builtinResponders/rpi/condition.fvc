@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinResponders.rpi.condition
+
+on condition (screenname, message) {
+	return (message beginswith "<methodCall>" or message beginswith "<?xml version=" and message contains "<methodCall>")}
+
+

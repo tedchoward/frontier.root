@@ -1,0 +1,83 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.rss.getOpmlFeeds
+
+on getOpmlFeeds (opmltext, adrfeeds, adrlistinfo=nil, flProcessIncludes=false) {
+	«Changes
+		«5/17/13; 10:04:06 AM by DW
+			«New optional param, flProcessIncludes. If true, we dive into includes. 
+		«9/17/09; 6:59:08 AM by DW
+			«If there's a <link> in the <head> with rel == "alternate" use it to set the link in the listinfo table. 
+		«9/3/09; 3:54:29 AM by DW
+			«Add optional adrlistinfo param, if non-nil, we copy info about the OPML into the table.
+		«7/28/09; 3:42:49 PM by DW
+			«Created. Get a list of feeds from OPML. Dives into any level of hierarchy and pulls out the feeds.
+	local (xstruct, now = clock.now (), includestack);
+	on decode (s) {
+		return (xml.entitydecode (s, flAlphaEntities:true))};
+	xml.compile (opmltext, @xstruct);
+	«scratchpad.getopmlxstruct = xstruct
+	new (tabletype, adrfeeds);
+	new (tabletype, @includestack); //5/17/13 by DW
+	local (adropml = xml.getaddress (@xstruct, "opml"));
+	bundle { //listinfo, 9/3/09 by DW
+		if adrlistinfo != nil {
+			new (tabletype, adrlistinfo);
+			adrlistinfo^.title = "";
+			adrlistinfo^.dateCreated = now;
+			adrlistinfo^.dateModified = now;
+			try {
+				local (adrhead = xml.getaddress (adropml, "head"));
+				try {adrlistinfo^.title = decode (xml.getvalue (adrhead, "title"))};
+				try {adrlistinfo^.dateCreated = date (xml.getvalue (adrhead, "dateCreated"))};
+				try {adrlistinfo^.dateModified = date (xml.getvalue (adrhead, "dateModified"))};
+				bundle { //find the link, 9/17/09 by DW
+					local (adr);
+					for adr in adrhead {
+						if nameof (adr^) endswith "link" {
+							local (adratts = @adr^.["/atts"]);
+							if string.lower (adratts^.rel) == "alternate" {
+								if adratts^.type == "text/html" {
+									if sizeof (adratts^.href) > 0 {
+										adrlistinfo^.link = adratts^.href};
+									break}}}};
+					if not defined (adrlistinfo^.link) {
+						adrlistinfo^.link = ""}}}}};
+	local (adrbody = xml.getaddress (adropml, "body"));
+	on processInclude (adratts) { //5/17/13 by DW
+		if defined (adratts^.url) {
+			bundle { //return if it's already in the include stack
+				local (adr, lowerurl = string.lower (adratts^.url));
+				for adr in @includestack {
+					if adr^ == lowerurl {
+						return}};
+				includestack.[lowerurl] = true};
+			try {
+				local (includetext = tcp.httpreadurl (adratts^.url, 3, false), xstruct, adrbody);
+				xml.compile (includetext, @xstruct);
+				adrbody = xml.opml.getBodyAddress (@xstruct);
+				processOutline (adrbody, true)}}};
+	on processOutline (adroutline, flfirstlevel) {
+		local (adrsuboutline);
+		if not flfirstlevel {
+			local (adratts = @adroutline^.["/atts"]);
+			if defined (adratts^) {
+				if defined (adratts^.type) {
+					if adratts^.type == "rss" {
+						local (adrsubtable = @adrfeeds^.[adratts^.xmlUrl]);
+						new (tabletype, adrsubtable);
+						adrsubtable^.atts = adratts^};
+					if adratts^.type == "include" { //5/17/13 by DW
+						if flProcessIncludes {
+							processInclude (adratts)}}}}};
+		for adrsuboutline in adroutline {
+			if nameof (adrsuboutline^) endswith "outline" {
+				processOutline (adrsuboutline, false)}}};
+	processOutline (adrbody, true)}
+«bundle //test code
+	«local (f = frontier.pathstring + "twOpml:nytnewbie.opml")
+	«local (s = string (file.readwholefile (f)))
+	«local (s = file.readwholefile (file.getspecialfolderpath ("", "Desktop Folder", false) + "mysubscriptions.opml"))
+	«local (s = file.readwholefile ("Ohio:mysubscriptions.opml"))
+	«s = tcp.httpreadurl ("http://howto.opml.org/dave/newsRiverOrg/podcastReadingList.opml")
+	«getOpmlFeeds (s, @scratchpad.opmlfeeds, @scratchpad.opmllistinfo)
+
+

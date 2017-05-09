@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.menuCommands.supportButton
+
+on supportButton () {
+	«Changes
+		«9/7/10; 9:45:07 AM by DW
+			«Open the blog post with support info. A place to post comments and questions.
+	local (url = "http://scripting.com/stories/2010/09/07/instantOutlinerSupport.html");
+	webbrowser.openurl (url);
+	webbrowser.bringtofront ()};
+bundle { //test code
+	supportbutton ()}
+
+

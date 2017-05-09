@@ -1,0 +1,62 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.comments.save
+
+on save () {
+	«Changes
+		«10/7/12; 1:19:22 PM by DW
+			«Save to the server specified by the editorialDomain attribute.
+				«http://worknotes.scripting.com/october2012/10712ByDw/editorialdomainAttOnComments
+		«9/24/12; 12:11:41 AM by DW
+			«If adrdata^.prefs.disqusName is non-empty, send a disqusName attribute along with the save.
+				«http://worknotes.scripting.com/september2012/92312ByDw/usingYourDisqusGroup
+		«9/17/12; 11:20:58 AM by DW
+			«Change outline title from Hello World from Bull Mancuso to Comment from Bull Mancuso. Later it should become a preference. 
+				«http://worknotes.scripting.com/september2012/91712ByDw/titleOnCommentOpml
+		«9/9/12; 7:43:33 PM by DW
+			«Created.
+	local (adrdata = opmleditor.comments.init (), atts, adroutline = address (window.frontmost ()), opmltext);
+	local (username = adrdata^.prefs.username);
+	bundle { //get subs into opmltext, attributes into atts
+		local (outlinetitle = "Comment from <%username%>");
+		local ([outlinetitle] = adroutline^, oldtarget = target.set (@[outlinetitle]));
+		op.go (left, infinity);
+		op.attributes.getall (@atts);
+		atts.username = username;;
+		if sizeof (adrdata^.prefs.disqusName) > 0 { //9/24/12 by DW
+			atts.disqusName = adrdata^.prefs.disqusName};
+		op.reorg (up, infinity);
+		if op.go (down, 1) {
+			op.demote ();
+			op.deleteline ()};
+		op.promote ();
+		op.deleteline ();
+		target.set (oldtarget);
+		opmltext = op.outlinetoxml (@[outlinetitle]);
+		opmltext = string.replace (opmltext, "&lt;%username%&gt;", atts.username);
+		wp.newtextobject (opmltext, @scratchpad.myopmltext)};
+	bundle { //send the opmltext up to the comment server
+		local (server = "xmlrpc://" + atts.editorialDomain + "/RPC2");
+		«local (urllist = string.urlsplit (atts.url), server = "xmlrpc://" + urllist [2] + "/RPC2")
+		[server].comments.post (atts, opmltext)};
+	bundle { //save in local folder or S3 archive or both
+		local (serialnum = string.padwithzeros (++adrdata^.stats.archiveSerialnum, 3));
+		local (canonicalname = html.directory.getcanonicalname (atts.title));
+		local (fname = canonicalname + serialnum + ".opml");
+		if adrdata^.prefs.flLocalSaveEnabled > 0 {
+			local (f = adrdata^.prefs.folder + file.getdatepath () + fname);
+			file.surefilepath (f);
+			file.writewholefile (f, opmltext)};
+		if adrdata^.prefs.flS3SaveEnabled and (sizeof (adrdata^.prefs.s3path) > 0) {
+			local (path);
+			bundle { //get path, make sure it's properly formatted
+				path = adrdata^.prefs.s3path;
+				if not (path endswith "/") {
+					path = path + "/"};
+				if not (path beginswith "/") {
+					path = "/" + path};
+				adrdata^.prefs.s3path = path};
+			s3.newobject (path + file.getdatepath ("/") + fname, opmltext)}};
+	speaker.beep ()};
+bundle { //test code
+	save ()}
+
+

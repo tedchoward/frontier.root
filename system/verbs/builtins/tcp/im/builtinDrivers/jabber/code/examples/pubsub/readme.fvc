@@ -1,0 +1,9 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.tcp.im.builtinDrivers.jabber.code.examples.pubsub.readme
+
+This table contains code which implements the Publish-Subscribe client for Radio Userland over Jabber.
+
+Make the pubsubPublishHandler an "iq" handler for the namespace "radio:iq:pubsub", and use the pubsubSubscribe and pubsubUnsubscribe code to send out the appropriate requests to your bridge.
+
+Documentation in the style of DocServer has been included in the pubsubDocs subtable for the relevant scripts.
+
+

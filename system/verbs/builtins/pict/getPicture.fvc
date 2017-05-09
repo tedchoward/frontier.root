@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.pict.getPicture
+
+on getPicture (adrpict) {
+	kernel (pict.getpicture)}
+
+

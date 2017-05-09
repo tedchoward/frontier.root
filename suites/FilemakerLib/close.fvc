@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:suites.FilemakerLib.close
+
+on Close (db, reportError = false) {
+	on doIt () {
+		with objectModel, filemaker {
+			close (database [db])}};
+	if reportError {
+		return (doIt ())}
+	else {
+		try {
+			return (doIt ())}
+		else {
+			return (false)}}}
+
+

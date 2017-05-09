@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.window.buttons.Post
+
+local (s = op.getlinetext ());
+twitter.init ();
+if not window.isopen ("About OPML") {
+	window.about ()};
+if sizeof (s) > user.twitter.prefs.maxChars {
+	scripterror ("The post is too long. It's " + sizeof (s) + " characters. The max is " + user.twitter.prefs.maxChars + ".")};
+thread.callscript (@twitter.newpost, {s})
+
+

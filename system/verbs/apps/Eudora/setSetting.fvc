@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.setSetting
+
+on setSetting (x, s) {
+	with objectModel, Eudora, eventInfo {
+		return (set (setting [long (x)], string (s)))}}
+
+

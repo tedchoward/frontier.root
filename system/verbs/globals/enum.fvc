@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.globals.enum
+
+on enum (x) {
+	kernel (lang.enum)}
+
+

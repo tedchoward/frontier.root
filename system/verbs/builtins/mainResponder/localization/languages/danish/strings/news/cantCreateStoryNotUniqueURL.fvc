@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.danish.strings.news.cantCreateStoryNotUniqueURL
+
+Can't create the story, [[storytitle]] because there already is a story in this month with the same URL.
+
+

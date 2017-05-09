@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.save
+
+on save (obj) { «Save an object
+	return (appleEvent (Eudora.id, 'core', 'save', '----', objspec (obj)))}
+
+

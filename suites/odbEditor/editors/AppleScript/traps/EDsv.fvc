@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:suites.odbEditor.editors.AppleScript.traps.EDsv
+
+on EDsv (scriptdata, adrobject) {
+	osa.getSource (@scriptdata, adrobject);
+	fileMenu.save ();
+	return (true)}
+
+

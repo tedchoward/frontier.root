@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.extract
+
+local {
+	complexLinkPat = "<a[ \t\r\n]*[^>]*href[ \t\r\n]*=[ \t\r\n]*\"?([-_~%@:/\\.A-Za-z0-9]+)\"?[^>]*>([^<]*)";
+	simpleLinkPat = "<a[ \t\r\n]+[^>]*href[ \t\r\n]*=[ \t\r\n]*\"([^\"]*)\"[^>]*>([^<]*)";
+	s = string(regex.examples.data.html);
+	theList;
+	tt};
+tt = clock.ticks();
+regex.extract (simpleLinkPat, @s, @theList, {2,1});
+dialog.notify (clock.ticks () - tt + " ticks; " + string (theList))
+
+

@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.controlPanel.["#tools"].helpLinks
+
+on helpLinks () {
+	«Return the string containing the latest help links for Frontier server managers.
+		«06/23/00; 12:47:25 PM by PBS
+	
+	if defined (mainResponder.controlPanel.["#tools"].latestHelpLinksText) {
+		local (s = "<br>");
+		s = s + string (mainResponder.controlPanel.["#tools"].latestHelpLinksText);
+		return (s)};
+	
+	return ("")}
+
+

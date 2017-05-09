@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.data.nodeTypes.blogpost.expand
+
+on expand () {
+	«Changes
+		«11/3/11; 8:32:33 AM by DW
+			«Created.
+	Frontier.tools.data.nodeTypes.include.expand ()};
+bundle { //test code
+	expand ()}
+
+

@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.outliner.openFriends
+
+local (wtitle = "My Twitter friends");
+local (adroutline = @user.twitter.friends);
+new (outlinetype, adroutline);
+local (oldtarget = target.set (adroutline));
+op.setlinetext (wtitle);
+edit (adroutline, wtitle);
+twitter.outliner.insertFriends ();
+target.set (oldtarget)
+
+

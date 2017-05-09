@@ -1,0 +1,39 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.prefs
+
+on prefs () {
+	«Changes
+		«9/17/11; 7:43:30 AM by DW
+			«Set up the toolprefs table and pass it to prefs2.main. Each element has the address of an outline.
+		«9/15/11; 8:49:15 AM by DW
+			«If s3 is enabled, it becomes the default for URLs. Added a place for code to run after user sets prefs. Easier than adding the code into the prefs outline. 
+		«8/30/11; 10:27:50 AM by DW
+			«Uses prefs2 instead of radio.prefs.
+	local (pta = html.getpagetableaddress (), htmltext, toolprefs);
+	«scratchpad.prefsparams = pta^
+	bundle { //fill toolprefs table, 9/17/11 by DW
+		local (adrfile, adrinstaller, adrprefs);
+		new (tabletype, @toolprefs);
+		for adrfile in @system.compiler.files {
+			adrinstaller = @adrfile^.["#installer"];
+			if defined (adrinstaller^) {
+				adrprefs = @adrinstaller^.prefs;
+				if defined (adrprefs^) {
+					local (adr);
+					case typeof (adrprefs^) {
+						stringtype {
+							adr = address (adrprefs^)};
+						outlinetype {
+							adr = adrprefs}};
+					toolprefs.[string.padwithzeros (sizeof (toolprefs) + 1, 5)] = adr}}}};
+		«scratchpad.toolprefs = toolprefs
+	htmltext = prefs2.main (@opmlEditor.data.outlines.prefs, @toolprefs);
+	bundle { //if s3 is enabled, it becomes the default for URLs, 9/15/11 by DW
+		if user.opmlEditor.staticText.locations.s3.prefs.enabled {
+			user.opmlEditor.staticText.locations.s3.prefs.flDefault = true;
+			user.opmlEditor.staticText.locations.filesystem.prefs.flDefault = false}};
+	return (htmltext)};
+bundle { //test code
+	html.setpagetableaddress (@scratchpad.prefsparams);
+	prefs ()}
+
+

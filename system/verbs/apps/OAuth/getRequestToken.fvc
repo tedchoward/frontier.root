@@ -1,0 +1,38 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.OAuth.getRequestToken
+
+on getRequestToken (endpoint, consumerkey, consumersecret, adrtoken, adrtokensecret) {
+	«Changes
+		«3/26/11; 9:39:51 PM by DW
+			«When calling string.urlEncode, pass the second optional param for the "full" encode. Otherwise characters like @ aren't encoded, and the signatures are declared invalid.
+		«2/11/09; 7:13:12 PM by DW
+			«Created. 
+				«http://term.ie/oauth/example/request_token.php?oauth_version=1.0&oauth_nonce=e07128e1d8db58f9f40750e7c45414d5&oauth_timestamp=1234408263&oauth_consumer_key=key&oauth_signature_method=HMAC-SHA1&oauth_signature=1YOcXRF22pOexWpyD3RjpvxCggI%3D
+	local (params);
+	new (tabletype, @params);
+	params.oauth_version = "1.0";
+	params.oauth_nonce = OAuth.getNonce ();
+	params.oauth_timestamp = OAuth.getTimeStamp ();
+	params.oauth_consumer_key = consumerKey;
+	params.oauth_signature_method = "HMAC-SHA1";
+	params.oauth_token = ""; //we haven't got one yet
+	«scratchpad.requestparams = params
+	params.oauth_signature = OAuth.getSignature (@params, endpoint, consumersecret);
+	«local (url = endpoint + "?")
+	«for adr in @params
+		«url = url + nameof (adr^) + "=" + string.urlencode (adr^, true) + "&"
+	«url = string.delete (url, sizeof (url), 1)
+	«scratchpad.urlrequesttoken = url
+	«local (s = tcp.httpreadurl (url))
+	local (s = OAuth.httpClient (endpoint, @params));
+	bundle { //parse the resulting string
+		adrtoken^ = string.nthfield (string.nthfield (s, "&", 1), "=", 2);
+		adrtokensecret^ = string.nthfield (string.nthfield (s, "&", 2), "=", 2)};
+		«oauth_token=requestkey&oauth_token_secret=requestsecret
+	«wp.newtextobject (s, @scratchpad.tokenresult); edit (@scratchpad.tokenresult)
+	return (true)};
+bundle { //test code
+	local (endpoint = "http://term.ie/oauth/example/request_token.php");
+	local (consumerkey = "key", consumersecret = "secret");
+	getRequestToken (endpoint, consumerkey, consumersecret, @scratchpad.token, @scratchpad.tokensecret)}
+
+

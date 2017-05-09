@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.introGroups
+
+on introGroups (pattern, s, groupIndex, adrMatchLen=nil) {
+	local (patternRef = 0, result = false, resultTable);
+	if adrMatchLen ‚ nil {
+		adrMatchLen^ = 0};
+	try {
+		patternRef = regex.compile (pattern, caseSensitive:regex.data.introCaseSensitive);
+		result = regex.search (patternRef, @s, @resultTable, makeGroups:true);
+		regex.free (patternRef);
+		case true {
+			not result;
+			not defined(resultTable.groupOffsets);
+			sizeOf(resultTable.groupOffsets) < groupIndex {
+				return 0}};
+		if adrMatchLen ‚ nil {
+			adrMatchLen^ = resultTable.groupLengths[groupIndex]};
+		return (resultTable.groupOffsets[groupIndex])}
+	else {
+		if (patternRef  != 0) {
+			regex.free (patternRef)};
+		scriptError (tryError)}}
+
+

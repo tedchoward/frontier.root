@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:user.im.responders.manila.script
+
+on script (driverName, screenname, message) {
+	return (tcp.im.builtinResponders.manila.script (driverName, screenname, message))}
+
+

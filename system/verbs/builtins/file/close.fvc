@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.close
+
+on close (path) {
+	kernel (file.close)}
+
+

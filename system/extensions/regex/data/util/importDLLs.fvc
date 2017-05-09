@@ -1,0 +1,40 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.data.util.importDLLs
+
+
+«This script is used to import the DLLs from Codewarrior when developing new versions of the Regex DLL.
+
+on importDLL (f, adr) {
+	if file.type (f) == 'iDLL' { //Windows DLL
+		adr^ = file.readWholeFile (f)}
+	else { //Mac DLL
+		new (tableType, adr);
+		adr^.dFork = file.readWholeFile (f);
+		local (cttypes = rez.countResTypes (f), ixtype, type, ctres, ixres, name, id, data, sublist, rezlist = {});
+		for ixtype = 1 to cttypes {
+			rez.getNthResType (f, ixtype, @type);
+			ctres = rez.countResources (f, type);
+			sublist = {};
+			for ixres = 1 to ctres {
+				rez.getNthResource (f, type, ixres, @name, @data);
+				rez.getNthResInfo (f, type, ixres, @id, @name);
+				sublist[0] = {"itID":id, "name":name, "data":data}};
+			rezlist[0] = {"type":type, "itms":sublist}};
+		adr^.rFork = rezlist};
+	return (true)};
+
+local (pc = file.getPathChar ());
+local (adrtable = @regex.data.dll);
+local (devfolder = "Macintosh HD:Development:cvsroot:Regex:");
+local (fname = "regex.dll");
+importDLL (devfolder + "MacPPC" + pc + fname, @adrtable^.macPPC);
+importDLL (devfolder + "Mac Carbon" + pc + fname, @adrtable^.macCarbon);
+importDLL (devfolder + "Win32" + pc + fname, @adrtable^.windows);
+bundle { //delete current DLL
+	local (f = Frontier.pathString + "DLLs" + pc + fname);
+	if file.exists (f) {
+		if file.isBusy (f) {
+			file.move (f, file.getSpecialFolderPath (nil, "Trash", true))}
+		else {
+			file.delete (f)}}}
+
+

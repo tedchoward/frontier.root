@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.odbcQueryTool.installMenu
+
+on installMenu () {
+	return (menu.install (@odbc.menu))}
+
+

@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.pocalypse.menuCommands.openWorkspace
+
+on openWorkspace () {
+	«Changes
+		«4/5/12; 10:32:27 AM by DW
+			«Open the workspace without clicking on a Collab button.
+	local (adrdata = opmlEditor.pocalypse.init ());
+	edit (@adrdata^.workspace, "Pocalypse Workspace", false, @opmlEditor.pocalypse.buttons)};
+bundle { //test code
+	openWorkspace ()}
+
+

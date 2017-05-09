@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.date.sameMonth
+
+on sameMonth (d1, d2) {
+	«Changes
+		«6/12/10; 8:14:49 AM by DW
+			«Created. Give me two dates and I'll tell you if they're in the same month. 
+			«I was writing this code in a bunch of places, sure sign there should be a verb for it.
+	local (day, month1, year1, hour, minute, second, month2, year2);
+	date.get (d1, @day, @month1, @year1, @hour, @minute, @second);
+	date.get (d2, @day, @month2, @year2, @hour, @minute, @second);
+	return ((month1 == month2) and (year1 == year2))}
+«bundle //test code
+	«dialog.alert (date.samemonth (clock.now (), date ("July 30, 2010")))
+
+

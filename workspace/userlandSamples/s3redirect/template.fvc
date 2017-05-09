@@ -1,0 +1,12 @@
+FrontierVcsFile:3:optx:workspace.userlandSamples.s3redirect.template
+
+<html>
+	<head>
+		<meta http-equiv="refresh" content="0;URL='<%url%>'">
+		</head>
+	<body>
+		</body>
+	</html>
+
+
+

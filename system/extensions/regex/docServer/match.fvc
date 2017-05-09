@@ -1,0 +1,45 @@
+FrontierVcsFile:3:optx:system.extensions.regex.docServer.match
+
+#title "regex.match"
+#renderOutlineWIth "docServerRenderer"
+Syntax
+	regex.match (patternRef, adrObject, adrTable, start, makeGroups)
+Params
+	patternRef is the pattern reference returned from "regex.compile".
+	
+	adrObject is an address pointing to an object that can be coerced to a string object.
+	
+	adrTable is an optional address of a table that receives information about the match. Defaults to nil.
+	
+	start is an optional integer. Defaults to 1.
+	
+	makeGroups is an optional boolean flag. Defaults to false.
+Action
+	Tries to match the compiled pattern, referenced by patternRef, to the target string, pointed to by adrObject, at position start.
+Returns
+	True if successful, false otherwise.
+Examples
+	local (pattern = "<[^>]*>")
+	local (s = "<font size = \"-2\">")
+	local (patRef)
+	try
+		patRef = regex.compile(pattern)
+		dialog.notify (regex.match(patRef, @s, @temp.matchInfo, 1, true))
+		regex.free (patRef)
+	else
+		regex.free (patRef)
+	
+Notes
+	start specifies the position in the coerced string where the match will be performed
+	
+	If makeGroups is true, information about any subexpression matches will be returned in the table pointed to by adrTable.  
+	
+	The "MatchInfo Table" outlines the information optionally returned in the table pointed to by adrTable.
+	
+	It is good practice to place regex.match in a try statement and ensure that memory is always released through an else statement.
+See Also
+	"regex.compile"
+	"regex.easyMatch"
+
+
+

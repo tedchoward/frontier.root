@@ -1,0 +1,7 @@
+FrontierVcsFile:3:wptx:suites.people.webAdmin.removeServiceFromGroup
+
+#title "Remove Service From Group"
+{removeServiceFromGroup ()}
+{goBack ()}
+
+

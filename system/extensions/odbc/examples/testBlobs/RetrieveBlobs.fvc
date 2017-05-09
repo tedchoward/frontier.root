@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.examples.testBlobs.RetrieveBlobs
+
+on RetrieveBlobs () {
+	local {
+		dsn = "";
+		uid = "";
+		pwd = "";
+		sql = "";
+		theResults = ""};
+	sql = "SELECT cover_tn, cover_data FROM cd_covers WHERE id = 38";
+	theResults = odbc.execute (dsn, uid, pwd, sql, "lists");
+	system.extensions.odbc.examples.testBlobs.resultBlobs.image_tn = theResults[1][1];
+	system.extensions.odbc.examples.testBlobs.resultBlobs.image_data = theResults[1][2]};
+RetrieveBlobs ()
+
+

@@ -1,0 +1,35 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.getLocationInfo
+
+on getLocationInfo (adrtable, ip=nil, apiUrl=nil) {
+	«Changes
+		«3/28/10; 10:17:52 AM by DW
+			«Make apiUrl a parameter, so you can call a different service, should the default one disappear someday. 
+		«3/28/10; 9:36:03 AM by DW
+			«Gets location info for the indicated IP address, if not specified, gets info for the machine it's running on.
+			«I really needed a way to get my external IP address, because tcp.dns.getmydottedid returns an internal IP address on EC2. The web service I'm using for this also returns geo-location so I return that info as well.
+				«http://www.hostip.info/use.html
+	if apiurl == nil {
+		apiurl = "http://api.hostip.info/"};
+	if ip != nil {
+		apiurl = apiurl + "?ip=" + ip};
+	new (tabletype, adrtable);
+	local (xmltext = tcp.httpreadurl (apiurl));
+	xml.compile (xmltext, @xstruct);
+	«scratchpad.geox = xstruct
+	local (adrroot = xml.getaddress (@xstruct, "HostipLookupResultSet"));
+	local (adrsubroot = xml.getaddress (adrroot, "featureMember"));
+	local (adrhostip = xml.getaddress (adrsubroot, "Hostip"));
+	adrtable^.ip = xml.getvalue (adrhostip, "ip");
+	adrtable^.locationName = xml.getvalue (adrhostip, "name");
+	adrtable^.countryName = xml.getvalue (adrhostip, "countryName");
+	adrtable^.countryAbbrev = xml.getvalue (adrhostip, "countryAbbrev");
+	local (adriplocation = xml.getaddress (adrhostip, "ipLocation"));
+	local (adrpointproperty = xml.getaddress (adriplocation, "pointProperty"));
+	local (adrpoint = xml.getaddress (adrpointproperty, "Point"));
+	adrtable^.coordinates = xml.getvalue (adrpoint, "coordinates");
+	return (true)}
+«bundle //test code
+	«getLocationInfo (@scratchpad.myLocation)
+	«edit (@scratchpad.myLocation)
+
+

@@ -1,0 +1,13 @@
+FrontierVcsFile:3:optx:system.verbs.apps.xmlStorageSystem.nodeTypes.user.data.dialogs.wizard.outline
+
+<wizard>
+	<panel title="Send Email" height="295" width="355">
+		<description>Send Email</description>
+		<item title="Subject:" type="string" size="45" maxlength="100" adr="subject"/>
+		<item title="Text:" type="text" cols="34" rows="7" adr="text"/>
+		<item title="Clicked OK" type="hidden" adr="userClickedOk"/>
+		</panel>
+	</wizard>
+
+
+

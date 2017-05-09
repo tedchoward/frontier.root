@@ -1,0 +1,55 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.getServerInfo
+
+on getServerInfo (adrserver, adrusername, adrpassword, adrwindow=nil) {
+	«Changes
+		«2/13/12; 9:08:28 PM by DW
+			«Fix dumb coding error. 
+		«2/13/12; 8:37:08 PM by DW
+			«Handle the case where the user enters a bad password, or the password changes.
+		«2/11/12; 4:42:23 PM by DW
+			«Created.
+	local (adrdata = opmlEditor.worldOutline.init ());
+	on getpassword (adrtable) {
+		local (password);
+		loop {
+			if defined (adrtable^.password) {
+				password = string (adrtable^.password)}
+			else {
+				if not dialog.getpassword ("Password for " + adrtable^.username + "?", @password) {
+					return (false)}};
+			try {
+				[adrtable^.server].worldOutline.validateUser (adrtable^.username, password);
+				adrtable^.password = binary (password);
+				return (true)} //all is good
+			else {
+				«scratchpad.tryerror = tryerror
+				if not dialog.confirm ("The server didn't like the password. Try again?") {
+					return (false)};
+				if defined (adrtable^.password) {
+					delete (@adrtable^.password)}}}};
+	if adrwindow != nil {
+		local (editorialDomain);
+		if window.attributes.getone ("editorialDomain", @editorialDomain, adrwindow) {
+			local (adrservertable = @adrdata^.servers.[editorialDomain]);
+			adrserver^ = adrservertable^.server;
+			adrusername^ = adrservertable^.username;
+			if not getpassword (adrservertable) {
+				return (false)};
+			adrpassword^ = string (adrservertable^.password);
+			«bundle //old password code -- 2/13/12 by DW
+				«if defined (adrservertable^.password)
+					«adrpassword^ = string (adrservertable^.password)
+				«else
+					«if not dialog.getpassword ("Password for " + adrusername^ + "?", adrpassword)
+						«return (false)
+					«adrservertable^.password = binary (adrpassword^)
+			return (true)}};
+	local (adrtable = @adrdata^.servers.[adrdata^.prefs.defaultServer]);
+	adrserver^ = adrtable^.server;
+	adrusername^ = adrtable^.username;
+	adrpassword^ = string (adrtable^.password);
+	return (true)};
+bundle { //test code
+	getServerInfo (@scratchpad.server, @scratchpad.username, @scratchpad.password)}
+
+

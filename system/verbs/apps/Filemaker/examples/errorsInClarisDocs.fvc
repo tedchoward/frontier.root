@@ -1,0 +1,12 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Filemaker.examples.errorsInClarisDocs
+
+Sort:
+	there is no unsort() verb
+Count:
+	cells in a file (ignore found set)       count(document[1],cell)
+
+In general properties of objects are accessed by an appropriate object specifier and not a script.
+	get(field[1].name) Çgets name property of field 1
+
+
+

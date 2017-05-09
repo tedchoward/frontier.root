@@ -1,0 +1,49 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.uploadSubBucket
+
+on uploadSubBucket (bucketname, subpath, folder, flCheckIfChanged=false, flSkipHiddenSystemFiles=true, flLog=false, adrfilter=nil) {
+	«Changes
+		«5/10/07; 6:15:27 PM by DW
+			«Add a filter callback that can veto an upload.
+		«5/9/07; 6:08:55 PM by DW
+			«Handle errors.
+		«5/6/07; 12:02:34 PM by DW
+			«Created. The flipside of downloadSubBucket.
+			«If flSkipHiddenSystemFiles is true, we skip hidden files placed there by the OS, that would mean nothing on other operating systems. 
+			«If flCheckIfChanged, before uploading, we check if the file has already been uploaded, and the uploaded version of the file is up to date. You might want to set this true if you're periodically synchronizing a folder and the files are large. 
+	on callfilter (f) {
+		try {
+			if adrfilter != nil {
+				if not adrfilter^ (f) { //filter says don't copy the file
+					return (false)}}};
+		return (true)};
+	if not (subpath beginswith "/") {
+		subpath = "/" + subpath};
+	local (f);
+	fileloop (f in folder, infinity) {
+		if callfilter (f) {
+			local (startticks = clock.ticks ());
+			if flSkipHiddenSystemFiles {
+				if system.environment.isMac { //avoid Macintosh system files
+					if file.filefrompath (f) beginswith "." { //like .DS_Store
+						continue}}};
+			local (path = string.replaceall (f - folder, file.getpathchar (), "/"));
+			local (objectpath = "/" + bucketname + subpath + path);
+			if flCheckIfChanged { //if it's already uploaded and current, skip it
+				local (metadata);
+				if s3.getObjectMetadata (objectpath, @metadata, true) {
+					if date (metadata.["Last-Modified"]) >= file.modified (f) {
+						continue}}};
+			try {
+				local (bits = file.readwholefile (f));
+				local (url = s3.newObject (objectpath, bits));
+				local (sizestring = string.megabytestring (file.size (f)));
+				if flLog {
+					log.addtooutline ("Upload: " + path + " (" + sizestring + ")", outlineUrl:url, startticks:startticks)}}
+			else {
+				if flLog {
+					local (sizestring = string.megabytestring (file.size (f)));
+					log.addtooutline ("Upload error: " + path + " (" + sizestring + "). " + tryerror, startticks:startticks)}}}}};
+bundle { //test code
+	uploadSubBucket ("privateTestBucket", "/zwriter/", "Macintosh HD:Users:davewiner:Desktop:OPML:zwriter:", flCheckIfChanged:true, flLog:true)}
+
+

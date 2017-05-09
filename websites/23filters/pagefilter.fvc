@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:websites.["#filters"].pagefilter
+
+on pageFilter (adrpagetable) {
+	with adrpagetable^ {
+		try { «some pages are empty, don't want to stop rendering
+			local (ch = string.upper (bodytext [1]));
+			if (ch >= 'A') and (ch <= 'Z') {
+				local (fonton = "<FONT SIZE=+2><b>", fontoff = "</b></FONT>");
+				bodytext = fonton + ch + fontoff + string.mid (bodytext, 2, sizeof (bodytext))}}};
+	html.addPageToGlossary (adrpagetable);
+	return (true)}
+«bundle //test code
+	«pageFilter (@websites.["#data"])
+
+

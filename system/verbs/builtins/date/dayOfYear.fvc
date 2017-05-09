@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.date.dayOfYear
+
+on dayOfYear (d) {
+	«Changes
+		«8/25/11; 7:18:18 PM by DW
+			«Russell Gum pointed out that this verb was in Frontier, but not in OPML. Luckily I have Frontier running on one of my servers, and was able to rescue it. 
+		«9/4/02; 1:37:22 AM by JES
+			«Created. Returns the day of the year, with the first day being 1.
+	local (day, month, year, hour, minute, second);
+	date.get (d, @day, @month, @year, @hour, @minute, @second);
+	local (firstOfYear = date.set (1, 1, year, 0, 0, 0));
+	local (dayOfYear = number ((d - firstOfYear) / 86400) + 1);
+	return (dayOfYear)};
+bundle { //test code
+	dialog.alert (date.dayOfYear (clock.now ()))}
+
+

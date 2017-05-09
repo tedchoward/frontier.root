@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.getWordChar
+
+on getWordChar () {
+	kernel (string.getwordchar)}
+
+

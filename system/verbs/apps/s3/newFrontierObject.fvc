@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.newFrontierObject
+
+on newFrontierObject (s3path, adr) {
+	«Changes
+		«7/20/14; 9:02:48 PM by DW
+			«Sometimes you want to upload a script or table to S3. Now you don't have to remember how to do it! :-)
+	return (s3.newobject (s3path, fatPages.buildFileAtts (adr, false)))};
+bundle { //test code
+	newFrontierObjecdt ()}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.setPosition
+
+on setPosition (path, pos) { «new in Frontier 5.0.1
+	kernel (file.setPosition)}
+
+

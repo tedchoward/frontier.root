@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.closeListen
+
+on closeListen (listenID) { «Close a listener
+	kernel (tcp.closeListen)}
+
+

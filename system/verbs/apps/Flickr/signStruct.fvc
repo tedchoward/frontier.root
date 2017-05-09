@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.signStruct
+
+on signStruct (adrstruct) {
+	local (sig = user.flickr.prefs.apiSecret, adr);
+	for adr in adrstruct {
+		sig = sig + nameof (adr^) + adr^};
+	adrstruct^.api_sig = string.hashmd5 (sig)}
+
+

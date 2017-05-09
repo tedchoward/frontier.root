@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.OAuth.testing.testsignature
+
+local (params);
+new (tabletype, @params);
+params.oauth_version = "1.0";
+params.oauth_nonce = "Aa4eP1wS99T";
+params.oauth_timestamp = "1234634770";
+params.oauth_consumer_key = "abcd";
+params.oauth_signature_method = "HMAC-SHA1";
+params.oauth_token = "ijkl";
+params.name1 = "value";
+params.name2 = "value";
+local (url = "http://host.net/resource");
+local (consumerSecret = "efgh");
+local (tokenSecret = "mnop");
+local (method = "GET");
+
+OAuth.testing.sig = OAuth.getSignature (@params, url, consumerSecret, tokenSecret, method)
+
+

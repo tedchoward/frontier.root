@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.deleteSubs
+
+on deleteSubs () {
+	kernel (op.deletesubs)}
+
+

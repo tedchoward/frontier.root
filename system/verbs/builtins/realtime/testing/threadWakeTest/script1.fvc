@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.testing.threadWakeTest.script1
+
+«Changes
+	«8/15/10; 8:30:29 PM by DW
+		«Created. 
+local (starttime = clock.now ());
+realtime.testing.threadWakeTest.idthread = thread.getcurrentid ();
+thread.sleepfor (60);
+dialog.alert ("Hello! I was asleep for " + number (clock.now () - starttime) + " seconds.")
+
+

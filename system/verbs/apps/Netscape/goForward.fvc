@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Netscape.goForward
+
+on goForward (x = nil) { «Goes forward
+	return (appleEvent (netscape.id, 'MOSS', 'fore', '----', x))}
+
+

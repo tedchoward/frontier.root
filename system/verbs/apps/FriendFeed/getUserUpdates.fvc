@@ -1,0 +1,83 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FriendFeed.getUserUpdates
+
+on getUserUpdates (who, adrtable, flNewOnly=false, appName="", flRoom=false, username=nil, remotekey=nil) {
+	«Changes
+		«1/27/09; 10:29:01 AM by DW
+			«Make it possible for this routine to be used to access rooms and private spaces.
+				«Changed the name of the first parameter from username to who -- this is whose updates we're going to retrieve.
+				«Add new optional parameter, flRoom, defaults false. If true, "who" is the name of FriendFeed room.
+				«Add two optional parameters, username and remotekey, default to nil, allows this to be used for authenticated requests.
+		«7/21/08; 6:01:09 AM by DW
+			«No messages on tcp.httpreadurl call.
+		«7/15/08; 1:02:27 PM by DW
+			«Only call filemenu.savemyroot if flNewOnly is true.
+		«7/15/08; 12:33:20 PM by DW
+			«Add call to filemenu.savemyroot at the end to make sure all the saved guids are safe on disk.
+		«7/15/08; 12:06:56 PM by DW
+			«Change the name of the data file to friendFeedData.root.
+		«7/15/08; 9:31:39 AM by DW
+			«Created. If flNewOnly is true, we do something really neat. We keep a data file around that tracks which items have been seen and which haven't. You must give us an appname, so your getting doesn't interfere with other app's.
+	local (url, adruser);
+	bundle { //set url, 1/27/09 by DW
+		if flRoom {
+			url = "http://friendfeed.com/api/feed/room/" + who + "?output=rss"}
+		else {
+			url = "http://friendfeed.com/api/feed/user/" + who + "?output=rss"}};
+	bundle { //open data file, if we're only returning new items
+		if appname == "" {
+			flNewOnly = false};
+		if flNewOnly {
+			local (adrdata = frontier.opendatafile ("friendFeedData"));
+			if not defined (adrdata^.userUpdates) {
+				new (tabletype, @adrdata^.userUpdates)};
+			local (adrapp = @adrdata^.userUpdates.[appName]);
+			if not defined (adrapp^) {
+				new (tabletype, adrapp)};
+			adruser = @adrapp^.[who];
+			if not defined (adruser^) {
+				new (tabletype, adruser)}}};
+	new (tabletype, adrtable); //start with an empty result
+	local (xmltext = tcp.httpreadurl (url, flMessages:false, username:username, password:remotekey), xstruct, now = clock.now ());
+	xml.compile (xmltext, @xstruct);
+	«scratchpad.xstruct = xstruct
+	local (adrrss = xml.getaddress (@xstruct, "rss"));
+	local (adrchannel = xml.getaddress (adrrss, "channel"), adritem);
+	for adritem in adrchannel {
+		if nameof (adritem^) endswith "item" {
+			local (guid = xml.getvalue (adritem, "guid"));
+			«msg (guid)
+			if flNewOnly {
+				local (adrguid = @adruser^.[guid]);
+				if defined (adrguid^) { //already seen
+					continue};
+				adrguid^ = now};
+			local (adrsub = @adrtable^.[guid]);
+			new (tabletype, adrsub);
+			adrsub^.title = xml.getvalue (adritem, "title");
+			adrsub^.link = xml.getvalue (adritem, "link");
+			adrsub^.pubDate = date (xml.getvalue (adritem, "pubDate"));
+			
+			local (adruser = xml.getaddress (adritem, "user"));
+			adrsub^.userName = xml.getvalue (adruser, "name");
+			adrsub^.userNickname = xml.getvalue (adruser, "nickname");
+			adrsub^.userProfileUrl = xml.getvalue (adruser, "profileUrl");
+			
+			local (adrservice = xml.getaddress (adritem, "service"));
+			adrsub^.serviceId = xml.getvalue (adrservice, "id");
+			adrsub^.serviceName = xml.getvalue (adrservice, "name");
+			adrsub^.serviceIconUrl = xml.getvalue (adrservice, "iconUrl");
+			adrsub^.serviceProfileUrl = xml.getvalue (adrservice, "profileUrl");
+			bundle { //entryType -- some services don't have them
+				try {
+					adrsub^.serviceEntryType = xml.getvalue (adrservice, "entryType")}
+				else {
+					adrsub^.serviceEntryType = ""}}}};
+	if flNewOnly {
+		filemenu.savemyroot (adruser)}};
+bundle { //test code
+	getuserupdates ("instant-outline-beta", @scratchpad.ffupdates, flRoom:true, username:"davew", remotekey:user.FriendFeed.prefs.remotekey);
+	«getuserupdates ("davew", @scratchpad.ffupdates)
+	«getuserupdates ("davew", @scratchpad.ffupdates, true, "testing")
+	edit (@scratchpad.ffupdates)}
+
+

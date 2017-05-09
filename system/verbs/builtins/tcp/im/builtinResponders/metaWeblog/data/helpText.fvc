@@ -1,0 +1,5 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.tcp.im.builtinResponders.metaWeblog.data.helpText
+
+Usage: metaWeblog [login | logoff | post | setServer | help] text...
+
+

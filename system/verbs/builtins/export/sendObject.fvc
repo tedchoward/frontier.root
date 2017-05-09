@@ -1,0 +1,34 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.export.sendObject
+
+on sendObject (adr, fname) {
+	«Changes
+		«7/26/08; 12:51:06 PM by DW
+			«Code cleanup.
+		«Friday, July 18, 1997 at 10:43:49 AM by PBS
+			«Frontier 5
+			«Save a Frontier object as a fat file.
+			«bundle // old code
+				«bundle «save the callimporter script
+					«this deserves some explanation...
+						«after the user double-clicks on the file, Frontier.finder2Click will get control
+						«it copies the 'scpt' resource into the object database at its old location and runs it.
+						«we copy the script first, so it's old location will be in a local table.
+						«when the script is loaded, it won't clobber the latest version of the script, 
+						«or collide with another version that is currently running.
+					«local (callimporter)
+					«table.assign (@callimporter, export.callimporter)
+					«export.sendtodesktop (@callimporter, fname)
+				«bundle «double-pack the object at adr into a 'data' resource
+					«local (resdata)
+					«pack (adr^, @resdata)
+					«pack (resdata, @resdata)
+					«rez.putnamedresource (fname, 'data', string (adr), @resdata)
+				«return (true)
+	local (s = fatPages.buildFileAtts (adr, false));
+	local (filetype = frontier.getFileType (typeOf (adr^)));
+	file.writeWholeFile (fname, s, filetype, 'LAND', clock.now ());
+	return (true)}
+«bundle //test code
+	«sendObject (this, "Macintosh HD:test.ftsc")
+
+

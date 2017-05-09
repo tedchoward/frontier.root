@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinResponders.state.condition
+
+on condition (screenname, message) {
+	return (string.lower (message) beginswith "state ")}
+
+

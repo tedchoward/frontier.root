@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fatPages.encodePageData
+
+on encodePageData (adrPageData) {
+	local (data);
+	pack (adrPageData^, @data);
+	return (string (data))}
+
+

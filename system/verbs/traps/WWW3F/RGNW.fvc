@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.["WWW?"].RGNW
+
+on RGNW (browserApp, transactionID) { «handler for WWW?RGNW event
+	«DW Thu, Apr 18, 1996 at 7:55:47 AM
+		«Neither Netscape or MSIE appears to be calling this trap
+		«There's something wrong here, but I don't know what!
+		«If and when this works, we should schedule a task to register protocols
+	scratchpad.browserapp = browserApp;
+	scratchpad.transactionid = transactionID;
+	return (5)} «allow us five seconds to register our traps
+
+

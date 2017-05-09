@@ -1,0 +1,12 @@
+FrontierVcsFile:3:wptx:websites.samples.shortStory
+
+#title "Short Story"
+In this picture, taken in the 1970s, Woz looks like he just heard a good joke and Jobs looks poised.
+
+<blockquote>{imageRef ("wozJobs")}</blockquote>
+
+End of story.
+
+Dave Winer
+
+

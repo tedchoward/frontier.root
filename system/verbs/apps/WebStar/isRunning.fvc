@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.isRunning
+
+on isRunning (appID = WebStar.id) {
+	return (sys.appIsRunning (appID))}
+
+

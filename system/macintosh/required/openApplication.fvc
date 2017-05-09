@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.required.openApplication
+
+on openApplication (appID) {
+	return (appleEvent (appID, kAERequiredSuite, kAEOpenApplication))}
+
+

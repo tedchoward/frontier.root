@@ -1,0 +1,337 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.webserver.data.icons.default
+
+<html>
+
+<head>
+
+<title>Public Domain Icons</title>
+
+</head>
+
+<body>
+
+<h1>Public Domain Icons</h1>
+
+
+
+<blockquote>
+
+These icons were originally made for Mosaic for X and have been included in the <a href="http://hoohoo.ncsa.uiuc.edu/">NCSA httpd</a> and <a href="http://www.apache.org/">Apache</a> server distributions in the past. They are in the public domain and may be freely included in any application. The original icons were done by Kevin Hughes (<a href="mailto:kevinh@eit.com">kevinh@eit.com</a>).
+
+<p>
+
+Many thanks to <a href="http://fy.chalmers.se/~appro/">Andy Polyakov</a> for tuning the icon colors and adding a few new images. If you'd like to contribute additions or ideas to this set, please let me know.
+
+</blockquote>
+
+<p>
+
+
+
+<ul>
+
+<li> You can get these icons as <a href="http://www.eit.com/goodies/www.icons/icons.tar">icons.tar</a>, 93k.
+
+<li> Or <a href="http://www.eit.com/goodies/www.icons/icons/">pick which icons you want</a> separately.
+
+<li> A <a href="http://www.eit.com/goodies/www.icons/srm.conf">srm.conf</a> file for use with NCSA's httpd or Apache.
+
+<li> <a href="#suggested">Suggested uses</a>...
+
+</ul>
+
+<p>
+
+
+
+<hr noshade>
+
+<p>
+
+
+
+<center><img src="icons/icon.sheet" alt=""></center>
+
+<p>
+
+
+
+<a name="suggested"><h2>Suggested Uses</h2></a>
+
+
+
+The following are a few suggestions, to serve as a starting point for ideas. Please feel free to tweak and rename the icons as you like.
+
+<p>
+
+
+
+<blockquote>
+
+<dl>
+
+<dt> <b>a.gif</b>
+
+<dd> This might be used to represent PostScript or text layout languages.
+
+<p>
+
+<dt> <b>alert.black.gif, alert.red.gif</b>
+
+<dd> These can be used to highlight any important items, such as a README file in a directory.
+
+<p>
+
+<dt> <b>back.gif, forward.gif</b>
+
+<dd> These can be used as links to go to previous and next areas.
+
+<p>
+
+<dt> <b>ball.gray.gif, ball.red.gif</b>
+
+<dd> These might be used as bullets.
+
+<p>
+
+<dt> <b>binary.gif</b>
+
+<dd> This can be used to represent binary files.
+
+<p>
+
+<dt> <b>binhex.gif</b>
+
+<dd> This can represent BinHex-encoded data.
+
+<p>
+
+<dt> <b>blank.gif</b>
+
+<dd> This can be used as a placeholder or a spacing element.
+
+<p>
+
+<dt> <b>bomb.gif</b>
+
+<dd> This can be used to repreesnt core files.
+
+<p>
+
+<dt> <b>box1.gif, box2.gif</b>
+
+<dd> These icons can be used to represent generic 3D applications and related files.
+
+<p>
+
+<dt> <b>broken.gif</b>
+
+<dd> This can represent corrupted data.
+
+<p>
+
+<dt> <b>burst.gif</b>
+
+<dd> This can call attention to new and important items.
+
+<p>
+
+<dt> <b>c.gif</b>
+
+<dd> This might represent C source code.
+
+<p>
+
+<dt> <b>comp.blue.gif, comp.red.gif</b>
+
+<dd> These little computer icons can stand for telnet or FTP sessions.
+
+<p>
+
+<dt> <b>compressed.gif</b>
+
+<dd> This may represent compressed data.
+
+<p>
+
+<dt> <b>continued.gif</b>
+
+<dd> This can be a link to a continued listing of a directory.
+
+<p>
+
+<dt> <b>down.gif, up.gif</b>
+
+<dd> These can be used to scroll up, down, left, and right in a listing or can be used to denote items in an outline.
+
+<p>
+
+<dt> <b>dvi.gif</b>
+
+<dd> This can represent DVI files.
+
+<p>
+
+<dt> <b>f.gif</b>
+
+<dd> This might represent FORTRAN or Forth source code.
+
+<p>
+
+<dt> <b>folder.gif, folder.open.gif, folder.sec.gif</b>
+
+<dd> The folder can represent directories. There is also a version that can represent secure directories or directories that cannot be viewed.
+
+<p>
+
+<dt> <b>generic.gif, generic.sec.gif, generic.red.gif</b>
+
+<dd> These can represent generic files, secure files, and important files, respectively.
+
+<p>
+
+<dt> <b>hand.right.gif, hand.up.gif</b>
+
+<dd> These can point out important items (pun intended).
+
+<p>
+
+<dt> <b>image1.gif, image2.gif, image3.gif</b>
+
+<dd> These can represent image formats of various types.
+
+<p>
+
+<dt> <b>index.gif</b>
+
+<dd> This might represent a WAIS index or search facility.
+
+<p>
+
+<dt> <b>layout.gif</b>
+
+<dd> This might represent files and formats that contain graphics as well as text layout, such as HTML and PDF files.
+
+<p>
+
+<dt> <b>link.gif</b>
+
+<dd> This might represent files that are symbolic links.
+
+<p>
+
+<dt> <b>movie.gif</b>
+
+<dd> This can represent various movie formats.
+
+<p>
+
+<dt> <b>p.gif</b>
+
+<dd> This may stand for Perl or Python source code.
+
+<p>
+
+<dt> <b>pie0.gif ... pie8.gif</b>
+
+<dd> These icons can be used in applications where a list of documents is returned from a search. The little pie chart images can denote how relevant the documents may be to your search query.
+
+<p>
+
+<dt> <b>patch.gif</b>
+
+<dd> This may stand for patches and diff files.
+
+<p>
+
+<dt> <b>portal.gif</b>
+
+<dd> This might be a link to an online service or a 3D world.
+
+<p>
+
+<dt> <b>ps.gif, quill.gif</b>
+
+<dd> These may represent PostScript files.
+
+<p>
+
+<dt> <b>screw1.gif, screw2.gif</b>
+
+<dd> These may represent CAD or engineering data and formats.
+
+<p>
+
+<dt> <b>script.gif</b>
+
+<dd> This can represent any of various interpreted languages, such as Perl, python, TCL, and shell scripts, as well as server configuration files.
+
+<p>
+
+<dt> <b>sound1.gif, sound2.gif</b>
+
+<dd> These can represent sound files.
+
+<p>
+
+<dt> <b>sphere1.gif, sphere2.gif</b>
+
+<dd> These can represent 3D worlds or rendering applications and formats.
+
+<p>
+
+<dt> <b>tex.gif</b>
+
+<dd> This can represent TeX files.
+
+<p>
+
+<dt> <b>text.gif</b>
+
+<dd> This can represent generic (plain) text files.
+
+<p>
+
+<dt> <b>transfer.gif</b>
+
+<dd> This can represent FTP transfers or uploads/downloads.
+
+<p>
+
+<dt> <b>unknown.gif</b>
+
+<dd> This may represent a file of an unknown type.
+
+<p>
+
+<dt> <b>uuencoded.gif</b>
+
+<dd> This can stand for uuencoded data.
+
+<p>
+
+<dt> <b>world1.gif, world2.gif</b>
+
+<dd> These can represent 3D worlds or other 3D formats.
+
+</dl>
+
+</blockquote>
+
+
+
+<p>
+
+<h6>All contents <a href="http://www.eit.com/copyright.html">Copyright</a> &#169; 1996 EIT.<br>
+
+Send questions and comments to <a href="mailto:webmaster@eit.com">webmaster@eit.com</a>.
+
+
+
+</body>
+
+</html>
+
+
+
+

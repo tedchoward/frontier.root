@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fileMenu.revert
+
+on revert () {
+	kernel (filemenu.revert)}
+
+

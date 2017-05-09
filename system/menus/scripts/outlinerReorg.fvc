@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.outlinerReorg
+
+on outlinerReorg (dir, units=1) {
+	system.menus.scripts.mustBeOutline ();
+	op.reorg (dir, units)}
+
+

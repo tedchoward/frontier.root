@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.visit
+
+local (test = " <A  href  ='index.html' > <A href=      'index2.html'     >    ");
+on testCallback (adrTable) {
+	dialog.notify (string(adrTable^));
+	return (true)};
+regex.visit ("<([^>]+)>", @test, @testCallback)
+
+

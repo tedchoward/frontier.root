@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.utilities.getGlossaryHTML
+
+on getGlossaryHTML () {
+	local (adr = @user.html.glossary, s, i);
+	s = "<center>";
+	for i = 1 to sizeof (adr^) {
+		s = s + adr^ [i] + "<br>"};
+	s = s + "</center>";
+	return (s)}
+
+

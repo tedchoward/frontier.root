@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.attributes.makeEmpty
+
+local (emptytable, data);
+new (tabletype, @emptytable);
+pack (emptytable, @data);
+op.setrefcon (data);
+return (true)
+
+

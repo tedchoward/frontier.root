@@ -1,0 +1,69 @@
+FrontierVcsFile:3:scpt:system.extensions.crypto.data.installDLL
+
+on installDLL () {
+	on putResources (f, rs) {
+		if typeOf (rs) != listType {
+			scriptError ("Can't install " + extname + " extension because the list of resources for this platform is missing.")};
+		local (i, nt = sizeOf (rs));
+		for i = 1 to nt {
+			local (typeRec = rs[i]);
+			local (itemList = typeRec['itms']);
+			local (j, nr = sizeOf (itemList), ty = typeRec['type']);
+			for j = 1 to nr {
+				local (rNm, rID, itemRec = typeRec['itms'][j], rData);
+				rNm = itemRec['name'];
+				rID = itemRec['itID'];
+				rData = itemRec['data'];
+				if rNm != "" {
+					rez.putNamedResource (f, ty, rNm, @rData)}
+				else {
+					rez.putResource (f, ty, rID, @rData)}}}};
+	on checkDLL (fname, adrpath) {
+		local (dllfolder = file.folderFromPath (frontier.getProgramPath()) + "DLLs" + file.getPathChar ());
+		file.sureFolder (dllfolder);
+		adrpath^ = dllfolder + fname;
+		if file.exists (adrpath^) {
+			try { // versionLessThan fails with numbers like 2.0b5a (because of 'a')
+				if date.versionLessThan (file.getVersion (adrpath^), postgreSQL.version) {
+					file.delete (adrpath^)}}
+			else {
+				file.delete (adrpath^)}};
+		parentOf (this^)^.dllpath = adrpath^;
+		return (file.exists (adrpath^))};
+	on writeDLL (f, adrdata) {
+		if not defined (adrdata^) {
+			scripterror ("Can't initialize " + extname + " extension because it is not implemented on this platform.")};
+		if typeOf (adrdata^) == tableType {
+			file.writeWholeFile (f, adrdata^.dFork, 'shlb', '????');
+			putResources (f, adrdata^.rFork)}
+		else {
+			file.writeWholeFile (f, adrdata^)};
+		return (true)};
+	local (extname = nameOf (parentOf (parentOf (this^)^)^));
+	local (fname, adrdata);
+	case sys.os () {
+		"Win95";
+		"WinNT" {
+			fname = extname + "w32.dll";
+			adrdata = @parentOf (this^)^.dll.windows};
+		"MacOS" {
+			if Frontier.isPowerPC () {
+				if defined (system.environment.isCarbon) and system.environment.isCarbon {
+					fname = extname + "carbon.dll";
+					adrdata = @parentOf (this^)^.dll.macCarbon}
+				else {
+					fname = extname + "classic.dll";
+					adrdata = @parentOf (this^)^.dll.macPPC}}
+			else {
+				fname = extname + "68k.dll";
+				adrdata = @parentOf (this^)^.dll.mac68k}}}
+	else {
+		scripterror ("Can't initialize " + extname + " extension because it is not implemented on this platform.")};
+	if not checkDLL (fname, @f) {
+		writeDLL (f, adrdata)};
+	return (f)};
+
+bundle { //test code
+	installDLL ()}
+
+

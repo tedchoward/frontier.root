@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.pocalypse.buttons.["00004000\tView"]
+
+«Changes
+	«3/29/12; 5:03:18 PM by DW
+		«Created. 
+thread.callscript (@opmlEditor.pocalypse.view, {})
+
+

@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FriendFeed.init
+
+«Changes
+	«12/3/08; 7:58:53 PM by DW
+		«Fix mistake -- we were initializing user.TWITTER.stats.ctposts. This is for FriendFeed, my friends, not Twitter. 
+	«6/23/08; 10:05:40 PM by DW
+		«Created.
+if not defined (user.FriendFeed) {
+	new (tabletype, @user.FriendFeed)};
+bundle { //prefs
+	if not defined (user.FriendFeed.prefs) {
+		new (tabletype, @user.FriendFeed.prefs)};
+	if not defined (user.FriendFeed.prefs.username) {
+		user.FriendFeed.prefs.username = ""};
+	if not defined (user.FriendFeed.prefs.remoteKey) {
+		user.FriendFeed.prefs.remoteKey = ""};
+	if not defined (user.FriendFeed.prefs.timeoutsecs) {
+		user.FriendFeed.prefs.timeoutsecs = 180}};
+bundle { //stats
+	if not defined (user.FriendFeed.stats) {
+		new (tabletype, @user.FriendFeed.stats)};
+	if not defined (user.FriendFeed.stats.ctPosts) {
+		user.FriendFeed.stats.ctPosts = 0}}
+
+

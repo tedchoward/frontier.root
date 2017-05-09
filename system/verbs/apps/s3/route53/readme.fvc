@@ -1,0 +1,12 @@
+FrontierVcsFile:3:optx:system.verbs.apps.s3.route53.readme
+
+Glue that connects OPML Editor to Amazon Route 53
+	Requires TLS to do HTTPS communication,
+	Only runs on Windows. Hope to remove this limit at some point. 
+	Not complete. There are a lot of things Route 53 can do that we don't have glue for. 
+	Also limits of 100 domains and 100 records, though both limits can easily be removed.
+	There's glue for a RPC handler in the testing table. Only for adding domains. This will be used in the Blorkmarks functionality of the World Outline.
+	6/22/11 by DW
+
+
+

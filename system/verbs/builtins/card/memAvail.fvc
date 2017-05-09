@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.memAvail
+
+on memAvail () { «returns FreeMem inside Card Runner
+	return (appleEvent (0, card.id, 'mema'))}
+
+

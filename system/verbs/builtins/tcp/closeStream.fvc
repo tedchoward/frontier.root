@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.closeStream
+
+on closeStream (stream) { «Close a stream.
+	kernel (tcp.closeStream)}
+
+

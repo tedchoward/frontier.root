@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.stack.visit
+
+on visit (adrStack, callback) {
+	local (top = adrStack^.top);
+	local (i, adrElement);
+	loop (i = top; i > 0; i--) {
+		adrElement = @adrstack^.vals.["item" + i];
+		if not callback^ (adrElement^) {
+			return (false)}};
+	return (true)}
+
+

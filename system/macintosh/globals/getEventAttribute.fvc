@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.globals.getEventAttribute
+
+on getEventAttribute (attrCode) {
+	kernel (lang.getEventAttribute)}
+
+

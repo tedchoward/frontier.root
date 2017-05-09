@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.test.tst2
+
+on tst2 (adr) { «see the Testing suite for a call to this trap
+	«it's in the "Test Frontier on Net" script
+		«select UserLand Testing Suite from the Suites menu
+		«the first and only parameter is an object database address
+		«we return the contents of the object at that address
+	local (x);
+	pack (adr^, @x);
+	return (x)}
+
+

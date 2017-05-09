@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.globals.nthWindow
+
+on nthWindow (n) {
+	return (setObj (cWindow, 0, formPosition, n))}
+
+

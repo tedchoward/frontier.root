@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:suites.ftpClient.quit
+
+with ftpClient.data {
+	if sys.appIsRunning (currentid) {
+		required.quitApplication (currentid)};
+	currentid = 'NONE'}
+
+

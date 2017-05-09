@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:suites.webEditServer.isEnabled
+
+«Return true if WebEditServer is currently enabled.
+if defined (user.betty.rpcHandlers.webEdit) {
+	return (true)};
+return (false)
+
+

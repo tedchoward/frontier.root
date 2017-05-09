@@ -1,0 +1,43 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.comments.init
+
+on init () {
+	«Changes
+		«9/24/12; 12:13:07 AM by DW
+			«Init adrdata^.prefs.disqusName.
+				«http://worknotes.scripting.com/september2012/92312ByDw/usingYourDisqusGroup
+		«9/9/12; 11:13:13 AM by DW
+			«Created.
+	local (adrdata = @user.opmleditor.comments);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)};
+		bundle { //adrdata^.prefs.username
+			if not defined (adrdata^.prefs.username) {
+				adrdata^.prefs.username = user.prefs.name}
+			else {
+				if (sizeof (adrdata^.prefs.username) == 0) and (sizeof (user.prefs.name) > 0) {
+					adrdata^.prefs.username = user.prefs.name}}};
+		if not defined (adrdata^.prefs.flLocalSaveEnabled) {
+			adrdata^.prefs.flLocalSaveEnabled = true};
+		if not defined (adrdata^.prefs.folder) {
+			adrdata^.prefs.folder = frontier.getsubfolder ("ops") + "OPML comments" + file.getpathchar ()};
+		if not defined (adrdata^.prefs.flS3SaveEnabled) {
+			adrdata^.prefs.flS3SaveEnabled = false};
+		if not defined (adrdata^.prefs.s3Path) {
+			adrdata^.prefs.s3Path = ""};
+		if not defined (adrdata^.prefs.disqusName) { //9/24/12 by DW
+			adrdata^.prefs.disqusName = ""}};
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)};
+		if not defined (adrdata^.stats.archiveSerialnum) {
+			adrdata^.stats.archiveSerialnum = 0}};
+	if not defined (adrdata^.workspace) {
+		new (outlinetype, @adrdata^.workspace)};
+	return (adrdata)}
+«bundle //test code
+	«init ()
+
+

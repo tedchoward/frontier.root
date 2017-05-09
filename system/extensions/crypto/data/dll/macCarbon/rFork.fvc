@@ -1,0 +1,5 @@
+FrontierVcsFile:3:list:system.extensions.crypto.data.dll.macCarbon.rFork
+
+{{"type":'DATA', "itms":{{"itID":0, "name":"ProcInfo", "data":"; crypto extension\x00SSI\t\tMD2_verb\x00SSI\t\tMD5_verb\x00SSSI\t\tHMAC_MD5_verb\x00SSS\t\tRC4_verb\x00SSI\t\tRIPEMD160_verb\x00SSI\t\tSHA_verb\x00SSI\t\tSHA1_verb\x00\x00\x00"}}}, {"type":version, "itms":{{"itID":1, "name":"", "data":"1.1a2"}, {"itID":2, "name":"", "data":"5.1"}}}, {"type":'cfrg', "itms":{{"itID":0, "name":"Generated cfrg", "data":"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01pwpc\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00Š}
+
+

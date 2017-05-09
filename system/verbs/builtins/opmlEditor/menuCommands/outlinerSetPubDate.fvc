@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.outlinerSetPubDate
+
+on outlinerSetPubDate () {
+	«Changes
+		«5/20/12; 6:45:23 PM by DW
+			«Rework the UI.
+		«6/10/11; 9:04:37 PM by DW
+			«Created.
+	local (pubdate, now = clock.now ());
+	if op.attributes.getone ("pubDate", @pubdate) {
+		pubdate = string (date (pubdate))}
+	else {
+		pubdate = string (now)};
+	if dialog.ask ("Pubdate for \"" + op.getlinetext () + "\"?", @pubdate) {
+		op.attributes.setone ("pubDate", date.netstandardstring (pubdate))}};
+bundle { //test code
+	outlinerSetPubDate ()}
+
+

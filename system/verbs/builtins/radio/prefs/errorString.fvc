@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.radio.prefs.errorString
+
+on errorstring (s) {
+	return ("<tr><td colspan=\"2\"><font color=\"#" + red + "\">" + s + "</font></td></tr>")}
+
+

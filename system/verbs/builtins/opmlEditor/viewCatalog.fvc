@@ -1,0 +1,89 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.viewCatalog
+
+on viewCatalog () {
+	«Changes
+		«3/19/12; 3:18:37 PM by DW
+			«If the name of the tool is longer than 13 characters, shorten it. Motivated by radioReallySimple. What a name! :-)
+		«9/25/11; 11:53:40 AM by DW
+			«The install links only show up if you're on the local machine. An asterisk next to the Install link means the tool is installed on the local machine.
+		«9/25/11; 11:20:44 AM by DW
+			«Lots of cleanup work.
+		«9/9/11; 11:02:48 AM by DW
+			«Fix a repeated HTML error in the thead section. We were closing th elements with </td>.
+		«9/9/11; 10:47:02 AM by DW
+			«Don't hard-code the name of the table class. It comes from webApp.data.tableClass.
+		«9/5/11; 7:51:55 AM by DW
+			«In the column headers, use <th> elements instead of <td> elements. Want to get absolute consistency here. Remove <b> elements from the text in the <th> elements.
+		«9/2/11; 6:00:00 PM by DW
+			«Add a headline for the page.
+		«9/1/11; 11:36:42 AM by DW
+			«Re-code for prefs2.
+		«8/7/08; 5:10:04 AM by DW
+			«Simplified the catalog listing, tweaked the layout.
+		«7/30/08; 2:23:51 PM by DW
+			«DIsplay introductory text before the catalog table.
+		«7/30/08; 11:55:14 AM by DW
+			«Minor cosmetic adjustments for slightly less screen real estate.
+		«7/29/08; 10:50:08 AM by DW
+			«Created. 
+	local (adrtoolsInfo = opmlEditor.getToolsInfo (), toolsfolder = frontier.getsubfolder ("apps") + "Tools" + file.getpathchar ());
+	local (pta = html.getpagetableaddress ());
+	
+	«scratchpad.toolsInfo = toolsinfo
+	local (htmltext = "", indentlevel = 0);
+	on add (s) {
+		htmltext = htmltext + (string.filledstring ("\t", indentlevel) + s + "\r");};
+	
+	add ("<div class=\"divToolCatalogPage\">"); indentlevel++;
+	add ("<h3>Tool Catalog</h3>");
+	add (string (opmlEditor.data.outlines.catalogIntro));
+	add ("<table  class=\"" + webApp.data.tableClass + "\" cellpadding=\"5\">"); indentlevel++;
+	bundle { //column headers
+		add ("<thead>"); indentlevel++;
+		add ("<tr>"); indentlevel++;
+		add ("<th class=\"toolName\">Name</th>");
+		add ("<th class=\"toolDescription\">Description</th>");
+		add ("<th class=\"toolVersion\">Ver</th>");
+		add ("<th class=\"toolDate\">Date</th>");
+		add ("<th class=\"toolIsInstalled\">&nbsp;</th>");
+		add ("<th class=\"toolInstallLink\">&nbsp;</th>");
+		add ("</tr>"); indentlevel--;
+		add ("</thead>"); indentlevel--};
+	local (adrtool, urlInstall);
+	add ("<tbody>"); indentlevel++;
+	for adrtool in adrtoolsInfo {
+		local (flinstalled = false, f);
+		add ("<tr>"); indentlevel++;
+		bundle { //set f, flinstalled
+			local (rootname = nameof (adrtool^), s = "&nbsp;");
+			f = toolsfolder + nameof (adrtool^);
+			if file.exists (f) {
+				flinstalled = true}};
+		bundle { //name, 3/19/12 by DW
+			local (name = (file.filefrompath (f) - ".root"));
+			if sizeof (name) > 13 {
+				name = string.mid (name, 1, 11) + "..."};
+			add ("<td class=\"toolName\"><a href=\"" + adrtool^.toolInfo.homePageUrl + "\">" + name + "</a></td>")};
+		add ("<td class=\"toolDescription\">" + adrtool^.toolInfo.description + "</td>");
+		add ("<td class=\"toolVersion\">" + adrtool^.toolInfo.version + "</td>");
+		add ("<td class=\"toolDate\">" + date.shortstring (adrtool^.toolInfo.releaseDate) + "</td>");
+		bundle { //column that indicates whether tool is installed or not
+			local (s = "&nbsp;");
+			if flinstalled {
+				s = "*"};
+			add ("<td class=\"toolIsInstalled\">" + s + "</td>")};
+		bundle { //install link
+			local (s = "Install");
+			if defined (pta^.flLocalAdminUser) and pta^.flLocalAdminUser {
+				local (urlinstall = opmlEditor.data.urls.installTool + string.urlencode (nameof (adrtool^)));
+				s = "<a href=\"" + urlInstall + "\">" + s + "</a></td>"};
+			add ("<td class=\"toolInstallLink\">" + s + "</td>")};
+		add ("</tr>"); indentlevel--};
+	add ("</tbody>"); indentlevel--;
+	add ("</table>"); indentlevel--;
+	add ("</div>"); indentlevel--;
+	return (htmltext)};
+bundle { //test code
+	viewCatalog ()}
+
+

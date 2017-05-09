@@ -1,0 +1,44 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.server.initUser
+
+on initUser (username, flCreateNewUser=false) {
+	«Changes
+		«9/14/10; 8:35:35 PM by DW
+			«Init adruser^.stats.ctSecsConnected.
+		«9/11/10; 4:29:38 PM by DW
+			«Init user-level stats.
+		«7/19/10; 9:52:00 AM by DW
+			«Created. 
+	local (adrdata = realtime.init ());
+	local (adruser = @adrdata^.server.users.[username]);
+	if not defined (adruser^) {
+		if flCreateNewUser {
+			new (tabletype, adruser)}
+		else {
+			scripterror ("Can't process the request because there is no user named \"" + username + ".\"")}};
+	bundle { //prefs
+		if not defined (adruser^.prefs) {
+			new (tabletype, @adruser^.prefs)};
+		if not defined (adruser^.prefs.enabled) {
+			adruser^.prefs.enabled = true}};
+	bundle { //stats
+		if not defined (adruser^.stats) {
+			new (tabletype, @adruser^.stats)};
+		if not defined (adruser^.stats.ctGets) {
+			adruser^.stats.ctGets = 0};
+		if not defined (adruser^.stats.ctTimeouts) {
+			adruser^.stats.ctTimeouts = 0};
+		if not defined (adruser^.stats.ctUpdates) {
+			adruser^.stats.ctUpdates = 0};
+		if not defined (adruser^.stats.ctPushTo) { //number of updates pushed to this user
+			adruser^.stats.ctPushTo = 0};
+		if not defined (adruser^.stats.ctPushBy) { //number of updates pushed by this user
+			adruser^.stats.ctPushBy = 0};
+		if not defined (adruser^.stats.ctSecsConnected) { //9/14/10 by DW
+			adruser^.stats.ctSecsConnected = 0}};
+	if not defined (adruser^.inboxes) {
+		new (tabletype, @adruser^.inboxes)};
+	return (adruser)};
+bundle { //test code
+	inituser ("davewiner", true)}
+
+

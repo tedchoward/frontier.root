@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.incomingUpdate
+
+on incomingUpdate (adrupdate) {
+	«Changes
+		«7/11/12; 11:03:32 AM by DW
+			«If we get an event of type "realtime" with data of "disabled" we disable the io client. 
+				«http://worknotes.scripting.com/july2012/71112ByDw/ioServerLooseend
+		«7/19/10; 7:58:41 PM by DW
+			«Created. 
+	local (adrdata = io.init (), now = clock.now ());
+	adrdata^.client.stats.ctRealtimeEvents++;
+	adrdata^.client.stats.whenLastRealtimeEvent = now;
+	«scratchpad.update = adrupdate^
+	if adrupdate^.type == "instantOutline" {
+		io.client.updateUser (adrupdate);
+		adrdata^.client.stats.ctOutlineUpdates++;
+		adrdata^.client.stats.whenLastOutlineUpdate = now};
+	if (adrupdate^.type == "realtime") and (adrupdate^.data == "disabled") { //7/11/12 by DW
+		adrdata^.client.prefs.enabled = false}};
+bundle { //test code
+	incomingUpdate (@system.temp.realtime.client.servers.io.updates.["0000007"])}
+
+

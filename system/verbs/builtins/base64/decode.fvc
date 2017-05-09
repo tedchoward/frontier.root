@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.base64.decode
+
+on decode (x) {
+	kernel (base64.decode)}
+
+

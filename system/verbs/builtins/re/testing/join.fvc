@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.re.testing.join
+
+local (theList = {"a", "b", "c"});
+dialog.notify (re.join ("|", theList))
+
+

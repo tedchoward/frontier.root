@@ -1,0 +1,28 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webserver.redirect
+
+on redirect (pta, url, flpermanent=false) {
+	«Changes
+		«3/28/11; 9:54:39 PM by DW
+			«if pta^.responseHeaders doesn't exist, create it. 
+		«11/23/10; 6:27:01 PM by DW
+			«Add optional parameter, flpermanent, default false. If true, we redirect with a 301, telling the caller that the old URL is obsolete.
+		«6/22/09; 4:29:17 PM by DW
+			«Created. This code was appearing in too many places not to factor it. 
+	if flpermanent {
+		pta^.code = 301;
+		pta^.responseBody = webserver.util.buildErrorPage ("302 MOVED", "It moved permanently.")}
+	else {
+		pta^.code = 302; //default, non-permanent redirect
+		pta^.responseBody = webserver.util.buildErrorPage ("302 FOUND", "Found the page.")};
+	if not defined (pta^.responseHeaders) { //3/28/11 by DW
+		new (tabletype, @pta^.responseHeaders)};
+	pta^.responseHeaders.location = url;
+	pta^.responseHeaders.URI = url}
+«bundle //test code
+	«local (pta = @scratchpad.pt)
+	«new (tabletype, pta)
+	«new (tabletype, @pta^.responseHeaders)
+	«redirect (pta, "http://scripting.com/")
+	«edit (pta)
+
+

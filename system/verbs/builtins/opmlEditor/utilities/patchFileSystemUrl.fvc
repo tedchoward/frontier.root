@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.utilities.patchFileSystemUrl
+
+on patchFileSystemUrl () {
+	«Changes
+		«8/28/12; 3:23:39 PM by DW
+			«Don't patch the config.mainresponder.domains entry.
+				«http://worknotes.scripting.com/august2012/82812ByDw/undoConfigmainresponderdomainsFix
+		«8/28/12; 11:38:30 AM by DW
+			«Also patch config.mainresponder.domains entry.
+		«8/27/12; 7:26:36 PM by DW
+			«Call this after changing the external name. This does a tiny piece of what opmlEditor.initStaticText does. 
+	local (port);
+	if user.opmlEditor.prefs.flServerOnPort80 {
+		port = ""}
+	else {
+		port = ":5337"};
+	user.opmleditor.staticText.locations.filesystem.prefs.url = "http://" + user.opmlEditor.prefs.server.externalDomainName + port + "/";
+	};
+	«local (adrconfig = @config.mainresponder.domains.[user.opmlEditor.prefs.server.externalDomainName])
+	«if not defined (adrconfig^)
+		«adrconfig^ = user.opmleditor.staticText.locations.filesystem.prefs.path
+bundle { //test code
+	patchFileSystemUrl ()}
+
+

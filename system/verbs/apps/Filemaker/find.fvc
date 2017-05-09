@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.find
+
+on find (obj) { «Perform a FileMaker Pro Find given current requests
+	setEventInteraction (false);
+	return (appleEvent (Filemaker.id, 'FMPR', 'FIND', '----', objspec (obj)))}
+
+

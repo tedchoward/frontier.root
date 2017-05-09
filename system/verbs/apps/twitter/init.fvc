@@ -1,0 +1,69 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.init
+
+on init () {
+	«Changes
+		«4/26/08; 6:14:08 PM by DW
+			«Init user.twitter.prefs.showurl.
+		«12/6/07; 11:37:27 AM by DW
+			«Init user.twitter.prefs.repliesurl.
+		«4/28/07; 9:54:55 AM by DW
+			«Add the "twitterFriend" nodetype.
+	if not defined (user.twitter) {
+		new (tabletype, @user.twitter)};
+	if not defined (user.twitter.prefs) {
+		new (tabletype, @user.twitter.prefs)};
+	if not defined (user.twitter.prefs.maxChars) {
+		user.twitter.prefs.maxChars = 140};
+	if not defined (user.twitter.prefs.posturl) {
+		user.twitter.prefs.posturl = "http://twitter.com/statuses/update.xml"};
+	if not defined (user.twitter.prefs.friendsurl) {
+		user.twitter.prefs.friendsurl = "http://twitter.com/statuses/friends.xml"};
+	if not defined (user.twitter.prefs.followersurl) {
+		user.twitter.prefs.followersurl = "http://twitter.com/statuses/followers.xml"};
+	if not defined (user.twitter.prefs.publictimelineurl) {
+		user.twitter.prefs.publictimelineurl = "http://twitter.com/statuses/public_timeline.xml"};
+	if not defined (user.twitter.prefs.friendstimelineurl) {
+		user.twitter.prefs.friendstimelineurl = "http://twitter.com/statuses/friends_timeline.xml"};
+	if not defined (user.twitter.prefs.directmessagesurl) {
+		user.twitter.prefs.directmessagesurl = "http://twitter.com/direct_messages.xml"};
+	if not defined (user.twitter.prefs.newdirectmessageurl) {
+		user.twitter.prefs.newdirectmessageurl = "http://twitter.com/direct_messages/new"};
+	if not defined (user.twitter.prefs.showurl) { //4/26/08 by DW
+		user.twitter.prefs.showurl = "http://twitter.com/users/show/"};
+	if not defined (user.twitter.prefs.repliesurl) {
+		user.twitter.prefs.repliesurl = "http://twitter.com/statuses/replies.xml"};
+	if not defined (user.twitter.prefs.username) {
+		user.twitter.prefs.username = ""};
+	if not defined (user.twitter.prefs.password) {
+		user.twitter.prefs.password = ""};
+	if not defined (user.twitter.prefs.timeOutSecs) {
+		user.twitter.prefs.timeOutSecs = 180};
+	if not defined (system.verbs.apps.twitter.watcher.ct) {
+		system.verbs.apps.twitter.watcher.ct = 0};
+	bundle { //user.twitter.prefs.watcher
+		if not defined (user.twitter.prefs.watcher) {
+			new (tabletype, @user.twitter.prefs.watcher)};
+		if not defined (user.twitter.prefs.watcher.terms) {
+			new (tabletype, @user.twitter.prefs.watcher.terms)};
+		if not defined (user.twitter.prefs.watcher.ctSecsBetweenChecks) {
+			user.twitter.prefs.watcher.ctSecsBetweenChecks = 120};
+		if not defined (user.twitter.prefs.watcher.subject) {
+			user.twitter.prefs.watcher.subject = "Twittergram from \"<%screenName%>\""};
+		if not defined (user.twitter.prefs.watcher.ids) {
+			new (tabletype, @user.twitter.prefs.watcher.ids)}};
+	bundle { //install nodetype
+		local (adrlink = @frontier.tools.data.nodetypes.twitterFriend);
+		if not defined (adrlink^) {
+			adrlink^ = @twitter.nodetypes.twitterFriend}};
+	if not defined (user.twitter.stats) {
+		new (tabletype, @user.twitter.stats)};
+	if not defined (user.twitter.stats.ctPosts) {
+		user.twitter.stats.ctPosts = 0};
+	if not defined (user.twitter.stats.ctGets) {
+		user.twitter.stats.ctGets = 0};
+	if not defined (user.twitter.outline) {
+		new (outlinetype, @user.twitter.outline)}};
+bundle { //test code
+	init ()}
+
+

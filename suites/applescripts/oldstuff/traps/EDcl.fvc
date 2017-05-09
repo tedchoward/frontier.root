@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.applescripts.oldstuff.traps.EDcl
+
+on FCls (fsFileBeingClosed) {
+	return (true)}
+
+

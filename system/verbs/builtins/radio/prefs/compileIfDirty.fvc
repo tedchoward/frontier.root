@@ -1,0 +1,157 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.radio.prefs.compileIfDirty
+
+on compileIfDirty (adroutline, adrToolsPrefs=nil) {
+	«Changes
+		«5/19/11; 7:46:38 PM by DW
+			«Class attributes everywhere.
+		«3/22/10; 8:13:29 AM by DW
+			«When compiling a Tools prefs page, if we are given a string, turn it into an address and dereference it. This allows us to point to the prefs outline from a #installer table. See river2.root for an example.
+		«2/24/09; 8:46:16 AM by DW
+			«The name of items in system.temp.radio.toolsPrefsCache was determined by popping the file from the address, but then they all have the same name, so for every tool with a prefs page they'd all have the name of the first one, and the text too. Changed string.popFileFromAddress to "string" and it worked nicely. Not clear if this breaks something else, but what we had wasn't working.
+		«8/8/08; 6:29:56 PM by DW
+			«Only do the grafting if there are tools to install, otherwise you end up with a Tools top-level head in the Prefs and nothing underneath, which is ugly.
+		«8/8/08; 11:45:11 AM by DW
+			«Added optional param adrToolsPrefs. Each outline is compiled if dirty and surgically grafted to the main outline in a new top-level Tools section at the end.
+		«9/24/02; 12:51:45 AM by JES
+			«Decode ampersand entities in category and topic names. Needed for localization.
+		«3/6/02; 1:25:40 PM by JES
+			«Decode XML entities in explanatory text, so that HTML will render properly in the browser.
+		«3/6/02; 12:13:09 PM by JES
+			«When getting the base-url for the prefs page in Radio, first check to see if a corresponding entry exists in radio.data.systemUrls, and if not, then get the base-url from pta^.uri. Insert the text of headings with no subheadings, in place in the prefs home page.
+		«2/5/02; 11:50:13 AM by PBS
+			«Conditionalized to work in Frontier.
+		«1/9/02; 3:33:19 PM by JES
+			«Created.
+			«Check to see if the outline has changed, and update the cache, next/prev links and page titles if necessary. Returns the address of the cache table in system.temp.radio.prefsCache.
+	local (pta = html.getPageTableAddress ());
+	
+	local (adrcache, toolcachetable, flatleastonetooldirty = false);
+	bundle { //find the cache for this outline
+		if not defined (system.temp.radio) { //PBS 02/05/02: this table may not exist in Frontier
+			new (tableType, @system.temp.radio)};
+		local (adr = @system.temp.radio.prefsCache);
+		if not defined (adr^) {
+			new (tabletype, adr)};
+		adr = @adr^.[string.popFileFromAddress (adroutline)]; //added string.popFileFromAddress, 8/8/08 by DW
+		if not defined (adr^) {
+			new (tabletype, adr)};
+		adrcache = adr};
+	bundle { //compile the tools prefs if dirty, 8/8/08 by DW
+		if adrToolsPrefs != nil {
+			if not defined (system.temp.radio.toolsPrefsCache) {
+				new (tabletype, @system.temp.radio.toolsPrefsCache)};
+			local (adradr);
+			new (tabletype, @toolcachetable);
+			for adradr in adrToolsPrefs {
+				local (adroutline = address (adradr^), flcompile = true);
+				if typeof (adroutline^) == stringtype { //it's a pointer, dereference it, 3/22/10 by DW
+					adroutline = address (adroutline^)};
+				local (adrcache = @system.temp.radio.toolsPrefsCache.[string (adroutline)]); //2/24/09 by DW
+				«local (adrcache = @system.temp.radio.toolsPrefsCache.[string.popFileFromAddress (adroutline)])
+				if defined (adrcache^) {
+					if timemodified (adrcache) >= timemodified (adroutline) {
+						flcompile = false}};
+				if flcompile {
+					xml.compile (op.outlinetoxml (adroutline), adrcache);
+					flatleastonetooldirty = true};
+				toolcachetable.[nameof (adradr^)] = adrcache}}};
+			«scratchpad.toolcachetable = toolcachetable
+	
+	local (flcompile, adrxstruct = @adrcache^.xstruct);
+	bundle { //compile the outline if it changed
+		flcompile = true;
+		if defined (adrxstruct^) {
+			if timemodified (adroutline) <= timemodified (adrxstruct) {
+				flcompile = false}};
+		if flcompile or flatleastonetooldirty {
+			xml.compile (op.outlinetoxml (adroutline), adrxstruct);
+			if adrToolsPrefs != nil { //do brain transplant surgery from the tools to the big struct, 8/8/08 by DW
+				if sizeof (toolcachetable) > 0 {
+					local (now = date.netstandardstring (clock.now ()));
+					local (adropml = xml.getAddress (adrxstruct, "opml"));
+					local (adrbody = xml.getAddress (adropml, "body"));
+					local (adrtools = xml.addtable (adrbody, "outline"));
+					local (adratts = @adrtools^.["/atts"]);
+					new (tabletype, adratts);
+					adratts^.created = now;
+					adratts^.text = "Tools";
+					bundle { //copy the xstructs from the tools into the big struct
+						local (adrtoolx);
+						for adrtoolx in @toolcachetable {
+							local (adropml = xml.getAddress (adrtoolx^, "opml"));
+							local (adrbody = xml.getAddress (adropml, "body"));
+							local (adrplacehold = xml.addtable (adrtools, "outline"));
+							adrplacehold^ = adrbody^ [1]}}}}}};
+					«system.temp.radio.whenLastPrefsBuild = clock.now () //to help debugging
+	
+	local (adropml = xml.getAddress (adrxstruct, "opml"));
+	local (adrbody = xml.getAddress (adropml, "body"));
+	
+	local (adrhomepagehtml = @adrcache^.homePageHtml, adrnextprevlist = @adrcache^.nextPrevList, adrpagetitles = @adrcache^.pagetitles);
+	if flcompile { //cache the text for the home page, create next-prevs list and cache it, and the page-titles table
+		adrnextprevlist^ = {};
+		new (tabletype, adrpagetitles);
+		local (htmltext = "", indentlevel = 0);
+		on add (s) {
+			htmltext = htmltext + string.filledstring ("\t", indentlevel) + s + "\r\n"};
+		local (adrcat, catnum = 1);
+		local (baseurl);
+		if system.environment.isRadio { //PBS 02/05/02: conditionalized to work in Frontier
+			if defined (radio.data.systemurls.[nameOf (adroutline^)] ) {
+				baseurl = radio.data.systemurls.[nameOf (adroutline^)]}
+			else {
+				baseurl = pta^.uri}}
+		else {
+			baseurl = pta^.uri};
+		on hasSubs (adrcat) {
+			try {
+				xml.getAddress (adrcat, "outline");
+				return (true)};
+			return (false)};
+		for adrcat in adrbody {
+			if not (nameof (adrcat^) beginswith "/") {
+				local (catname = xml.getattributevalue (adrcat, "text"), adrtopic, topicnum = 1);
+				catname = string.replaceAll (catname, "&amp;", "&");
+				if hasSubs (adrcat) {
+					add ("<h4 class=\"prefsHeading\">" + catname + "</h4>")}
+				else { //explanatory text
+					add ("<p>" + xml.entityDecode (catname, true) + "</p>")};
+				local (flListStarted = false);
+				for adrtopic in adrcat {
+					if not (nameof (adrtopic^) beginswith "/") {
+						if hasSubs (adrtopic) {
+							if not flListStarted {
+								add ("<ul class=\"prefsList\">"); indentlevel++;
+								flListStarted = true};
+							local (dottedid = catnum + "." + topicnum);
+							adrnextprevlist^ = adrnextprevlist^ + {dottedid};
+							local (url = baseurl + "?page=" + dottedid);
+							local (pagetitle = xml.getattributevalue (adrtopic, "text"), class);
+							pagetitle = string.replaceAll (pagetitle, "&amp;", "&");
+							adrpagetitles^.[pagetitle] = dottedid;
+							bundle { //set class
+								class = "prefsItem";
+								if indexof (adrtopic^) == sizeof (adrcat^) {
+									class = class + " lastItem"}};
+							add ("<li class=\"" + class + "\"><a href=\"" + url + "\">" + pagetitle + "</a></li>");
+							topicnum++}
+						else { //explanatory text
+							if flListStarted {
+								add ("</ul>"); indentlevel--;
+								flListStarted = false};
+							local (text = xml.entityDecode (xml.getattributevalue (adrtopic, "text"), true));
+							add ("<p>" + text + "</p>")}}};
+				if flListStarted {
+					add ("</ul>"); indentlevel--};
+				catnum++}};
+		adrhomepagehtml^ = htmltext};
+	
+	return (adrcache)};
+bundle { //testing
+	local (params); new (tableType, @params);
+	params.uri = "/rcsAdmin/prefs";
+	html.setPageTableAddress (@params);
+	compileIfDirty (@opmlEditor.data.outlines.prefs, @user.opmlEditor.prefs.toolsWithPrefs);
+	html.deletePageTableAddress ()}
+
+

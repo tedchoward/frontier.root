@@ -1,0 +1,26 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.ses.init
+
+on init () {
+	«Changes
+		«8/29/12; 9:24:45 AM by DW
+			«Remove username and password, they're not needed. Add a few stats.
+		«8/28/12; 8:55:09 PM by DW
+			«Created.
+	local (adrdata = @config.amazonSES);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)}};
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)};
+		if not defined (adrdata^.stats.ctSendMails) {
+			adrdata^.stats.ctSendMails = 0};
+		if not defined (adrdata^.stats.ctSendMailErrors) {
+			adrdata^.stats.ctSendMailErrors = 0}};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

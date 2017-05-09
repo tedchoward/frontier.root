@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.buttons.template.["00002000\tDelete"]
+
+«Changes
+	«3/7/12; 6:05:29 PM by DW
+		«Created. 
+thread.callscript (@opmlEditor.worldOutline.deleteTemplate, {})
+
+

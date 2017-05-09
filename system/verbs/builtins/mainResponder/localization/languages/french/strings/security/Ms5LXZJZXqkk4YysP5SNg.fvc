@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.french.strings.security.httpUnsupportedSecurityLevel
+
+L'authentification HTTP ne peut &ecirc;tre effectu&eacute;e car un niveau de s&eacute;curit&eacute; non support&eacute; a &eacute;t&eacute; sp&eacute;cifi&eacute; par l'administrateur du serveur.
+
+

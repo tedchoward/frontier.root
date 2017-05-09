@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.cancelTransaction
+
+on canceltransaction (n) { «Tells the Web browser to cancel a TransactionID is progress which the application has initiated via an OpenURL or ShowFile command.
+	case sys.os () {
+		"MacCn";
+		"MacOS" {
+			return (appleEvent (user.webBrowser.currentid, 'WWW!', 'CANT', '----', long (n)))}}}
+
+

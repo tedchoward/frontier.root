@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.tours.openMenu
+
+local (adroutline = @user.webBrowser.tours.menu);
+if not defined (adroutline^) { «create the menu if necessary
+	new (menubartype, adroutline);
+	target.set (adroutline);
+	editmenu.setfont ("geneva");
+	editmenu.setfontsize (12);
+	op.setLineText ("Tours");
+	target.clear ()};
+«edit (adroutline)
+target.set (adroutline);
+return (adroutline)
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.objectModel.after
+
+on after (obj) {
+	return (insertionLoc ('afte', obj))}
+
+

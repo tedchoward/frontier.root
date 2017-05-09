@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.pikeRenderer.init
+
+local (adrscript = @user.html.renderers.pikeRenderer);
+if not defined (adrscript^) {
+	local (scripttext = "on pikeRenderer (adroutline)\r\treturn (pikeRenderer.theRenderer (adroutline))");
+	script.newScriptObject (scripttext, adrscript)}
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.code.sampleCallbacks.start
+
+on start(adrSelf) {
+	msg("Started")};
+
+
+

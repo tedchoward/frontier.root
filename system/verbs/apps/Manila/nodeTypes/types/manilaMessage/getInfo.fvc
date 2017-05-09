@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Manila.nodeTypes.types.manilaMessage.getInfo
+
+local (infoText =  "");
+on add (s) {
+	infoText = infoText + s + "\r"};
+local (atts);
+if op.attributes.getAll (@atts) {
+	add ("Posted: " + atts.postTime);
+	add ("Author: " + atts.memberName);
+	add ("Message number: " + atts.msgNum);
+	playlist.notifyDialog (infoText)}
+
+

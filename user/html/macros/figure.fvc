@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:user.html.macros.figure
+
+on figure (num, desc, fname) {
+	local (htmltext = "");
+	on add (s) {
+		htmltext = htmltext + s};
+	add ("<center>" + user.html.macros.gifref (fname));
+	add ("<br><h6><i>Figure " + num + ": " + desc + "</i></h6><br></center>");
+	return (htmltext)}
+«figure (0, "The Finder's menu bar with OSA Menu installed and Frontier 4.0 running.", "script1.0")
+
+

@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.controlPanel.["#wizard"].structure.["00001000\twizard"].["00005000\tpanel"].["00014000\titem"].["00002000\tpopuptext"]
+
+The encrypted format does not store passwords in membership cookies. Instead it hashes the password, plus additional information, to make membership more secure.
+
+

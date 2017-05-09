@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:user.im.responders.blogger.condition
+
+on condition (screenname, message) {
+	return (tcp.im.builtinResponders.blogger.condition (screenname, message))}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.date.firstOfMonth
+
+on firstOfMonth (param1) {
+	kernel (date.firstOfMonth)}
+
+

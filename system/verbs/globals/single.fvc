@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.globals.single
+
+on single (val) {
+	kernel (lang.single)}
+
+

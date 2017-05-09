@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.objectExists
+
+on objectExists (name) {
+	local (atts);
+	return (cardEditor.getObjectAttributes (name, @atts))}
+
+

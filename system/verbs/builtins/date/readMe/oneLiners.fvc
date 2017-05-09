@@ -1,0 +1,40 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.date.readMe.oneLiners
+
+date.tomorrow (clock.now ())
+	// "Friday, November 14, 1997; 7:54:29 AM"
+date.yesterday (clock.now ())
+	// "Wednesday, November 12, 1997; 7:54:34 AM"
+date.nextWeek (clock.now ())
+	// "Thursday, November 20, 1997; 7:54:38 AM"
+date.prevWeek (clock.now ())
+	// "Thursday, November 06, 1997; 7:54:40 AM"
+date.nextMonth (clock.now ())
+	// "Saturday, December 13, 1997; 7:54:45 AM"
+date.prevMonth (clock.now ())
+	// "Monday, October 13, 1997; 7:54:52 AM"
+date.nextYear (clock.now ())
+	// "Friday, November 13, 1998; 7:54:54 AM"
+date.prevYear (clock.now ())
+	// "Wednesday, November 13, 1996; 7:54:56 AM"
+
+date.shortString (clock.now ())
+	// "11/13/97"
+date.abbrevString (clock.now ())
+	// "11/13/97"
+date.longString (clock.now ())
+	// "Thursday, November 13, 1997"
+
+date.firstOfMonth (clock.now ())
+	// "Saturday, November 01, 1997; 12:00:00 AM"
+date.lastOfMonth (clock.now ())
+	// "Sunday, November 30, 1997; 12:00:00 AM"
+
+date.dayOfWeek (clock.now ())
+	// 5
+date.daysInMonth (clock.now ())
+	// 30
+date.weeksInMonth (clock.now ()) 
+	// 6
+
+
+

@@ -1,0 +1,31 @@
+FrontierVcsFile:3:optx:system.extensions.regex.docServer.easySearch
+
+#title "regex.easySearch"
+#renderOutlineWIth "docServerRenderer"
+Syntax
+	regex.easySearch (pattern, s, adrTable, start)
+Params
+	pattern is a regular expression (string)
+	
+	s is a string object
+	
+	adrTable is an optional address of a table that receives information about the search. Default is nil.
+	
+	start is an optional number specifying the position in the string where the search will commence. Default is 1.
+Action
+	Tries to match the pattern to the target string, s, at successive positions commencing at position start.
+Returns
+	True if successful, false otherwise.
+Examples
+	regex.easySearch ("<[^>]*>", "<font size = \"-2\">", @temp.matchInfo)
+		// true
+	
+Notes
+	This verb is similar to "regex.search" except that it encapsulates all calls to the required lower level verbs "regex.compile" and  "regex.free".
+	
+	The "MatchInfo Table" outlines the information optionally returned in the table pointed to by adrTable.
+See Also
+	"regex.search"
+
+
+

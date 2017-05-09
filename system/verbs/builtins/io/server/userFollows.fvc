@@ -1,0 +1,18 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.server.userFollows
+
+on userFollows (user1, user2, adrupdate) {
+	«Changes
+		«9/1/10; 6:07:26 PM by DW
+			«Designed to be called-back from realtime.server.userFollows to determine if one user follows another.
+	try {
+		if adrupdate^.type == "instantOutline" { //it's one of ours
+			local (adruser = io.server.initUser (user1));
+			return (defined (adruser^.follows.[user2]))}};
+	return (false)};
+bundle { //test code
+	local (t);
+	new (tabletype, @t);
+	t.type = "instantOutline";
+	dialog.alert (userfollows ("davewinxer", "marcbarrot", @t))}
+
+

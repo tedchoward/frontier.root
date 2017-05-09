@@ -1,0 +1,51 @@
+FrontierVcsFile:3:scpt:user.html.macros.gifRef
+
+on gifRef (gifname, explanation = "", hspace = "", align = "", usemap = "") { «4.2
+	«macro that generates an IMG tag to a GIF file
+		«for local sites that contain a gifs folder, we generate height and width
+		«makes for smoother-viewing web pages
+	
+	local (htmltext = "");
+	on add (s) {
+		htmltext = htmltext + s};
+	
+	if explanation == "" {
+		explanation = gifname + " Picture"};
+	
+	local (folder = html.data.page.ftpsite^.folder + "gifs\\");
+	local (url);
+	bundle { «figure out what the URL for the gif is, relative to this page
+		«assume the site has an #ftpsite directive
+		«assume the gifs directory is at the same level as the table that has the #ftpsite
+		url = "";
+		local (adr = html.data.page.adrobject);
+		loop {
+			adr = parentOf (adr^);
+			if adr == parentOf (html.data.page.ftpsite^) {
+				break};
+			url = "../" + url};
+		url = url + "gifs/"};
+	
+	add ("<img src=\"" + url + gifname + ".gif\" border=0 alt=\"" + explanation + "\"");
+	try {
+		local (f = folder + gifname + ".gif");
+		if not file.exists (f) { «try to copy it from www.scripting.com's gifs folder
+			local (otherfolder = "I:\\websites\\gifs\\");
+			local (otherf = otherfolder + gifname + ".gif");
+			if file.exists (otherf) {
+				file.copy (otherf, f)}};
+		local (hwlist = html.getGifHeightWidth (f));
+		add (" height=" + hwlist [1] + " width=" + hwlist [2])};
+		«file.setmodified (f, clock.now ()) «so we can tell which ones we are using
+	if hspace != "" {
+		add (" hspace=" + hspace)};
+	if align != "" {
+		add (" align=" + align)};
+	if usemap != "" {
+		add (" usemap=\"#" + usemap + "\"")};
+	add (">");
+	return (htmltext)}
+«bundle «test code
+	«clipboard.putvalue (gifref ("cactus"))
+
+

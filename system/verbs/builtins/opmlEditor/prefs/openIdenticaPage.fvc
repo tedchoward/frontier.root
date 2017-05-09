@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.prefs.openIdenticaPage
+
+«Changes
+	«8/6/08; 1:20:02 PM by DW
+		«Bring the browser to the front and open the Identi.ca prefs page.
+webbrowser.bringtofront ();
+webbrowser.openurl (opmlEditor.data.urls.identicaPrefsPage)
+
+

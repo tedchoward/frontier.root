@@ -1,0 +1,33 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.menuCommands.addToUserDatabases
+
+on addToUserDatabases (f = nil) {
+	«5/25/99; 9:50:04 AM by DW
+		«Call this script from a menu command. When you create a new guest database that you want to open automatically when Frontier launches, choose the command. It creates a new user.databases sub-table that opens so you can change the default values it sets. I got tired of manually created user.databases sub-tables.
+	if f == nil { //work with the frontmost window
+		local (adr = table.getcursoraddress ());
+		if not table.inGuestDatabase (adr) {
+			scriptError ("Can't add Frontier.root to user.databases. It's just for guest databases.")};
+		local (x = string.parseAddress (adr));
+		f = x [1]};
+	if not file.exists (f) {
+		scriptError ("Can't add a file that doesn't exist to user.databases.")};
+	local (fname = file.filefrompath (f));
+	local (adrtable = @user.databases.[fname]);
+	if defined (adrtable^) {
+		if not dialog.confirm (adrtable + " exists. Replace it?") {
+			return}}
+	else {
+		if not dialog.confirm ("Add " + fname + " to user.databases?") {
+			return}};
+	new (tabletype, adrtable);
+	adrtable^.f = f;
+	adrtable^.openOnStartup = true;
+	adrtable^.runStartupScript = false;
+	adrtable^.supportsSubscribe = false;
+	filemenu.save ();
+	edit (adrtable);
+	window.zoom (adrtable)}
+«bundle //test code
+	«addToUserDatabases ()
+
+

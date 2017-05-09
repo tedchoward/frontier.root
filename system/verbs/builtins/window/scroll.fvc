@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.window.scroll
+
+on scroll (dir, count) {
+	kernel (window.scroll)}
+
+

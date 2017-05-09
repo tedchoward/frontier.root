@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.findCommand
+
+case sys.os () {
+	"MacOS" {
+		search.dialog ()};
+	"Win95";
+	"WinNT" {
+		if user.prefs.search.winStandardFindCommand {
+			search.findTextDialog ()}
+		else {
+			search.replaceTextDialog ()}}}
+
+

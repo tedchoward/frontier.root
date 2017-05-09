@@ -1,0 +1,18 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.examples.newFolderIcon
+
+on newFolderIcon (folder, iconresource) {
+	local (quote = ³"²);
+	local (iconlabel = file.fileFromPath (folder) - ":");
+	local (objectname = cardEditor.uniqueName (iconlabel));
+	local (script = "file.openFolder (" + quote + folder + quote + ")");
+	
+	cardEditor.newObject (card.types.iconType, objectname, iconlabel, script);
+	cardEditor.cleanObject (objectname);
+	
+	bundle { «set up attributes of new object
+		local (atts);
+		new (tableType, @atts);
+		atts.rsnm = short (iconresource);
+		cardEditor.setObjectAttributes (objectname, @atts)}}
+
+

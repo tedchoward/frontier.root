@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.isBusy
+
+on isBusy (path) {
+	kernel (file.isbusy)}
+
+

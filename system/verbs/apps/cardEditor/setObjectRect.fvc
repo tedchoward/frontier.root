@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.setObjectRect
+
+on setObjectRect (name, rectangle) {
+	new (tableType, @atts);
+	atts.rect = rect (rectangle);
+	return (cardEditor.setObjectAttributes (name, @atts))}
+
+

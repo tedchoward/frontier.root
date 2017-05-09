@@ -1,0 +1,13 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.localization.languages.german.strings.discuss.sendRpcEnclosureDidntWorkBody
+
+Leider konnte der Server die Nachricht Nr. [[msgnum]] nicht an ihren Computer schicken.<p>
+Der Server erhielt die folgende Antwort von ihrem Computer (m&ouml;glicherweise kryptisch):
+<blockquote><i>[[errorstring]]</i></blockquote>
+<b>Einige Dinge, die Sie &uuml;berpr&uuml;fen k&ouml;nnen</b>:<ul><p>
+	<li>Sie m&uuml;ssen user.betty.rpcHandlers.userland installiert haben.<p>
+	<li>Frontier mu&szlig; auf <i>Ihrem Computer</i> laufen.<p>
+	<li>Frontier mu&szlig; auf Port 80 laufen. (Dies wird in Zukunft einstellbar sein.)<p>
+	<li>Wenn Sie sicher sind, alle Einstellungen korrekt vorgenommen zu haben, und das Internet &uuml;ber einen Proxy-Server oder eine Firewall nutzen, wenden Sie sich bitte an Ihren Systemadministrator.<p>
+	</ul>
+
+

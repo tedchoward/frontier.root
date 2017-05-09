@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:websites.samples.UserLand.["#tools"].displayTitle
+
+«If a page has #displayTitle set to false,
+	«don't display a title in the body portion of the page.
+	«For instance, the home page of the site doesn't display a title.
+if html.getPref ("displayTitle", html.getPageTableAddress ()) {
+	return ("<h2>" + html.getPageTableAddress ()^.title + "</h2>")};
+return (html.data.standardMacros.spacePixels (15, "vertical"))
+
+

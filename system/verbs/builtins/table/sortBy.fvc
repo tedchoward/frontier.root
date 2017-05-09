@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.table.sortBy
+
+on sortBy (columnTitle) {
+	kernel (table.sortBy)}
+
+

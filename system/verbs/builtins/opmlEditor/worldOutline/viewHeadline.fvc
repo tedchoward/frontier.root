@@ -1,0 +1,51 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.viewHeadline
+
+on viewHeadline () {
+	«Changes
+		«12/1/12; 11:46:10 AM by DW
+			«If Shift key is down, copy the URL to the clipboard instead of opening it in the browser.
+				«http://worknotes.scripting.com/december2012/12112ByDw/shiftview
+		«1/6/12; 6:46:43 AM by DW
+			«Core of this routine moved into opmlEditor.worldOutline.getHeadlineUrl so it could be used in other contexts.
+				«local (lo = window.frontmost ()^, domain, path = "", userprefs)
+				«local (oldtarget = target.set (@lo))
+				«on opendomain (domain)
+					«webbrowser.openurl ("http://" + domain + path + "/")
+					«webbrowser.bringtofront ()
+				«loop
+					«op.attributes.getone ("domain", @domain)
+					«if domain != nil
+						«if sizeof (path) > 0
+							«local (sizefirststep = sizeof (string.nthfield (path, "/", 1)))
+							«path = string.delete (path, 1, sizefirststep)
+							«if path endswith "/"
+								«path = string.delete (path, sizeof (path), 1)
+						«opendomain (domain)
+						«break
+					«if not op.go (left, 1)
+						«if not (path beginswith "/") //6/30/11 by DW
+							«path = "/" + path
+						«if path endswith "/" //6/30/11 by DW
+							«path = string.delete (path, sizeof (path), 1)
+						«
+						«if window.attributes.getone ("domain", @domain) //1/6/12 by DW
+							«opendomain (domain)
+						«else
+							«opmlEditor.worldOutline.getUserPrefs (@userprefs) //9/19/11 by DW
+							«opendomain (userprefs.domain)
+						«
+						«dialog.alert ("Can't view the site because we didn't find a domain attribute.")
+						«break
+					«path = html.directory.getcanonicalname (op.getlinetext ()) + "/" + path //6/17/11 by DW
+				«target.set (oldtarget)
+	local (url = opmlEditor.worldOutline.getHeadlineUrl ());
+	if kb.shiftkey () { //12/1/12 by DW
+		clipboard.putvalue (url);
+		speaker.beep ()}
+	else {
+		webbrowser.openurl (url);
+		webbrowser.bringtofront ()}}
+«bundle //test code
+	«viewHeadline ()
+
+

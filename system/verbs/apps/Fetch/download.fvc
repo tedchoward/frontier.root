@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.download
+
+on download (obj) { «get a remote file or directory
+	return (appleEvent (Fetch.id, 'FTCh', 'Dnld', '----', objspec (obj)))}
+
+

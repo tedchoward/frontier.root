@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.nodeTypes.v4BuddyOutlineElement.getinfo
+
+«Changes
+	«7/15/10; 11:15:45 AM by DW
+		«Created. 
+op.attributes.getAll (@system.temp.atts);
+edit (@system.temp.atts)
+
+

@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.bringToFront
+
+on bringToFront () {
+	if not app.start ("WebStar") {
+		return (false)};
+	return (sys.bringAppToFront (WebStar.id))}
+
+

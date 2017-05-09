@@ -1,0 +1,36 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.userland.dwExportList
+
+Export list (must be last top level element in outline)
+	userland.firstRootRun
+		Setting up user.prefs.search
+			user.prefs.search.searchFor = ""
+			user.prefs.search.replaceWith = ""
+		Don't wipe out workspace.notepad.
+			Have to find a better place to do this. I keep losing my notepad as I work on this stuff.
+	system.callbacks.htmlControlStartup
+		Wasn't present in the root Andre sent.
+	system.callbacks.systemTrayIconRightClick
+	userland.opmlEditorSystemTrayMenu
+		System tray menu in the OPML editor.
+	system.startup.startupScript
+		call to infoDialog disabled
+	system.verbs.builtins.userland.cleanRoot
+		Set random booleans in the OPML editor
+			user.prefs.flShortTimeStamp = true
+			user.prefs.flWinStandardMaximize = false
+			user.prefs.openAboutWindow = false
+		No need to wipe out scratchpad, it's done in the first run script.
+	user.inetd.config.http
+		Change port from 80 to 8081
+	user.inetd.config.http2
+		Change port from 5336 to 5337.
+	user.webserver.responders.default
+		Instead of calling mainResponder.respond, return some default text.
+		Ship disabled?
+	workspace.notepad
+		This window.
+	system.verbs.builtins.userland
+		My work area while doing builds.
+
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.isModal
+
+on isModal (adr) {
+	kernel (dialog.isModalCard)}
+
+

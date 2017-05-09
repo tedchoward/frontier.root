@@ -1,0 +1,21 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.search
+
+on search (patternRef, adrObject, adrTable=nil, start=1, range=0, makeGroups=false) {
+	if (range == 0) {
+		range = sizeof (adrObject^) - start + 1};
+	if (adrTable != nil) {
+		local (matchRecord);
+		matchRecord = record (dll.call (regex.data.getPath (), "regsearchverb", long (patternRef), string (adrObject^), long (start), long (range), boolean (makeGroups)));
+		new (tableType, adrTable);
+		adrTable^.matchOffset = matchRecord ["mpos"];
+		adrTable^.matchLength = matchRecord ["nchr"];
+		adrTable^.matchString = string.mid (adrObject^, matchRecord ["mpos"], matchRecord ["nchr"]);
+		if (makeGroups) {
+			adrTable^.groupStrings = matchRecord ["grps"];
+			adrTable^.groupOffsets = matchRecord ["offs"];
+			adrTable^.groupLengths = matchRecord ["lens"]};
+		return (boolean (matchRecord ["mtch"]))}
+	else {
+		return (boolean (dll.call (regex.data.getPath (), "regsearchboolverb", long (patternRef), string (adrObject^), long (start), long (range))))}}
+
+

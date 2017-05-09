@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.rez.getNthResInfo
+
+on getNthResInfo (path, type, n, adrid, adrname) {
+	kernel (rez.getNthResInfo)}
+
+

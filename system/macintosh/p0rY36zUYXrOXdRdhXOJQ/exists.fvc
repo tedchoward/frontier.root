@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.core.exists
+
+on exists (appID, obj) { «Tell if an object exists
+	return (appleEvent (appID, 'core', 'doex', '----', objspec (obj)))}
+
+

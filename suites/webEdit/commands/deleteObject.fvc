@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:suites.webEdit.commands.deleteObject
+
+local (adrObject);
+
+bundle { //get the currently selected object
+	adrObject = webEdit.getSelectedObject ();
+	if adrObject == false {
+		return (false)}};
+
+if not (dialog.twoWay ("Are you sure you want to delete " + nameOf (adrObject^) + "?", "No", "Yes")) {
+	s = webEdit.deleteObject (adrObject);
+	
+	webEdit.notify (s);
+	return (true)}
+
+

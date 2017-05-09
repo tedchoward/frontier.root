@@ -1,0 +1,53 @@
+FrontierVcsFile:3:scpt:user.html.renderers.bsoRenderer
+
+on bsoRenderer (adroutline) { «renders an outline created by siteTools.buildSiteOutline
+	«Wed, May 22, 1996 at 8:50:06 AM by DW
+		«How outline renderers work:
+			«The adroutline points to a *copy* of the original outline.
+			«The #directives have been removed.
+			«It's also the target window.
+		«What this renderer does:
+			«It turns each line into a table.
+			«If level > 0, add an empty cell, with its width specified.
+			«The width is a multiple of user.sitetools.indentpixels.
+		«How to edit scripts:
+			«http://www.scripting.com/frontier/topics/outlinercribsheet.html
+	
+	op.firstsummit ();
+	op.fullexpand ();
+	local (level = 0);
+	on visit () {
+		loop {
+			local (hassubs = op.countSubs (1) > 0);
+			local (s = "");
+			s = s + "<table><tr>";
+			if level > 0 { «add a dummy cell to do the indentation
+				s = s + "<td width=" + (17 * level) + "></td>"};
+			local (linetext = op.getlinetext ());
+			if hassubs {
+				linetext = "<b>" + linetext + "</b>"};
+			s = s + "<td>" + linetext + "</td></tr></table>";
+			op.setlinetext (s);
+			window.msg (s);
+			if hassubs {
+				op.go (right, 1);
+				level++;
+				visit ();
+				level--;
+				op.go (left, 1)};
+			if not op.go (down, 1) {
+				break}}};
+	visit ();
+	return (string (adroutline^))};
+
+«bundle «test code
+	«table.copy (@user.siteTools.siteOutline, @scratchpad)
+	«target.set (@scratchpad.siteoutline)
+	«op.firstsummit ()
+	«while op.getlinetext () beginswith "#"
+		«op.deleteline ()
+	«edit (@scratchpad.siteoutline)
+	«webbrowser.displaytext ("<html>" + bsoRenderer (@scratchpad.siteoutline) + "</html>")
+	«target.clear ()
+
+

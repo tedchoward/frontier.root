@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.misc.dosc
+
+on dosc (s) { «executed the script specified by s
+	«we'll accept an alias to a script file, or the text of the script itself
+	case typeOf (s) {
+		aliasType {
+			return (string (Frontier.finder2Click (string (s))))};
+		stringType {
+			return (string (evaluate (s)))};
+		binaryType {
+			if getBinaryType (s) == 'itxt' { «International Text
+				s = string.delete (s, 1, 4); «strip off script & language codes
+				return (string (evaluate (s)))}}};
+	return (false)}
+
+

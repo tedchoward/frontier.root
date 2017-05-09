@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.getImgHtml
+
+on getImgHtml (id, flRightAlign=false) {
+	«Changes
+		«1/8/08; 2:36:12 PM by DW
+			«Point to the photo page instead of the original url.
+		«6/11/07; 12:45:52 PM by DW
+			«New optional parameter, flRightAlign.
+		«6/10/07; 2:18:36 PM by DW
+			«Created.
+			«http://www.flickr.com/services/api/flickr.photos.getSizes.html
+	local (sizes);
+	Flickr.getSizes (id, @sizes);
+	Flickr.photos.getInfo (id, adrinfo:@info);
+	«s = "<a href=\"" + sizes.Original.url + "\">"
+	s = "<a href=\"" + info.urls.photopage + "\">"; //1/8/08 by DW
+	s = s + "<img src=\"" + sizes.Original.source + "\" width=\"" + sizes.Original.width + "\" height=\""+ sizes.Original.height + "\"" + " border=\"0\"";
+	if flRightAlign {
+		s = s + " align=\"right\" hspace=\"15\" vspace=\"5\""};
+	s = s + "></a>";
+	return (s)};
+bundle { //test code
+	webbrowser.displaytext (getImgHtml ("539476741", false))}
+
+

@@ -1,0 +1,86 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fileSynch.synchDirectory
+
+on synchDirectory (adrdata) {
+	«Changes
+		«7/28/11; 9:04:51 AM by DW
+			«Only include the file if whenLastUpload is defined. 
+		«4/24/11; 4:14:52 PM by DW
+			«Produce an OPML version in addition to a JSON version.
+		«2/10/11; 11:19:20 AM by DW
+			«Created. 
+	local (now = clock.now (), pc = file.getpathchar ());
+	bundle { //json version
+		local (jsontext);
+		bundle { //generate jsontext
+			local (indentlevel = 0, adrfile, flnotfirst = false);
+			jsontext = "";
+			on add (s) {
+				jsontext = jsontext + string.filledstring ("\t", indentlevel) + s + "\r"};
+			on encode (s) {
+				return (string.multiplereplaceall (s, @json.data.replaceTable))};
+			add ("{"); indentlevel++;
+			add ("\"files\": ["); indentlevel++;
+			for adrfile in @adrdata^.files {
+				if defined (adrfile^.whenLastUpload) {
+					bundle { //add comma if not first
+						if flnotfirst {
+							add (",")};
+						flnotfirst = true};
+					add ("{"); indentlevel++;
+					add ("\"path\": \"" + encode (nameof (adrfile^)) + "\",");
+					add ("\"whenCreated\": \"" + date.netstandardstring (adrfile^.whenCreated) + "\",");
+					add ("\"whenLastUpload\": \"" + date.netstandardstring (adrfile^.whenLastUpload) + "\",");
+					add ("\"ctUploads\": \"" + adrfile^.ctuploads + "\",");
+					add ("\"url\": \"" + encode (adrfile^.url) + "\",");
+					add ("}"); indentlevel--}};
+			add ("]"); indentlevel--;
+			add ("}"); indentlevel--};
+		bundle { //write file
+			local (path = adrdata^.prefs.rootpath + "directory.json");
+			s3.newobject (path, jsontext, type:"application/json")}};
+	bundle { //opml version, 4/24/11 by DW
+		local (opmltext);
+		bundle { //generate opmltext
+			local (indentlevel = 0, adrfile, flnotfirst = false);
+			opmltext = "";
+			on add (s) {
+				opmltext = opmltext + string.filledstring ("\t", indentlevel) + s + "\r"};
+			on encode (s) {
+				return (string.multiplereplaceall (s, @json.data.replaceTable))};
+			add ("<?xml version=\"1.0\"?>");
+			add ("<!-- Created by " + (this - "system.verbs.builtins.") + " running in " + frontier.getprogramname () + " on " + clock.now () + ". -->");
+			add ("<opml version=\"2.0\">"); indentlevel++;
+			bundle { //<head> section
+				add ("<head>"); indentlevel++;
+				add ("<title>" + encode (adrdata^.prefs.rooturl) + "</title>");
+				add ("<dateModified>" + date.netstandardstring (now) + "</dateModified>");
+				add ("<dateCreated>" + date.netstandardstring (now) + "</dateCreated>");
+				add ("<ownerName>" + encode (user.prefs.name) + "</ownerName>");
+				add ("<ownerEmail>" + encode (user.prefs.mailaddress) + "</ownerEmail>");
+				add ("</head>"); indentlevel--};
+			bundle { //<body> section
+				add ("<body>"); indentlevel++;
+				on dofolder (folder) {
+					local (f);
+					fileloop (f in folder) {
+						local (fname = file.filefrompath (f));
+						if fname beginswith "." {
+							continue};
+						if file.isfolder (f) {
+							add ("<outline text=\"" + encode (fname - pc) + "\">"); indentlevel++;
+							dofolder (f);
+							add ("</outline>"); indentlevel--}
+						else {
+							local (adrfile = @adrdata^.files.[string.delete (f, 1, sizeof (adrdata^.prefs.folder))]);
+							if defined (adrfile^) {
+								add ("<outline text=\"" + encode (fname) + "\" type=\"link\" url=\"" + encode (adrfile^.url) + "\" />")}}}};
+				dofolder (adrdata^.prefs.folder);
+				add ("</body>"); indentlevel--};
+			add ("</opml>"); indentlevel--};
+		bundle { //write file
+			local (path = adrdata^.prefs.rootpath + "directory.opml");
+			s3.newobject (path, opmltext, type:"text/xml")}}};
+bundle { //test code
+	synchDirectory (@user.fileSynch.synchPoints.["Amazon S3"])}
+
+

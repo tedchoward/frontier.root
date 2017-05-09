@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.quit
+
+on quit () {
+	return (required.quitApplication (BBEdit.id))}
+
+

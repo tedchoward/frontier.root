@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.kb.optionKey
+
+on optionKey () {
+	kernel (kb.optionkey)}
+
+

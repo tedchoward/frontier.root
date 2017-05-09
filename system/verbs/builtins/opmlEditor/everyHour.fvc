@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.everyHour
+
+on everyHour () {
+	«Changes
+		«4/20/11; 8:49:04 PM by DW
+			«Created.
+	bundle { //cleanup update scripts that were left around in the last hour
+		opmlEditor.utilities.cleanupUpdateScripts ()}};
+bundle { //test code
+	everyHour ()}
+
+

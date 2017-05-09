@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.outliner.openProfilePage
+
+local (url = "http://twitter.com/" + op.getlinetext ());
+webbrowser.bringtofront ();
+webbrowser.openurl (url)
+
+

@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.danish.strings.members.sendMailAlreadyMemberError
+
+Can't create a new user because there already is an account for [[mailaddress]].
+
+

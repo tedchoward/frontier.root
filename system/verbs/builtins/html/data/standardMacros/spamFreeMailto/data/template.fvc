@@ -1,0 +1,11 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.html.data.standardMacros.spamFreeMailto.data.template
+
+{name} [1] sent this email to you through {server} [2].
+
+{text}
+
+[1] {userUrl}
+[2] {serverUrl}
+
+
+

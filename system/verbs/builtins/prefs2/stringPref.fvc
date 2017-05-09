@@ -1,0 +1,65 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.prefs2.stringPref
+
+on stringPref (prompt, adrstring, type="text", size=50, maxlength=100, textToRight="", colspan=1, flCheckRepeatedPassword=false, labelAlign="right", flIgnorePasswordError=false) {
+	«Changes
+		«9/30/11; 9:16:08 AM by DW
+			«Hard-code the width to 500px. Works wonderfully. Now I can get rid of a hack elsewhere whose only purpose was to make this bit wider. Hah!
+		«9/8/11; 10:37:33 AM by DW
+			«flCheckRepeatedPassword defaults false (used to be true). We're moving away from double-password prompting.
+		«8/30/11; 11:16:33 AM by DW
+			«Created.
+	local (pta = html.getpagetableaddress (), error = "", stringvalue, itemtext);
+	local (itemname = string.urlEncode (string.popFileFromAddress (adrstring)));
+	if pta^.method == "POST" {
+		local (value = "");
+		try { //9/21/09 by DW
+			if system.environment.isRadio { //PBS 02/05/02: conditionalized to work in Frontier
+				value = pta^.radioresponder.postargs.[string.urlEncode (string.popFileFromAddress (adrstring))]}
+			else {
+				value = pta^.postargs.[string.urlEncode (string.popFileFromAddress (adrstring))]};
+			if not system.environment.isRadio { //only do latin-to-mac in Radio. mainResponder does this for us in Frontier
+				if system.environment.isMac {
+					value = string.latinToMac (value)}};
+			if string.lower (adrstring) contains "password" {
+				if flCheckRepeatedPassword {
+					local (adrrepeatedpassword = nil);
+					if defined (system.environment.isOpmlEditor) {
+						if system.environment.isOpmlEditor {
+							adrrepeatedpassword = @system.temp.newsRiver.repeatedPassword}};
+					if adrrepeatedpassword == nil {
+						adrrepeatedpassword = @system.temp.radio.repeatedPassword};
+					if adrstring != adrrepeatedpassword {
+						if adrrepeatedpassword^ != value {
+							error = radio.prefs.errorstring ("Can't change the password because the values don't match.")}}}}; //localize
+							«bundle //debugging, 3/11/11 by DW
+								«new (tabletype, @scratchpad.passwords)
+								«scratchpad.passwords.p1 = adrrepeatedpassword^
+								«scratchpad.passwords.p2 = value
+			if sizeof (error) == 0 {
+				local (adr = address (string.popFileFromAddress (adrstring)));
+				if defined (adr^) {
+					if typeof (adr^) != stringtype {
+						delete (adr)}};
+				if string.lower (type) == "password" { //convert to binary value
+					value = binary (value)};
+				adr^ = value;
+				if system.environment.isRadio { //PBS 02/05/02: conditionalized to work in Frontier
+					if adr == @user.prefs.name {
+						weblogData.prefs.authorName = value};
+					if adr == @user.prefs.mailAddress {
+						weblogData.prefs.authorMailAddress = value}}}
+			else {
+				if flIgnorePasswordError and (value == "") { //3/11/11 by DW
+					error = ""}}}};
+	bundle { //set stringvalue
+		if string.lower (type) == "password" {
+			stringvalue = ""}
+		else {
+			stringvalue = string (adrstring^)}};
+	bundle { //set itemtext
+		itemtext = "<input class=\"xlarge\" name=\"" + itemname + "\" size=\"" + size + "\" style=\"padding: 0px; height: 28px; width: 500px; font-size: 18px;\" value=\"" + stringvalue + "\" type=\"" + type + "\" />"};
+	return ("<label for=\"" + itemname + "\">" + prompt + ":</label><div class=\"input\">" + itemtext + "</div>")};
+bundle { //test code
+	stringPref ()}
+
+

@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.examples.returnText
+
+local { « enter your datasource name, userid, password, and sql statement
+	dsn = "MyDataSource";
+	uid = "";
+	pwd = "";
+	sqlstr = "select * from guests";
+	result};
+result = odbc.execute (dsn, uid, pwd, sqlstr, "text");
+odbc.disconnect (dsn);
+
+target.set (@odbc.examples.resultsTabText);
+wp.insert (result);
+target.clear ()
+
+

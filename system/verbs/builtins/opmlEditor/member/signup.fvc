@@ -1,0 +1,70 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.member.signup
+
+on signup (urlRedirect, groupname="default", adrusername=nil, membershipkind="", invitecode="", extratext="") {
+	«Changes
+		«12/17/12; 10:17:25 AM by DW
+			«New optional params, groupname, adrusername, membershipkind, invitecode, extratext.
+				«http://worknotes.scripting.com/december2012/121712ByDw/updateSignupDialog
+		«6/12/12; 9:35:33 AM by DW
+			«Created.
+	local (pta = html.getpagetableaddress (), t, now = clock.now ());
+	local (adrdata = opmleditor.init ());
+	bundle { //set up membershipkind
+		if membershipkind == "" { //not specified by caller, 12/17/12 by DW
+			membershipkind = adrdata^.prefs.membershipKind};
+		membershipkind = string.lower (membershipkind);
+		if membershipkind == "closed" {
+			webserver.redirect (pta, urlRedirect)}};
+	bundle { //set up invitecode
+		if invitecode == "" {
+			invitecode = adrdata^.prefs.inviteCode};
+		invitecode = string.lower (invitecode)};
+	pta^.title = "Sign up";
+	bundle { //initial setup of t
+		new (tabletype, @t);
+		t.message = "";
+		t.username = "";
+		t.errormessage = "";
+		t.introtext = string (user.opmlEditor.prefs.signupPageIntroText);
+		t.extratext = string (extratext)}; //12/17/12 by DW
+	bundle { //t.inviteCode
+		if membershipkind == "limited" {
+			t.invitationCode = "<div class=\"control-group\"><label class=\"control-label\" for=\"inviteCode\">Invitation code:</label><div class=\"controls\"><input type=\"text\" class=\"input-xlarge inputSignin\" id=\"idInviteCode\" name=\"inviteCode\"/></div></div>"}
+		else {
+			t.invitationCode = ""}};
+	«scratchpad.signinparams = pta^; edit (@scratchpad.signinparams)
+	if pta^.method == "POST" {
+		local (args);
+		new (tabletype, @args);
+		webserver.parseargs (pta^.requestbody, @args);
+		«scratchpad.args = args; edit (@scratchpad.args)
+		if membershipkind == "limited" {
+			if string.lower (args.inviteCode) != invitecode {
+				t.errormessage = "That's not a good invitation code."}
+			else {
+				if adrdata^.prefs.inviteCodeCount <= 0 {
+					t.errormessage = "No invites remain for that code."}
+				else {
+					adrdata^.prefs.inviteCodeCount--}}};
+		bundle { //see if username is valid, 6/15/12 by DW
+			args.usernameNew = string.trimwhitespace (args.usernameNew);
+			string.validUsername (args.usernameNew, adrerrorstring: @t.errormessage)}; //if not valid, t.errormessage is non-empty
+		if sizeof (t.errormessage) == 0 {
+			if opmlEditor.member.exists (args.usernameNew) {
+				t.errormessage = "There already is a user named " + args.usernameNew + "."}
+			else {
+				local (adrmember = opmlEditor.member.initMember (args.usernameNew, groupname, flcreate:true), adrgroup = opmlEditor.member.initGroup (groupname));
+				local (cookievalue = "username=" + args.usernameNew + "&password=" + args.passwordNew);
+				adrmember^.prefs.password = args.passwordNew;
+				t.message = "New user \"" + args.usernameNew + "\" created.";
+				webserver.util.setCookie (pta, adrgroup^.cookiename, cookievalue, adrgroup^.cookiedomain, adrgroup^.cookieexpires);
+				if adrusername != nil { //12/17/12 by DW
+					adrusername^ = args.usernameNew};
+				webserver.redirect (pta, args.urlRedirect)}};
+		t.username = args.usernameNew};
+	t.urlRedirect = urlRedirect; //3/22/12 by DW
+	return (string.multiplereplaceall (string (opmlEditor.data.outlines.signUpTemplate), @t, false, "<%", "%>"))};
+bundle { //test code
+	signup ()}
+
+

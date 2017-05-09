@@ -1,0 +1,27 @@
+FrontierVcsFile:3:optx:system.verbs.apps.BBEdit.changeNotes
+
+Changes by Erik C. Thauvin (ravensys@eskimo.com) Ñ http://www.eskimo.com/~ravensys/
+	08/19/95 Ñ initial public release
+		ported most of Bare Bones' AppleScript scripts to Frontier
+			BBEdit.examples.capitalizeSelSentences
+			BBEdit.examples.changeLineEndings
+			BBEdit.examples.insertTextAndSave
+			BBEdit.examples.replaceAllString
+			BBEdit.examples.prefixWithGreaterThan
+			BBEdit.examples.rePrefixSelection
+			BBEdit.examples.window1Position
+			BBEdit.examples.window2Position
+			BBEdit.examples.window2Position80Col
+			BBEdit.examples.window80Col50Line
+			BBEdit.examples.window80Columns
+		fixed BBEdit.hardWrap() definitition
+	11/01/95 Ñ BBEdit 3.5.1 release
+		added support for new verbs, properties, etc.
+		fixed BBEdit.find() verb definition
+		corrected a few "cosmetic" problems
+	01/07/96 Ñ BBEdit 3.5.2 release
+		added support for new verbs, properties, etc.
+		fixed BBEdit.zapGremlins() verb definition
+
+
+

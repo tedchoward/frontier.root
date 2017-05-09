@@ -1,0 +1,42 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.testing.outlineToDomains
+
+on outlineToDomains () {
+	«Changes
+		«7/16/12; 4:37:04 PM by DW
+			«Loop over the frontmost outline, mapping names to ip addresses or cnames.
+	op.firstsummit ();
+	loop {
+		domain = op.getlinetext (); //scripting.com
+		op.expand (1);
+		if op.go (right, 1) {
+			loop {
+				local (name = op.getlinetext (), value);
+				op.expand (1);
+				if not script.iscomment () {
+					if op.go (right, 1) {
+						local (value = op.getlinetext (), type);
+						bundle { //set type
+							local (firstfield = string.nthfield (value, ".", 1));
+							try {
+								number (firstfield);
+								type = "A"}
+							else {
+								type = "CNAME"}};
+						try {s3.route53.createRecord (domain, name, value, type, flsynch:false)};
+						op.go (left, 1);
+						op.collapse ()}};
+				if not op.go (down, 1) {
+					break}};
+			op.go (left, 1);
+			op.collapse ()};
+		if not op.go (down, 1) {
+			break}}}
+«bundle //test code
+	«local (s = tcp.httpreadurl ("http://dropbox.scripting.com/dave/outlines/route53/opmlOrg.opml"))
+	«local (s = tcp.httpreadurl ("http://dropbox.scripting.com/dave/outlines/route53/scriptingCom.opml"))
+	«op.xmltooutline (s, @scratchpad.myoutline)
+	«target.set (@scratchpad.myoutline)
+	«edit (@scratchpad.myoutline)
+	«outlineToDomains ()
+
+

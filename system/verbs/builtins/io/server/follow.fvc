@@ -1,0 +1,40 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.server.follow
+
+on follow (username, userToFollow) {
+	«Changes
+		«9/14/10; 9:04:08 AM by DW
+			«When pushing the update, the userWhoCausedUpdate parameter must be userToFollow, not username. Otherwise the outline of the user being followed shows as an update to the person who did the following. Not good! :-)
+		«9/9/10; 12:22:33 PM by DW
+			«Instead of returning the update, we push the outline of the user being followed to the user following. They might be logged on in more than one place, so simply returning the update isn't enough.
+		«9/3/10; 10:12:53 AM by DW
+			«Fixed bug where you'd get back your own outline instead of the outline of the person you're following.
+		«9/3/10; 9:31:43 AM by DW
+			«Returns an update table if we were able to do the follow, errors otherwise.
+		«9/1/10; 2:59:28 PM by DW
+			«Created. 
+	local (adrdata = io.init (), adruser = io.server.initUser (username), t);
+	if not defined (adrdata^.server.users.[userToFollow]) {
+		scripterror ("Can't follow user \"" + userToFollow + "\" because there is no user with that name.")};
+	local (adrfollow = @adruser^.follows.[userToFollow]);
+	if defined (adrfollow^) {
+		scripterror ("Can't follow user \"" + userToFollow + "\" because you're already following that user.")};
+	adrfollow^ = clock.now ();
+	«bundle //set up table for update
+		«local (adrfollowed = io.server.initUser (userToFollow))
+		«new (tabletype, @t)
+		«t.htmltext = "User \"" + username + "\" now follows \"" + userToFollow + ".\""
+		«t.type = "instantOutline"
+		«t.username = userToFollow
+		«t.data = adrfollowed^.opmltext
+		«t.when = clock.now ()
+	bundle { //push the followed outline to the user doing the following, 9/9/10 by DW
+		local (adrfollowed = io.server.initUser (userToFollow));
+		local (s = "User \"" + username + "\" now follows \"" + userToFollow + ".\"");
+		realtime.server.pushUpdate (s, "instantOutline", userToFollow, adrfollowed^.opmltext, userToPushTo:username)};
+	new (tabletype, @t); //9/9/10 by DW
+	return (t)};
+bundle { //test code
+	scratchpad.t = follow ("davewiner", "bullmancuso");
+	edit (@scratchpad.t)}
+
+

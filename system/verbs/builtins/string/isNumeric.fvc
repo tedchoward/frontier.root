@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.isNumeric
+
+on isNumeric (ch) { «new in 4.0b7
+	kernel (string.isNumeric)}
+
+

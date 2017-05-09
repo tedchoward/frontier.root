@@ -1,0 +1,36 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.bookmarksMenu.["builtinNodeTypes-toBeDeleted"].getManilaMessageLogic
+
+on getManilaMessageLogic (adrLogic, adrTitle) {
+	local (url);
+	if op.attributes.getOne ("siteUrl", @url) {
+		local (msgNum);
+		if op.attributes.getOne ("msgNum", @msgNum) {
+			
+			on popNameAndEmail (s) {
+				local (ix = sizeOf (s));
+				loop { // remove the name and email address
+					if ix == 0 {
+						break};
+					if string.mid (s, ix, 4) == " -- " {
+						s = string.mid (s, 1, ix - 1);
+						break};
+					ix--};
+				return (s)};
+			
+			local (linetext = op.getLineText ());
+			local (nodeType);
+			op.attributes.getOne ("type", @nodeType);
+			if nodeType == "manilaMessageReadOnly" {
+				linetext = popNameAndEmail (linetext)};
+			local (siteName, siteUrl);
+			op.attributes.getOne ("displaySiteName", @siteName);
+			op.attributes.getOne ("siteUrl", @siteUrl);
+			if defined (user.playlist.manila.sites.[siteUrl].displaySiteName) {
+				siteName = user.playlist.manila.sites.[siteUrl].displaySiteName};
+			
+			adrTitle^ = siteName + ": " + lineText;
+			adrLogic^ = "playlist.manila.openMessageForEditing (\"" + url + "\", \"" + msgNum + "\")"; //msgNum in quotes -- part of the Manila RPC spec is that msgNum may be a string
+			
+			return (true)}}}
+
+

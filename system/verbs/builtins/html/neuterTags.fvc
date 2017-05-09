@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.neuterTags
+
+on neuterTags (s, adrTable) { //6.1
+	kernel (html.neutertags)}
+
+

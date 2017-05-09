@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.members.getMemberTableWithHash
+
+on getMemberTableWithHash (groupName, userName, hashString) {
+	«Return the address to the user's table.
+		«On the way in, check the hashString and scriptError if it's not correct.
+			«This is a basic access routine for #security scripts.
+			«04/10/00; 2:43:10 PM by PBS
+	
+	local (adrUser = mainResponder.members.getMemberTable (groupName, userName));
+	if mainResponder.members.compareHashes (hashString, adrUser^.password, groupName) {
+		return (adrUser)};
+	
+	scriptError ("The password is incorrect.")}
+
+

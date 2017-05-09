@@ -1,0 +1,21 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.deleteBucket
+
+on deleteBucket (name, flDeleteContents=false) {
+	«Changes
+		«1/31/07; 12:27:40 PM by DW
+			«Added optional parameter, flDeleteContents, default false. If true, we delete the contents of the bucket before deleting the bucket.
+		«4/11/06; 9:14:10 AM by DW
+			«Created.
+	local (response);
+	s3.init ();
+	if flDeleteContents {
+		local (bucketcontents, adr);
+		s3.getBucket (name, @bucketcontents);
+		for adr in @bucketcontents {
+			s3.deleteObject ("/" + name + "/" + nameof (adr^))}};
+	response = s3.httpClient (method:"DELETE", resource: "/"+ name);
+	return (true)};
+bundle { //test code
+	deleteBucket ("aws.scripting.com", true)}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.redirect
+
+on redirect (obj) { «Redirect a message
+	return (appleEvent (Eudora.id, 'CSOm', 'eRdr', '----', objspec (obj)))}
+
+

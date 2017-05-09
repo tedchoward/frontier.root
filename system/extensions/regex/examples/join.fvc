@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.join
+
+local (theList = {"a", "b", "c"});
+dialog.notify (regex.join ("|", @theList))
+
+

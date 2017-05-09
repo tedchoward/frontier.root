@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webApp.viewStyles
+
+on viewStyles () {
+	«Changes
+		«9/1/11; 6:22:27 PM by DW
+			«Created.
+	local (pta = html.getpagetableaddress ());
+	wp.newTextObject ("{bodytext}", @pta^.template);
+	pta^.autoParagraphs = false;
+	pta^.clayCompatibility = false;
+	pta^.activeUrls = false;
+	pta^.processMacros = false;
+	pta^.expandGlossaryItems = false;
+	pta^.responseHeaders.["Content-Type"] = "text/css";
+	return (string (webApp.data.styles))};
+bundle { //test code
+	viewStyles ()}
+
+

@@ -1,0 +1,18 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.simpleDb.getTimeStamp
+
+on getTimeStamp (when=clock.now ()) {
+	«Changes
+		«12/30/07; 6:43:20 PM by DW
+			«Created.
+			«http://www.w3.org/TR/xmlschema-2/#dateTime
+			«"2007-12-31T02:36:22.000Z"
+	on pad (num) {
+		return (string.padwithzeros (num, 2))};
+	local (day, month, year, hour, minute, second, tz = date.getCurrentTimeZone (), s);
+	date.get (when - tz, @day, @month, @year, @hour, @minute, @second);
+	s = year + "-" + pad (month) + "-" + pad (day) + "T" + pad (hour) + ":" + pad (minute) + ":" + pad (second) + ".000Z";
+	return (s)};
+bundle { //test code
+	dialog.alert (getTimeStamp ())}
+
+

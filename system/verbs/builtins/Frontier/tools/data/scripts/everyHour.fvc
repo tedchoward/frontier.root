@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.data.scripts.everyHour
+
+on everyHour () {
+	«Changes
+		«<%now%> by <%initials%>
+			«Created. 
+	local (adrdata = <%toolname%>Suite.init ());
+	adrdata^.stats.ctHours++};
+bundle { //test code
+	everyHour ()}
+
+

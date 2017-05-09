@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.geturl
+
+on geturl (s) { «Get a URL and display it in a window
+	return (appleEvent (Fetch.id, 'GURL', 'GURL', '----', string (s)))}
+
+

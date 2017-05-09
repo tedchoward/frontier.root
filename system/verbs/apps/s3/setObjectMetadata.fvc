@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.setObjectMetadata
+
+on setObjectMetadata (path, adrmetadata) {
+	«Changes
+		«8/24/13; 8:26:26 AM by DW
+			«Created. Not efficient, but gets the job done. I needed this in order to be able to set a bunch of documents to redirect. 
+	local (filetext);
+	try {
+		filetext = s3.getObject (path)}
+	else {
+		filetext = " "};
+	s3.newobject (path, filetext, adrmeta:adrmetadata)};
+bundle { //test code
+	local (metadata);
+	new (tabletype, @metadata);
+	metadata.["website-redirect-location"] = "http://docs.fargo.io/fargo";
+	setObjectMetadata ("/smallpicture.com/test.html", @metadata)}
+
+

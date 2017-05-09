@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:workspace.userlandSamples.soapValidatorScripts.soapValidatorHandlers.arrayOfStructsTest
+
+on arrayOfStructsTest (myArray) {
+	local (i, ct = 0, struct);
+	for i = 1 to sizeof (myArray) {
+		struct = myArray [i];
+		ct = ct + struct.curly};
+	return (ct)}
+
+

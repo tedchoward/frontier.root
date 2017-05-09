@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.quit
+
+on quit (saving = nil) { «Perform tasks before termination, then terminate
+	return (core.quit (Fetch.id, saving))}
+
+

@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.setObjectShadowDepth
+
+on setObjectShadowDepth (name, shadowDepth) {
+	new (tableType, @atts);
+	atts.sdwd = number (shadowDepth);
+	return (card.setObjectAttributes (name, @atts))}
+
+

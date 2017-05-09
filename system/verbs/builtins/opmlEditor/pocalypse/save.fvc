@@ -1,0 +1,63 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.pocalypse.save
+
+on save () {
+	«Changes
+		«4/3/12; 6:44:19 PM by DW
+			«Fix the title on the outline we send to the server. Used to be lo -- now it's Reviews from "bullmancuso".
+		«4/3/12; 6:39:26 AM by DW
+			«Unconditionally store the username in the server table, not just if it doesn't exist. 
+		«4/2/12; 6:00:28 PM by DW
+			«After testing on my laptop, added some initializations. 
+		«3/29/12; 5:03:05 PM by DW
+			«Created.
+	local (adrdata = opmlEditor.pocalypse.init (), adroutline = address (window.frontmost ()), opmltext, atts, password);
+	bundle { //get subs into opmltext, attributes into atts
+		local (outlinetitle = "Reviews from \"<%username%>\"");
+		local ([outlinetitle] = adroutline^, oldtarget = target.set (@[outlinetitle]));
+		op.go (left, infinity);
+		op.attributes.getall (@atts);
+		op.reorg (up, infinity);
+		if op.go (down, 1) {
+			op.demote ();
+			op.deleteline ()};
+		op.promote ();
+		op.deleteline ();
+		target.set (oldtarget);
+		opmltext = op.outlinetoxml (@[outlinetitle]);
+		opmltext = string.replace (opmltext, "&lt;%username%&gt;", atts.username);
+		wp.newtextobject (opmltext, @scratchpad.myopmltext);
+		scratchpad.myatts = atts};
+	bundle { //save in local folder or S3 archive or both
+		local (serialnum = string.padwithzeros (++adrdata^.stats.archiveSerialnum, 3));
+		local (canonicalname = html.directory.getcanonicalname (atts.title));
+		local (fname = canonicalname + serialnum + ".opml");
+		if sizeof (adrdata^.prefs.folder) > 0 {
+			local (f = adrdata^.prefs.folder + file.getdatepath () + fname);
+			file.surefilepath (f);
+			file.writewholefile (f, opmltext)};
+		if sizeof (adrdata^.prefs.s3path) > 0 {
+			local (path = adrdata^.prefs.s3path);
+			if not (path endswith "/") {
+				path = path + "/"};
+			if not (path beginswith "/") {
+				path = "/" + path};
+			s3.newobject (path + canonicalname + ".opml", opmltext);
+			s3.newobject (path + file.getdatepath ("/") + fname, opmltext)}};
+	bundle { //get the password from the user, or database
+		local (adrwodata = opmleditor.worldoutline.init (), adrserver = @adrwodata^.servers.[atts.responder], server, username);
+		if not defined (adrserver^) {
+			new (tabletype, adrserver)};
+		if not defined (adrserver^.server) {
+			adrserver^.server =  "xmlrpc://" + atts.responder + "/RPC2"};
+		window.attributes.setone ("editorialDomain", atts.responder, adroutline);
+		adrserver^.username = atts.username; //4/3/12 by DW
+		if not opmlEditor.worldOutline.getServerInfo (@server, @username, @password, adroutline) {
+			return}};
+	bundle { //send the notes to the responder
+		local (server = "xmlrpc://" + atts.responder + "/RPC2");
+		[server].pocalypse.save (atts.url, opmltext, atts.username, password);
+		speaker.beep ()}};
+bundle { //test code
+	save ()}
+
+

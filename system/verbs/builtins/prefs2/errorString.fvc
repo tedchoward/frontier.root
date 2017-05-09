@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.prefs2.errorString
+
+on errorstring (s) {
+	«Changes
+		«8/31/11; 7:44:04 AM by DW
+			«Created.
+	return ("<span class=\"help-inline\"><red>" + s + "</red></span>")};
+bundle { //test code
+	errorstring ()}
+
+

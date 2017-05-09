@@ -1,0 +1,5 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.localization.languages.danish.strings.security.httpBadURIDirective
+
+The request could not be processed by the server because the Request-URI was not equal to the URI directive of the Authorization header.
+
+

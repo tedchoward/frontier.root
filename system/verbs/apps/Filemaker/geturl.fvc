@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.geturl
+
+on geturl (s) { «Open a FileMaker Pro database using a URL specification
+	return (appleEvent (Filemaker.id, 'GURL', 'GURL', '----', string (s)))}
+
+

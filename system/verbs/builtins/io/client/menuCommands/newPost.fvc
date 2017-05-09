@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.menuCommands.newPost
+
+on newPost () {
+	«Changes
+		«2/5/11; 2:14:29 PM by DW
+			«Code behind the New Post button in the Instant Outliner.
+	if not defined (scripting2Suite) {
+		dialog.alert ("This command requires that the Scripting2 blogging tool is installed.");
+		return};
+	scripting2Suite.editor.newPost (dir:down)};
+bundle { //test code
+	newPost ()}
+
+

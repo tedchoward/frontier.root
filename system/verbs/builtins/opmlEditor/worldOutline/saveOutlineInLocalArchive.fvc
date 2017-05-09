@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.saveOutlineInLocalArchive
+
+on saveOutlineInLocalArchive (url, opmltext) {
+	«Changes
+		«11/3/11; 9:19:50 AM by DW
+			«I don't trust the server, so I want a local copy of all the saved outlines. 
+	local (adrdata = opmlEditor.worldOutline.init ());
+	if adrdata^.prefs.flArchivedOutlinesLocally {
+		local (f = url);
+		if f beginswith "http://" {
+			f = string.delete (f, 1, sizeof ("http://"))};
+		bundle { //delete all characters up to the first numeric character in the file path
+			local (i);
+			for i = 1 to sizeof (f) {
+				if string.isnumeric (f [i]) {
+					f = string.delete (f, 1, i-1);
+					break}}};
+		f = adrdata^.prefs.folderLocalArchive + string.replaceall (f, "/", file.getpathchar ());
+		file.surefilepath (f);
+		file.writewholefile (f, opmltext)}}
+«bundle //test code
+	«saveOutlineInLocalArchive ("http://static.reallysimple.org/worldoutline/dave/2011/11/02/archive004.opml", "xxx")
+
+

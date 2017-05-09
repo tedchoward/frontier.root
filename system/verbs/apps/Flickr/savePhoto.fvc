@@ -1,0 +1,34 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.savePhoto
+
+on savePhoto (id, folder, flDownloadIfFileExists=false) {
+	«Changes
+		«8/12/10; 5:13:08 AM by DW
+			«Try for "Original" size first, then Large, then Medium, then return false.
+		«8/11/10; 11:06:13 AM by DW
+			«Save the Large version of a Flickr photo in the indicated folder. Returns false if it the photo doesn't have a Large version.
+	local (photoinfo, sizes);
+	Flickr.photos.getInfo (id, nil, @photoinfo);
+	Flickr.photos.getSizes (id, @sizes);
+	on getSize (sizename) {
+		if defined (sizes.[sizename]) {
+			local (f = folder + id + ".jpg", fldownload = true);
+			file.surefilepath (f);
+			if file.exists (f) {
+				if not flDownloadIfFileExists {
+					fldownload = false}};
+			if fldownload {
+				file.writewholefile (f, tcp.httpreadurl (sizes.[sizename].source));
+				file.setcreated (f, photoinfo.dates.taken);
+				file.setmodified (f, photoinfo.dates.taken)};
+			return (true)}
+		else {
+			return (false)}};
+	if not getSize ("Original") {
+		if not getSize ("Large") {
+			if not getSize ("Medium") {
+				return (false)}}};
+	return (true)};
+bundle { //test code
+	savePhoto ("4576175120", "Ohio:testing:")}
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:TEXT:user.html.glossary.WordNet
+
+<form action="http://www.cogsci.princeton.edu/cgi-bin/webwn/" method="get"><input type="hidden" name="stage" value="1">
+
+<table><tr><td><input type="text" name="word" size="15"></td><td><input type="submit" value="WordNet"></td></tr></table></form>
+
+

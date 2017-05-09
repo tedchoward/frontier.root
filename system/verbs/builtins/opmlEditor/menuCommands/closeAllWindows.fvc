@@ -1,0 +1,39 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.closeAllWindows
+
+on closeAllWindows () {
+	«Changes
+		«5/27/12; 7:15:48 PM by DW
+			«Added code that allows for this in the case of the Quick Script window, Find & Replace Dialog, and scripts attached to menu commands. Also, if it's a guest database window, just hide, don't close it because that closes the file. Oops. Don't want to do that!
+				«http://worknotes.scripting.com/may2012/52712ByDw/closeAllWindowsCommand
+		«2/11/12; 1:57:28 AM by DW
+			«New command in the Misc menu. We don't close windows that we can't (About OPML) or windows that if we closed them would cause the OPML Editor to cough up hair. It really should be possible to close *any* window. But this is how it works. :-(
+	if dialog.confirm ("Close all windows?") {
+		on visit (adr) {
+			if window.isopen (adr) {
+				if adr endswith "config.root\"]" {
+					return (true)};
+				if adr == "About OPML" {
+					return (true)};
+				if adr == "root" {
+					return (true)};
+				if adr beginswith "Script for " { //5/27/12 by DW -- it's a menu script
+					return (true)};
+				if adr beginswith "Quick Script" { //5/27/12 by DW
+					return (true)};
+				if adr beginswith "Find & Replace Dialog" { //5/27/12 by DW
+					return (true)};
+				if typeof (adr^) == scripttype {
+					script.compile (adr)};
+				bundle { //if it's a guest database window, just hide it, 5/27/12 by DW
+					if table.inguestdatabase (adr) {
+						local (addressList = string.parseAddress (adr));
+						if sizeof (addressList) == 1 {
+							window.hide (adr);
+							return (true)}}};
+				window.close (adr)};
+			return (true)};
+		window.visit (@visit)}};
+bundle { //test code
+	closeAllWindows ()}
+
+

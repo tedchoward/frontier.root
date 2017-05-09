@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.xmlutils.createRequest
+
+on createRequest (adrrequest, s = nil) {
+	local (adrdocument = soap.xmlutils.createMessage (adrrequest, s));
+	adrrequest^.type = "request";
+	return (adrdocument)}
+
+

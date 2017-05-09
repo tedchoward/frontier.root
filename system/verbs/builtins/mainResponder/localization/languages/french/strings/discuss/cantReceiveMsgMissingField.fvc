@@ -1,0 +1,5 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.localization.languages.french.strings.discuss.cantReceiveMsgMissingField
+
+Ce message ne peut &ecirc;tre accept&eacute; car un des champs est manquant, [[fieldname]], ou la valeur du champ ne correspond pas &agrave; celle attendue.
+
+

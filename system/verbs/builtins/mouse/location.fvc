@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mouse.location
+
+on location () {
+	kernel (mouse.location)}
+
+

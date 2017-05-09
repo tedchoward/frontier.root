@@ -1,0 +1,9 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.card.details.readme
+
+This table contains lots of random stuff that I needed to have around while working on the apps.card table. 
+
+You're free to browse, you can learn a bunch of stuff about how it's put together. Some of the scripts are called by card.xxx level scripts, so if you change things, you can definitely also break things. Be careful.
+
+DW 12/29/94
+
+

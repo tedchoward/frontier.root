@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.bookmarksMenu.openUrl
+
+on openUrl (url, windowTitle) {
+	Frontier.tools.windowTypes.commands.openUrl (url)};
+	«bundle //old code for Frontier
+		«if string.lower (url) endsWith ".opml"
+			«local (urlList = string.urlSplit (url))
+			«local (opmlText = string.httpResultSplit (tcp.httpClient (server:urlList [2], path:urlList [3])))
+			«local (adrTable = @system.temp.bookmarkedOutlines)
+			«if not defined (adrTable^)
+				«new (tableType, adrTable)
+			«local (adrOutline = @adrTable^.[windowTitle])
+			«op.xmlToOutline (opmlText, adrOutline)
+			«edit (adrOutline)
+			«window.setTitle (adrOutline, windowTitle)
+			«window.zoom (adrOutline)
+		«else //not opml
+			«webBrowser.openUrl (url)
+			«webBrowser.bringToFront ()
+bundle { //debugging
+	openUrl ("http://www.scripting.com/", "test")}
+
+

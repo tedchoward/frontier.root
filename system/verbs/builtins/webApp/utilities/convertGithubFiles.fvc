@@ -1,0 +1,33 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webApp.utilities.convertGithubFiles
+
+on convertGithubFiles () {
+	«Changes
+		«9/30/11; 11:13:43 AM by DW
+			«Downloads all the files we include from github and stores them in your own S3 space. Make sure the pref at user.prefs.githubMirrorPath is set. 
+	local (s3path = user.prefs.githubMirrorPath, s = string (webApp.data.headIncludesOrig), urls, ix);
+	bundle { //scrape into urls table
+		new (tabletype, @urls);
+		loop {
+			ix = string.patternmatch ("\"http://", s);
+			if ix == 0 {
+				break};
+			s = string.delete (s, 1, ix);
+			ix = string.patternmatch ("\"", s);
+			url = string.mid (s, 1, ix-1);
+			s = string.delete (s, 1, ix);
+			urls.[url] = ""}};
+	bundle { //write urls to s3
+		local (adrurl, url, path, fname);
+		for adrurl in @urls {
+			url = nameof (adrurl^);
+			fname = string.lastfield (url, "/");
+			path = s3path + fname;
+			s3.newobject (path, tcp.httpreadurl (url));
+			adrurl^ = "http:/" + path}};
+	webApp.data.urlmap = urls;
+	s = string.multiplereplaceall (string (webApp.data.headIncludesOrig), @urls);
+	op.newoutlineobject (s, @webApp.data.headIncludes)};
+bundle { //test code
+	convertGithubFiles ()}
+
+

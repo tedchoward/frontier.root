@@ -1,0 +1,129 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.getSpecialFolderPath
+
+on getSpecialFolderPath (vol, specialfolder, create) {
+	«Changes:
+		«2/28/09; 8:24:28 AM by DW
+			«Make it so that "Desktop Folder" works on Windows, so you can write code that saves to the desktop on either Mac or Win that uses the same special folder name.
+		«11/25/07; 2:08:28 PM by DW
+			«On the Macintosh, add the Pictures folder to the supported locations.
+		«10/30/07; 12:25:29 PM by DW
+			«Add the Documents folder to the supported locations.
+		«10/16/07; 10:43:36 AM by DW
+			«Fixed longstanding bug, where sys.unixShellCommand ("who am i") would return "davewine" when we need it to return "davewiner".
+		«5.0.1 dmb: added "temporary item" support for Windows
+			«maps to the Temp directory
+		«8/26/01; 11:30:11 PM by JES
+			«Added support for special folders used for MacOS X.
+	on kernelcall (vol, specialfolder, create) {
+		kernel (file.getSpecialFolderPath)};
+	case sys.os () {
+		"MacOS" {
+			if system.environment.isCarbon {
+				if vol == "" {
+					vol = file.getSystemDisk ()};
+				local (pc = file.getPathChar ());
+				local (folder);
+				on getUserFolder () {
+					local (usersfolder = vol + "Users" + pc);
+					local (username = string.nthField (sys.unixShellCommand ("who am i"), ' ', 1));
+					local (folder = usersfolder + username + pc);
+					if file.exists (folder) {
+						return (folder)};
+					local (subfolder); //10/16/07 by DW -- fix long-standing bug
+					fileloop (subfolder in usersfolder) {
+						if file.filefrompath (subfolder) beginswith username {
+							return (subfolder)}};
+					return (folder)};
+				case string.lower (specialfolder) {
+					"apple menu items" {
+						scriptError ("Can't get the path to the Apple Menu Items folder because Mac OS X does not have an Apple Menu Items folder.")};
+					"applications" {
+						folder = vol + "Applications" + pc};
+					"desktop folder" {
+						folder = getUserFolder () + "Desktop" + pc};
+					"documents" {
+						folder = getUserFolder () + "Documents" + pc};
+					"pictures" {
+						folder = getUserFolder () + "Pictures" + pc};
+					"extensions" {
+						folder = vol + "System" + pc + "Extensions" + pc};
+					"favorites" {
+						folder = getUserFolder () + "Library" + pc + "Favorites" + pc};
+					"fontcollections" {
+						folder = getUserFolder () + "Library" + pc + "FontCollections" + pc};
+					"fonts" {
+						folder = getUserFolder () + "Library" + pc + "Fonts" + pc};
+					"preferences" {
+						folder = getUserFolder () + "Library" + pc + "Preferences" + pc};
+					"startup items";
+					"startupitems" {
+						scriptError ("Can't get the path to the Startup Items folder because Mac OS X does not have a Startup Items folder.")};
+					"system";
+					"system folder" {
+						folder = vol + "System" + pc};
+					"temp";
+					"temporary items" {
+						folder = vol + "Temporary Items" + pc};
+					"trash" {
+						folder = vol + "Trash" + pc}};
+				if create {
+					file.sureFilePath (folder);
+					file.sureFolder (folder)};
+				return (filespec (folder))}
+			else { //Classic
+				kernelcall (vol, specialfolder, create)}};
+		"Win95";
+		"WinNT" {
+			«Monday, December 8, 1997 at 3:59:21 PM by DW
+				«"Desktop" -- Windows desktop - virtual folder at the root of the name space.
+				«"DesktopDirectory" -- File system directory used to physically store file
+					«objects on the desktop (not to be confused with the desktop folder itself).
+				«"Fonts" -- Virtual folder containing fonts.
+				«"NetHood" -- File system directory containing objects that appear in the network neighborhood.
+				«"Personal" -- File system directory that serves as a common respository for documents
+				«"Programs" -- File system directory that contains the user's program groups (which are also file system directories).
+				«"Recent" -- File system directory that contains the user's most recently used documents.
+				«"SendTo" -- File system directory that contains Send To menu items.
+				«"StartMenu" -- File system directory containing Start menu items.
+				«"StartUp" -- File system directory that corresponds to the user's Startup program group.
+				«"Templates" -- File system directory that serves as a common repository for document templates.
+				«"Windows" -- The Windows directory is the directory where an application
+					«should store initialization and help files. If the user is running a shared
+					«version of Windows, the Windows directory is guaranteed to be private for
+					«each user. 
+				«"System" -- Retrieves the path of the Windows system directory. 
+					«The system directory contains such files as Windows libraries, drivers, and font files
+			case string.lower (specialfolder) {
+				"preferences" {
+					return (file.getPrefsSubFolder (specialfolder))};
+				"temp" {
+					local (tempfolder);
+					if vol == "" {
+						vol = file.getSystemDisk ()};
+					vol = vol [1] + ":\\";
+					tempfolder = vol + "Temp\\";
+					if create and not file.exists (tempfolder) {
+						try {file.sureFolder (tempfolder)}};
+					return (tempfolder)};
+				"desktop folder" { //2/28/09 by DW
+					return (kernelcall (vol, "DesktopDirectory", create))}}
+			else {
+				try {
+					return (kernelcall (vol, specialfolder, create))}
+				else {
+					local (errormessage);
+					if string.lower (string.firstword (specialfolder)) == "temporary" {
+						local (folder);
+						if vol == "" {
+							vol = file.getSystemDisk ()};
+						folder = vol + "\\Temp\\";
+						if create {
+							file.sureFolder (folder)};
+						return (true)};
+					errormessage = "Couldn't get the folder path because \"" + specialfolder;
+					errormessage = errormessage + "\" is not a special folder name.";
+					return (scriptError (errormessage))}}}}};
+bundle { //testing
+	dialog.alert (file.getSpecialFolderPath ("", "desktop folder", true))}
+
+

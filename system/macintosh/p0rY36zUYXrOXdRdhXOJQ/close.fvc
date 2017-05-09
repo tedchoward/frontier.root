@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.core.close
+
+on close (appID, obj, saving = 'no  ', savingIn = nil) { «Close an object
+	return (appleEvent (appID, 'core', 'clos', '----', objspec (obj), 'savo', enum (saving), 'kfil', alias (savingIn)))}
+
+

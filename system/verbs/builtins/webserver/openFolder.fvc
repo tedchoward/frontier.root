@@ -1,0 +1,31 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webserver.openFolder
+
+on openFolder (pta) {
+	«Changes
+		«8/10/08; 5:24:45 AM by DW
+			«Make sure the folder exists before opening it.
+		«1/11/08; 10:28:36 AM by DW
+			«Factored into the main root from photoFan.root because more than one app might need to open a folder from its desktop website.
+		«11/23/07; 6:41:55 PM by DW
+			«Created. Open a folder that's passed as a parameter. 
+	«scratchpad.params = pta^
+	local (args);
+	new (tabletype, @args);
+	webserver.parseargs (pta^.searchargs, @args);
+	file.surefilepath (args.folder + "xxx"); //8/10/08 by DW
+	file.openfolder (args.folder);
+	finder.bringtofront ();
+	pta^.code = 302; //non-permanent redirect
+	pta^.responseBody = webserver.util.buildErrorPage ("302 FOUND", "Found the page.");
+	pta^.responseHeaders.location = pta^.requestHeaders.Referer;
+	pta^.responseHeaders.URI = pta^.requestHeaders.Referer}
+«bundle //test code
+	«local (pt)
+	«new (tabletype, @pt)
+	«pt.searchargs = "folder=" + string.urlencode (file.getsystemdisk ())
+	«new (tabletype, @pt.responseHeaders)
+	«new (tabletype, @pt.requestHeaders)
+	«pt.requestHeaders.Referer = "http://www.scripting.com/"
+	«openfolder (@pt)
+
+

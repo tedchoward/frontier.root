@@ -1,0 +1,77 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.openRoot
+
+on openRoot () {
+	«Changes
+		«12/14/12; 12:15:47 PM by DW
+			«Add to history.
+				«http://worknotes.scripting.com/december2012/121412ByDw/historyFunctionInEditor
+		«11/5/12; 8:48:15 PM by DW
+			«When opening an Untitled window, prompt for the title. 
+				«http://worknotes.scripting.com/november2012/11512ByDw/promptForWindowTitle
+		«8/13/12; 10:04:13 AM by DW
+			«Decode special characters.
+				«http://worknotes.scripting.com/august2012/81212ByDw/characterEncodingIssues
+		«7/20/12; 3:40:13 PM by DW
+			«Set the rightClickCallback attribute for the window so we get the new Types menu when we right-click in a window that's opened by clicking on the edit link on the Roots page. 
+		«3/23/12; 12:42:26 PM by DW
+			«Save authorName and authorEmail params as attributes on the outline editing window.
+		«2/13/12; 10:15:09 PM by DW
+			«Adapt to multi-server setup.
+		«1/6/12; 9:25:22 PM by DW
+			«Only redirect through the Referer header if it's defined.
+		«12/30/11; 10:47:30 AM by DW
+			«Called from the Roots page in a World Outline installation when the user clicks the Edit icon next to a root outline. We simply open it in a window with the right buttons at the top of the window. Redirect back to the page we were linked to from. 
+	local (adrdata = opmleditor.worldoutline.init (), pta = html.getpagetableaddress (), args);
+	scratchpad.openrootparams = pta^;
+	new (tabletype, @args);
+	webserver.parseargs (pta^.searchargs, @args);
+	scratchpad.openrootargs = args;
+	
+	op.getnetoutline (args.root, @adrtable, flKeepXml:true);
+	if not defined (adrtable^.outline) { //8/13/12 by DW
+		local (s = adrtable^.xmltext);
+		s = string.replaceall (s, "&amp;#", "&#");
+		s = string.multiplereplaceall (s, @opmlEditor.data.worldOutline.replaceTableInverted1);
+		s = string.multiplereplaceall (s, @opmlEditor.data.worldOutline.replaceTableInverted2);
+		s = string.latinToMac (s);
+		«wp.newtextobject (s, @scratchpad.myfuckingincomingopmltext)
+		op.xmltooutline (s, @adrtable^.outline)};
+	frontier.bringtofront ();
+	edit (@adrtable^.outline, adrButtonTable:@opmlEditor.worldOutline.buttons.archive);
+	
+	bundle { //add to history -- 12/14/12 by DW
+		args.title = window.gettitle (window.frontmost ());
+		opmlEditor.worldOutline.history.add (args)}; //12/13/12 by DW
+	
+	bundle { //prompt for title of Untitled outlines -- 11/5/12 by DW
+		local (adr = window.frontmost ());
+		if string.lower (window.gettitle (adr)) == "untitled" {
+			window.update (adr);
+			opmlEditor.menuCommands.setOutlineTitle ()}};
+	
+	window.attributes.setone ("urlOutline", args.root, @adrtable^.outline);
+	window.attributes.setone ("domain", args.domain, @adrtable^.outline);
+	window.attributes.setone ("authorName", args.authorName, @adrtable^.outline); //3/23/12 by DW
+	window.attributes.setone ("authorEmail", args.authorEmail, @adrtable^.outline); //3/23/12 by DW
+	window.attributes.setone ("rightClickCallback", @opmlEditor.worldOutline.rightClickCallback); //7/20/12 by DW
+	if defined (args.editorialDomain) {
+		local (adrserver);
+		window.attributes.setone ("editorialDomain", args.editorialDomain, @adrtable^.outline);
+		window.attributes.setone ("username", args.username, @adrtable^.outline); //must be present
+		adrserver = @adrdata^.servers.[args.editorialDomain];
+		if not defined (adrserver^) {
+			new (tabletype, adrserver)};
+		if not defined (adrserver^.username) {
+			adrserver^.username = args.username};
+		if not defined (adrserver^.server) {
+			adrserver^.server =  "xmlrpc://" + args.editorialDomain + "/RPC2"}};
+	if defined (pta^.requestHeaders.Referer) {
+		webserver.redirect (pta, pta^.requestHeaders.Referer)};
+	return ("")};
+bundle { //test code
+	try {
+		delete (@system.temp.op.netOutlines.["http://static.scripting.com/orlando/world/dave/2012/11/05/archive015.opml"])};
+	html.setpagetableaddress (@scratchpad.openrootparams);
+	openRoot ()}
+
+

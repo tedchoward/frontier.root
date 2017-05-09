@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.copyAddressCommand
+
+«Changes
+	«7/17/11; 9:30:45 AM by DW
+		«Now if a script window is frontmost it will put the address of the script on the clipboard. Cuts down the number of steps to do this. Also works for other types, outlines, menus, etc.
+	«8/6/08; 9:44:09 AM by DW
+		«Code for the Table menu's Copy Address command. New feature, loop over system.paths, if the address begins with one of the values, pop it off and break out of the loop.
+		«The check for "suites." was there before we moved this code out of the menubar object and into the system.menu.scripts table.
+local (adrfront);
+try {
+	adrfront = address (window.frontmost ())}
+else {
+	scripterror ("Can't get the address of the front window.")};
+
+local (adrtocopy = adrfront);
+case typeof (adrfront^) {
+	tabletype {
+		adrtocopy = table.getcursor ()}};
+
+local (s = string.popFileFromAddress (adrtocopy), adr);
+for adr in @system.paths {
+	if s beginswith adr^ {
+		s = string.delete (s, 1, sizeof (adr^) + 1);
+		break}};
+if s beginswith "suites." {
+	s = string.delete (s, 1, sizeof ("suites."))};
+clipboard.putvalue (s)
+
+

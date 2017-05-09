@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.getErrorFile
+
+on getErrorFile (appID = WebStar.id) { «gets error file setting
+	with objectModel, WebStar.eventInfo {
+		return (core.get (appID, errorFile))}}
+
+

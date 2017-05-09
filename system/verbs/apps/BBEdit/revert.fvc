@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.revert
+
+on revert (obj) { «Restore the object to its last saved state
+	return (appleEvent (BBEdit.id, 'misc', 'rvrt', '----', objspec (obj)))}
+
+

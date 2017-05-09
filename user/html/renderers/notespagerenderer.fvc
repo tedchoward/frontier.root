@@ -1,0 +1,32 @@
+FrontierVcsFile:3:scpt:user.html.renderers.notespagerenderer
+
+on notespagerenderer (adroutline) {
+	op.firstsummit ();
+	op.fullexpand ();
+	local (level = 0);
+	on visit () {
+		loop {
+			local (hassubs = op.countSubs (1) > 0);
+			local (s = "");
+			s = s + "<table border=0 cellspacing=2>";
+			if level > 0 { «add a dummy cell to do the indentation
+				s = s + "<td height=17 width=" + (17 * level) + "></td>"};
+			local (linetext = op.getlinetext ());
+			linetext = string.replaceAll (linetext, "<", "&lt;");
+			if hassubs {
+				linetext = "<b>" + linetext + "</b>"};
+			s = s + "<td height=17>" + linetext + "</table>";
+			op.setlinetext (s);
+			window.msg (s);
+			if hassubs {
+				op.go (right, 1);
+				level++;
+				visit ();
+				level--;
+				op.go (left, 1)};
+			if not op.go (down, 1) {
+				break}}};
+	visit ();
+	return (string (adroutline^))}
+
+

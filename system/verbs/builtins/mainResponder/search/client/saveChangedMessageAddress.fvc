@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.search.client.saveChangedMessageAddress
+
+on saveChangedMessageAddress (adrMsg) {
+	«Index a message sometime in the future.
+		«Just store the address in a queue in config.mainResponder.data.changedMessages.
+		«11/2/99; 1:25:24 PM by PBS
+	
+	if not defined (config.mainResponder.data) {
+		new (tableType, @config.mainResponder.data)};
+	local (adrQueue = @config.mainResponder.data.changedMessages);
+	if not defined (adrQueue^) {
+		new (tableType, adrQueue)};
+	
+	adrQueue^.[adrMsg] = clock.now ();
+	
+	fileMenu.saveMyRoot (adrQueue);
+	
+	return (true)}
+
+

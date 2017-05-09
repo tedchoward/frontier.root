@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.uBASE.nthFile
+
+on nthFile (n) {
+	return (systemEvent ('ubas', 'filn', '----', short (n)))}
+
+

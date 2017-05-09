@@ -1,0 +1,232 @@
+FrontierVcsFile:3:optx:system.verbs.apps.winShell.["DocServer Source"]
+
+winShell.about
+	Syntax
+		winShell.about ()
+	Params
+		None required.
+	Action
+		Displays the Windows About Window.
+	Returns
+		True.
+	Examples
+		winShell.about ()
+			// true
+	Notes
+		This verb is Windows-specific.
+		This verb is implemented in the ScriptControlDLL DLL.
+winShell.createShortcut
+	Syntax
+		winShell.createShortcut (path, targetPath)
+	Params
+		path is the path on disk to the new shortcut file.
+		targetPath is the path on disk that the shortcut points to.
+	Action
+		Creates a shortcut at path linking to the file at targetPath.
+	Returns
+		True.
+	Examples
+		winShell.createShortcut ("C:\\Frontier.lnk", frontier.getProgramPath ())
+			// true
+	Notes
+		It's up to the caller to be sure there's a .lnk suffix at the end of path.
+		This verb is Windows-specific; it's implement by a VBScript script.
+		This verb requires that the Microsoft Script Control and Windows Scripting Host are installed.
+		On the Macintosh, call file.newAlias.
+		Once this verb has been burnt-in, file.newAlias will call this verb on Windows, so file.newAlias will be cross-platform.
+	See Also
+		winShell.createUrlShortcut
+		winShell.resolveShortcut
+winShell.createUrlShortcut
+	Syntax
+		winShell.createUrlShortcut (path, url)
+	Params
+		path is the path on disk to the new shortcut file.
+		url is the url the new shortcut should point to.
+	Action
+		Creates an Internet Shortcut at path linking to the url.
+	Returns
+		True.
+	Examples
+		winShell.createUrlShortcut ("C:\\Scripting News.url", "http://www.scriptingnews.com/")
+			// true
+	Notes
+		It's up to the caller to be suer there's a .url suffix at the end of path.
+		This verb is Windows-specific; it's implement by a VBScript script.
+		This verb requires that the Microsoft Script Control and Windows Scripting Host are installed.
+	See Also
+		winShell.createShortcut
+winShell.expandEnvironmentStrings
+	Syntax
+		winShell.expandEnvironmentStrings (s)
+	Params
+		None required.
+	Action
+		Creates a table containing the Windows system environment variables.
+	Returns
+		The table.
+	Examples
+		winShell.getEnvironmentVariables ()
+	Notes
+		For each variable, there's a table entry whose name is the name of the variables and whose value is the value of the variable.
+		This verb is Windows-specific; it's implement by a VBScript script.
+		This verb requires that the Microsoft Script Control and Windows Scripting Host are installed.
+winShell.exploreFolder
+	Syntax
+		winShell.exploreFolder (folderPath)
+	Params
+		folderPath is the path to the folder you want to open in the Explorer.
+	Action
+		Opens a new Explorer window, with the folder selected in the left pane and its contents displayed in the right pane.
+	Returns
+		True.
+	Notes
+		This verb is Windows-specific.
+		This verb is implemented in the ScriptControlDLL DLL.
+	See Also
+		"file.reveal"
+winShell.getEnvironmentVariables
+	Syntax
+		winShell.getEnvironmentVariables ()
+	Params
+		None required.
+	Action
+		Creates a table containing the Windows system environment variables.
+	Returns
+		The table.
+	Examples
+		winShell.getEnvironmentVariables ()
+	Notes
+		For each variable, there's a table entry whose name is the name of the variables and whose value is the value of the variable.
+		This verb is Windows-specific; it's implement by a VBScript script.
+		This verb requires that the Microsoft Script Control and Windows Scripting Host are installed.
+winShell.getRegistryValue
+	Syntax
+		winShell.getRegistryValue (registryPath)
+	Params
+		registryPath is the path to an item in the Windows registry.
+	Action
+		Gets the value stored at registryPath.
+	Returns
+		The value.
+	Examples
+		winShell.getRegistryValue ("HKCU\\Software\\UserLand\\Frontier\\FrameH")
+			// "904"
+	Notes
+		The beginning of the path must contain one of the following:
+			HKCU = HKEY_CURRENT_USER
+			HKLM = HKEY_LOCAL_MACHINE
+			HKCR = HKEY_CLASSES_ROOT
+		This verb is Windows-specific; it's implement by a VBScript script.
+		This verb requires that the Microsoft Script Control and Windows Scripting Host are installed.
+winShell.mapNetworkDrive
+	Syntax
+		winShell.mapNetworkDrive (drive, share)
+	Params
+		drive is a drive specification of the form Z:
+		share is a share specification of the form \\server\share
+	Action
+		Maps a network drive to a drive letter.
+	Returns
+		True.
+	Examples
+		winShell.mapNetworkDrive ("F:", "\\\\Madrid\\D Drive")
+			// true
+	Notes
+		Be sure to escape the backspaces.
+		This verb is Windows-specific; it's implement by a VBScript script.
+		This verb requires that the Microsoft Script Control and Windows Scripting Host are installed.
+winShell.minimizeAll
+	Syntax
+		winShell.minimizeAll
+	Params
+		None required.
+	Action
+		Minimizes all windows.
+	Returns
+		True.
+	Examples
+		winShell.minimizeAll ()
+			// true
+	Notes
+		There is no animation -- the windows are all just minimized.
+		This verb is Windows-specific; it's implement by a VBScript script.
+		This verb requires that the Microsoft Script Control and Windows Scripting Host are installed.
+winShell.msgBox
+	Syntax
+		winShell.msgBox (message, buttonsNum, title)
+	Params
+		message is the text to display in the dialog box.
+		buttonsNum is the added together sum of these styles:
+			0 Display OK button only. 
+			1 Display OK and Cancel buttons. 
+			2 Display Abort, Retry, and Ignore buttons. 
+			3 Display Yes, No, and Cancel buttons. 
+			4 Display Yes and No buttons. 
+			5 Display Retry and Cancel buttons.
+			16 Display Critical Message icon.  
+			32 Display Warning Query icon. 
+			48 Display Warning Message icon. 
+			64 Display Information Message icon. 
+			0 First button is default. 
+			256 Second button is default. 
+			512 Third button is default. 
+			768 Fourth button is default. 
+			0 Application modal; the user must respond to the message box before continuing work in the current application. 
+			4096 System modal; all applications are suspended until the user responds to the message box. 
+		title is the title of the dialog box.
+	Action
+		Displays a VBScript dialog box with the specified message, style, and title.
+	Returns
+		The number of the button hit. Possible values are:
+			1 OK 
+			2 Cancel 
+			3 Abort 
+			4 Retry 
+			5 Ignore 
+			6 Yes 
+			7 No 
+	Examples
+		winShell.msgBox ("Hello Frontier!", 2 + 48 + 512, "UserLand Frontier")
+			// "4"
+		(The Retry button was clicked.)
+	Notes
+		This verb is Windows specific; it's implement by a VBScript script.
+		Frontier provides many other built-in "dialog verbs".
+		This verb requires that the Microsoft Script Control is installed.
+winShell.print
+	Syntax
+		winShell.print (f)
+	Params
+		f is the path to the file you want to print.
+	Action
+		Prints the file specified by f.
+	Returns
+		True.
+	Examples
+		winShell.print ("C:\\Documents\\MyWord.doc")
+	Notes
+		This verb is Windows-specific.
+		This verb is implemented in the ScriptControlDLL DLL.
+winShell.resolveShortcut
+	Syntax
+		winShell.resolveShortcut (shortcutPath)
+	Params
+		shortcutPath is a file path to a shortcut.
+	Action
+		Gets the path the shortcut points to.
+	Returns
+		The path to the shortcut.
+	Examples
+		winShell.resolveShortcut ("C:\\Frontier.lnk")
+			// "D:\\Frontier\\Frontier.exe"
+	Notes
+		This verb is Windows-specific.
+		On the Macintosh, use file.resolveAlias.
+		Once this verb has been burnt-in, then file.resolveAlias will call this verb, so file.resolveAlias will be cross-platform.
+		This verb is implemented in the ScriptControlDLL DLL.
+	See Also
+		winShell.createShortcut
+
+
+

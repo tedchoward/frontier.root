@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.exportMenuItem
+
+case sys.os () {
+	"MacCn";
+	"MacOS" {
+		return ("Export...")}}
+else {
+	return ("&Export...")}
+
+

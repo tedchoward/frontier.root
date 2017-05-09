@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.server.wakeWaitingThreads
+
+on wakeWaitingThreads (username=nil) {
+	«Changes
+		«9/25/10; 12:18:06 PM by DW
+			«Add optional username parameter. If non-nil, only wake threads for user with that name. 
+		«8/15/10; 8:45:03 PM by DW
+			«Created. Wake up all the waiting threads so they can return
+	local (adrlongpolls = @system.temp.realtime.server.longpolls);
+	if defined (adrlongpolls^) {
+		local (adrtable);
+		on wake (adrtable) {
+			if adrtable^.enabled {
+				try {
+					local (id = adrtable^.idthread);
+					if thread.exists (id) {
+						thread.wake (id)}}}};
+		for adrtable in adrlongpolls {
+			if username == nil {
+				wake (adrtable)}
+			else {
+				if adrtable^.username == username {
+					wake (adrtable)}}}}};
+bundle { //test code
+	wakeWaitingThreads ("davewiner")}
+
+

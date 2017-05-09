@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.AnArchie.help
+
+on help () { «open the help window
+	return (appleEvent (AnArchie.id, 'core', 'help'))}
+
+

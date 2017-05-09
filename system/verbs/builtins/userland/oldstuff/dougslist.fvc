@@ -1,0 +1,53 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.userland.oldstuff.dougslist
+
+Dave,
+
+FYI, here's a list of items that I'd really like to take care of in
+Frontier -- IF they turn out to be reasonably easy (i.e. risk-free). They
+are items that stand out either because they've come up repeatedly over
+time, or because I just think they're important enough to consider. The
+first few have been discussed recently on Frontier-Talk. The first is the
+biggest:
+
+    appInfo.aeteTableName for auto handling of "eventInfo" subtables
+          "with appName" would automatically appInfo.aeteTablName^ too.
+        script recording would recognize same
+        update commercial dev suite accordingly
+    objspec (list) should return list of objspecs, not generate error
+        only when list > 1 item, which is now an error anyway
+          same logic could apply to any type
+    problem sending finderEvent to self (jbaxter)
+        finderEvent to self should spawn new thread, or not crash
+    string.popLeading doesn't handle chars > 128
+    string.popLeading doesn't compare extended ascii properly
+    op.find doesn't handle 1st headline right
+    table.rename doesn't enforce uniqueness
+    local table created within a local table can't target.set, window.open, etc.
+    add misc.windowClosed callback
+    can't coece nil to short. should be zero, like long (nil)
+    search.replaceall should toss compiled code of scripts
+    when Saving runs out of memory, error: operating on free block
+    it is not possible for a handler to return nil.  Attempting to do so
+returns true, instead.
+    install global coercion for 'ldt ' (longDateTime)
+    alias to string should use GetAliasInfo to avoid mounting volume
+    file.fileFromPath shouldn't call file.exists (pbgetcatinfo) twice
+    dialog.run () and dialog.runModeless () should allow Dialog Manager to
+place the dialgs if the resources have any of the auto-placement flags set.
+    dialog.run should handle timers like dialog.runModeless
+    show 'osas' files in File/Open dialog
+    typeTEXT clicker should probably open text file that it can't run
+    commerical.enterAppName should make sure it's an identifier
+    objspec comparision needs to coerce to record to avoid random bytes
+    speaker.sound (0.25, 255, 6000) locks Frontier up
+    window.setModified should bump timeModified of object
+
+Obviously, these can't all be done. I expect that at least half would be
+dismissed as soon as I investigate their implementation. But I think
+they're all worth looking into, in case they turn out to be really easy.
+Whatever can fit in, time/risk wise, would be part of the new "reference
+release" I spoke of earlier.
+
+Doug
+
+

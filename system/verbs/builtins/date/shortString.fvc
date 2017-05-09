@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.date.shortString
+
+on shortString (param1) {
+	kernel (date.shortString)}
+
+

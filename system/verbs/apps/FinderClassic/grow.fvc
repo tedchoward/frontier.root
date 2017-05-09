@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FinderClassic.grow
+
+on grow (folderpath, h, v) { « set the size of the indicated folder's window
+	local (fwindow);
+	if not Finder.makeWindow (folderpath, 0, @fwindow) {
+		return (false)};
+	newsize = long (point.set (h, v));
+	return (finderEvent (Finder.id, Finder.class, 'grow', '----', fwindow, 'fmsc', newsize))}
+
+

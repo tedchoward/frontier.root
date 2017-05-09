@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.outlinerSetTypeTo
+
+on outlinerSetTypeTo (theType) {
+	«Changes
+		«5/28/12; 12:05:00 PM by DW
+			«Set the name attribute.
+				«http://worknotes.scripting.com/may2012/52812ByDw/towardInvariantNames
+		«5/20/12; 6:58:19 PM by DW
+			«Created.
+	if dialog.confirm ("Set the type of \"" + op.getlinetext () + "\" to " + theType + "?") {
+		op.attributes.setone ("type", theType);
+		opmlEditor.setNameAttribute ()}};
+bundle { //test code
+	outlinerSetTypeTo ()}
+
+

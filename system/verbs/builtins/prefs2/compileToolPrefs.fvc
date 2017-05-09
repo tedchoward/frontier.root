@@ -1,0 +1,31 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.prefs2.compileToolPrefs
+
+on compileToolPrefs (adrbody, adrtoolprefs) {
+	«Changes
+		«1/18/12; 2:43:00 PM by DW
+			«Fix an off-by-1 error. The first tool would overwrite the last non-tool. Fixed by auto-incrementing outlineum before using it, instead of after using it.
+		«9/16/11; 6:57:01 PM by DW
+			«Compile all the tool outlines, and glue their xstruct bodies at the end of the body of the main outline xstruct. We're creating a Frankenstein monster out of all the little outlines in the tool roots.
+	if adrtoolprefs != nil {
+		local (adr, outlinenum);
+		bundle { //set outlinenum
+			local (adr);
+			outlinenum = 0;
+			for adr in adrbody {
+				if nameof (adr^) endswith "outline" {
+					local (num = number (string.nthfield (nameof (adr^), "\t", 1)));
+					if num > outlinenum {
+						outlinenum = num}}}};
+		for adr in adrtoolprefs {
+			local (opmltext = op.outlinetoxml (adr^), xstructtool);
+			xml.compile (opmltext, @xstructtool);
+			bundle { //copy the body of xstructtool into adrbody
+				local (adropmltool = xml.getaddress (@xstructtool, "opml"), adrx);
+				local (adrbodytool = xml.getaddress (adropmltool, "body"));
+				for adrx in adrbodytool {
+					if nameof (adrx^) endswith "outline" {
+						adrbody^.[string.padwithzeros (++outlinenum, 8) + "\toutline"] = adrx^}}}}}}
+«bundle //test code
+	«compileToolPrefs ()
+
+

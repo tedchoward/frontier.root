@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.compare
+
+on compare (path1, path2) {
+	kernel (file.compare)}
+
+

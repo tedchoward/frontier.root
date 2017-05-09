@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.globals.putAppleListItem
+
+on putAppleListItem (val, itemspec, adr) {
+	kernel (lang.putAppleListItem)}
+
+

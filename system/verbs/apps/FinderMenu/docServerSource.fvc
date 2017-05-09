@@ -1,0 +1,42 @@
+FrontierVcsFile:3:optx:system.verbs.apps.FinderMenu.docServerSource
+
+FinderMenu.visitPaths
+	Syntax
+		FinderMenu.visitPaths (adrCallback)
+	Parameters
+		adrCallback is the address of a Frontier script that will be called once for each item selected in the Finder.
+	Action
+		Calls the callback script once for each item selected in the Finder.
+	Returns
+		True if all the callbacks returned true, false if the callback returned false.
+	Examples
+		FinderMenu.visitPaths (@msg) «displays each path in main window
+			// true
+	Notes
+		The callback must accept exactly one parameter, the full path to the file, folder or disk that’s to be processed by the script.
+		When the callback returns true, processing continues. If it returns false, FinderMenu.visitPaths returns false immediately without processing any other files. Use this capability, for example, when you’re searching for something, and you found it.
+		FinderMenu.visitPaths is implemented as a Frontier script, so you can examine the source code to see how it works.
+		This verb is provided in FinderMenu 2.1 to maintain compatibility with earlier FinderMenu scripts. An easier way to loop over all the selected files is provided in FinderMenu 2.1. See FinderMenu.getSelectionList for details.
+	See Also
+		FinderMenu.getSelectionList
+FinderMenu.getSelectionList
+	Syntax
+		FinderMenu.getSelectionList ()
+	Parameters
+		None.
+	Action
+		Determines which files, folders or disks are selected in the Finder.
+	Returns
+		A list containing the selected files.
+	Examples
+		FinderMenu.getSelectionList ()
+			// {"System:Apps:", "System:Frontier:"}
+		for f in FinderMenu.getSelectionList () {msg (f)}
+			// true
+	Notes
+		FinderMenu.getSelectionList is a new verb for use with Frontier 2.1. It will not work with earlier releases of Frontier.
+	See Also
+		FinderMenu.visitPaths
+
+
+

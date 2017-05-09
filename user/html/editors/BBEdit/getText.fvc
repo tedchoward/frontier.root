@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:user.html.editors.BBEdit.getText
+
+on getText () {
+	local (s);
+	if not sys.appisrunning (bbedit.id) {
+		scriptError ("BBEdit is not running.")};
+	with objectModel, BBEdit, eventInfo {
+		try {
+			s = get (window [1].windowText)}
+		else {
+			scripterror ("Couldn't get the 'windowText' attribute from the frontmost BBEdit window.")}}}
+
+

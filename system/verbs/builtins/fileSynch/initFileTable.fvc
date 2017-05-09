@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fileSynch.initFileTable
+
+on initFileTable (adrfile) {
+	local (adrdata);
+	adrdata = parentof (adrfile^); //files
+	adrdata = parentof (adrdata^); //the synchpoint table
+	local (f = adrdata^.prefs.folder + nameof (adrfile^));
+	if not defined (adrfile^.whenCreated) {
+		adrfile^.whenCreated = file.created (f)};
+	if not defined (adrfile^.whenModified) {
+		adrfile^.whenModified = file.modified (f)};
+	if not defined (adrfile^.fldirty) {
+		adrfile^.fldirty = true};
+	if not defined (adrfile^.ctuploads) {
+		adrfile^.ctuploads = 0};
+	if not defined (adrfile^.whenLastError) {
+		adrfile^.whenLastError = date (0)};
+	if not defined (adrfile^.cterrors) {
+		adrfile^.cterrors = 0};
+	if not defined (adrfile^.url) {
+		adrfile^.url = ""}};
+bundle { //test code
+	initFileTable (@user.fileSynch.synchPoints.test.files.["oh.opml"])}
+
+

@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FinderClassic.open
+
+on open (path) { «open anything in the Finder
+	if not Finder.folderVerb ('sope', path) {
+		return (false)};
+	return (Finder.bringToFront ())}
+
+

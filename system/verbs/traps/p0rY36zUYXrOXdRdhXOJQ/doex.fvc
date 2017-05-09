@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.core.doex
+
+on doex (obj) { «does object exist?
+	return (defined (obj^))}
+
+

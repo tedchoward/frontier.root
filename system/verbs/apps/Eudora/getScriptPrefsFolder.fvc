@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.getScriptPrefsFolder
+
+on getScriptPrefsFolder () {
+	«for scripts that want to store stuff in folders in the System FolderŠ
+		«we return a path to a folder just for Eudora-based scripts
+	
+	local (prefsfolder = file.getSpecialFolderPath ("", "Preferences", true));
+	local (userlandfolder = prefsfolder + "UserLand:");
+	file.sureFolder (userlandfolder);
+	local (eudorafolder = userlandfolder + "Eudora:");
+	file.sureFolder (eudorafolder);
+	return (eudorafolder)}
+
+

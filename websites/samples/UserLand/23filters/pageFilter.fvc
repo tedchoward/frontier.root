@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:websites.samples.UserLand.["#filters"].pageFilter
+
+on pageFilter (adrPageTable) {
+	html.addPageToGlossary (adrPageTable);
+	return (true)}
+
+

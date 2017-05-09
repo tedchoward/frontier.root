@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.getWindowInfo
+
+on getWindowInfo (n) { «Returns the information about the window as a list. Currently the list contains the window title and the URL. You can get the same information using standard Apple Event GetProperty.
+	case sys.os () {
+		"MacOS" {
+			return (appleEvent (user.webBrowser.currentid, 'WWW!', 'WNFO', '----', long (n)))}}}
+
+

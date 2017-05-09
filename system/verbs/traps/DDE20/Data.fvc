@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.["DDE "].Data
+
+on Data (result, rInfo, sInfo, item, wantAck, wasRequest) {
+	«msg ("Received Data: " + rinfo + ", " + sInfo + ", " + result)
+	if not DDE.waitingForData {
+		return (false)};
+	if (DDE.senderInfo != rInfo) || (DDE.receiverInfo != sInfo) {
+		return (false)};
+	DDE.waitingForData = false; «we've got it now
+	DDE.receivedData = result;
+	return (true)}
+
+

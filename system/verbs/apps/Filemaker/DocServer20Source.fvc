@@ -1,0 +1,477 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Filemaker.["DocServer Source"]
+
+Filemaker.beginTransaction
+	Syntax
+		Filemaker.beginTransaction ()
+	Parameters
+		None.
+	Action
+		Starts a transaction with Filemaker.
+	Returns
+		The ID number of the transaction.
+	Examples
+		Filemaker.beginTransaction ())
+			// 265987
+	Notes
+		• See Filemaker.examples.transactions for more about using transactions with Filemaker.
+		• Transactions are useful when a user may be directly interacting with the database at the same time as your scripts. Whenever possible, use semaphores instead of transactions.
+	See Also
+		Filemaker.endTransaction
+Filemaker.bringToFront
+	Syntax
+		Filemaker.bringToFront ()
+	Parameters
+		None.
+	Action
+		Makes Filemaker the frontmost application.
+	Returns
+		True if the database was brought to front, false if the request failed.
+	Examples
+		Filemaker.bringToFront ()
+			// true
+	Notes
+		If Filemaker is not running, this verb will launch it.
+	See Also
+		Filemaker.sendToBack
+		Filemaker.launch
+		Filemaker.quit
+		Filemaker.showWindow
+		Filemaker.hideWindow
+Filemaker.classInfo
+	Syntax
+		Filemaker.classInfo (x, wrCode=nil)
+	Parameters
+		x is the the event class of the Apple events for which to return information.
+		wrCode (optional) is the human language and script system in which to return information.
+	Action
+		Retrieves the information for a particular class.
+	Returns
+		A record containing the object’s properties and elements.
+	Examples
+		Filemaker.classInfo (cell)
+			// {'qpro':{{'prop':bestType, 'clID':'type', 'prfg':0}, {'prop':class, 'clID':'type', 'prfg':0},... (etc.)
+	Notes
+		This verb is not used in the overwhelming majority of Filemaker scripts.
+Filemaker.close
+	Syntax
+		Filemaker.close (obj)
+	Parameters
+		obj is the object to be closed.
+	Action
+		Closes the specified object.
+	Returns
+		True if successful, an error message otherwise.
+	Examples
+		with objectModel, filemaker { close (database ["U.S. States"]) }
+			// true
+	See Also
+		Filemaker.open
+Filemaker.count
+	Syntax
+		Filemaker.count (obj, class)
+	Parameters
+		obj is an object specifier, the object whose elements are to be counted.
+		class is the class of the elements to be counted.
+	Action
+		Counts the specified items.
+	Returns
+		An integer, the number of elements of a particular class within an object
+	Examples
+		with objectModel, filemaker { count (database ["U.S. States"], record) }
+			// 50
+Filemaker.create
+	Syntax
+		Filemaker.create (new, withData = nil, withProperties = nil, at = nil)
+	Parameters
+		new is the class of the element to create.
+		withData (optional) is the data to place in the new object.
+		withProperties (optional) specifies the properties of the new object.
+		at (optional) specifies the location of the new object.
+	Action
+		Create a new object with data and properties at a location.
+	Returns
+		An object specifier, a reference to the new object.
+	Examples
+		with objectModel, filemaker { create (record, {"Puerto Rico", "San Juan", "Marlin"}, at:endOf (database ["U.S. States"]))}
+			// database ["U.S. States"].row [idKey:58]
+	Notes
+		Use this verb to create new records, requests, menus and menu items. 
+Filemaker.dataSize
+	Syntax
+		Filemaker.dataSize (obj, as = nil)
+	Parameters
+		obj is an object specifier, the object whose size you want to determine.
+		as (optional) is the data type for which the size is calculated.
+	Action
+		Gets the size in bytes of an object.
+	Returns
+		The size in bytes of an object.
+	Examples
+		with objectModel, filemaker { dataSize (database["U.S. States"])}
+			// 8632
+	Notes
+		Returns the size of the data handled by Apple events, which is not necessarily the size of a stored object.
+Filemaker.delete
+	Syntax
+		Filemaker.delete (obj)
+	Parameters
+		obj is an object specifier, the object to be deleted.
+	Action
+		Deletes the specified object.
+	Returns
+		True if the object was deleted, an error message otherwise.
+	Examples
+		with objectModel, filemaker { delete (database ["U.S. States"].record [16])}   «Kansas has seceded from the Union.
+			// true
+	Notes
+		Records, requests, menus, and menu items can be deleted with this verb.
+	See Also
+		Filemaker.create
+Filemaker.doMenu
+	Syntax
+		Filemaker.doMenu (x)
+	Parameters
+		x is an object specifier, specifying the menu item to perform.
+	Action
+		Performs the specified menu item.
+	Returns
+		True if successful, false otherwise.
+	Examples
+		with objectModel, filemaker { doMenu (menu ["Mode"].menuItem ["Layout"])}   «Switch to Layout mode
+			// true
+	Notes
+		• Menu items must match exactly the way they appear in Filemake Pro.
+		• Use option-semicolon to generate the ellipsis character.
+		• Certain menu items are available only in specific modes.
+	See Also
+		Filemaker.doScript
+Filemaker.doScript
+	Syntax
+		Filemaker.doScript (scriptName)
+	Parameters
+		scriptName is the name of the Filemaker script to execute.
+	Action
+		Executes the specified script.
+	Returns
+		True if the script is found, an error message otherwise.
+	Examples
+		filemaker.doScript ("MyTestScript")
+			// true
+	Notes
+		Filemaker Pro scripts have the ability to do many things that Apple events cannot do. This is a useful way of extending your Frontier script’s capabilities.
+	See Also
+		Filemaker.doMenu
+Filemaker.duplicate
+	Syntax
+		Filemaker.duplicate (obj, duplicateTo = nil)
+	Parameters
+		obj is the object to duplicate.
+		duplicateTo (optional) is the location for the new object.
+	Action
+		Filemaker duplicates an object at a location.
+	Returns
+		A reference to the new object in the form of an object specifier.
+	Examples
+		with objectModel, filemaker { duplicate (database ["U.S. States"].record [1], endof (database ["U.S. States"]))} «duplicate Alabama’s entry
+			// database ["U.S. States"].row [idKey:51]
+Filemaker.endTransaction
+	Syntax
+		Filemaker.endTransaction ()
+	Parameters
+		None.
+	Action
+		Ends the current transaction, freeing Filemaker to respond to other events.
+	Returns
+		True.
+	Examples
+		Filemaker.endTransaction ()
+			// true
+	Notes
+		• See Filemaker.examples.transactions for examples of using transactions with Filemaker.
+		• Whenever possible, use semaphores instead of transactions.
+	See Also
+		Filemaker.beginTransaction
+Filemaker.exists
+	Syntax
+		Filemaker.exists (obj)
+	Parameters
+		obj is an object specifier referencing the object whose existence is to be determined.
+	Action
+		Tests the existence of an object.
+	Returns
+		True if the object exists, false if not.
+	Examples
+		with objectModel, filemaker { exists (database ["U.S. States"]) }  «"U.S. States" is the name of a currently-open database.
+			// true
+		with objectModel, filemaker { exists (database ["U.S. States"].record [51]) }  «There is no 51st record.
+			// false
+		with objectModel, filemaker { exists (database ["Non-existent database"]) }
+			// false
+	See Also
+		Filemaker.goto
+Filemaker.find
+	Syntax
+		Filemaker.find (obj)
+	Parameters
+		obj is an object specifier, the object to be searched.
+	Action
+		Given current requests, searches the specified object.
+	Returns
+		True.
+	Examples
+		with objectModel, filemaker { find (database ["U.S. States"]) }  «Performs a find based on current requests
+			// true
+	Notes
+		• Using Filemaker.find is a several-step process. The common method is to delete all requests, then create a new request with data. Calling Filemaker.find then performs the find based on the newly-created request.
+		• Often, it is simpler and faster to use Filemaker.get to retrieve records that match a certain search criteria.
+	See Also
+		Filemaker.create
+		Filemaker.get
+Filemaker.get
+	Syntax
+		Filemaker.get (obj, as = nil)
+	Parameters
+		obj is an object specifier, the object to retrieve.
+		as specifies the desired types for the data, in order of preference.
+	Action
+		Retrieves data referenced by an object specifier.
+	Returns
+		The data.
+	Examples
+		with objectModel, filemaker { get (database ["U.S. States"].record [2])}
+			// {"Alaska", "Juneau", "Crabs"}
+		with objectModel, filemaker { get (database ["U.S. States"].record [cell ["State Name"] contains "Ala"])}  «Get records that match given criteria
+			// {{"Alabama", "Huntsville", "Lobster"}, {"Alaska", "Juneau", "Crabs"}}
+	Notes
+		When you want to retrieve records matching search criteria, using Filemaker.get is often faster than creating a request and performing a find. This is particularly true with small, flat databases.
+	See Also
+		Filemaker.find
+		Filemaker.set
+Filemaker.getEventInfo
+	Syntax
+		Filemaker.getEventInfo (x, eventInfoIn = nil)
+	Parameters
+		x is the the event class of the Apple events for which to return information.
+		eventInfoIn (optional) is the human language and script system in which to return information.
+	Action
+		Retrieves data referenced by an object specifier.
+	Returns
+		A record containing the events and their parameters.
+	Examples
+		Filemaker.getEventInfo  ('core')
+			// {{'evcl':'core', 'evti':'qobj', 'rsin':{'kywd':'----', 'dstp':'gcli', 'pmfg':0}, 'prms':{{'kywd':'----', 'dstp':'type', 'pmfg':-32768},... (etc.)
+	Notes
+		It is not necessary to use this command to script Filemaker successfully.
+	See Also
+		Filemaker.classInfo
+Filemaker.getUrl
+	Syntax
+		Filemaker.getUrl (s)
+	Parameters
+		s is the URL specification for the FileMaker Pro database in the form "FMP3://[host]/filename"
+	Action
+		Connects to the specified database over the Internet.
+	Returns
+		The result of connecting to the database.
+	Examples
+		Filemaker.getUrl ("FMP3://claris.com/Product Catalog.FP3")
+	Notes
+		• Use the getUrl event to open a FileMaker Pro database over the Internet using a web browser application.
+		• To use the getUrl event, first make sure to register FileMaker Pro as a protocol with the helper application.
+		• See Claris’s “Apple Events Reference” and http://www.claris.com/ for more information.
+Filemaker.goto
+	Syntax
+		Filemaker.goto (obj)
+	Parameters
+		obj is the object to which to go.
+	Action
+		Goes to the specified object.
+	Returns
+		True if successful, an error message otherwise.
+	Examples
+		with objectModel, filemaker { goto (database ["U.S. States"].record [16])}  «Go to a specific record
+			// true
+	Notes
+		This verb works for window, document, database, layout, record, request, and cell objects.
+Filemaker.hideWindow
+	Syntax
+		Filemaker.hideWindow (db)
+	Parameters
+		db is the name or number of the database whose window you want to hide.
+	Action
+		Hides the specified database’s window.
+	Returns
+		True.
+	Examples
+		Filemaker.hideWindow (1) «Hides the frontmost database.
+			// true
+		Filemaker.hideWindow ("U.S. States") «Hides the database named "U.S. States"
+			// true
+	Notes
+		On web-servers, hiding Filemaker’s windows improves performance.
+	See Also
+		Filemaker.showWindow
+Filemaker.isRunning
+	Syntax
+		Filemaker.isRunning ()
+	Parameters
+		None.
+	Action
+		Checks if Filemaker is running.
+	Returns
+		True if Filemaker is running, false if it is not.
+	Examples
+		Filemaker.isRunning ()
+			// true
+	See Also
+		Filemaker.launch
+		Filemaker.quit
+Filemaker.launch
+	Syntax
+		Filemaker.launch ()
+	Parameters
+		None.
+	Action
+		Launches Filemaker Pro.
+	Returns
+		True if request succeeds, false otherwise.
+	Examples
+		Filemaker.launch ()
+			// true
+	See Also
+		Filemaker.quit
+Filemaker.open
+	Syntax
+		Filemaker.open (files, withPassword = nil)
+	Parameters
+		files is a file path or list of file paths to be opened.
+		withPassword (optional) the password to use.
+	Action
+		Opens the specified database in Filemaker.
+	Returns
+		True if successful, an error otherwise.
+	Examples
+		Filemaker.open ({"Macintosh HD:U.S. States","Macintosh HD:My Database"})  «Open two databases
+			// true
+		Filemaker.open ("Macintosh HD:Secret Database", "abracadabra")  «Open a password-protected database
+			// true
+	See Also
+		Filemaker.close
+Filemaker.print
+	Syntax
+		Filemaker.print (obj)
+	Parameters
+		obj is the object to print.
+	Action
+		Prints the specified object.
+	Returns
+		The result of printing an object.
+	Examples
+		Filemaker.print (database ["U.S. States"])
+			// true
+	Notes
+		The print verb works with databases, windows, and documents.
+Filemaker.quit
+	Syntax
+		Filemaker.quit ()
+	Parameters
+		None.
+	Action
+		Quits Filemaker Pro.
+	Returns
+		True if the request is successful, false otherwise.
+	Examples
+		Filemaker.quit ()
+			// true
+	See Also
+		Filemaker.launch
+Filemaker.sendToBack
+	Syntax
+		Filemaker.sendToBack ()
+	Parameters
+		None.
+	Action
+		Hides Filemaker in the background.
+	Returns
+		True if successful, false otherwise.
+	Examples
+		Filemaker.sendToBack ()
+			// true
+	See Also
+		Filemaker.bringToFront
+Filemaker.set
+	Syntax
+		Filemaker.set (obj, setDataTo)
+	Parameters
+		obj is the object whose data will be set.
+		setDataTo is the new data.
+	Action
+		Sets the data for an object.
+	Returns
+		True if the request succeeded, an error message otherwise.
+	Examples
+		with objectModel, filemaker { set (database ["U.S. States"].record [1], {"Alabama", "Huntsville", "Lobster"})}  «Set the first record in a database.
+			// true
+		with objectModel, filemaker { set (database ["U.S. States"].record [id2:67], {"Maryland", "Annapolis", "Crabs"})}  «Set the data for the record with the unique ID of 67
+			// true
+	See Also
+		Filemaker.get
+Filemaker.show
+	Syntax
+		Filemaker.show (obj)
+	Parameters
+		obj is the object to show.
+	Action
+		Makes an object visible.
+	Returns
+		True if the request succeeded, an error message otherwise.
+	Examples
+		with objectModel, filemaker { show (database ["U.S. States"].record [1])}  «Show the first record in the database
+			// true
+		with objectModel, filemaker { show (database ["U.S. States"].record [all])}  «Show all records
+			// true
+		with objectModel, filemaker { show (database ["U.S. States"].record [cell ["State Name"] contains "Ala"])}  «Show certain records
+			// true
+	Notes
+		Unlike Filemaker.goto, this verb affects the current found set. It’s somewhat like creating a request and doing a find.
+	See Also
+		Filemaker.get
+		Filemaker.find
+Filemaker.showWindow
+	Syntax
+		Filemaker.showWindow (db)
+	Parameters
+		db is the name or number of the database whose window you want to make visible.
+	Action
+		Makes the specified database’s window visible.
+	Returns
+		True if the request succeeded, false otherwise.
+	Examples
+		Filemaker.showWindow ("U.S. States") «Makes the "U.S. States" database visible
+			// true
+	Notes
+		• This verb complements Filemaker.hideWindow.
+		• On webservers it’s common to hide Filemaker’s windows. This improves Filemaker’s performance.
+	See Also
+		Filemaker.hideWindow
+Filemaker.sort
+	Syntax
+		Filemaker.sort (obj, by = nil, inOrder = nil)
+	Parameters
+		obj is the object to sort.
+		by (optional, default is no field) is the field by which the object will be sorted.
+		inOrder (optional, default is ascending) can be descending or ascending.
+	Action
+		Sorts the records in the current found set.
+	Returns
+		True if the request succeeded, an error message otherwise.
+	Examples
+		with objectModel, filemaker { sort (database ["U.S. States"])}  «Unsort the database
+			// true
+		with objectModel, filemaker { sort (database ["U.S. States"], cell["State Name"])}  «Sort database by state name
+			// true
+		with objectModel, filemaker { sort (database ["U.S. States"], cell["State Name"], descending)}  «Sort database by state name, descending order
+			// true
+
+
+

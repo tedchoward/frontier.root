@@ -1,0 +1,18 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.data.nodeTypes.blogpost.collapse
+
+on collapse () {
+	«Changes
+		«11/6/11; 2:12:20 PM by DW
+			«Only do an "include" style collapse if there's a URL attribute. 
+		«11/3/11; 8:34:23 AM by DW
+			«Created.
+	local (atts);
+	op.attributes.getall (@atts);
+	if defined (atts.url) {
+		Frontier.tools.data.nodeTypes.include.collapse ()}
+	else {
+		op.collapse ()}};
+bundle { //test code
+	collapse ()}
+
+

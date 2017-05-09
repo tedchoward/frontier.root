@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.member.addSignInCommands
+
+on addSignInCommands (adrmenutable) {
+	«Changes
+		«6/11/12; 12:00:14 PM by DW
+			«A bottleneck each of the viewMenu routines can call to add a sign-in command to the menu. We might add a sign-up command if that is permitted. 
+	local (adrdata = opmleditor.init (), membershipkind = string.lower (adrdata^.prefs.membershipKind));
+	on additem (title, pagename) {
+		local (adritem = @adrmenutable^.[string.padwithzeros (sizeof (adrmenutable^), 5)]);
+		new (tabletype, adritem);
+		adritem^.title = title;
+		adritem^.pagename = pagename};
+	additem (webApp.data.signInCommand, "/signin");
+	if (membershipkind == "open") or (membershipkind == "limited") {
+		additem ("Sign-up", "/signup")}};
+bundle { //test code
+	addSignInCommands ()}
+
+

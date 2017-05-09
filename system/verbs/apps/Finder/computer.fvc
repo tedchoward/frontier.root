@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Finder.computer
+
+on computer (x, has = nil) { «Test attributes of this computer
+	return (appleEvent (Finder.id, 'fndr', 'gstl', '----', string4 (x), 'has ', long (has)))}
+
+

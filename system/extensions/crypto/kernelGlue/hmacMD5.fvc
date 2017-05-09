@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.extensions.crypto.kernelGlue.hmacMD5
+
+on hmacMD5 (s, key, flTranslate=true) {
+	«Changes
+		«8/31/09; 5:08:05 PM by DW
+			«Created. 
+	kernel (crypt.hmacMD5)}
+
+

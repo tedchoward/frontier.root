@@ -1,0 +1,26 @@
+FrontierVcsFile:3:optx:suites.ftpClient.examples.oneliners
+
+Wed, Aug 14, 1996 at 11:06:50 AM by DW
+	Started this outline to test Tim Moore's improvements.
+	This is cool! I'm likin it.
+ftpClient.launch ()
+	// true
+ftpClient.isFolder ("ftp.scripting.com", "userland/mailShop.sit.hqx", "", "")
+	// false
+ftpClient.list ("ftp.scripting.com", "aladdin", "", "")
+	// {".", "..", "stuffitLite3.5.sea.hqx"}
+ftpClient.list ("ftp.scripting.com", "userland", "", "")
+	// {".", "..", "clayBasket1.0b8.sit.hqx", "davenet.1.sit.hqx", "davenet.html.sit.hqx", "docserver.html.sit.hqx", "frontier4.0.1.sit.hqx", "frontier4.0.1.upg.sit.hqx", "frontier4.1b1.sit.hqx", "frontier4.1b2.sit.hqx", "frontier4.1b3.sit.hqx", "frontierManu…
+ftpClient.mkdir ("ftp.scripting.com", "yyyy", "account", "password")
+	// true
+ftpClient.rename ("ftp.scripting.com", "yyyy", "zzzzzz", "account", "password")
+	// true
+ftpClient.remove ("ftp.scripting.com", "zzzzzz", "account", "password")
+	// true
+ftpClient.sureFilePath ("ftp.scripting.com", "aaa/bbb/ccc/ddd.eee", "account", "password")
+	// true
+ftpClient.sureFilePath ("ftp.scripting.com", "aaa/bbb/ccc/ddd.eee", "account", "password")
+	// true
+
+
+

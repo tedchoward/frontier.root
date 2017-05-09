@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.window.isHidden
+
+on isHidden (adr) {
+	return (not window.isVisible (adr))}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.editGraphic
+
+on editGraphic (area) { «Edit the specified drawing area
+	return (misc.editGraphic (BBEdit.id, area))}
+
+

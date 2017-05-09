@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.open
+
+on open (path) {
+	kernel (file.open)}
+
+

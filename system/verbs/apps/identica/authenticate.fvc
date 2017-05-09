@@ -1,0 +1,34 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.identica.authenticate
+
+on authenticate (username, password, server="identi.ca") {
+	«Changes
+		«3/12/09; 6:05:58 AM by DW
+			«New optional param, server, allows you to post to another instance of Laconica.
+		«7/19/08; 11:08:21 AM by DW
+			«Add a cache.
+		«7/19/08; 10:57:49 AM by DW
+			«Created. Returns true if the user has a valid identi.ca login false otherwise.
+	local (adrcache);
+	bundle { //check the cache
+		adrcache = @system.temp.identicaAuthentications;
+		if not defined (adrcache^) {
+			new (tabletype, adrcache)};
+		adrcache = @adrcache^.[server];
+		if not defined (adrcache^) {
+			new (tabletype, adrcache)};
+		adrcache = @adrcache^.[username];
+		if defined (adrcache^) {
+			if adrcache^ == password {
+				return (true)}}};
+	try {
+		local (replies);
+		if identica.getReplies (@replies, username, password, server) {
+			adrcache^ = password;
+			return (true)}};
+	return (false)}
+«bundle //test code
+	«dialog.alert (authenticate ("georgematesky", "fuckyou!"))
+	«dialog.alert (authenticate (user.identica.prefs.username, user.identica.prefs.password, "home.smallpicture.com"))
+	«dialog.alert (authenticate (user.identica.prefs.username, user.identica.prefs.password))
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.lastWord
+
+on lastWord (s) {
+	kernel (string.lastword)}
+
+

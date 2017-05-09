@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.data.standardMacros.embeddedUserTalk
+
+on embeddedUserTalk (scriptstring, displaytext) {
+	scriptstring = string.urlEncode (scriptstring);
+	return ("<a href=\"usrtlk:" + scriptstring + "\">" + displaytext + "</a>")}
+
+

@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.openToolCatalog
+
+«Changes
+	«8/11/08; 8:01:45 AM by DW
+		«Bring the web browser to the front first.
+	«7/29/08; 12:00:12 PM by DW
+		«Added call to opmlEditor.init.
+	«7/29/08; 10:47:10 AM by DW
+		«Created. 
+opmlEditor.init ();
+webbrowser.bringtofront ();
+webbrowser.openurl (opmlEditor.data.urls.toolCatalogPage)
+
+

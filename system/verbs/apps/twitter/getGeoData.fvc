@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.getGeoData
+
+on getGeoData (adrxstatus, adrtable) {
+	«Changes
+		«11/19/09; 2:09:46 PM by DW
+			«Created.  If the status has geo data, add longitude and latitude values to the table.
+	local (adrgeo = xml.getaddress (adrxstatus, "geo"));
+	local (adrpoint = xml.getaddress (adrgeo, "point"));
+	local (s = adrpoint^.["/pcdata"]);
+	adrtable^.longitude = double (string.nthfield (s, " ", 2));
+	adrtable^.latitude = double (string.nthfield (s, " ", 1))};
+bundle { //test code
+	new (tabletype, @scratchpad.geodata);
+	local (adrstatus = xml.getaddress (@scratchpad.statusstruct, "status"));
+	getGeoData (adrstatus, @scratchpad.geodata)}
+
+

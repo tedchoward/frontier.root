@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.objectModel.endOf
+
+on endOf (obj) {
+	return (insertionLoc ('end ', obj))}
+
+

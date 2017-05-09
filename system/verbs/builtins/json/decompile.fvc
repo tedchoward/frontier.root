@@ -1,0 +1,140 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.json.decompile
+
+on decompile (adrtable, adrreplacetable=@json.data.replaceTable) {
+	«Changes
+		«2/7/13; 1:12:07 PM by DW
+			«In the 11/14/12 change we only replaced the first backslash. What if the line contains more than one? Now we replace them all. Wish us luck! :-)
+		«2/7/13; 9:48:04 AM by DW
+			«New optional param, adrreplacetable. 
+				«http://worknotes.scripting.com/february2013/2713ByDw/newOptionalParamForJsondecompile
+		«11/14/12; 11:04:35 AM by DW
+			«If the text contains a backslash, replace it with two backslashes.
+				«http://worknotes.scripting.com/november2012/111412ByDw/encodingProblem
+		«12/31/10; 10:57:38 AM by DW
+			«Use the replacetable when encoding, it also converts carriage returns and linefeeds.
+		«10/24/10; 8:20:06 PM by DW
+			«Handle empty lists. If we're passed the address of a scalar, then just process a scalar. In other words, don't convert scalars to structs or lists.
+		«10/23/10; 5:58:25 PM by DW
+			«Output numbers and booleans without "double quotes"
+		«10/23/10; 5:18:42 AM by DW
+			«Add a special case for a table that is a list. See workspace.userlandSamples.jsonTesting.tables.adobeExample1 for a test case.
+		«10/11/10; 8:43:31 AM by DW
+			«Encode double-quotes by prefacing them with a backslash. List whose elements were scalars were not being output correctly, that was fixed.
+		«10/8/10; 3:54:30 PM by DW
+			«Initial version of a utility that outputs an XML structure in JSON. A general purpose JSONizer. I'm testing it here: http://scripting.com/stories/2010/10/09/nextStepsInTheFeedhoseProj.html
+	local (jsontext = "", indentlevel = 0, emptyName = "<<empty>>");
+	on add (s) {
+		jsontext = jsontext + string.filledstring ("\t", indentlevel) + s + "\r"};
+	on droplastcomma () {
+		«scratchpad.jtx = string.mid (jsontext, sizeof (jsontext) - 10, 11)
+		for i = sizeof (jsontext) downto 1 {
+			if jsontext [i] == "," {
+				jsontext = string.delete (jsontext, i, 1);
+				break}}};
+		«scratchpad.jtx = string.mid (jsontext, sizeof (jsontext) - 9, 10)
+	on encode (s) {
+		s = string.replaceAll (s, "\\", "\\\\"); //11/14/12 & 2/7/13 by DW
+		return (string.multiplereplaceall (s, adrreplacetable))}; //2/7/13 by DW
+		«return (string.replaceall (s, "\"", "\\\"")) //replace " with \"
+	on getnameof (adr) {
+		local (name = nameof (adr^));
+		if name == "/pcdata" {
+			return ("#value")}
+		else {
+			if name contains "\t" {
+				name = string.nthfield (name, "\t", 2);
+				if name == "" { //10/23/10 by DW
+					name = emptyName}};
+			return (name)}};
+	on getscalarstring (adr) { //10/23/10 by DW
+		case typeof (adr^) {
+			stringtype {
+				return ("\"" + encode (string (adr^)) + "\"")};
+			longtype;
+			doubletype;
+			booleantype {
+				return (encode (string (adr^)))};
+			listtype { //must be an empty list -- 10/24/10 by DW
+				return ("[ ]")};
+			unknownType {
+				return ("null")}}}; //10/24/10 by DW
+	on additem (adr, comma="", fllistitem=false) {
+		if nameof (adr^) != "/atts" {
+			if typeof (adr^) == tabletype {
+				name = getnameof (adr);
+				if name != emptyName { //10/23/10 by DW
+					add ("\"" + getnameof (adr) + "\":")};
+				dotable (adr, comma)}
+			else {
+				if fllistitem {
+					add (getscalarstring (adr) + comma)}
+				else {
+					add ("\"" + getnameof (adr) + "\": " + getscalarstring (adr) + comma)}}}};
+	on dotable (adrtable, tablelevelcomma="") {
+		local (adr, fllast, comma, countsarray);
+		bundle { //fill countsarray
+			local (adr, adrcount);
+			new (tabletype, @countsarray);
+			for adr in adrtable {
+				adrcount = @countsarray.[getnameof (adr)];
+				if defined (adrcount^) {
+					adrcount^++}
+				else {
+					adrcount^ = 1}}};
+		add ("{"); indentlevel++;
+		bundle { //output the attributes first
+			local (adratts = @adrtable^.["/atts"], comma);
+			if defined (adratts^) {
+				for adratt in adratts {
+					add ("\"" + nameof (adratt^) + "\": \"" + encode (string (adratt^)) + "\",")}}};
+		bundle { //first pass, elements with one occurrence
+			local (adr);
+			for adr in adrtable {
+				if countsarray.[getnameof (adr)] == 1 {
+					bundle { //set comma
+						if indexof (adr^) == sizeof (adrtable^) { //last item in table
+							comma = ","}
+						else {
+							comma = ","}};
+					additem (adr, comma)}}};
+		bundle { //second pass, elements with more than one occurrence
+			local (adrcount);
+			for adrcount in @countsarray {
+				if adrcount^ > 1 {
+					local (namethis = nameof (adrcount^));
+					add ("\"" + namethis + "\": ["); indentlevel++;
+					for adr in adrtable {
+						if getnameof (adr) == namethis {
+							if typeof (adr^) == tabletype {
+								dotable (adr)}
+							else {
+								additem (adr, fllistitem:true)};
+							add (",")}};
+					add ("]"); indentlevel--}}};
+		droplastcomma ();
+		add ("}" + tablelevelcomma); indentlevel--};
+	
+	if typeof (adrtable^) == tabletype {
+		bundle { //special case for table that is a list, 10/23/10 by DW
+			local (adr, fllist = false);
+			for adr in adrtable {
+				if string.nthfield (nameof (adr^), "\t", 2) == "" { //it's a list
+					fllist = true};
+				break};
+			if fllist {
+				add ("["); indentlevel++;
+				for adr in adrtable {
+					additem (adr, ",", fllistitem:true)};
+				droplastcomma ();
+				add ("]"); indentlevel--;
+				return (jsontext)}};
+		dotable (adrtable)}
+	else {
+		additem (adrtable, fllistitem:true)};
+	return (jsontext)}
+«bundle //test code
+	«wp.newtextobject (decompile (@scratchpad.foolishshit), @scratchpad.wpobj)
+	«wp.newtextobject (decompile (@workspace.userlandSamples.jsonTesting.tables.adobeExample1Variant1), @scratchpad.wpobj)
+	«webbrowser.displaytext ("<pre>" + decompile (@scratchpad.items) + "</pre>")
+
+

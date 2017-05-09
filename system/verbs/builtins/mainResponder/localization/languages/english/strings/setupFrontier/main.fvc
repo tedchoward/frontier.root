@@ -1,0 +1,69 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.mainResponder.localization.languages.english.strings.setupFrontier.main
+
+Congratulations on installing Frontier <%frontier.version ()%>!</p>
+	<p>There's just one more easy step -- to personalize this copy of Frontier, configure your network settings, create your first website, and complete the installation.</p>
+	[[setupError]][[proxyConfirm]]
+	<form method="POST">
+		<table border="0" cellspacing="1" cellpadding="5">
+			<tr>
+				<td align="left">Name:</td>
+				<td valign="top" colspan="1"><input type="text" name="name" size="50" maxlength="255" value="[[username]]"></td>
+				</tr>
+			<tr>
+				<td align="left">Server domain:</td>
+				<td valign="top" colspan="1"><input type="text" name="serverDomain" size="50" maxlength="255" value="[[serverDomain]]"></td>
+				</tr>
+			<tr>
+				<td align="left">Email address:&nbsp;&nbsp;</td>
+				<td valign="top" colspan="1"><input type="text" name="email" size="50" maxlength="255" value="[[useremail]]"></td>
+				</tr>
+			<tr>
+				<td align="left">Outgoing (SMTP) mail server:</td>
+				<td valign="top" colspan="1"><input type="text" name="mailHost" size="50" maxlength="255" value="[[mailhost]]"></td>
+				</tr>
+			<tr>
+				<td align="left">Organization:</td>
+				<td valign="top" colspan="1"><input type="text" name="organization" size="50" maxlength="255" value="[[userorganization]]"></td>
+				</tr>
+			<tr>
+				<td align="left">Admin password:</td>
+				<td valign="top" colspan="1"><input type="password" name="password" size="25" maxlength="255" value="[[userpassword]]"></td>
+				</tr>
+			<tr>
+				<td align="left">Repeat:</td>
+				<td valign="top" colspan="1"><input type="password" name="repeatPassword" size="25" maxlength="255" value="[[userpassword]]"></td>
+				</tr>
+			<tr><td></td><td><input type="submit" name="setupFrontier" value="Submit"></td></tr>
+			</table>
+		</form>
+	<p>Important note: If you need to connect through a proxy server, please <a href="#proxy">set that up first</a> before completing the installation.</p>
+<h4><hr><a name="proxy">Proxy server settings</a></h4>
+	If you must use a proxy server to access the Internet, please tell Frontier how to communicate with it. Check the box below, fill in the settings, and then click the Submit button.
+	[[proxyError]]
+	<form method="POST">
+		<table border="0" cellspacing="1" cellpadding="5">
+			<tr>
+				<td colspan="2"><input type="checkbox" name="enabled" value=xxx [[proxyenabled]]>&nbsp;Check this box if you want Frontier to communicate through the proxy server described below.<br><br></td>
+				</tr>
+			<tr>
+				<td align="left">Domain:</td>
+				<td valign="top" colspan="1"><input type="text" name="domain" size="50" maxlength="100" value="[[proxydomain]]"></td>
+				</tr>
+			<tr>
+				<td align="left">Port:</td>
+				<td valign="top" colspan="1"><input type="text" name="port" size="50" maxlength="100" value="[[proxyport]]"></td>
+				</tr>
+			<tr>
+				<td align="left">Username:</td>
+				<td valign="top" colspan="1"><input type="text" name="username" size="50" maxlength="100" value="[[proxyusername]]"></td>
+				</tr>
+			<tr>
+				<td align="left">Password:</td>
+				<td valign="top" colspan="1"><input type="password" name="password" size="25" maxlength="100" value="[[proxypassword]]"></td>
+				</tr>
+			<tr><td></td><td><input type="submit" name="proxy" value="Submit"></td></tr>
+			</table>
+		</form>
+
+
+

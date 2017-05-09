@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.dll.isLoaded
+
+on isLoaded (dllPath) {
+	kernel (dll.isLoaded)}
+
+

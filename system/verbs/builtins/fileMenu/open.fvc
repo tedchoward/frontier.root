@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fileMenu.open
+
+on open (path, hidden = false) {
+	kernel (filemenu.open)}
+
+

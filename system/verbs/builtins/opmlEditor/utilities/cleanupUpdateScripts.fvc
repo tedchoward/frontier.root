@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.utilities.cleanupUpdateScripts
+
+on cleanupUpdateScripts () {
+	«Changes
+		«4/21/11; 2:09:20 PM by DW
+			«Created.
+	local (i, adrscript, agelimit = clock.now () - (5 * 60));
+	for i = sizeof (system.temp) downto 1 {
+		adrscript = @system.temp [i];
+		if typeof (adrscript^) == scripttype {
+			if string.lower (nameof (adrscript^)) beginswith "update" {
+				if timecreated (adrscript) < agelimit { //couldn't possibly still be running
+					try {delete (adrscript)}}}}}};
+bundle { //test code
+	cleanupUpdateScripts ()}
+
+

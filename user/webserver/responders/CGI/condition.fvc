@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:user.webserver.responders.CGI.condition
+
+(path endsWith ".fcgi")
+
+

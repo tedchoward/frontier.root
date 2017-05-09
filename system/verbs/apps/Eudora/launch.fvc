@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.launch
+
+on launch () {
+	return (app.startWithDocument ("Eudora", ""))}
+
+

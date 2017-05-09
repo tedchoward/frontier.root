@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.window.isVisible
+
+on isVisible (adr) {
+	kernel (window.isvisible)}
+
+

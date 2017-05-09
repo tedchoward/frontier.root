@@ -1,0 +1,21 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.introMatch
+
+on introMatch (pattern, s, adrMatchLen=nil) {
+	local (patternRef = 0, result = false, resultTable);
+	if adrMatchLen ‚ nil {
+		adrMatchLen^ = 0};
+	try {
+		patternRef = regex.compile (pattern, caseSensitive:regex.data.introCaseSensitive);
+		result = regex.search (patternRef, @s, @resultTable);
+		regex.free (patternRef);
+		if adrMatchLen ‚ nil {
+			adrMatchLen^ = resultTable.matchLength};
+		if result {
+			return (resultTable.matchOffset)};
+		return 0}
+	else {
+		if (patternRef  != 0) {
+			regex.free (patternRef)};
+		scriptError (tryError)}}
+
+

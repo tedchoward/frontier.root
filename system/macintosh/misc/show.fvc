@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.misc.show
+
+on show (appID, obj, showIn = nil, at = nil) { «Bring an object into view
+	return (appleEvent (appID, 'misc', 'mvis', '----', objspec (obj), 'wndw', objspec (showIn), 'show', point (at)))}
+
+

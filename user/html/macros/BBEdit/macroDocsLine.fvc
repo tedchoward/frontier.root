@@ -1,0 +1,42 @@
+FrontierVcsFile:3:scpt:user.html.macros.BBEdit.macroDocsLine
+
+on macroDocsLine (script, comment) {
+	«bundle «old version, returns a table line
+		«a macro that's called from the BBEdit docs page
+			«we return a table line, formatted to fit inside 
+			«a table of example macro calls
+		«
+		«local (htmltext = "")
+		«on add (s)
+			«htmltext = htmltext + s + cr
+		«on addcell (s)
+			«add ("<td valign=top><code>" + s + "</code></td>")
+		«add ("<tr>")
+		«addcell ("{" + script + "}")
+		«bundle «add the value of the script
+			«local (s)
+			«try
+				«s = evaluate (script)
+			«else
+				«s = tryError
+			«addcell (s)
+		«addcell (comment)
+		«return (htmltext)
+	bundle { «new version, returns a list line
+		local (htmltext = "");
+		on add (s) {
+			htmltext = htmltext + s + cr};
+		on addcell (s) {
+			add ("<td valign=top><code>" + s + "</code></td>")};
+		add ("<li><b>{" + script + "}</b> = ");
+		bundle { «add the value of the script
+			local (s);
+			try {
+				s = evaluate (script)}
+			else {
+				s = tryError};
+			add ("<b>\"" + s + "\"</b>. ")};
+		add (comment);
+		return (htmltext)}}
+
+

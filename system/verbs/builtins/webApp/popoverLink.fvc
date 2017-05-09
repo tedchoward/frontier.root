@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webApp.popoverLink
+
+on popoverLink (title, popovertext, linetext) {
+	«Changes
+		«11/30/11; 10:53:46 AM by DW
+			«Build a popover box, suitable for display by the Bootstrap toolkit.
+	on clean (s) {
+		return (searchengine.stripmarkup (s))};
+	return ("<a href=\"#\" rel=\"popover\" title=\"" + clean (title) + "\" data-content=\"" + clean (popovertext) + "\">" + linetext + "</a>")};
+bundle { //test code
+	popoverLink ()}
+
+

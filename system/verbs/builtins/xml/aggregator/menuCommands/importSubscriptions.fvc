@@ -1,0 +1,49 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.aggregator.menuCommands.importSubscriptions
+
+«Changes
+	«12/30/05; 7:45:29 AM by DW
+		«Handle structured lists.
+		«Don't die if a node doesn't have an xmlUrl attribute.
+		«Should work with BlogLines's OPML list format (they have a 2-level structure).
+	«12/28/05; 8:35:41 PM by DW
+		«Return true if we did a scan, false otherwise. This allows the caller to put up a dialog saying that the scan is complete, and offer to display the new items.
+	«2/2/02; 4:23:16 PM by JES
+		«Pass a 0 to file.getFileDialog, for the type parameter instead of nil. Fixes a bug where files could not be opened on MacOS X.
+	«11/25/01; 9:13:34 AM by DW
+		«Created.
+
+local (f);
+if file.getfiledialog ("Choose a subscriptions file:", @f, 0) {
+	local (adrdata = xml.aggregator.init ());
+	
+	local (xmltext = file.readwholefile (f), xstruct);
+	xml.compile (xmltext, @xstruct);
+	
+	local (adropml = xml.getAddress (@xstruct, "opml"));
+	local (adrbody = xml.getAddress (adropml, "body"));
+	local (ctimports = 0);
+	
+	on dolevel (adroutline) {
+		local (adr);
+		for adr in adroutline {
+			if string.lower (nameof (adr^)) contains "outline" {
+				local (adratts = @adr^.["/atts"]);
+				if defined (adratts^) {
+					if defined (adratts^.xmlUrl) {
+						local (adrservice = @adrdata^.services.[adratts^.xmlUrl]);
+						msg (adratts^.xmlUrl);
+						if not defined (adrservice^) {
+							new (tabletype, adrservice);
+							ctimports++}}};
+				dolevel (adr)}}}; //recurse
+	dolevel (adrbody);
+	if ctimports > 0 {
+		if dialog.yesno (ctimports + " services were imported, would you like to do a scan now?") {
+			window.about ();
+			xml.aggregator.readAllServices ();
+			return (true)}}
+	else {
+		dialog.alert ("All the services in the subscription file were already in your subscription list.")}};
+return (false)
+
+

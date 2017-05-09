@@ -1,0 +1,27 @@
+FrontierVcsFile:3:optx:websites.["#template"]
+
+{pageheader (title)}
+<blockquote>
+	<h1>{title}</h1>
+	<blockquote>
+		{bodytext}
+		</blockquote>
+	<hr>
+		<table cellspacing=10>
+			<tr>
+				<td valign=center>
+					{frontierLogo ()}
+					</td>
+				<td valign=center>
+					This page was last built on {clock.now ()} 
+					by {user.prefs.name}. 
+					{html.processMacros (user.prefs.mailAddress)}
+					At the moment I am using {platformLink ()} to work on this website.
+					</td>
+				</tr>
+			</table>
+	</blockquote>
+{pagefooter ()}
+
+
+

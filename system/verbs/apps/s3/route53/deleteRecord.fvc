@@ -1,0 +1,46 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.deleteRecord
+
+on deleteRecord (name, comment=nil, adrresponse=nil) {
+	«Changes
+		«6/20/11; 9:09:04 PM by DW
+			«Created.
+	local (bodytext, requesttext, now = clock.now (), domainname, idHostedZone, atts);
+	bundle { //init adrresponse
+		if adrresponse != nil {
+			new (tabletype, adrresponse)}};
+	bundle { //set domainname, idHostedZone
+		domainname = s3.route53.getDomainName (name);
+		idHostedZone = s3.route53.getZoneId (domainname)};
+	bundle { //build the <Change> element in bodytext
+		local (t);
+		s3.route53.getRecordInfo (name, @t);
+		t.name = name;
+		bodytext = string.multiplereplaceall (string (s3.route53.data.deleteTemplate), @t, false, "<%", "%>")};
+	bundle { //build the requesttext element in requesttext
+		local (t);
+		new (tabletype, @t);
+		bundle { //set comment
+			if comment == nil {
+				comment = "Record deleted by " + frontier.getprogramname () + " on " + date.netstandardstring (now) + "."};
+			t.comment = comment};
+		t.bodytext = bodytext;
+		requesttext = string.multiplereplaceall (string (s3.route53.data.requestEnvelope), @t, false, "<%", "%>")};
+		«wp.newtextobject (requesttext, @scratchpad.requesttext)
+	bundle { //sent the request to Amazon
+		local (s = s3.route53.httpClient ("2011-05-05/hostedzone/" + idHostedZone + "/rrset", "POST", requesttext), atts, xstruct);
+		s = string.httpResultSplit (s);
+		xml.compile (s, @xstruct);
+		«s3.route53.xstruct = xstruct
+		bundle { //fill in fields of atts
+			local (adrchangeresponse = xml.getaddress (@xstruct, "ChangeResourceRecordSetsResponse"));
+			local (adrchangeinfo = xml.getaddress (adrchangeresponse, "ChangeInfo"));
+			new (tabletype, @atts);
+			atts.id = xml.getvalue (adrchangeinfo, "Id");
+			atts.status = xml.getvalue (adrchangeinfo, "Status");
+			atts.whenSubmitted = date.iso8601StringToDate (xml.getvalue (adrchangeinfo, "SubmittedAt"))};
+		if adrresponse != nil {
+			adrresponse^ = atts}}};
+bundle { //test code
+	deleteRecord ("0zn8.blorkmark.net", adrresponse:@scratchpad.deleteresponse)}
+
+

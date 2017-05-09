@@ -1,0 +1,22 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.webserver.data.responders.default.data.docTree.someText
+
+<html>
+<body>
+This is a test. Just put raw text in here or binary data. <p>
+
+It will be served very simply and quickly. Macros and glossary refs are not processed, the text does not flow thru a template, none of the machinery of the website framework is applied.<p>
+
+You can include HTML tags if you know for sure that the text is going to be displayed in a web browser. I'm making that assumption here.<p>
+
+A couple of examples: <p><ol>
+
+<li>A link to a text object: <a href="otherText">a little doc</a>.<p>
+
+<li>A link to a binary object: <a href="cactus">a picture</a>.<p>
+</ol>
+
+Note that the default Responder <a href="aScript">does execute scripts</a>. You get the result of the execution of the script not the source code of the script.
+</body>
+</html>
+
+

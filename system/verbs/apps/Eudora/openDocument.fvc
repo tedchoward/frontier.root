@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.openDocument
+
+on openDocument (file) {
+	return (required.openDocument (Eudora.id, file))}
+
+

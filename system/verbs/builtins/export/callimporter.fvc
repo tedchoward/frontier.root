@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.export.callimporter
+
+on callimporter (path) { «this script is saved with all exported objects
+	return (export.importer (path))}
+
+

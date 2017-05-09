@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.findDifferences
+
+on findDifferences (new, old, caseInsensitive = nil, ignoreLeadingSpace = nil) { «Finds and displays differences between two files, folders, or projects.
+	return (appleEvent (BBEdit.id, 'R*ch', 'CmpF', 'Cmpn', filespec (new), 'Cmpo', filespec (old), 'Cins', boolean (caseInsensitive), 'CIgs', boolean (ignoreLeadingSpace)))}
+
+

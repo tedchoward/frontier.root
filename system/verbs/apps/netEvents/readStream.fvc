@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.netEvents.readStream
+
+on readStream (stream, bytesToRead) { «Read from an open stream
+	return (appleEvent (netEvents.id, 'WAPI', 'READ', '----', long (stream), 'LENG', long (bytesToRead)))}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.misc.createPublisher
+
+on createPublisher (appID, obj, edition = nil) { «Create a publisher
+	return (appleEvent (appID, 'misc', 'cpub', '----', objspec (obj), 'eloc', edition))}
+
+

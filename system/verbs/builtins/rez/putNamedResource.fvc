@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.rez.putNamedResource
+
+on putNamedResource (path, type, name, adr) {
+	kernel (rez.putnamedresource)}
+
+

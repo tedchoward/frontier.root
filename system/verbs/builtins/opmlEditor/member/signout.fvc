@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.member.signout
+
+on signout (urlRedirect, groupname="default") {
+	«Changes
+		«12/16/12; 11:39:42 AM by DW
+			«New optional parameter, groupname.
+				«http://worknotes.scripting.com/december2012/121612ByDw/usingGroupsInOpmlServerApps
+		«9/29/11; 11:47:48 AM by DW
+			«Set the page title to "Sign Out" to balance the sign-in script that already does this. Helps factor more out of the calling script, and if you want to call it something else, you can -- after you call us. 
+		«3/7/11; 9:17:45 AM by DW
+			«Created. 
+	local (pta = html.getpagetableaddress (), now = clock.now ());
+	local (adrgroup = opmlEditor.member.initGroup (groupname), cookievalue = "");
+	pta^.title = "Sign out"; //9/29/11 by DW
+	webserver.util.setCookie (pta, adrgroup^.cookiename, cookievalue, adrgroup^.cookiedomain, adrgroup^.cookieexpires);
+	webserver.redirect (pta, urlRedirect);
+	return ("")}
+
+

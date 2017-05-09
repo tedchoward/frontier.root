@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.beep
+
+on beep () {
+	«Changes
+		«9/12/10; 5:14:37 PM by DW
+			«The beep sound made when a buddy updates.
+	local (adrdata = io.init ());
+	if adrdata^.client.prefs.flBeepOnBuddyUpdate {
+		speaker.sound (1, 50, 100);
+		speaker.sound (1, 100, 14000)}};
+bundle { //test code
+	beep ()}
+
+

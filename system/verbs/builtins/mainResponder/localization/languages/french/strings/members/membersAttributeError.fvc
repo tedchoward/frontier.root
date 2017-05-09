@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.french.strings.members.membersAttributeError
+
+L'attribut #members doit &ecirc;tre une table, le nom d'une sous-table, une adresse valide ou encore une valeur de members.root.
+
+

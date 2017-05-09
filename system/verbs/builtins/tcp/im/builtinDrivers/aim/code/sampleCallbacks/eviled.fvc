@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.code.sampleCallbacks.eviled
+
+on EVILED(adrSelf, pctWarn, evildoer) {
+	return("eviled")}
+
+

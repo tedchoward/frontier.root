@@ -1,0 +1,13 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.opmlEditor.data.outlines.editOutlineForm
+
+<form action="http://127.0.0.1:5337/opmlEditor/editOutlineButton/open">
+	<input type="hidden" name="domain" value="<%domain%>">
+	<input type="hidden" name="editorialDomain" value="<%editorialDomain%>">
+	<input type="hidden" name="root" value="<%root%>">
+	<input type="hidden" name="username" value="<%username%>">
+	<input type="hidden" name="title" value="<%title%>">
+	<button style="font-family: Arial; padding-left: 10px; padding-right: 10px;" type="submit" class="btn btn-primary"><i class="icon-pencil icon-white" style="margin-right: 7px;"></i>Edit</button>
+	</form>
+
+
+

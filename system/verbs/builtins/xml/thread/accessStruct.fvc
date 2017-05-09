@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.thread.accessStruct
+
+on accessStruct (adrtable, adradrxstruct) {
+	«Changes
+		«6/10/11; 8:00:07 PM by DW
+			«Maintain ctAccesses stat at the table level, not just the version level.
+		«6/10/11; 7:38:02 AM by DW
+			«Created.
+	local (adrversions, adrversion,  now = clock.now ());
+	xml.thread.initStruct (adrtable);
+	adrversions = @adrtable^.versions;
+	adrversion = @adrversions^ [sizeof (adrversions^)];
+	adradrxstruct^ = @adrversion^.struct;
+	adrversion^.threadIds.[thread.getCurrentID ()] = now;
+	adrversion^.stats.ctAccesses++;
+	adrversion^.stats.whenLastAccess = now;
+	adrtable^.stats.ctAccesses++;
+	adrtable^.stats.whenLastAccess = now};
+bundle { //test code
+	«accessStruct (@scratchpad.daveOutline, @scratchpad.adrxstruct)
+	thread.callscript (@xml.thread.accessStruct, {@scratchpad.daveOutline, @scratchpad.adrxstruct})}
+
+

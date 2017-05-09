@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.script.getLanguage
+
+on getLanguage (adrScript) {
+	kernel (script.getLanguage)}
+
+

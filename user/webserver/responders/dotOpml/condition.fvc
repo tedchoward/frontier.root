@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:user.webserver.responders.dotOpml.condition
+
+(string.lower (path) beginsWith "/dotopml/")
+
+

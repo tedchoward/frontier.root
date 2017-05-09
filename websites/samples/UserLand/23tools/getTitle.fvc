@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:websites.samples.UserLand.["#tools"].getTitle
+
+local (adrPageTable = html.getPageTableAddress ());
+local (default = html.getPref ("defaultFileName", adrPageTable));
+
+if adrPageTable^.adrObject == adrPageTable^.adrSiteRootTable^.[default] { //is it the home page?
+	return ("UserLand Software, Inc.")};
+
+return ("UserLand: " + adrPageTable^.title)
+
+

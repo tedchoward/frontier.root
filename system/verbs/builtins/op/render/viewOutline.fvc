@@ -1,0 +1,754 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.render.viewOutline
+
+on viewOutline (urlOpml, pathIntoOutline=nil, adrParent=nil, adrOutline=nil, flSuppressComments=true, adrInitialRules=nil, adrInitialRulesText=nil, flHtmlCache=true, adrLineLevelCallback=nil, adrDirectiveVals=nil, adrGlossaryFindCallback=nil, flEmulateTrex=false) {
+	«Changes
+		«10/10/13; 12:46:33 PM by DW
+			«In addlevel, we were building "relpath" out of canonical names, even if there was a name attribute present. This would result in incorrect links to docs in index outlines.
+		«10/4/13; 10:53:02 AM by DW
+			«New optional param, flEmulateTrex.
+		«10/3/13; 3:04:15 PM by DW
+			«New optional param, adrGlossaryFindCallback.
+		«7/30/13; 12:34:19 PM by DW
+			«Support for the img attribute that was supported first in Trex. Nice to be porting functionality back this way. ;-)
+		«10/6/12; 11:42:00 AM by DW
+			«Use the generalized glossary to look up rules.
+				«http://worknotes.scripting.com/october2012/10612ByDw/generalizingGlossary
+		«9/26/12; 4:32:44 PM by DW
+			«Optional param, adrDirectiveVals. If not-nil, we store the values of and # directives in the table. 
+				«http://worknotes.scripting.com/september2012/92612ByDw/directivesInOutlines
+		«9/23/12; 11:37:34 AM by DW
+			«Strip markup from permalink text. 
+				«http://worknotes.scripting.com/september2012/92312ByDw/permalinksOnCommentPages
+		«9/1/12; 5:58:25 PM by DW
+			«New rule: outline-space-before. It puts the space above the headline, unlike outline-space which puts it after. 
+				«http://worknotes.scripting.com/september2012/9112ByDw/newRuleOutlinespacebefore
+		«8/24/12; 8:36:19 PM by DW
+			«Instead of generating div elements for outline items, generate paragraph elements. 
+				«http://worknotes.scripting.com/august2012/82412ByDw/dontUseDivsWhenRenderingOutlines
+		«8/12/12; 2:33:32 PM by DW
+			«When decoding, don't decode numeric entities. 
+				«http://worknotes.scripting.com/august2012/81212ByDw/characterEncodingIssues
+		«7/26/12; 4:10:53 PM by DW
+			«Change local routine notypeatt changes to notdocnode. It returns true if there is no type att, or if the type is "tweet" -- this makes it easy to add other types that are like tweets, that don't interrupt the outline structure. Just add them to notdocnode. Also for type "tweet" don't call linktodocnode even if it has no subs. 
+		«7/24/12; 7:43:07 PM by DW
+			«When generating a link to a document use the name attribute if it's present.
+				«http://worknotes.scripting.com/july2012/72412ByDw/oprenderviewoutlineIsNameaware
+		«6/1/12; 8:23:39 PM by DW
+			«New optional param, adrLineLevelCallback -- if not nil, points to a routine that returns text that we add at the end of each line. 
+		«5/2/12; 8:26:20 AM by DW
+			«If a node has a type attribute link to it instead of including it inline. We would previously only link to a set of pre-defined types. But we're going to allow user-defined types, and this should work equally well for them.
+				«http://worknotes.scripting.com/may2012/5212ByDw/outlinesShouldJumpOnAllNodesWithTypeAtt
+		«Pre 5/2/12
+			«4/23/12; 11:04:05 AM by DW
+				«Fix bug where the title of a Root was being included at the beginning of the path. 
+					«http://worknotes.scripting.com/april2012/42312ByDw/twoProblemsInOutlineRendering
+			«4/21/12; 10:47:16 AM by DW
+				«If there was an error trying to read a file that's been included by the outline you'd get a cryptic error message and the rendering would fail. Fixed.
+			«4/19/12; 10:42:49 AM by DW
+				«When initializing relpath, check if the parent has atts, and if it has a text att. If we're synthesizing an outline, it won't -- which is something we do with the reviewer's section in pocalypse.root.
+			«4/18/12; 6:08:10 PM by DW
+				«Includes in outlines.
+					«http://worknotes.scripting.com/april2012/41812ByDw/includesInOutlines
+			«4/16/12; 5:05:55 PM by DW
+				«Outlines can contain docs. 
+					«http://worknotes.scripting.com/april2012/41612ByDw/outlinesThatContainDocs
+			«4/6/12; 12:35:55 PM by DW
+				«Implemented the new-item-color rule. 
+					«http://worknotes.scripting.com/april2012/4612ByDw/newitemcolorRule
+			«4/3/12; 9:23:53 AM by DW
+				«If a headline is expandable, add a new class to the text, spanExpandableText. This allows us to have an ibeam cursor for text that can't expand/collapse, making selection work better (or at all).
+					«http://worknotes.scripting.com/april2012/4312ByDw/cursorInOutlines/
+			«4/1/12; 10:33:28 AM by DW
+				«Comment inclusion of styles and script. They are now included in the global styles and script files.
+					«http://worknotes.scripting.com/april2012/4112ByDw/movingOprenderStylesAndScripts/
+			«3/24/12; 1:33:52 PM by DW
+				«Check out the code for paths into the outline, and improve caching so that we cache one rendering for every path into the outline that's referenced. 
+					«http://worknotes.scripting.com/march2012/32412ByDw/linksThatGoIntoOutlines/
+			«3/19/12; 1:10:35 PM by DW
+				«Support new "collapse" attribute. If a node has it, and it's true, then the node is collapsed, no matter what the rules say. Useful for including very long bits of text in an outline that you don't want to interfere with the user experience.
+			«3/10/12; 1:44:16 PM by DW
+				«Support rules-from-the-glossary.
+					«http://worknotes.scripting.com/march2012/31012ByDw/rulesFromTheGlossary/
+			«3/5/12; 8:55:57 AM by DW
+				«New optional param, flHtmlCache. If false, we don't store an htmlCache element on the body element of the OPML.
+					«http://worknotes.scripting.com/march2012/3512ByDw/scripting2AndOpmlSource/
+			«2/27/12; 11:13:25 AM by DW
+				«Added hooks for font-family. The names accumulate into a table called "fonts" and at the end we generate the stylesheet links to that the fonts are included. Only if they are Google web fonts.
+					«http://worknotes.scripting.com/february2012/22712ByDw/hookingGoogleWebFontsIntoRules/
+			«2/16/12; 10:00:54 PM by DW
+				«Fixed a bug introduced when we added the adrInitialRulesText optimization. We have to avoid the first push when either adrInitialRules or adrInitialRulesText is non-nil. Problem manifested itself in blogpost nodetypes, by indenting one level too many.
+			«2/15/12; 2:47:19 PM by DW
+				«Implement caching, on by default. Pref is at config.op.prefs.flRenderCache.
+			«2/14/12; 9:49:36 AM by DW
+				«Re-activate code for dealing with link nodetypes. It was already there, just commented out while I was digging all around it.
+			«2/12/12; 6:23:44 PM by DW
+				«New optional param, adrInitialRulesText. If not nil, compile the text and use it for the initial rules. If you specify this, don't set adrInitialRules. Factors some code that was showing up everywhere.
+			«2/8/12; 10:55:10 AM by DW
+				«Moved to new table, op.render, from worldOutlineSuite.
+			«2/5/12; 12:07:40 PM by DW
+				«Add rules support.
+			«2/3/12; 5:23:27 PM by DW
+				«New optional param, flIncludeStyles. If you're not using the template, you might want us to include some styles so the outline doesn't look terrible. On the other hand you might not. :-)
+			«1/29/12; 9:25:19 AM by DW
+				«When we're not using a template, run the default styles through a table of default values.
+			«1/28/12; 6:53:50 PM by DW
+				«When we're not using a template, wrap the html text in a divOutlineBody. This is necessary for the default styles to work properly.
+			«1/22/12; 12:31:12 PM by DW
+				«New optional param, flUseTemplate. If false, we just return the text of the outline, not embedded in the outline template. Wrap all text in an opText span, not just text with subs. New optional param, flSuppressComments, if false we let comments come through (you want them to appear in code listings, for example).
+			«1/6/12; 9:49:52 AM by DW
+				«Support multiple roots.
+			«12/21/11; 12:30:11 PM by DW
+				«Convert to use templates. New required param, adrnodeatts. 
+			«12/7/11; 3:35:49 PM by DW
+				«Link nodes display in a new tab/window.
+			«12/2/11; 10:34:49 AM by DW
+				«Optional param, adrparent. If you already have the outline, and want us to ignore the url.
+			«12/1/11; 5:12:10 PM by DW
+				«New optional param, pathIntoOutline.
+			«11/28/11; 5:26:28 PM by DW
+				«Created.
+	local (adrtable, adrxstruct, htmltext = "\r", indentlevel = 0, wedgeblank, fonts);
+	local (wedgeRightIcon = "caret-right", wedgeDownIcon = "caret-down"); //10/4/13 by DW
+	local (startticks = clock.ticks (), now = clock.now (), showClassName = "show", urlToOutline, adrbody, t, oplevel = 0, rules);
+	local (permalinkimg = string (op.render.data.html.permalinkImg), linkimg = string (op.render.data.html.linkImg), xstructoutline, directives, adrdirectivecache = nil);
+	local (flrulessuppliedbycaller = (adrInitialRules != nil) or (adrInitialRulesText != nil), flfirstpush = true, adrcache, relpath = "", includestack);
+	new (tabletype, @t);
+	new (tabletype, @fonts);
+	new (tabletype, @includestack); //4/18/12 by DW
+	new (tabletype, @directives); //9/26/12 by DW
+	
+	«scratchpad.pathintooutline = pathIntoOutline 
+	«thread.getstackdump (@scratchpad.stackdump)
+	
+	bundle { //setup rules table
+		if adrInitialRulesText != nil {
+			new (tabletype, @rules);
+			new (tabletype, @rules.["000"]);
+			op.render.compileRules (string (adrInitialRulesText^), @rules.["000"])}
+		else {
+			if adrInitialRules == nil {
+				new (tabletype, @rules)}
+			else {
+				rules = adrInitialRules^}}};
+	bundle { //images
+		wedgeblank = "<img class=\"expandIcon\" src=\"" + op.render.data.urls.wedgeBlank + "\" border=\"0\">";
+		docicon = "<img class=\"expandIcon\" src=\"" + op.render.data.urls.docIcon + "\" border=\"0\">"};
+	«bundle //set urlToOutline
+		«if pathIntoOutline == nil
+			«urlToOutline = pta^.uri
+		«else
+			«sizeof ("http://worldoutline.scripting.com/scratchpad/nodetypes/outlineNodetype/unitedStates/midwest")
+				«91
+			«string.mid ("http://worldoutline.scripting.com/scratchpad/nodetypes/outlineNodetype/unitedStates/midwest", 1, 70)
+				«"http://worldoutline.scripting.com/scratchpad/nodetypes/outlineNodetype"
+			«sizeof ("/unitedStates/midwest")
+				«21
+			«
+			«urlToOutline = string.mid (pta^.uri, 1, sizeof (pta^.uri) - sizeof (pathIntoOutline))
+	bundle { //set adrbody, relpath
+		if adrparent != nil {
+			on setrelpath () {
+				local (adrparentatts = @adrparent^.["/atts"]);
+				if not defined (adrparentatts^) {
+					return};
+				if defined (adrparentatts^.domain) and (sizeof (adrparentatts^.domain) > 0) { //4/23/12 by DW
+					return};
+				if not defined (adrparent^.["/atts"].text) {
+					return};
+				relpath = html.directory.getcanonicalname (adrparent^.["/atts"].text) + "/"};
+			adrbody = adrparent;
+			setrelpath ()}
+		else {
+			if adroutline != nil {
+				local (xmltext = op.outlinetoxml (adroutline), adropml);
+				xml.compile (xmltext, @xstructoutline);
+				adropml = xml.getaddress (@xstructoutline, "opml");
+				adrbody = xml.getaddress (adropml, "body")}
+			else {
+				op.getNetOutline (urlOpml, @adrtable);
+				xml.thread.accessStruct (@adrtable^.struct, @adrxstruct);
+				«bundle //see if you can get it from our cache
+					«adrversion = parentof (adrxstruct^)
+					«if defined (adrversion^.data)
+						«if flcache
+							«if defined (adrversion^.data.woHtmlCache)
+								«return (adrversion^.data.woHtmlCache)
+					«else
+						«new (tabletype, @adrversion^.data)
+				local (adropml = xml.getaddress (adrxstruct, "opml"));
+				adrbody = xml.getaddress (adropml, "body")}}};
+	
+	local (adrdata = op.init ());
+	bundle { //see if the html has been cached -- 2/15/12 by DW
+		if adrdata^.prefs.flRenderCache {
+			if (pathIntoOutline != nil) and (sizeof (pathIntoOutline) > 0) {
+				adrcache = @adrbody^.urls;
+				if not defined (adrcache^) {
+					new (tabletype, adrcache)};
+				adrcache = @adrcache^.[pathIntoOutline]}
+			else {
+				adrcache = @adrbody^.htmlCache};
+			bundle { //set adrdirectivecache, 9/26/12 by DW
+				local (adrparent = parentof (adrcache^));
+				adrdirectivecache = @adrparent^.directiveCache};
+			if defined (adrdirectivecache^) { //9/26/12 by DW
+				table.copycontents (adrdirectivecache, adrDirectiveVals)};
+			if defined (adrcache^) {
+				adrdata^.stats.ctRenderCacheRefs++;
+				adrdata^.stats.whenLastRenderCacheRef = now;
+				return (adrcache^)}}};
+	
+	on add (s) {
+		htmltext = htmltext + string.filledstring ("\t", indentlevel) + s + "\r\n"};
+	on hassubs (adrx) { //return true if the outline node has sub-outlines
+		local (adr);
+		for adr in adrx {
+			if nameof (adr^) endswith "outline" { //contains at least one sub
+				adrfirstsub = adr;
+				return (true)}};
+		return (false)};
+	on isinclude (adratts) { //4/18/12 by DW
+		return (defined (adratts^.type) and (string.lower (adratts^.type) == "include") and defined (adratts^.url))};
+	on decode (s) {
+		return (xml.entitydecode (s, true, flDecodeNumericEntities:false))}; //8/12/12 by DW
+	on getExpandCollapseJavascriptCall (id) {
+		local (urlExpand, urlCollapse);
+		bundle { //set urlExpand, urlCollapse
+			if defined (myrules.["no-icons"]) and myrules.["no-icons"] {
+				urlExpand = op.render.data.urls.wedgeBlank;
+				urlCollapse = op.render.data.urls.wedgeBlank}
+			else {
+				if defined (myrules.["icon-expand"]) {
+					urlExpand = myrules.["icon-expand"]}
+				else {
+					urlExpand = op.render.data.urls.wedgeRight};
+				if defined (myrules.["icon-collapse"]) {
+					urlCollapse = myrules.["icon-collapse"]}
+				else {
+					urlCollapse = op.render.data.urls.wedgeDown}}};
+		return ("javascript:ec('" + id + "','" + showClassName + "','" + urlExpand + "','" + urlCollapse + "');")};
+	on getExpandCollapseIcon (id, flInitiallyExpanded=true, showClassName="show", iconurl=nil, iconName="") {
+		if flEmulateTrex { //10/4/13 by DW
+			local (iconExpand, iconCollapse, iconStyle="",  cssClasses = "ec ecIcon", iconExpandHtml = "", iconCollapseHtml = "", linkStyle = "");
+			if defined (myrules.["font-size"]) {
+				iconStyle = " style=\"font-size: "+ myrules.["font-size"] + ";\""};
+			bundle { //set iconExpand, iconCollapse
+				if defined (myrules.["icon-expand"]) {
+					iconExpand = myrules.["icon-expand"]}
+				else {
+					iconExpand = wedgeRightIcon};
+				if defined (myrules.["icon-collapse"]) {
+					iconCollapse = myrules.["icon-collapse"]}
+				else {
+					iconCollapse = wedgeDownIcon}};
+			bundle { //set iconName
+				if iconName == "" {
+					if flInitiallyExpanded {
+						iconName = iconCollapse}
+					else {
+						iconName = iconExpand}}
+				else {
+					iconExpand = iconName;
+					iconCollapse = iconName}};
+			bundle { //set cssClasses
+				if flInitiallyExpanded {
+					cssClasses = cssClasses + " expanded"}
+				else {
+					cssClasses = cssClasses + " collapsed";}};
+			bundle { //set iconExpandHtml
+				if iconExpand beginswith "http://" {
+					iconExpandHtml = "<img src=\"" + iconExpand + "\" class=\"expandIcon\"/>"}
+				else {
+					iconExpandHtml = "<i class=\"icon-" + iconExpand + " expandIcon\"" + iconStyle + "></i>"}};
+			bundle { //set iconCollapseHtml
+				if iconCollapse beginswith "http://" {
+					iconCollapseHtml = "<img src=\""+iconCollapse+"\" class=\"collapseIcon\"/>"}
+				else {
+					iconCollapseHtml = "<i class=\"icon-"+iconCollapse+" collapseIcon\""+iconStyle+"></i>"}};
+			bundle { //set linkStyle
+				if defined (myrules.["font-size"]) {
+					linkStyle = " style=\"width: "+myrules.["font-size"]+"; margin-left: -"+myrules.["font-size"]+";\""}};
+			return ("<a class=\"" + cssClasses + "\"" + linkStyle + ">" + iconExpandHtml + iconCollapseHtml + "</a>")}
+		else {
+			local (urlExpand, urlCollapse);
+			bundle { //set urlExpand, urlCollapse
+				if defined (myrules.["no-icons"]) and myrules.["no-icons"] {
+					urlExpand = op.render.data.urls.wedgeBlank;
+					urlCollapse = op.render.data.urls.wedgeBlank}
+				else {
+					if defined (myrules.["icon-expand"]) {
+						urlExpand = myrules.["icon-expand"]}
+					else {
+						urlExpand = op.render.data.urls.wedgeRight};
+					if defined (myrules.["icon-collapse"]) {
+						urlCollapse = myrules.["icon-collapse"]}
+					else {
+						urlCollapse = op.render.data.urls.wedgeDown}}};
+			if iconurl == nil {
+				if flInitiallyExpanded {
+					iconurl = urlCollapse}
+				else {
+					iconurl = urlExpand}};
+			return ("<a href=\"javascript:ec('" + id + "','" + showClassName + "','" + urlExpand + "','" + urlCollapse + "');\"><img class=\"expandIcon\" id=\"img_" + id + "\" src=\"" + iconurl + "\" border=\"0\"></a>")}};
+	on textToId (text) {
+		local (s = "");
+		for i = 1 to sizeof (text) {
+			ch = text [i];
+			if string.isnumeric (ch) or string.isalpha (ch) {
+				s = s + ch}
+			else {
+				s = s + " "}};
+		s = string.innerCaseName (s);
+		if sizeof (s) > 20 {
+			s = string.mid (s, 1, 20)};
+		return (s + random (1, 100000))};
+	on notdocnode (adr) { //7/26/12 by DW
+		local (adratts = @adr^.["/atts"]);
+		if defined (adratts^) {
+			if defined (adratts^.type) {
+				case adratts^.type {
+					"tweet" {
+						return (true)}}
+				else {
+					return (false)}}};
+		return (true)};
+	«on notypeatt (adr)
+		«local (adratts = @adr^.["/atts"])
+		«if defined (adratts^)
+			«if defined (adratts^.type)
+				«return (false)
+		«return (true)
+	on pushruleslevel () {
+		if flfirstpush and flrulessuppliedbycaller { //(adrInitialRules != nil)
+			flfirstpush = false;
+			return (@rules [1])}
+		else {
+			local (adrtable = @rules.[string.padwithzeros (sizeof (rules), 3)]);
+			new (tabletype, adrtable);
+			return (adrtable)}};
+	on popruleslevel () {
+		delete (@rules [sizeof (rules)])};
+	on getmyrules (adrtable) {
+		local (i, level, adritem, adrvalue, adrrule, val);
+		new (tabletype, adrtable);
+		for i = 1 to sizeof (rules) {
+			level = sizeof (rules) - i + 1;
+			for adritem in @rules [i] { //each one represents a single rule
+				if (level >= adritem^.startlevel) and (level <= adritem^.endlevel) { //add all the values that are in scope
+					for adrvalue in @adritem^.values {
+						adrrule = @adrtable^.[nameof (adrvalue^)];
+						val = adrvalue^;
+						if (typeof (val) == stringtype) and (val == "infinity") {
+							val = infinity};
+						adrrule^ = val}}}}};
+		«scratchpad.myrules = adrtable^
+	on nonstylerule (name) { //rules that don't get added to style attributes
+		case string.lower (name) {
+			"expanded";
+			"icon-expand";
+			"icon-collapse";
+			"no-icons";
+			"list-space";
+			"permalink";
+			"outline-indent";
+			"outline-space-before"; //9/1/12 by DW
+			"outline-space" {
+				return (true)}}
+		else {
+			return (false)}};
+	on getxmltext (adrtable) {
+		local (adr, name);
+		for adr in adrtable {
+			name = nameof (adr^);
+			if name == "/atts" {
+				xmltext = xmltext + string.filledstring ("\t", level) + adr^.text + "\r"}
+			else {
+				if not (name beginswith "/") {
+					level++;
+					getxmltext (adr);
+					level--}}}};
+	on compilerules (adr) {
+		local (xmltext, struct, level = 0);
+		bundle { //get xmltext
+			xmltext = "";
+			«on getxmltext (adrtable)
+				«local (adr, name)
+				«for adr in adrtable
+					«name = nameof (adr^)
+					«if name == "/atts"
+						«xmltext = xmltext + string.filledstring ("\t", level) + adr^.text + "\r"
+					«else
+						«if not (name beginswith "/")
+							«level++
+							«getxmltext (adr)
+							«level--
+			getxmltext (adr);
+			xmltext = decode (xmltext)};
+			«wp.newtextobject (xmltext, @scratchpad.myxmltext)
+		op.render.compileRules (xmltext, adrlocalrules)};
+		«bundle //compile
+			«try
+				«xml.compile (xmltext, @struct)
+			«else
+				«local (s = "Can't complile the rules text because it is not valid XML.")
+				«wp.newtextobject (xmltext, @scratchpad.badtext)
+				«scripterror (s + "<pre>\r\r" + xml.entityencode (xmltext, true) + "</pre>")
+		«local (adrrules = xml.getaddress (@struct, "rules"))
+		«local (rulelist = xml.getaddresslist (adrrules, "rule"), item, startlevel, endlevel)
+		«for item in rulelist
+			«local (adrsub = @adrlocalrules^.[string.padwithzeros (sizeof (adrlocalrules^), 3)])
+			«new (tabletype, adrsub)
+			«scratchpad.item = item^
+			«try {startlevel = xml.getattribute (item, "level")^} else {startlevel = 1}
+			«try {endlevel = xml.getattribute (item, "to")^} else {endlevel = infinity}
+			«adrsub^.startlevel = startlevel; adrsub^.endlevel = endlevel
+			«bundle //populate the values sub-table
+				«local (legalvalue)
+				«new (tabletype, @adrsub^.values)
+				«for legalvalue in legalvaluetags
+					«try {adrsub^.values.[legalvalue] = xml.getaddress (item, legalvalue)^}
+			«bundle //populate the values sub-table, without requiring a legalvaluetags list -- 2/5/12 by DW
+				«local (name, adrx, attname)
+				«new (tabletype, @adrsub^.values)
+				«for adrx in item
+					«name = nameof (adrx^)
+					«if name contains "\t"
+						«attname = string.nthfield (name, "\t", 2)
+						«adrsub^.values.[attname] = adrx^
+	on styletext (s, adrrules, flexpandable=false, adrnodeatts=nil) { //apply rules to text, 2/5/12 by DW
+		local (style = "", adrrule, name, classadd = "");
+		if flexpandable { //4/3/12 by DW
+			classadd = " spanExpandableText"};
+		if sizeof (adrrules^) > 0 {
+			for adrrule in adrrules {
+				if not nonstylerule (nameof (adrrule^)) {
+					name = nameof (adrrule^);
+					if name == "font-family" { //2/27/12 by DW
+						fonts.[adrrule^] = true};
+					if name == "new-item-color" { //4/6/12 by DW
+						if adrnodeatts != nil {
+							if defined (adrnodeatts^.created) {
+								if date (adrnodeatts^.created) > (now - 3600) {
+									style = style + "color: " + adrrule^ + "; "}}};
+						continue};
+					style = style + name + ": " + adrrule^ + "; "}};
+			if sizeof (style) > 0 {
+				style = " style=\"" + string.delete (style, sizeof (style), 1) + "\""}};
+		s = "<span class=\"spanOutlineText" + classadd + "\"" + style + ">" + s + "</span>";
+		return (s)};
+	on addlevel (adrlevel, pathIntoOutline, relpath="") {
+		local (adr, firstpathelement, adrlocalrules = pushruleslevel (), myrules, listitemstyle, itemnum = 0, flpopincludestack = false);
+		getmyrules (@myrules);
+		if pathIntoOutline != nil {
+			if pathIntoOutline beginswith "/" {
+				pathIntoOutline = string.delete (pathIntoOutline, 1, 1)};
+			firstpathelement = string.nthfield (pathIntoOutline, "/", 1);
+			pathIntoOutline = string.delete (pathIntoOutline, 1, sizeof (firstpathelement))};
+		bundle { //dive into include node, 4/18/12 by DW
+			local (adratts = @adrlevel^.["/atts"]);
+			if isinclude (adratts) {
+				local (adrtable, url = adratts^.url, adrincludestack);
+				for adrincludestack in @includestack { //protect against infinite loop
+					if string.lower (adrincludestack^) == string.lower (url) {
+						popruleslevel ();
+						return}};
+				try {
+					op.getnetoutline (url, @adrtable);
+					xml.thread.accessStruct (@adrtable^.struct, @adrxstruct);
+					adrlevel = xml.getaddress (adrxstruct, "opml");
+					adrlevel = xml.getaddress (adrlevel, "body");
+					includestack.[string.padwithzeros (sizeof (includestack), 3)] = url;
+					flpopincludestack = true}
+				else { //4/21/12 by DW
+					popruleslevel ();
+					return}}};
+		bundle { //emit the list div, 2/7/12 by DW
+			local (adrrule, style = "");
+			for adrrule in @myrules {
+				case string.lower (nameof (adrrule^)) {
+					"outline-indent" {
+						style = style + "padding-left: " + adrrule^ + "; "};
+					"list-space" {
+						style = style + "padding-bottom: " + adrrule^ + "; "}}};
+			if sizeof (style) > 0 {
+				style = " style=\"" + string.delete (style, sizeof (style), 1) + "\""};
+			add ("<div class=\"divOutlineList\"" + style + ">"); indentlevel++; oplevel++}; //2/3/12 by DW
+		for adr in adrlevel {
+			if nameof (adr^) endswith "outline" {
+				local (adratts = @adr^.["/atts"], text = decode (adratts^.text), lowertext = string.lower (text), icon, adrfirstsub = nil, flcomment = false, flexpanded, permalink, callbacktext, idItem, ecId = "", numbering = "");
+				
+				if flEmulateTrex { //10/6/13 by DW
+					icon = ""}
+				else {
+					icon = wedgeblank};
+				
+				on addoutlineitem () {
+					local (id = "", img = "");
+					if sizeof (idItem) > 0 {
+						id = " id=\"" + iditem + "\""};
+					
+					if flEmulateTrex { //10/4/13 by DW
+						if sizeof (ecId) > 0 {
+							ecId = " ec-id=\"" + ecId + "\""}};
+					
+					if (defined (adratts^.img)) { //7/28/13 by DW
+						img = "<img style=\"float: right; margin-left: 25px; margin-top: 15px; margin-right: 15px; margin-bottom: 15px;\" src=\"" + adratts^.img + "\">";;
+						if (defined (adratts^.url)) { //10/9/13 by DW
+							img = "<a href=\"" + adratts^.url + "\" target=\"_blank\">" + img + "</a>"}};
+					
+					add (callbacktext + "<p class=\"divOutlineItem\"" + listitemstyle + id + ecId + ">" + icon + img + numbering + text + permalink + "</p>")}; //8/24/12 by DW
+				bundle { //skip comments, if feature is enabled, 1/22/12 by DW
+					if defined (adratts^.isComment) {
+						if adratts^.isComment {
+							if  flSuppressComments {
+								continue};
+							add ("<div class=\"divComment\">"); indentlevel++;
+							flcomment = true}}};
+				
+				bundle { //process # directives, 9/26/12 by DW
+					if (text beginswith "#") {
+						if adrdirectivevals != nil { //caller supplied a place to put values
+							local (name, value);
+							if string.getdirectivevalue (text, @name, @value) {
+								directives.[name] = value}};
+						continue}};
+				
+				bundle { //get <rules>
+					if text == "<rules>" {
+						compilerules (adr);
+						getmyrules (@myrules);
+						continue}
+					else {
+						if text beginswith "<rules " { //3/10/12 by DW
+							local (name = string.trimwhitespace (string.nthfield (text, " ", 2)));
+							if name endswith ">" {
+								local (rulestext);
+								name = string.trimwhitespace (string.mid (name, 1, sizeof (name) - 1));
+								
+								if adrGlossaryFindCallback == nil { //10/3/13 by DW
+									if defined (worldOutlineSuite.glossary.find) {
+										adrGlossaryFindCallback = @worldOutlineSuite.glossary.find}};
+								
+								if adrGlossaryFindCallback != nil { //10/3/13 by DW
+									if adrGlossaryFindCallback^ (name, @rulestext) {
+										op.render.compileRules (rulestext, adrlocalrules);
+										getmyrules (@myrules);
+										continue}};
+								}}}};
+								«if defined (worldOutlineSuite.glossary.find) //10/6/12 by DW
+									«if worldOutlineSuite.glossary.find (name, @rulestext)
+										«op.render.compileRules (rulestext, adrlocalrules)
+										«getmyrules (@myrules)
+										«continue
+								«bundle //set adrglossary, continue if you can't
+									«try
+										«local (pta = html.getpagetableaddress ())
+										«adrglossary = pta^.adrglossary
+									«else
+										«continue
+								«if defined (adrglossary^.[name])
+									«op.render.compileRules (string (adrglossary^.[name]), adrlocalrules)
+									«getmyrules (@myrules)
+									«continue
+				bundle { //pass <style>, <script> through without processing
+					if (lowertext == "<style>") or (lowertext == "<script>") {
+						local (xmltext = "");
+						getxmltext (adr);
+						add (decode (xmltext));
+						continue}};
+				local (canonicalname = html.directory.getcanonicalname (text, true)); //9/23/12 by DW
+				itemnum++;
+				«if lowertext contains "no software company"
+					«msg ("hello")
+				bundle { //set flexpanded, 2/6/12 by DW
+					flexpanded = false;
+					«scratchpad.testarray.[string.padwithzeros (sizeof (scratchpad.testarray), 5)] = canonicalname + " == " + firstpathelement
+					if canonicalname == firstpathelement {
+						flexpanded = true;
+						text = "<b>" + text + "</b>"}
+					else {
+						if defined (myrules.expanded) {
+							flexpanded = boolean (myrules.expanded)}};
+					
+					if defined (adratts^.collapse) { //3/19/12 by DW
+						flexpanded = not boolean (adratts^.collapse)}};
+				bundle { //set listitemstyle, 2/6/12 by DW
+					local (adrrule, style = "");
+					for adrrule in @myrules {
+						case string.lower (nameof (adrrule^)) {
+							"outline-space" {
+								style = style + "padding-bottom: " + adrrule^ + "; "};
+							"outline-space-before" { //9/1/12 by DW
+								style = style + "padding-top: " + adrrule^ + "; "}}};
+					if sizeof (style) > 0 {
+						style = " style=\"" + string.delete (style, sizeof (style), 1) + "\""};
+					listitemstyle = style};
+				bundle { //set permalink, 2/8/12 by DW
+					local (flpermalink = false);
+					if defined (myrules.permalink) {
+						flpermalink = boolean (myrules.permalink)};
+					if flpermalink {
+						permalink = "<a name=\"" + canonicalname + "\">&nbsp;</a><a href=\"#" + canonicalname + "\">" + permalinkimg + "</a>"}
+					else {
+						permalink = ""}};
+				bundle { //set numbering, 10/6/13 by DW
+					if defined (myrules.numbering) {
+						case myrules.numbering {
+							"decimal" {
+								numbering = "<span class=\"outlineTypeNumber\">" + itemnum + ".</span> "}}}};
+				bundle { //set idItem, 6/4/12 by DW
+					if defined (adratts^.pgfnum) {
+						idItem = "i" + adratts^.pgfnum}
+					else {
+						idItem = ""}};
+				bundle { //set callbacktext, 6/1/12 by DW
+					if adrLineLevelCallback != nil {
+						callbacktext = adrLineLevelCallback^ (adr, idItem)}
+					else {
+						callbacktext = ""}};
+				if (hassubs (adr) and notdocnode (adr)) or isinclude (adratts) {
+					local (id = textToId (text), flcontainsnolink = not (lowertext contains "</a"), iconName = "", ecId = id);
+					
+					if defined (adratts^.icon) { //10/4/13 by DW
+						iconName = adratts^.icon};
+					
+					local (icon = getExpandCollapseIcon (id, flexpanded, showClassName, iconName));
+					«if flexpanded
+						«text = "<b>" + text + "</b>"
+					text = styletext (text, @myrules, flexpandable: flcontainsnolink, adrnodeatts: adratts);
+					bundle { //click in text to expand/collapse
+						if flcontainsnolink { //don't hot-up if there's one or more links in the text
+							if flEmulateTrex { //10/4/13 by DW
+								text = "<a class=\"ec\">" + text + "</a>"}
+							else {
+								local (js = getExpandCollapseJavascriptCall (id));
+								text = "<a onclick=\"" + js + "\">" + text + "</a>"}}};
+								«text = "<a onclick=\"javascript:ec('" + id + "','" + showClassName + "','" + urlExpand + "','" + urlCollapse + "');\">" + text + "</a>"
+					addoutlineitem ();
+					bundle { //add the text in a special <div> that makes it expandable
+						local (classname = "hide", name = canonicalname);
+						if defined (adratts^.name) { //10/10/13 by DW
+							name = adratts^.name};
+						if flexpanded {
+							classname = "show"};
+						add ("<div class=\"" + classname + "\" id=\"" + id + "\" name=\"" + id + "\">"); indentlevel++;
+						level++;
+						addlevel (adr, pathIntoOutline, relpath + name + "/");
+						level--;
+						add ("</div>"); indentlevel--}}
+				else {
+					local (docicon = "");
+					bundle { //if type att is present, link to a doc, 4/16/12 by DW
+						if defined (adratts^.type) {
+							on linktodoc (iconname="file", url=nil) {
+								local (path);
+								if url != nil {
+									path = url}
+								else {
+									if defined (adratts^.domain) {
+										path = "http://" + adratts^.domain + "/"}
+									else {
+										«local (nomad = parentof (adr^))
+										«path = html.directory.getcanonicalname (text)
+										«loop
+											«path = html.directory.getcanonicalname (nomad^.["/atts"].text) + "/" + path
+											«if nomad == adrparent
+												«break
+											«nomad = parentof (nomad^)
+										
+										local (name); //7/24/12 by DW -- use the name att if it's there
+										if defined (adratts^.name) {
+											name = adratts^.name}
+										else {
+											name = html.directory.getcanonicalname (text)};
+										path = relpath + name;
+										}};
+								docicon ="<a href=\"" + path + "\"><i class=\"icon-" + iconname + "\"></i></a>&nbsp;";
+								text = "<a href=\"" + path + "\" class=\"aOutlineDocLink\">" + text + "</a>"};
+							case string.lower (adratts^.type) {
+								"link" {
+									if defined (adratts^.url) { //10/7/13 by DW -- we have a node with type link and no url attribute
+										linktodoc ("bookmark", adratts^.url)}};
+								"thumblist" {
+									linktodoc ("th")};
+								"photo" {
+									linktodoc ("camera")};
+								"outline" {
+									linktodoc ("list-alt")};
+								"rss" {
+									linktodoc ("signal")};
+								"redirect" {
+									linktodoc ("refresh")};
+								"tweet" { //7/26/12 by DW -- do nothing
+									nil}}
+							else {
+								linktodoc ()}}};
+						«if defined (adratts^.type) //old version
+							«local (type = adratts^.type, urlDoc)
+							«bundle //set urlDoc
+								«urlDoc = urlToOutline
+								«if not (urlDoc beginswith "/")
+									«urlDoc = "/" + urlDoc
+								«if not (urlDoc endswith "/")
+									«urlDoc = urlDoc + "/"
+								«urlDoc = urlDoc + relpath + html.directory.getcanonicalname (text)
+							«bundle //links that end with .opml are treated as includes
+								«if type == "link"
+									«if string.lower (adratts^.url) endswith ".opml"
+										«type = "include"
+							«case type
+								«"link"
+									«icon ="<a href=\"" + adratts^.url + "\" target=\"_blank\">" + docicon + "</a>"
+								«"blogpost"
+									«local (popovertext = "")
+									«if adrfirstsub != nil
+										«popovertext = decode (adrfirstsub^.["/atts"].text)
+									«icon ="<a href=\"" + urlDoc + "\" title=\"" + popovertext + "\">" + docicon + "</a>"
+								«"outline"
+								«"rss"
+								«"include"
+								«"howto"
+								«"redirect"
+								«"html"
+								«"photo"
+									«icon ="<a href=\"" + urlDoc + "\">" + docicon + "</a>"
+					text = styletext (text, @myrules, adrnodeatts: adratts);
+					«no icon -- if we have it here we end up with overhang on paragraph lines. 
+						«2/7/12; 10:21:22 AM by DW
+					addoutlineitem ()};
+				if flcomment {
+					add ("</div>"); indentlevel--}}};
+		add ("</div>"); indentlevel--; oplevel--;
+		popruleslevel ();
+		if flpopincludestack {
+			delete (@includestack [sizeof (includestack)])}};
+	
+	local (level = 0);
+	«add (string (op.render.data.html.script)) //4/1/12 by DW -- commented
+	«add (string (op.render.data.html.style)) //4/1/12 by DW -- commented
+	add ("<div class=\"divOutlineBody\">"); indentlevel++;
+	addlevel (adrbody, pathIntoOutline, relpath);
+	add ("</div>"); indentlevel--;
+	bundle { //add font includes, 2/27/12 by DW
+		htmltext = op.render.getFontIncludes (@fonts) + htmltext};
+	bundle { //save to cache -- 2/15/12 by DW
+		if adrdata^.prefs.flRenderCache and flHtmlCache {
+			adrcache^ = htmltext; //3/24/12 by DW
+			adrdirectivecache^ = directives;
+			adrdata^.stats.ctRenderCacheStores++;
+			adrdata^.stats.whenLastRenderCacheStore = now}};
+		«if adrversion != nil
+			«adrversion^.data.woHtmlCache = htmltext
+	table.copycontents (@directives, adrDirectiveVals); //9/26/12 by DW
+	return (htmltext)};
+bundle { //test code
+	local (adroutline = @op.render.testing.examples.blogpost);
+	adroutline = @op.render.testing.examples.kitchensink;
+	adroutline = @op.render.testing.examples.outlinethatcontainsstuff;
+	adroutline = @op.render.testing.examples.hasinclude;
+	adroutline = @op.render.testing.examples.infiniteloop;
+	webbrowser.displaytext (viewoutline ("", adroutline:adroutline, adrInitialRules:@op.render.testing.examples.rulesCompiled));
+	}
+	«webbrowser.displaytext (viewoutline ("http://dropbox.scripting.com/dave/worldOutline/rulesTesting/howtoPrototype.opml"))
+
+

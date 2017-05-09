@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.setMessageText
+
+on setMessageText (msgObj, msgText) {
+	with objectModel, Eudora, eventInfo {
+		return (core.set (id, msgObj.body, msgText))}}
+
+

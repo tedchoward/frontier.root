@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.adminSite.callbacks.logRootUpdate
+
+on logRootUpdate (adrpart, changenote) {
+	«Changes
+		«8/28/02; 11:11:26 PM by JES
+			«Created.
+	if not config.mainResponder.prefs.flLogRootUpdates { //do nothing
+		return (true)};
+	local (partname = string.popFileFromAddress (adrpart) );
+	local (adritem = log.addToGuestDatabase ("rootUpdates", partname, true));
+	adritem^.adr = adrpart;
+	adritem^.changenote = changenote;
+	return (true)}
+«bundle //test code
+	«logRootUpdate ("foo", "change notes")
+
+

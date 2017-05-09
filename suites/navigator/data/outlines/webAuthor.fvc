@@ -1,0 +1,12 @@
+FrontierVcsFile:3:optx:suites.navigator.data.outlines.webAuthor
+
+Web Sites;root.websites;A table that contains all your web sites.
+FTP Sites;user.html.sites;A table that contains site descriptions for your web sites, either locally or thru FTP.
+Macros;user.html.macros;A table that contains scripts that can be called from your web pages inside {curly braces}.
+Glossary;user.html.glossary;A table that contains bits of text and HTML that can be referenced in "double quotes".
+Templates;user.html.templates;A table that contains text that controls the formatting of groups of web pages.
+Renderers;user.html.renderers;A table that contains scripts that turn outlines into HTML text.
+Data;websites.["#data"];A table that contains all the attributes of the page as it is being built.
+
+
+

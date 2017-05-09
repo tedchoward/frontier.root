@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.misc.revert
+
+on revert (appID, obj) { «Restore the object to its last saved state
+	return (appleEvent (appID, 'misc', 'rvrt', '----', objspec (obj)))}
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:wptx:suites.people.webAdmin.newGroup
+
+#title "New Group"
+{newGroup ()}
+{goBack ()}
+
+

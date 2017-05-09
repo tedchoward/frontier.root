@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.contacts.getPublicList
+
+on getPublicList (userid, adrcontactstable) {
+	«Changes
+		«11/6/07; 7:03:48 AM by DW
+			«Get the indicated user's public contact list.
+				«http://www.flickr.com/services/api/flickr.contacts.getPublicList.html
+	local (mystruct);
+	new (tabletype, adrcontactstable);
+	new (tabletype, @mystruct);
+	mystruct.api_key = user.flickr.prefs.apiKey;
+	mystruct.user_id = userid;
+	local (s = [user.flickr.prefs.server].flickr.contacts.getPublicList (mystruct), xstruct);
+	s = xml.entitydecode (s, flAlphaEntities:true);
+	xml.compile (s, @xstruct);
+	«scratchpad.xstruct = xstruct
+	local (adrcontacts = xml.getaddress (@xstruct, "contacts"), adrcontact);
+	for adrcontact in adrcontacts {
+		if nameof (adrcontact^) endswith "contact" {
+			local (adratts = @adrcontact^.["/atts"]);
+			local (adrsub = @adrcontactstable^.[adratts^.username]);
+			new (tabletype, adrsub);
+			adrsub^.id = adratts^.nsid}}}
+«bundle //test code
+	«local (id = Flickr.people.findByUsername ("fredwilson"))
+	«getpubliclist (id, @scratchpad.contacts)
+	«edit (@scratchpad.contacts)
+
+

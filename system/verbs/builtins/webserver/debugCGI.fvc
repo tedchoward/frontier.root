@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webserver.debugCGI
+
+«Run this script to debug your CGI. It assumes that debugging is on,
+	«and uses the parameters from your last CGI request,
+	«which are stored at scratchpad.cgiparams.
+webbrowser.displayText (webserver.handler (@scratchpad.cgiparams));
+webbrowser.bringToFront ()
+
+

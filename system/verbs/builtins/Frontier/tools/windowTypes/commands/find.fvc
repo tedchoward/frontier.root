@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.windowTypes.commands.find
+
+on find () {
+	«Run the Find command.
+		«09/29/00; 5:55:47 PM by PBS
+	system.menus.scripts.findCommand ()}
+
+

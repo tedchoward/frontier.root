@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.db.delete
+
+on delete (f, path) {
+	kernel (db.delete)}
+
+

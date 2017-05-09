@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.editMenu.setShadow
+
+on setShadow (flshadow) {
+	kernel (editmenu.setshadow)}
+
+

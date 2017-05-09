@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.newBucket
+
+on newBucket (name, acl="public-read") {
+	«Changes
+		«10/10/06; 9:11:13 AM by DW
+			«New optional parameter, acl, determines if the bucket we're creating is private. This means that only the creator can read it or write to it. By default, the public can read, but only the creator can write. Other values are: 
+				«* private: Owner gets FULL_CONTROL. No one else has any access rights. This is the default.
+				«* public-read:Owner gets FULL_CONTROL and the anonymous principal is granted READ access. If this policy is used on an object, it can be read from a browser with no authentication.
+				«* public-read-write:Owner gets FULL_CONTROL, the anonymous principal is granted READ and WRITE access. This is a useful policy to apply to a bucket, if you intend for any anonymous user to PUT objects into the bucket.
+				«* authenticated-read:Owner gets FULL_CONTROL, and any principal authenticated as a registered Amazon S3 user is granted READ access.
+		«4/11/06; 9:07:32 AM by DW
+			«Created.
+	local (response);
+	s3.init ();
+	response = s3.httpClient ("PUT", "/"+ name, acl:acl);
+	return (response.headers.Location)};
+bundle { //test code
+	newBucket ("michegas")}
+
+

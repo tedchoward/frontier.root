@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.clickers.typeFTsc
+
+on typeFTsc (path) {
+	«open or run a file of type FTsc, containing "fat page" data
+	return (Frontier.clickers.typeFATP (path))}
+
+

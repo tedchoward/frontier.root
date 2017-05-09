@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.buttons.buddies.["00004500\tRefresh"]
+
+«Changes
+	«11/26/12; 6:50:40 PM by DW
+		«Created. 
+			«http://worknotes.scripting.com/november2012/112612ByDw/refreshButtonInIoWindow
+thread.callscript (@io.client.menuCommands.refreshOneBuddy, {})
+
+

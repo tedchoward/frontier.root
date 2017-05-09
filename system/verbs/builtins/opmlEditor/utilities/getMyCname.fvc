@@ -1,0 +1,22 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.utilities.getMyCname
+
+on getMyCname () {
+	«Changes
+		«4/10/12; 9:17:13 AM by DW
+			«Trying a different approach, less expensive, and easier on my services, and much faster. Instead of allocating a CNAME from mediahackers.org, do a reverse DNS lookup. This makes sure we get an externally usable name.
+				«http://worknotes.scripting.com/april2012/41012ByDw/allocingCnamesChange/
+	local (server = "xmlrpc://getmycname.scripting.com/RPC2", response, now = clock.now ());
+	bundle { //don't allow calls more often than once every ten minutes
+		if defined (system.temp.opmleditor.stats.whenLastCnameGet) {
+			if (now - system.temp.opmleditor.stats.whenLastCnameGet) < (60 * 10) {
+				return ("")}};
+		system.temp.opmleditor.stats.whenLastCnameGet = now};
+	try {
+		response = [server].getMyCname.getcname ();
+		if not response.error {
+			return (response.name)}};
+	return ("")};
+bundle { //test code
+	dialog.alert (getMyCname ())}
+
+

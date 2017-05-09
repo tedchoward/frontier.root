@@ -1,0 +1,79 @@
+FrontierVcsFile:3:optx:user.html.templates.example2
+
+{pageheader ("Frontier: " + "<title>")}   
+<table border=0 cellpadding=8 cellspacing=0>
+	<tr>
+		{"<td  valign=top bgcolor=\"" + sideBarColor () + "\">"}
+			<center>
+				<font face="helvetica,arial" size=-2>
+					<b>{homelink (gifref ("frondoc") + "")}</b><p>
+					"What is Frontier?"<br> 
+					{sitelink (@user.websites.frontier.newReleases.Frontier41, "Download")}<br> 
+					"News & Updates"
+					<p>
+						{sitelink (@user.websites.frontier.admin.mail, "Mailing Lists")}<br>
+						<a href="http://www.scripting.com/samples/">Sample Scripts</a><br>
+						{sitelink (@user.websites.frontier.outline, "Site Outline")}
+					<p>
+						"Search"<br>
+						"Guestbook"<br>
+						"BBS"
+					<p>
+						{siteLink (@user.websites.frontier.manual.default, "<b>User's Guide</b>")}
+						<br>
+							{siteLink (@user.websites.frontier.manual.chapter01, "1")}
+							{siteLink (@user.websites.frontier.manual.chapter02, "2")}
+							{siteLink (@user.websites.frontier.manual.chapter03, "3")}
+							{siteLink (@user.websites.frontier.manual.chapter04, "4")}
+							{siteLink (@user.websites.frontier.manual.chapter05, "5")}
+							{siteLink (@user.websites.frontier.manual.chapter06, "6")}<br>
+							{siteLink (@user.websites.frontier.manual.chapter07, "7")}
+							{siteLink (@user.websites.frontier.manual.chapter08, "8")}
+							{siteLink (@user.websites.frontier.manual.chapter09, "9")}
+							{siteLink (@user.websites.frontier.manual.chapter10, "10")}
+							{siteLink (@user.websites.frontier.manual.chapter11, "11")}
+						<p>
+							{siteLink (@user.websites.frontier.menus.apple, "Apple")}
+							{siteLink (@user.websites.frontier.menus.file, "File")}
+							{siteLink (@user.websites.frontier.menus.edit, "Edit")}<br>
+							{siteLink (@user.websites.frontier.menus.main, "Main")}
+							{siteLink (@user.websites.frontier.menus.open, "Open")}
+							{siteLink (@user.websites.frontier.menus.suites, "Suites")}<br>
+							{siteLink (@user.websites.frontier.menus.web, "Web")}
+							{siteLink (@user.websites.frontier.menus.window, "Window")}
+						<p>
+							{siteLink (@user.websites.frontier.menus.menubar, "Menubar")}
+							{siteLink (@user.websites.frontier.menus.outline, "Outline")}<br>
+							{siteLink (@user.websites.frontier.menus.script, "Script")}
+							{siteLink (@user.websites.frontier.menus.table, "Table")}
+							{siteLink (@user.websites.frontier.menus.wp, "WP")}
+					<p>
+						<b>{homelink (gifref ("frondoc") + "")}</b><p>
+					</font>
+				{spacepixels (80)}
+				</center>
+			</td>
+		{"<td valign=top bgcolor=\"" + mainCellColor () + "\">"}
+			<h2>
+				{chaptertitle ()} <title>
+				</h2>
+			<p>
+			<blockquote>
+				<font color="black">
+					{subtext ()}
+					</font>
+				<bodytext>
+				{spacepixels (400)}
+				<hr size=3>
+				<font face="geneva,arial" size=-2>
+					© Copyright 1996 UserLand Software. This page was last built on {string.dateString ()} at {string.timeString ()} 
+					with "Frontier". Thanks for checking it out! "Dave"
+					</font>
+				</blockquote>
+			</td>
+		</tr>
+	</table>
+{pagefooter ()}
+
+
+

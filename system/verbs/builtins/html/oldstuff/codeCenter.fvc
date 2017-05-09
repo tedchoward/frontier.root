@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.oldstuff.codeCenter
+
+on codeCenter (s) {
+	return ("<code><center> " + s + " </center></code>")}
+
+

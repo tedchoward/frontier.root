@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.extensions.crypto.kernelGlue.MD5
+
+on MD5 (s, flTranslate=true) {
+	«Changes
+		«8/31/09; 5:06:34 PM by DW
+			«Created. 
+	kernel (crypt.MD5)}
+
+

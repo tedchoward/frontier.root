@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.menu.install
+
+html.menu.init ();
+if user.html.menu.enabled {
+	if defined (html.menu.theMenu) {
+		menu.install (@html.menu.theMenu)}}
+
+

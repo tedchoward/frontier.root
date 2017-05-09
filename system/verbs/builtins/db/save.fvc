@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.db.save
+
+on save (f) {
+	kernel (db.save)}
+
+

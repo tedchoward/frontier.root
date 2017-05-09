@@ -1,0 +1,59 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.httpReadUrl
+
+on httpReadUrl (url, ctFollowRedirects=0, flMessages=true, username="", password="", method="GET", adrcode=nil) {
+	«Changes
+		«6/13/10; 1:57:27 AM by DW
+			«Add optional param to let the user get the HTTP status code.
+			«Old code
+				«on httpReadUrl (url, ctFollowRedirects=0, flMessages=true, username="", password="", method="GET")
+					«Changes
+						«1/2/09; 12:15:28 PM by DW
+							«Add optional param to let caller specify the method.
+						«11/8/07; 12:59:20 PM by DW
+							«Add optional params for username and password.
+						«10/17/07; 8:14:24 AM by DW
+							«Add optional parameter to turn off messages.
+						«8/26/06; 11:45:46 AM by DW
+							«Add an optional param, ctFollowRedirects, defaults to 0 (old behavior). 
+							«If non-zero, we follow that many redirects. Recommend a value like 5, if you think a redirect is possible.
+						«8/25/06; 10:25:12 AM by DW
+							«Don't give up if the url is missing a trailing slash.
+						«9/27/99; 8:00:51 PM by DW
+							«Pass us an http url and we return the result.
+					«local (urllist)
+					«try
+						«urllist = string.urlsplit (url)
+					«else
+						«urllist = string.urlsplit (url + "/")
+					«return (string.httpResultSplit (tcp.httpClient (method, server:urllist [2], path:urllist [3], ctFollowRedirects:ctFollowRedirects, flMessages:flMessages, username:username, password:password)))
+		«1/2/09; 12:15:28 PM by DW
+			«Add optional param to let caller specify the method.
+		«11/8/07; 12:59:20 PM by DW
+			«Add optional params for username and password.
+		«10/17/07; 8:14:24 AM by DW
+			«Add optional parameter to turn off messages.
+		«8/26/06; 11:45:46 AM by DW
+			«Add an optional param, ctFollowRedirects, defaults to 0 (old behavior). 
+			«If non-zero, we follow that many redirects. Recommend a value like 5, if you think a redirect is possible.
+		«8/25/06; 10:25:12 AM by DW
+			«Don't give up if the url is missing a trailing slash.
+		«9/27/99; 8:00:51 PM by DW
+			«Pass us an http url and we return the result.
+	local (urllist);
+	bundle { //set urllist
+		try {
+			urllist = string.urlsplit (url)}
+		else {
+			urllist = string.urlsplit (url + "/")}};
+	local (httpResult = tcp.httpClient (method, server:urllist [2], path:urllist [3], ctFollowRedirects:ctFollowRedirects, flMessages:flMessages, username:username, password:password));
+	if adrcode != nil { //6/13/10 by DW
+		adrcode^ = tcp.httpGetStatusCode (httpResult)};
+	return (string.httpResultSplit (httpResult))}
+«bundle //test code
+	«dialog.alert (httpReadUrl ("http://www.classannual.com:8080/test", 5))
+	«dialog.alert (httpReadUrl ("http://www.davosnewbies.com", adrcode:@code))
+	«dialog.alert (code)
+	«dialog.alert (httpReadUrl ("http://www.davosnewbies.com"))
+	«dialog.alert (httpReadUrl ("http://www.scripting.com/default.html"))
+
+

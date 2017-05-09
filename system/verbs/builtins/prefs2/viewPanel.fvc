@@ -1,0 +1,137 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.prefs2.viewPanel
+
+on viewPanel (adrprefs, catnum, panelnum, titleparam="", adrtoolprefs=nil, path=nil) {
+	«Changes
+		«7/17/12; 12:53:02 PM by DW
+			«New optional param, path. 
+				«http://worknotes.scripting.com/july2012/71712ByDw/pointingToPrefsPages
+		«3/14/12; 2:44:49 PM by DW
+			«Convert to Bootstrap 2.0.
+		«1/27/12; 10:10:38 AM by DW
+			«Better error messages.
+				«http://worknotes.scripting.com/january2012/12712ByDw/betterErrorMessagesOnBadPrefsLinks/
+		«9/16/11; 6:56:06 PM by DW
+			«New optional parameter, adrtoolprefs.
+		«8/30/11; 10:08:11 AM by DW
+			«The caller either provides a catnum and panelnum or a title, and we display the panel.
+	local (pta = html.getpagetableaddress (), htmltext = "\r\r", indentlevel = 0, adrsub, xstruct, adrx, nextlink, prevlink);
+	local (mypagename = nameof (pta^.adrobject^), titlefname = nil);
+	on add (s) {
+		htmltext = htmltext + string.filledstring ("\t", indentlevel) + s + "\r"};
+	on decode (s) {
+		return (xml.entitydecode (s, true))};
+	on gettext (adrx) {
+		return (string.replaceall (decode (adrx^.["/atts"].text), "<br>", ""))};
+	
+	bundle { //set adrx, nextlink, prevlink
+		local (opmltext = op.outlinetoxml (adrprefs), adrpanel);
+		xml.compile (opmltext, @xstruct);
+		
+		local (adropml = xml.getaddress (@xstruct, "opml"));
+		local (adrbody = xml.getaddress (adropml, "body"));
+		prefs2.compileToolPrefs (adrbody, adrtoolprefs); //9/16/11 by DW
+		scratchpad.xstruct = xstruct;
+		
+		
+		if path == nil {
+			on getsub (adrbase, num) {
+				local (adrsub, ct = 1);
+				for adrsub in adrbase {
+					if nameof (adrsub^) endswith "outline" {
+						if ct == num {
+							return (adrsub)};
+						ct++}}};
+			local (adrcat = getsub (adrbody, catnum));
+			adrx = getsub (adrcat, panelnum)}
+		else { //7/17/12 by DW
+			on getsub (adrbase, name) {
+				local (adrsub);
+				for adrsub in adrbase {
+					if nameof (adrsub^) endswith "outline" {
+						if string.lower (string.titleToFilename (gettext (adrsub))) == name {
+							return (adrsub)}}}};
+			local (adrcat = getsub (adrbody, string.lower (string.titleToFilename (string.nthfield (path, ".", 1)))));
+			adrx = getsub (adrcat, string.lower (string.titleToFilename (string.nthfield (path, ".", 2))))};
+		
+		if titleparam != nil {
+			titlefname = string.lower (string.titleToFilename (titleparam))};
+		
+		local (loopcatnum = 0, looppanelnum, panelarray, ixthispanel = 0);
+		new (tabletype, @panelarray);
+		for adrcat in adrbody { //fill the panelarray
+			if nameof (adrcat^) endswith "outline" {
+				loopcatnum++;
+				looppanelnum = 0;
+				for adrpanel in adrcat {
+					if nameof (adrpanel^) endswith "outline" {
+						looppanelnum++;
+						panelarray.[string.padwithzeros (sizeof (panelarray), 5)] = loopcatnum + "." + looppanelnum;
+						if titlefname != nil { //the caller provided a title, not catnum.panelnum
+							if titlefname == string.lower (string.titleToFilename (gettext (adrpanel))) {
+								ixthispanel = sizeof (panelarray);
+								adrx = adrpanel}}
+						else {
+							if adrpanel == adrx {
+								ixthispanel = sizeof (panelarray)}}}}}};
+		«scratchpad.panelarray = panelarray
+		
+		bundle { //better error messages -- 1/27/12 by DW
+			if ixthispanel == 0 {
+				if titlefname != nil {
+					scripterror ("Can't display the prefs page because there is no panel entitled \"" + titleparam + ".\"")}
+				else {
+					scripterror ("Can't display the prefs page because there is no panel numbered \"" + catnum + "." + panelnum + ".\"")}}};
+		
+		if ixthispanel == 1 {
+			prevlink = "Previous"}
+		else {
+			prevlink = "<a href=\"" + nameof (pta^.adrobject^) + "?page=" + panelarray [ixthispanel-1] + "\">Previous</a>"};
+		
+		if ixthispanel == sizeof (panelarray) {
+			nextlink = "Next"}
+		else {
+			nextlink = "<a href=\"" + nameof (pta^.adrobject^) + "?page=" + panelarray [ixthispanel+1] + "\">Next</a>"}};
+	
+	add ("<div class=\"divPrefs\">"); indentlevel++;
+	add ("<form method=\"POST\" class=\"form-horizontal\">"); indentlevel++;
+	add ("<fieldset>"); indentlevel++;
+	
+	local (title = gettext (adrx));
+	bundle { //top line
+		local (adrparent = parentof (adrx^));
+		add ("<div class=\"row\" class=\"divPrefsTopLine\"><div style=\"float:left;\"><a href=\"" + mypagename + "\">Preferences</a>&nbsp;>&nbsp;" + gettext (adrparent) + "</div><div style=\"float:right;\">" + prevlink + " / " + nextlink + "</div></div>")};
+	
+	add ("<div class=\"row\"><h3>" + title + "</h3></div>");
+	pta^.title = title;
+	
+	for adrsub in adrx {
+		if nameof (adrsub^) endswith "outline" {
+			local (s = gettext (adrsub));
+			s = string.replaceall (s, "radio.prefs.", "prefs2.");
+			add ("<div class=\"row\"><div class=\"clearfix\">" + s + "</div></div>")}};
+	add ("</fieldset>"); indentlevel--;
+	
+	bundle { //add Submit button
+		«add ("<div class=\"actions\">")
+		add ("<button type=\"submit\" class=\"btn btn-primary btn-large\">Submit</button>")};
+		«add ("</div>")
+	
+	add ("</form>"); indentlevel--;
+	add ("</div>"); indentlevel--;
+	
+	bundle { //prepare for the item handlers to run
+		if pta^.method == "POST" {
+			new (tabletype, @pta^.postArgs);
+			webserver.parseArgs (pta^.requestBody, @pta^.postArgs)}};
+	
+	return (htmltext)};
+bundle { //test code
+	local (opmltext = op.outlinetoxml (@opmlEditor.data.outlines.prefs));
+	xml.compile (opmltext, @xstruct);
+	scratchpad.xstruct = xstruct;
+	local (adropml = xml.getaddress (@xstruct, "opml"));
+	local (adrbody = xml.getaddress (adropml, "body"));
+	local (adrx = @adrbody^ [2] [4]);
+	webbrowser.displaytext (viewPanel (adrx))}
+
+

@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.startup
+
+on startup () {
+	«Changes
+		«2/18/12; 4:42:38 PM by DW
+			«Don't try to open the outline if the user has not set up a world outline server.
+		«2/18/12; 12:15:25 PM by DW
+			«Created.
+	local (adrdata = opmlEditor.worldOutline.init ());
+	if sizeof (adrdata^.prefs.defaultServer) > 0 {
+		local (userprefs);
+		opmlEditor.worldOutline.getUserPrefs (@userprefs);
+		«scratchpad.userprefs = userprefs
+		if userprefs.flOpenOutlineAtStartup {
+			opmlEditor.worldOutline.openArchivedOutline (userprefs.startupOutlineUrl, userprefs.startupOutlineTitle)}}}
+«bundle //test code
+	«startup ()
+
+

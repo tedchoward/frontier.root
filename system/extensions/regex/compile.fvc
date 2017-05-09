@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.compile
+
+on compile (pattern, caseSensitive = false, fastmap = true) {
+	return (long (dll.call (regex.data.getPath (), "regcompileverb", string (pattern), boolean (caseSensitive), boolean (fastmap), long (regex.data.adrSyntaxOptions^))))}
+
+

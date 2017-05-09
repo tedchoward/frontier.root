@@ -1,0 +1,11 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.prefs2.bootstrap.panelItemTemplate
+
+<div class="clearfix">
+	<label for="<%itemName%>"><%itemPrompt%></label>
+	<div class="input">
+		<%itemCode%>
+		</div>
+	</div>
+
+
+

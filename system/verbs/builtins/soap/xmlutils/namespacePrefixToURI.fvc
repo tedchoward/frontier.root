@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.xmlutils.namespacePrefixToURI
+
+on namespacePrefixToURI (adrmsg, prefix) {
+	local (adrtable = @adrmsg^.scopestack);
+	local (ix, adr);
+	for ix = sizeof (adrtable^) downto 1 {
+		adr = @adrtable^[ix].namespaces;
+		if defined (adr^.[prefix]) {
+			return (adr^.[prefix])}};
+	return ("")}
+
+

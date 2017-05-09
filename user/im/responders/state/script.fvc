@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:user.im.responders.state.script
+
+on script (driverName, screenname, message) {
+	return (tcp.im.builtinResponders.state.script (driverName, screenname, message))}
+
+

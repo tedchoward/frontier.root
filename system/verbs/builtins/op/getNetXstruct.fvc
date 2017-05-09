@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.getNetXstruct
+
+on getNetXstruct (url, adrxstruct) {
+	«Changes
+		«12/14/12; 11:23:50 AM by DW
+			«A new core routine. Give us the url of an OPML file and we return a pointer to its xstruct. I kept having to figure out how to do this every time I needed to access an OPML file in a utility script. 
+				«http://worknotes.scripting.com/december2012/121412ByDw/opgetnetxstruct
+	local (adrtable, adrx);
+	op.getnetoutline (url, @adrtable);
+	xml.thread.accessStruct (@adrtable^.struct, @adrx);
+	adrxstruct^ = adrx^};
+bundle { //test code
+	getNetXstruct ("http://static.reallysimple.org/worldoutline/dave/2012/01/05/archive039.opml", @scratchpad.myxstruct);
+	edit (@scratchpad.myxstruct)}
+
+

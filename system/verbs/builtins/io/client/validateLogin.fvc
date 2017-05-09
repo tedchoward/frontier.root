@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.validateLogin
+
+on validateLogin () {
+	«Changes
+		«8/8/10; 5:22:05 AM by DW
+			«Created. 
+	local (adrdata = io.init (), pta = html.getpagetableaddress ());
+	if pta^.method == "POST" {
+		local (s);
+		try {
+			local (username = adrdata^.client.prefs.username);
+			local (password = string (adrdata^.client.prefs.password));
+			local (server = adrdata^.client.prefs.server);
+			[server].io.authenticate (username, password);
+			s = "<font color=\"green\">The Instant Outline server likes your username and password! :-)</font>"}
+		else {
+			scratchpad.tryerror = tryerror;
+			s = "<font color=\"red\">The Instant Outline server is unhappy with your username and password. :-(</font>"};
+		return (s)}
+	else {
+		return ("")}};
+bundle { //test code
+	local (pt);
+	new (tabletype, @pt);
+	pt.method = "POST";
+	html.setpagetableaddress (@pt);
+	dialog.alert (validateLogin ())}
+
+

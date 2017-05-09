@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.uBASE.openFile
+
+on openFile (path) {
+	local (windowtitle = file.fileFromPath (path));
+	return (appleEvent (ubase.id, 'UBAS', 'opnf', '----', filespec (path), 'wtit', windowtitle))}
+
+

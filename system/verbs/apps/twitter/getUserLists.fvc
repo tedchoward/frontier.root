@@ -1,0 +1,39 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.getUserLists
+
+on getUserLists (adrtable, username=nil, password=nil, whoseLists=nil) {
+	«Changes
+		«10/31/09; 7:48:19 PM by DW
+			«Reorganized parameter list so username and password can be optional params.
+		«10/31/09; 6:58:35 PM by DW
+			«Add a parameter, "whoseLists" to determine whose lists we get. The username and password must be present to authenticate, but I can get other people's lists if I want to.
+		«10/31/09; 7:59:32 AM by DW
+			«Fill a table with information about all the lists owned by the user.
+	local (apiurl, cursor = 0);
+	if username == nil {
+		username = user.twitter.prefs.username};
+	if password == nil {
+		password = user.twitter.prefs.password};
+	if whoseLists == nil {
+		whoseLists = username};
+	apiurl = "http://twitter.com/" + whoseLists + "/lists.xml";
+	new (tabletype, adrtable);
+	loop {
+		local (url = apiurl, xmltext, xstruct);
+		if cursor != 0 {
+			url = url + "?cursor=" + cursor};
+		xmltext = tcp.httpreadurl (url, 5, false, username, password);
+		xml.compile (xmltext, @xstruct);
+		scratchpad.xstruct = xstruct;
+		local (adrlistslist = xml.getaddress (@xstruct, "lists_list"));
+		local (adrlists = xml.getaddress (adrlistslist, "lists"));
+		for adrlist in adrlists {
+			if nameof (adrlist^) endswith "list" {
+				local (adrsub = @adrtable^.[xml.getvalue (adrlist, "slug")], status);
+				twitter.extractListInfo (adrlist, adrsub)}};
+		cursor = xml.getvalue (adrlistslist, "next_cursor");
+		if cursor == 0 { //no more
+			break}}};
+bundle { //test code
+	getUserLists (@scratchpad.mylists, whoseLists:"atul")}
+
+

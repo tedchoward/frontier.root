@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.countSelectedObjects
+
+on countSelectedObjects () {
+	return (appleEvent (cardEditor.id, 'IOWA', 'ctso'))}
+
+

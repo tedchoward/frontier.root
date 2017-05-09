@@ -1,0 +1,22 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.saveTemplate
+
+on saveTemplate () {
+	«Changes
+		«3/7/12; 9:08:54 PM by DW
+			«Convert for new template-editing process.
+		«2/12/12; 3:36:04 PM by DW
+			«New way of getting server info.
+		«6/25/11; 8:49:20 PM by DW
+			«Pass opmltext back to the server, first step toward sending back only opmltext.
+		«6/18/11; 11:36:34 AM by DW
+			«Created.
+	local (adrdata = opmlEditor.worldOutline.init (), server, username, password);
+	local (adroutline = address (window.frontmost ()), nodetype = nameof (adroutline^));
+	local (opmltext = op.outlinetoxml (adroutline));
+	opmlEditor.worldOutline.getServerInfo (@server, @username, @password); //2/11/12 by DW
+	[server].worldOutline.saveTemplate (username, password, nodetype, opmltext);
+	speaker.beep ()}
+«bundle //test code
+	«saveTemplate ()
+
+

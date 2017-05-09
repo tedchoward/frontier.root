@@ -1,0 +1,34 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.tumblr.getPost
+
+on getPost (idPost, adrpostdata, email=nil, password=nil, group=nil) {
+	«Changes
+		«11/27/09; 5:41:48 PM by DW
+			«Empty the data table before doing anything.
+		«11/24/09; 6:25:13 PM by DW
+			«Add optional group param.
+		«11/24/09; 12:28:00 PM by DW
+			«Created. Get data about the indicated post.
+	local (adrdata = tumblr.init (), apiurl);
+	new (tabletype, adrpostdata); //11/27/09 by DW
+	if group == nil {
+		tumblr.authenticate (email, password, @userdata);
+		apiurl = userdata.url}
+	else {
+		apiurl = "http://" + group + "/"};
+	local (xmltext = tcp.httpreadurl (apiurl + "api/read", 5, false), xstruct);
+	xml.compile (xmltext, @xstruct);
+	«scratchpad.postxstruct = xstruct
+	local (adrtumblr = xml.getaddress (@xstruct, "tumblr"));
+	local (adrposts = xml.getaddress (adrtumblr, "posts"), adrpost);
+	for adrpost in adrposts {
+		if nameof (adrpost^) endswith "post" {
+			local (adratts = @adrpost^.["/atts"]);
+			if adratts^.id == idPost {
+				adrpostdata^ = adratts^;
+				return (true)}}};
+	return (false)};
+bundle { //test code
+	getpost (260106433, @scratchpad.postdata, group:"rsscloud.tumblr.com");
+	edit (@scratchpad.postdata)}
+
+

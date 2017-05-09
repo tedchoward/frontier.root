@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.isPunctuation
+
+on isPunctuation (ch) { «new in 4.0b7
+	kernel (string.isPunctuation)}
+
+

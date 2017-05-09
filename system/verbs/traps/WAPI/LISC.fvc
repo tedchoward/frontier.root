@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.WAPI.LISC
+
+on LISC (stream, client, refcon) {
+	local (adrtable = @user.netEvents.listens.[stream]);
+	adrtable^.client = client;
+	adrtable^.refcon = refcon;
+	adrtable^.stream = stream;
+	adrtable^.ready = true;
+	return (true)}
+
+

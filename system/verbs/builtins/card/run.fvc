@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.run
+
+on run (x) {
+	kernel (dialog.runCard)}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.required.printDocument
+
+on printDocument (appID, file) {
+	return (appleEvent (appID, kAERequiredSuite, kAEPrintDocuments, '----', alias (file)))}
+
+

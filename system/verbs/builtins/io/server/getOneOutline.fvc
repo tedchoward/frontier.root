@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.server.getOneOutline
+
+on getOneOutline (userWhoseOutlineIWant) {
+	«Changes
+		«9/11/10; 3:32:10 PM by DW
+			«Return an update for the indicated user. Implements the Refresh command in the right-click menu for the Buddies window.
+	local (adruser = io.server.initUser (userWhoseOutlineIWant), t);
+	new (tabletype, @t);
+	t.htmltext = "Here is " + userWhoseOutlineIWant + "'s outline.";
+	t.type = "instantOutline";
+	t.username = userWhoseOutlineIWant;
+	t.data = adruser^.opmltext;
+	t.when = clock.now ();
+	return (t)}
+
+

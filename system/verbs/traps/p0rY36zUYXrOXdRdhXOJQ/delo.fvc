@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.core.delo
+
+on delo (obj) { «delete object
+	if not defined (obj^) {
+		scriptError (-1728)}; «no such object
+	return (delete (address (obj)))}
+
+

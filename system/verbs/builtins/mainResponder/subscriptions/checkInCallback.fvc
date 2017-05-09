@@ -1,0 +1,21 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.subscriptions.checkInCallback
+
+on checkInCallback (adrobject, username, now, description) { //called after an object has been checked in
+	local (nomad = adrobject, adrchanges);
+	loop {
+		nomad = parentof (nomad^);
+		if nomad == "" {
+			break};
+		adrchanges = @nomad^.["#changes"];
+		if defined (adrchanges^) {
+			local (adrtable = xml.addtable (adrchanges, nameof (adrobject^)));
+			adrtable^.what = adrobject;
+			adrtable^.when = now;
+			adrtable^.who = username;
+			wp.newtextobject (description, @adrtable^.why);
+			break}}};
+bundle { //test code
+	local (adr = table.getcursoraddress ());
+	checkincallback (adr, "Bull Mancuso", clock.now (), "No information available at this time.")}
+
+

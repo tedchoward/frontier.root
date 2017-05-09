@@ -1,0 +1,18 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webApp.viewHeroUnit
+
+on viewHeroUnit (title, description, buttonTitle, buttonLink) {
+	«Changes
+		«4/29/12; 12:31:31 AM by DW
+			«Created.
+				«http://worknotes.scripting.com/april2012/42912ByDw/bootstrapherounitMacro
+	local (t);
+	new (tabletype, @t);
+	t.mainhead = title;
+	t.mainparagraphs = description;
+	t.mainbuttonlink = buttonlink;
+	t.mainbuttontext = buttontitle;
+	return (string.multiplereplaceall (string (webApp.data.heroUnitTemplate), @t, false, "<%", "%>"))};
+bundle { //test code
+	viewHeroUnit ()}
+
+

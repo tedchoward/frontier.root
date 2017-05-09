@@ -1,0 +1,57 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.viewUsers
+
+on viewUsers () {
+	«Changes
+		«6/20/12; 7:18:34 AM by DW
+			«We were abbreviating the name of the day in one column and not in the other. 
+		«9/25/11; 11:17:36 AM by DW
+			«Lots of cleanup work. 
+				«http://worknotes.scripting.com/september2011/92511ByDw/usersPage/
+		«9/9/11; 10:43:43 AM by DW
+			«Created.
+	local (htmltext = "", indentlevel = 0);
+	on add (s) {
+		htmltext = htmltext + (string.filledstring ("\t", indentlevel) + s + "\r");};
+	
+	add ("<div class=\"divUserListPage\">"); indentlevel++;
+	add ("<h3>Users</h3>");
+	add (string (opmlEditor.data.outlines.usersIntro));
+	add ("<table  class=\"" + webApp.data.tableClass + "\" cellpadding=\"5\">"); indentlevel++;
+	bundle { //column headers
+		add ("<thead>"); indentlevel++;
+		add ("<tr>"); indentlevel++;
+		add ("<th class=\"userUserName\">Name&nbsp;&nbsp;</td>");
+		add ("<th class=\"userCount\">Count</th>");
+		add ("<th class=\"userFirstDate\">First</th>");
+		add ("<th class=\"userLastDate\">Last</th>");
+		add ("</tr>"); indentlevel--;
+		add ("</thead>"); indentlevel--};
+	bundle { //one row for each user
+		local (adrusers = @[system.temp.mainResponder.membersRootFile].default.users, adruser);
+		add ("<tbody>"); indentlevel++;
+		for adruser in adrusers {
+			add ("<tr>"); indentlevel++;
+			add ("<td class=\"userUserName\">" + nameof (adruser^) + "</td>");
+			bundle { //count, 9/25/11 by DW
+				local (s = "&nbsp;");
+				if defined (adruser^.stats.ctvalidations) { //SLIde validations
+					s = string.addcommas (adruser^.stats.ctvalidations)}
+				else {
+					if defined (adruser^.stats.ctvalidate) { //local validations 
+						s = string.addcommas (adruser^.stats.ctvalidate)}};
+				add ("<td class=\"userCount\">" + s + "</td>")};
+			add ("<td class=\"userFirstDate\">" + date.viewDate (timecreated (adruser), true) + "</td>");
+			bundle { //whenLastValidate
+				if defined (adruser^.stats.whenLastValidate) {
+					add ("<td class=\"userLastDate\">" + date.viewDate (adruser^.stats.whenLastValidate, true) + "</td>")}
+				else {
+					add ("<td>&nbsp;</td>")}};
+			add ("</tr>"); indentlevel--};
+		add ("</tbody>"); indentlevel--};
+	add ("</table>"); indentlevel--;
+	add ("</div>"); indentlevel--;
+	return (htmltext)}
+«bundle //test code
+	«viewUsers ()
+
+

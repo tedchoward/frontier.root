@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.menu.deleteMenuCommand
+
+on deleteMenuCommand (adrmenubar, menuname, itemstring) {
+	kernel (menu.deleteMenuCommand)}
+
+

@@ -1,0 +1,45 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.re.docs.DocServer.replace
+
+#title "re.replace"
+#renderOutlineWith "docServerRenderer"
+Syntax
+	re.replace (cp, repl, s, maxReplacements, adrCallback)
+Params
+	cp is a binary param containing the compiled pattern that was returned by a call to "re.compile".
+	repl is a string param containing the replacement string for any matches found.
+	s is a string param containing the target string.
+	maxReplacements is an optional number param specifying the upper limit on the number of replacements to be performed on the target string. Default is infinity.
+	adrReplacementCount is an optional address param specifying a variable in which the number of replacements made can be returned.
+	adrCallback is an optional address param specifying a script to be called for every replacement to be made. Defaults to nil.
+Action
+	Attempts to match the compiled pattern against successive character positions in the target string, replacing each match with repl.
+Returns
+	A copy of s with matches of the pattern replaced by repl.
+Examples
+	re.replace (re.compile ("[a-z]+"), "-", "123abc456")
+		// "123---456"
+	local (cp = re.compile ("([0-9][0-9][0-9][0-9])-([0-9][0-9])-([0-9][0-9])))
+	re.replace (cp, "\\2/\\3/\\1", "2003-05-11")
+		// "05/11/2003"
+Errors
+	An error will be generated if the cp param is not a valid byte-code representation of a regular expression or if the repl parameter contains a reference to a non-existant numbered or named capturing parenthesis.
+Notes
+	The repl parameter can contain the following special character sequences:
+		\nn where nn is a number, possibly consisting of multiple digits, will be replaced by the substring matched by the nnth capturing parentheses.
+		\g<nn> where nn is a number, possibly consisting of multiple digits, will be replaced by the substring matched by the nnth capturing parentheses.
+		\g<cc> where cc is an alpha string, will be replaced by the substring matched by the capturing parentheses named cc.
+	The \g<nn> notation can be used to specify the nnth capturing parentheses followed by another number, e.g. \20 would be replaced by the substring captured by the 20th parenthesis whereas \g<2>0 would be replaced by the substring captured by the second parenthesis followed by a literal zero.
+	If the adrCallback is not nil, it should point to a script taking two parameters, the address of a match info table and the address of a string. When the script is called, the second parameter contains the replacement string that would have been made if no callback had been specified.
+	The match info table follows the same conventions as the one returned by "re.match" if the flMakeGroups and flMakeNamedGroups params had been set to true.
+	The callback script can modify the string that will replace the current match by assigning to the value pointed to by its second parameter. The callback script should return a boolean value indicating whether further attempts to match and replace should be made.
+	If the maxReplacements parameter is less than or equal to zero, no replacements will be performed.
+	The kernel implementation of the re verbs is based on the Perl Compatible Regular Expressions (PCRE) library. This is the same library used by Python, Apache, and PHP. Mandatory excerpt from the PCRE license:
+		Regular expression support is provided by the PCRE library package, which is open source software, written by Philip Hazel, and copyright by the University of Cambridge, England.
+		The source code for the PCRE library is available for download from ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/
+See Also
+	"re.compile"
+	"re.match"
+	"re.expand"
+
+
+

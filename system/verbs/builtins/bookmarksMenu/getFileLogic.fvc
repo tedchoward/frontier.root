@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.bookmarksMenu.getFileLogic
+
+on getFileLogic (adr, f, adrLogic, adrTitle) {
+	«This script handles bookmarking file-based windows. It is a vestige. For current code, see Frontier.tools.data.windowTypes.outlinerFile.getBookmarkLogic.
+	adrTitle^ = window.getTitle (adr);
+	
+	if system.environment.isWindows { //escape backslashes on Windows
+		f = string.replaceAll (f, "\\", "\\\\")};
+	adrLogic^ = "fileMenu.open (\"" + string.replaceAll (f, "\"", "\\\"") + "\")"}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.server.rpcHandlers.test
+
+on test (x) {
+	return (x*2)}
+
+

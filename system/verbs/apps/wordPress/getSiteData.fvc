@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.wordPress.getSiteData
+
+on getSiteData (siteUrl) {
+	«Changes
+		«10/28/09; 9:11:35 AM by DW
+			«Created. 
+	local (adrdata = wordPress.init (), adrsite = @adrdata^.sites.[siteUrl], now = clock.now ());
+	if not defined (adrsite^) {
+		if not metaweblog.getRsdData (siteUrl, adrsite) {
+			scriptError ("Can't get site data because " + siteUrl + " isn't a WordPress site.")};
+		new (tabletype, @adrsite^.stats);
+		adrsite^.stats.ctAccesses = 0;
+		adrsite^.stats.whenFirstAccess = now};
+	adrsite^.stats.ctAccesses++;
+	adrsite^.stats.whenLastAccess = now;
+	return (adrsite)};
+bundle { //test code
+	edit (getSiteData ("http://rebootnews.wordpress.com/"))}
+
+

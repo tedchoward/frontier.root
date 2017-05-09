@@ -1,0 +1,32 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.supportedBrowsers
+
+on supportedBrowsers () {
+	«Changes:
+		«10/27/11; 5:32:50 PM by DW
+			«On Windows, added "firefox.exe" and "chrome.exe" to the list. Seems we ought to have a few others as well.
+		«10/27/11; 5:16:04 PM by DW
+			«Added Chrome's creator ID, 'rimZ', to the list of supported browsers.
+		«10/16/05; 11:48:01 AM by DW
+			«Added support for Firefox on Mac OS X.
+		«1/10/03; 5:49:15 PM by JES
+			«Added support for Safari on MacOS X.
+		«9/21/02; 5:28:28 PM by JES
+			«Added support for Chimera Navigator on OS X.
+		«1/9/02; 3:27:15 PM by PBS
+			«Added support for Mozilla, Opera, and iCab.
+	case sys.os () {
+		"MacOS" {
+			if defined (system.environment.isCarbon) and system.environment.isCarbon {
+				return ({'MSIE', 'OWEB', 'MOSS', 'MOZZ', 'OPRA', 'iCAB', 'CHIM', 'sfri', 'MOZB', 'rimZ'})}
+			else {
+				return ({'MSIE', 'MOSS', 'MOZZ', 'OPRA', 'iCAB'})}};
+		"Win95";
+		"WinNT" {
+			return ({"firefox.exe", "chrome.exe", "iexplore.exe", "netscape.exe"})}}}
+«bundle //test code
+	«local (browsers = supportedBrowsers (), id)
+	«for id in browsers
+		«if sys.appIsRunning (id)
+			«dialog.alert ("Hot damn! " + id + " is running.")
+
+

@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.menu.setTagCase
+
+on setTagCase (tag) {
+	if html.menu.useLowerCaseTags () {
+		return (string.lower (tag))};
+	return (string.upper (tag))}
+
+

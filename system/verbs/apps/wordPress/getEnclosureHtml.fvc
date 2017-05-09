@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.wordPress.getEnclosureHtml
+
+on getEnclosureHtml (enclosureUrl, pubDate=clock.now ()) {
+	local (t, length);
+	new (tabletype, @t);
+	t.enclosureUrl = enclosureUrl;
+	t.enclosureFname = string.lastField (enclosureUrl, "/");
+	tcp.httpGetTypeLength (enclosureUrl, @t.enclosureType, @length);
+	t.enclosureMegabytes = string.megabytestring (length);
+	t.pubDateString = date.longstring (pubDate);
+	return (string.multiplereplaceall (string (wordPress.data.enclosureTemplate), @t, false, "<%", "%>"))};
+bundle { //test code
+	clipboard.putvalue (getEnclosureHtml ("http://mp3.morningcoffeenotes.com/reboot09Sep08.mp3"))}
+
+

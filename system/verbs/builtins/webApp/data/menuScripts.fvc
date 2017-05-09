@@ -1,0 +1,30 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.webApp.data.menuScripts
+
+<script>
+	function toggleMenubar () {
+		if (document.getElementById ("<%idMenuBar%>").style.display == ''){
+			setCookie ("flMenuVisible", "0", 1000)
+			document.getElementById ("<%idMenuBar%>").style.display = "none";
+			document.getElementById ("wedge").src = '<%expandIconUrl%>';		
+			}
+		else {
+			setCookie ("flMenuVisible", "1", 1000)
+			document.getElementById("<%idMenuBar%>").style.display = '';
+			document.getElementById("wedge").src = '<%collapseIconUrl%>';
+			}
+		}
+	</script>
+<style>
+	.divMenubarToggle img {
+		position: absolute;
+		top: 5px;
+		left: 1px;
+		z-index:100000;
+		}
+	</style>
+<div class="divMenubarToggle">
+	<a title="Click here to show or hide the menubar." onclick="toggleMenubar()"><img src="<%initialIconUrl%>" id="wedge" width="16" height="16" alt="Click here to show or hide the menubar."></a>
+	</div>
+
+
+

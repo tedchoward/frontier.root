@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.buttons.buddies.["00004000\tSupport"]
+
+«Changes
+	«9/7/10; 9:45:07 AM by DW
+		«Created. 
+thread.callscript (@io.client.menuCommands.supportButton, {})
+
+

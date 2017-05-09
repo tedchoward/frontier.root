@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.re.getPatternInfo
+
+on getPatternInfo (cp, adrInfoTable) {
+	kernel (re.getPatternInfo)}
+
+

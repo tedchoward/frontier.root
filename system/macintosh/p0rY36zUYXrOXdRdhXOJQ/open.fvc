@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.core.open
+
+on open (appID, obj) { «Open an object
+	return (appleEvent (appID, 'aevt', 'odoc', '----', obj))}
+
+

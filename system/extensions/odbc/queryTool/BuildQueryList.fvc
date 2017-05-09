@@ -1,0 +1,56 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.queryTool.BuildQueryList
+
+on BuildQueryList () {
+	«Builds a list of existing queries to put into the menu bar
+	
+	local {
+		adritem;
+		adrTable=@user.prefs_odbc.queries;
+		i;
+		theScript;
+		currLine};
+	menu.remove(@odbc.menu);
+	target.set (@odbc.menu);
+	op.go(flatup, infinity);
+	bundle { «For the load query sub
+		while (op.getLineText() != "Load Query") {
+			if not (op.go(flatdown, 1)) {
+				return}};
+		op.deleteSubs();
+		for i = 1 to sizeof (adrtable^) {
+			adritem = @adrtable^ [i];
+			op.insertAtEndOfList(nameof (adritem^));
+			currLine = op.getCursor();
+			new(scriptType, @theScript);
+			target.set(@theScript);
+			op.insert("target.set(@odbc.queryTool.SQLQuery)", down);
+			op.insert("wp.setText(string("+adritem+"))", down);
+			op.insert("target.clear()", down);
+			target.set(@odbc.menu);
+			op.setCursor(currLine);
+			menu.setScript(@theScript);
+			op.go(left, 1)}};
+	bundle { «For the delete query sub
+		while (op.getLineText() != "Delete Query") {
+			if not (op.go(flatdown, 1)) {
+				return}};
+		op.deleteSubs();
+		for i = 1 to sizeof (adrtable^) {
+			adritem = @adrtable^ [i];
+			op.insertAtEndOfList(nameof (adritem^));
+			currLine = op.getCursor();
+			new(scriptType, @theScript);
+			target.set(@theScript);
+			op.insert("delete(@"+adritem+")", down);
+			op.insert("odbc.querytool.BuildQueryList()", down);
+			target.set(@odbc.menu);
+			op.setCursor(currLine);
+			menu.setScript(@theScript);
+			op.go(left, 1)}};
+	
+	menu.install(@odbc.menu);
+	return("-")};
+
+BuildQueryList()
+
+

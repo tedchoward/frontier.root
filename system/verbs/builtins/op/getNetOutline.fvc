@@ -1,0 +1,156 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.getNetOutline
+
+on getNetOutline (urlOutline, adradrtable, flKeepXml=false, flAskForOpml=true, minsecs=10) {
+	«Changes
+		«11/5/12; 11:43:03 PM by DW
+			«If flKeepXml is true, and we don't have the xmltext, then we don't care how long it's been since we read -- we go ahead and read. The caller is depending on xmltext existing. 
+				«http://worknotes.scripting.com/november2012/11512ByDw/opgetnetoutlineFix
+		«8/13/12; 2:48:11 PM by DW
+			«If there's a 404 code return, scripterror with an error message saying we couldn't find the outline, and provide its url. Previously it would say something awful like there is no element #0 in the table. Not helpful. :-)
+		«5/30/12; 9:20:28 AM by DW
+			«New optional param, minsecs. Used to be a local variable with the value 10, which means "check with server not more than once every 10 seconds." Now the caller can specify. Set it to a relatively large number of seconds if you have a resource that's being accessed often but doesn't change very often. This value determines the latency for updates. 
+		«5/17/12; 10:54:43 AM by DW
+			«New optional param, flAskForOpml. Set it false if you're getting an XML file that's not OPML. This allows it to be used to cache feeds. 
+				«http://worknotes.scripting.com/may2012/51712ByDw/cachingRssReads
+		«1/21/12; 10:42:26 AM by DW
+			«If we're instructed to keep the XML text but we don't have it -- we must force a read of the outline, even if it hasn't changed.
+		«6/12/11; 12:08:19 PM by DW
+			«New optional param, flKeepXml. On the client side, for inclusion, we need the XML text, but like the caching this facility offers. Also set flAcceptOpml true on tcp.httpClient call. When the opmltext updates, delete adrtable^.outline if it's defined. 
+				«See frontier.tools.data.nodetypes.include.expand for how it's used.
+		«6/10/11; 1:34:45 PM by DW
+			«Uses xstruct management facility. 
+		«5/18/11; 7:39:40 AM by DW
+			«Amazon is telling us we're reading the OPML files too frequently. So we're going to check the outline at most once every 10 seconds and see if the problem goes away. No matter what, if we get anything other than a 200 return code, we won't replace the opmltext. 
+				«bundle //old code
+					«if code != "304"
+						«local (adroutline = @adrtable^.outline)
+						«adrtable^.opmltext = s
+						«op.xmltooutline (s, adroutline)
+						«if window.isopen (adroutline) //4/24/11 by DW
+							«window.close (adroutline)
+						«if defined (adrtable^.xstruct) //5/9/11 by DW
+							«delete (@adrtable^.xstruct)
+						«adrtable^.stats.ctFullReads++
+						«adrtable^.stats.ctAccess = 0
+						«adrtable^.stats.whenLastFullRead = now
+					«else
+						«adrtable^.stats.ct304s++
+						«if not defined (adrtable^.stats.ctAccess)
+							«adrtable^.stats.ctAccess = 0
+						«adrtable^.stats.ctAccess++
+		«5/14/11; 10:50:51 AM by DW
+			«Got bit by the same problem with fileSynch and S3 and files with blanks in their names. Same solution here, replace the blank with %20 in the url and it works.
+		«5/13/11; 5:17:38 PM by DW
+			«New stats: whenLastFullRead, ctAccess.
+		«5/9/11; 8:20:24 PM by DW
+			«If the outline changed and there's an xstruct in the table, delete it. 
+		«4/24/11; 8:26:02 PM by DW
+			«If the outline window is open after we read it, close it.
+		«4/18/11; 5:47:45 PM by DW
+			«Created. Get an outline over the net, with eTag support. 
+	local (adrtable, startticks = clock.ticks (), now = clock.now (), flNeedXml = false);
+	bundle { //find the outline table
+		if not defined (system.temp.op) {
+			new (tabletype, @system.temp.op)};
+		bundle { //stats
+			if not defined (system.temp.op.stats) {
+				new (tabletype, @system.temp.op.stats)};
+			if not defined (system.temp.op.stats.ctGarbageCollects) {
+				system.temp.op.stats.ctGarbageCollects = 0};
+			if not defined (system.temp.op.stats.whenLastGarbageCollect) {
+				system.temp.op.stats.whenLastGarbageCollect = now}};
+		if not defined (system.temp.op.netOutlines) {
+			new (tabletype, @system.temp.op.netOutlines)};
+		adrtable = @system.temp.op.netOutlines.[urlOutline];
+		if not defined (adrtable^) {
+			new (tabletype, adrtable);
+			new (tabletype, @adrtable^.stats);
+			adrtable^.stats.ctFullReads = 0;
+			«adrtable^.stats.ct304s = 0
+			adrtable^.stats.ctAccess = 0};
+		if not defined (adrtable^.stats.whenLastRead) {
+			adrtable^.stats.whenLastRead = date.yesterday (now) - minsecs - 1}};
+	
+	bundle { //set flNeedXml -- 11/5/12 by DW
+		if flKeepXml and (not defined (adrtable^.xmltext)) {
+			flNeedXml = true}};
+	
+	bundle { //get the opmltext
+		if flNeedXml or (number (now - adrtable^.stats.whenLastRead) >= minsecs) {
+			local (url = string.replaceall (urlOutline, " ", "%20")); //5/14/11 by DW
+			local (urllist = string.urlSplit (url), headers, code, flEtagOkay);
+			bundle { //set flEtagOkay, 1/21/12 by DW
+				if flNeedXml { //flKeepXml and (not defined (adrtable^.xmltext))
+					flEtagOkay = false}
+				else {
+					flEtagOkay = true}};
+			bundle { //set up headers
+				new (tabletype, @headers);
+				if defined (adrtable^.etag) and flEtagOkay {
+					headers.["If-None-Match"] = adrtable^.etag}};
+			local (s = tcp.httpClient (server:urllist [2], path:urllist [3], timeOutTicks:60*30, flmessages:false, adrHdrTable:@headers, ctFollowRedirects:2, flAcceptOpml:flAskForOpml));
+			code = string.nthField (s, ' ', 2);
+			bundle { //keep track of codes to help with debugging
+				if not defined (adrtable^.stats.codes) {
+					new (tabletype, @adrtable^.stats.codes)};
+				adrcode = @adrtable^.stats.codes.[string (code)];
+				if defined (adrcode^) {
+					adrcode^++}
+				else {
+					adrcode^ = 1}};
+			s = string.httpResultSplit (s, @headers);
+			if defined (headers.eTag) {
+				adrtable^.eTag = headers.eTag};
+			
+			case code {
+				200 {
+					if flKeepXml { //6/12/11 by DW
+						adrtable^.xmltext = s};
+					if defined (adrtable^.outline) { //6/12/11 by DW
+						delete (@adrtable^.outline)};
+					xml.thread.newversion (@adrtable^.struct, s); //6/10/11 by DW
+					};
+					«bundle //old stuff we used to do before we had managed xstructs
+						«local (adroutline = @adrtable^.outline)
+						«adrtable^.opmltext = s
+						«op.xmltooutline (s, adroutline)
+						«if window.isopen (adroutline) //4/24/11 by DW
+							«window.close (adroutline)
+						«if defined (adrtable^.xstruct) //5/9/11 by DW
+							«delete (@adrtable^.xstruct)
+						«
+						«adrtable^.stats.ctFullReads++
+						«adrtable^.stats.ctAccess = 0
+						«adrtable^.stats.whenLastFullRead = now
+				304 {
+					«adrtable^.stats.ct304s++
+					if not defined (adrtable^.stats.ctAccess) {
+						adrtable^.stats.ctAccess = 0}};
+				404 { //8/13/12 by DW
+					scripterror ("Can't access the outline at \"" + urlOutline + "\" because the remote server didn't find it.")}};
+			
+			adrtable^.stats.ctTicksLastAccess = clock.ticks () - startticks;
+			adrtable^.stats.whenLastRead = now}};
+	adrtable^.stats.ctAccess++;
+	
+	«bundle //temp debugging, 2/10/12 by DW
+		«thread.getstackdump (@adrtable^.stats.callstack)
+	
+	adrtable^.stats.whenLastAccess = now;
+	adradrtable^ = adrtable;
+	bundle { //garbage-collect if it's time, 6/10/11 by DW
+		if (now - system.temp.op.stats.whenLastGarbageCollect) >= 60 {
+			local (adrtable);
+			for adrtable in @system.temp.op.netOutlines {
+				xml.thread.garbageCollect (@adrtable^.struct)};
+			system.temp.op.stats.whenLastGarbageCollect = now;
+			system.temp.op.stats.ctGarbageCollects++}}};
+bundle { //test code
+	local (url = worldOutlineSuite.data.urls.defaultRootOutline);
+	url = "http://dropbox.scripting.com/dave/readingLists/iowa.opml";
+	url = "http://dropbox.scripting.com/dork/idiot.opml";
+	url = "http://static.scripting.com/orlando/world/dave/2012/10/22/archive002.opml";
+	getNetOutline (url, @scratchpad.adrtable, flKeepXml:true);
+	edit (scratchpad.adrtable)}
+
+

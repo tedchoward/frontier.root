@@ -1,0 +1,11 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.userland.oldstuff.partsList
+
+Fixes
+	dialog.notify
+	html.buildObject
+	system.menus.buildMenuBar
+	system.verbs.builtins.search
+	html.data.standardMacros.imageRef
+
+
+

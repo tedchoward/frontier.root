@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.bit.logicalXor
+
+on logicalXor (n1, n2) {
+	kernel (bit.logicalXor)}
+
+

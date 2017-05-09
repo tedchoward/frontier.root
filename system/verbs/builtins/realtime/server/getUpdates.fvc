@@ -1,0 +1,84 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.server.getUpdates
+
+on getUpdates (username, ipaddress, randomString=nil, ctSecsTillTimeout=nil) {
+	«Changes
+		«9/25/10; 11:56:55 AM by DW
+			«Code review, delete unused code. Don't have to delete the temp table at the end if we dis-enable it. Trying to simplify code in any way possible. 
+		«9/14/10; 8:28:54 PM by DW
+			«Maintain adruser^.stats.ctSecsConnected.
+		«9/11/10; 4:24:03 PM by DW
+			«Gather user-level stats.
+		«8/14/10; 5:03:38 AM by DW
+			«The debugging tables trapped a huge problem. Suppose the client times out before the server returns. It then loops around and establishes another connection. Now the server has two threads listening on behalf of the client. It's a 50-50 shot which one will service the inbox first. If it's the correct one, the one that's alive as far as the client is concerned, everything works. However if it's the other one, the update will be returned but no one is listening. 
+			«This points out a flaw in the inbox approach, which we might want to root out at some point in the future. If the client just tells us what the number of the last update he received was, we can tell right away whether we should return one. 
+			«But first I'm going to fix this problem. 
+		«8/14/10; 3:42:25 AM by DW
+			«Maintain a system table for each update thread to make it easy to see what the server is doing. Add optional ctSecsTillTimeout param for debugging.
+		«8/12/10; 6:24:37 AM by DW
+			«Add randomString optional param, default nil. If non-nil, it is an additional level of disambiguator for inboxes. If two machines on the same LAN, behind a NAT, are both logged on with the same name, they will interfere with each other. If each client has its own random string, then we can separate the streams. 
+		«7/26/10; 6:45:38 PM by DW
+			«Delete inboxes that are too old, once each hour.
+		«7/16/10; 7:43:21 AM by DW
+			«Add another level under each users' realtimeUpdates table, with the IP they're connecting through. 
+			«Set the creation time of the table we're watching to now. If a table gets too old, it gets reclaimed, so we don't have to accumulate updates for connections that aren't being maintained.
+		«7/13/10; 8:16:06 AM by DW
+			«Wait for something to show up in the user's realtimeUpdates table, when it does, pack it up and return it. If it times out (initially hard-coded to 60 seconds) return an empty table.
+	local (adrdata = realtime.init (), now = clock.now (), timeoutticks);
+	local (serialnum = system.temp.realtime.server.stats.longpollSerialnum++);
+	local (adrlongpolls = @system.temp.realtime.server.longpolls);
+	local (adrtemptable = @adrlongpolls^.[string.padwithzeros (serialnum, 8) + "\t" + username]);
+	local (adruser = realtime.server.initUser (username)); //9/11/10 by DW
+	local (adrinbox = realtime.server.initinbox (username, ipaddress, randomstring));
+	local (idMyThread = thread.getcurrentid ());
+	adrinbox^.stats.whenLastCheck = now; adrinbox^.stats.ctChecks++;
+	bundle { //set timeoutticks
+		if ctSecsTillTimeout == nil { //8/14/10 by DW -- allow caller to set
+			ctSecsTillTimeout = adrdata^.server.prefs.ctSecsTimeout - random (0, 10)};
+		timeoutticks = clock.ticks () + (ctSecsTillTimeout * 60)};
+	bundle { //disable other threads waiting on behalf of this user, 8/14/10 by DW
+		local (adr);
+		for adr in adrlongpolls {
+			if (adr^.username == username) and (adr^.ipaddress == ipaddress) and (adr^.randomstring == randomstring) {
+				adr^.enabled = false}}};
+		«thread.callscript (@realtime.server.killUserThreads, {username, ipaddress, randomstring, idMyThread})
+	bundle { //user-level stats -- 9/11/10 by DW
+		adruser^.stats.ctGets++;
+		adruser^.stats.whenLastGet = now};
+	bundle { //set up temp table
+		new (tabletype, adrtemptable);
+		adrtemptable^.idthread = idMyThread;
+		adrtemptable^.enabled = true;
+		adrtemptable^.username = username;
+		adrtemptable^.ipaddress = ipaddress;
+		adrtemptable^.randomstring = randomString;
+		adrtemptable^.whenterminate = now + ctSecsTillTimeout}; //just to help with debugging
+	thread.sleepfor (ctSecsTillTimeout);
+	bundle { //more stats -- 9/14/10 by DW
+		local (newnow = clock.now ()); //when we woke up
+		adruser^.stats.ctSecsConnected = adruser^.stats.ctSecsConnected + number (newnow - now);
+		now = newnow};
+	if (sizeof (adrinbox^.queue) > 0) and adrtemptable^.enabled { //we have something to return
+		local (t);
+		«semaphore.lock (sem, 180)
+		t = adrinbox^.queue;
+		new (tabletype, @adrinbox^.queue); //consume it
+		«semaphore.unlock (sem)
+		adrinbox^.stats.ctNonTimeouts++;
+		«delete (adrtemptable)
+		adrtemptable^.enabled = false; //9/25/10 by DW
+		adruser^.stats.ctUpdates++;
+		adruser^.stats.whenLastUpdate = now;
+		return (t)} //return it
+	else { //timed out
+		local (t);
+		new (tabletype, @t);
+		adrinbox^.stats.ctTimeouts++;
+		«delete (adrtemptable)
+		adrtemptable^.enabled = false; //9/25/10 by DW
+		adruser^.stats.ctTimeouts++;
+		adruser^.stats.whenLastTimeout = now;
+		return (t)}};
+bundle { //test code
+	scratchpad.updates = getUpdates ("davewiner", "69.203.2.19", "kGEiL2HXqCZKVEI", 3)}
+
+

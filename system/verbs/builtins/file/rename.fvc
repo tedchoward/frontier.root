@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.rename
+
+on rename (path, name) {
+	kernel (file.rename)}
+
+

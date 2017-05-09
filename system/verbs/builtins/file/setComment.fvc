@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.setComment
+
+on setComment (path, comment) {
+	kernel (file.setComment)}
+
+

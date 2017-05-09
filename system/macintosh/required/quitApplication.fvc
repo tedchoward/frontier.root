@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.required.quitApplication
+
+on quitApplication (appID) {
+	return (finderEvent (appID, kAERequiredSuite, kAEQuitApplication))}
+
+

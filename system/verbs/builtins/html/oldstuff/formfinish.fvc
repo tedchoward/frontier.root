@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.oldstuff.formfinish
+
+on formfinish (buttonname) {
+	return ("<p><input type=\"submit\" value=\"" + buttonname + "\">\r</form>")}
+
+

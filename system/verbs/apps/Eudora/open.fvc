@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.open
+
+on open (obj) { «Open the specified object
+	return (appleEvent (Eudora.id, 'aevt', 'odoc', '----', objspec (obj)))}
+
+

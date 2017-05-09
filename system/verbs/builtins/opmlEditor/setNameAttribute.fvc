@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.setNameAttribute
+
+on setNameAttribute () {
+	«Changes
+		«5/28/12; 12:02:15 PM by DW
+			«If the cursor headline has a type att but no name att, and its linetext contains non-whitespace characters, give it a name attribute. 
+				«http://worknotes.scripting.com/may2012/52812ByDw/towardInvariantNames
+	local (atts);
+	op.attributes.getall (@atts);
+	if defined (atts.type) and (not defined (atts.name)) {
+		local (name = html.directory.getCanonicalName (op.getlinetext ()));
+		if sizeof (name) > 0 {
+			op.attributes.setone ("name", name)}}};
+bundle { //test code
+	setNameAttribute ()}
+
+

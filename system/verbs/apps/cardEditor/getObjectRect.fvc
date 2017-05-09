@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.getObjectRect
+
+on getObjectRect (name) {
+	local (atts);
+	if not cardEditor.getObjectAttributes (name, @atts) {
+		return ("")};
+	return (atts.rect)}
+
+

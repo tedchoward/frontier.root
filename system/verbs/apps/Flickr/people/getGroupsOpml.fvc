@@ -1,0 +1,38 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.people.getGroupsOpml
+
+on getGroupsOpml (id) {
+	«Changes
+		«5/30/12; 4:36:56 PM by DW
+			«Add title attribute on outline element, improve encoding.
+		«5/30/12; 12:45:25 PM by DW
+			«Generate an OPML subscription list for the groups the user is subscribed to.
+	local (mygroups, opmltext = "", indentlevel = 0, now = clock.now ());
+	Flickr.people.getGroups (id, @mygroups);
+	on add (s) {
+		opmltext = opmltext + string.filledstring ("\t", indentlevel) + s + "\r"};
+	on encode (s) {
+		if system.environment.isMac {
+			s = xml.entityEncode (latinToMac.macToLatin (s), true)}
+		else {
+			s = xml.entityEncode (s, true)};
+		s = string.multiplereplaceall (s, @xml.rss.data.replaceTable, false);
+		return (s)};
+	add ("<opml version=\"2.0\">"); indentlevel++;
+	bundle { //<head> section
+		add ("<head>"); indentlevel++;
+		add ("<title>Groups for " + id + "</title>");
+		add ("<dateModified>" + date.netstandardstring (now) + "</dateModified>");
+		add ("</head>"); indentlevel--};
+	bundle { //<body> section
+		local (adrgroup);
+		add ("<body>"); indentlevel++;
+		for adrgroup in @mygroups {
+			add ("<outline type=\"rss\" version=\"RSS2\" text=\"" + encode (adrgroup^.name) + "\" title=\"" + encode (adrgroup^.name) + "\" xmlUrl=\"" + encode (adrgroup^.urlFeed) + "\" />")};
+		add ("</body>"); indentlevel--};
+	add ("</opml>"); indentlevel--;
+	wp.newtextobject (opmltext, @scratchpad.testtext);
+	return (opmltext)};
+bundle { //test code
+	file.writewholefile ("ohio:hello.opml", getGroupsOpml (user.flickr.prefs.nsid))}
+
+

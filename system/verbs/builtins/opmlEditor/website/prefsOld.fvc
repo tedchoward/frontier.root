@@ -1,0 +1,32 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.prefsOld
+
+on prefs (searchArgs=nil) {
+	«Changes
+		«9/2/09; 1:38:18 PM by DW
+			«Add optional searchArgs parameter, if non-nil, use these as the searchargs. For example river2website.prefs sets it to "title=river2" so that we display its prefs page but within its own template. 
+		«8/8/08; 3:17:14 PM by DW
+			«Prefs expand to take plugins from tools. Hot stuff!!
+		«8/2/08; 12:23:10 PM by DW
+			«Set a fixed width of 600 pixels  for every prefs panel.
+		«11/30/07; 1:52:35 PM by DW
+			«Ported from flickrRivr.
+	local (pta = html.getpagetableaddress ());
+	«scratchpad.prefsparams = pta^
+	new (tabletype, @pta^.searchArgTable);
+	if searchArgs == nil { //9/2/09 by DW
+		searchArgs = pta^.searchargs};
+	webserver.parseargs (searchArgs, @pta^.searchArgTable);
+	if pta^.method == "POST" {
+		new (tabletype, @pta^.postArgs);
+		webserver.parseArgs (pta^.requestBody, @pta^.postArgs)};
+	opmlEditor.init ();
+	local (htmltext = radio.prefs.browser (@opmlEditor.data.outlines.prefs, adrToolsPrefs:@user.opmlEditor.prefs.toolsWithPrefs));
+	pta^.title = "Preferences";
+	pta^.flShowTitle = false; //the page looks better without it
+	htmltext = "<table width=\"600\"><tr><td>" + htmltext + "</td></tr></table>";
+	return (htmltext)}
+«bundle //test code
+	«html.setpagetableaddress (@scratchpad.prefsparams)
+	«webbrowser.displaytext (prefs ())
+
+

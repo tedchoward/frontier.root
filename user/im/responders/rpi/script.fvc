@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:user.im.responders.rpi.script
+
+on script (driverName, screenName, message) {
+	return (tcp.im.builtinResponders.rpi.script (driverName, screenName, message))}
+
+

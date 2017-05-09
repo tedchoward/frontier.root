@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.table.render
+
+on render (adrTable) {
+	«Render a Frontier table via the appropriate method.
+	local (adrScript = @html.table.methods.[adrTable^.method]);
+	return (adrScript^ (adrTable))}
+
+

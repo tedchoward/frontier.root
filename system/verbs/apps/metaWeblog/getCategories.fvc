@@ -1,0 +1,37 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.metaWeblog.getCategories
+
+on getCategories (blogid=nil, username=nil, password=nil, adrdata=@metaWeblog.data) {
+	«Changes
+		«12/3/05; 8:32:23 PM by DW
+			«Created. This is specified by the RFC, but until now we didn't have a glue script for it. 
+			«http://www.xmlrpc.com/metaWeblogApi
+	local (url);
+	metaWeblog.init ();
+	bundle { //set defaults
+		if username == nil {
+			username = user.metaWeblog.username};
+		if password == nil {
+			password = string (user.metaWeblog.password)};
+		if blogId == nil {
+			blogId = user.metaWeblog.blogId}};
+	url = "xmlrpc://" + adrdata^.server + ":" + adrdata^.port + adrdata^.rpcPath;
+	return ([url].metaWeblog.getCategories (blogid, username, password))}
+«bundle //test code
+	«local (adrblog = @user.wordpress.blogs.default, data)
+	«local (username = adrblog^.username, password = string (adrblog^.password))
+	«local (blogid = 1)
+	«new (tabletype, @data)
+	«bundle //set up data
+		«local (urllist = string.urlsplit (adrblog^.url))
+		«new (tabletype, @data)
+		«data.protocol = "xml-rpc"
+		«data.port = 80
+		«data.rpcPath = "/" + urllist [3] 
+		«data.server = urllist [2]
+	«local (thelist = getCategories (blogid, username, password, @data), cats, item)
+	«new (tabletype, @cats)
+	«for item in thelist
+		«cats.[string.padwithzeros (sizeof (cats)+1, 3)] = item
+	«scratchpad.categories = cats
+
+

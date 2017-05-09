@@ -1,0 +1,43 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.extractRefs
+
+on extractRefs (s) {
+	«Builds a list of external references in a HTML document.
+		«Only <IMG SRC...> and <A HREF ...> tags are currently supported.
+		«Returns a list of URL's.
+	
+	local {
+		linkPattern = "<a[ \t\r\n]*[^>]*href[ \t\r\n]*=[ \t\r\n]*\"?([-_~%@:/\\.A-Za-z0-9]+)";
+		imgPattern = "<img[ \t\r\n]*[^>]*src[ \t\r\n]*=[ \t\r\n]*\"?([-_~%@:/\\.A-Za-z0-9]+)";
+		listone, listtwo};
+	
+	regex.extract (linkPattern, @s, @listone, {1});
+	regex.extract (imgPattern, @s, @listtwo, {1});
+	
+	return (listone + listtwo)};
+
+«bundle //test code
+	«local (extractList, extractTable, dir, i)
+	«
+	«extractList = extractRefs (string (regex.examples.data.html))
+	«
+	«new (tableType, @extractTable)
+	«for i = 1 to sizeof (extractList)
+		«if (defined (extractTable [extractList [i]]))
+			«extractTable [extractList [i]]++
+		«else
+			«extractTable [extractList [i]] = 1
+	«
+	«new (outlineType, @temp.urls)
+	«edit(@temp.urls)
+	«target.set (@temp.urls)
+	«op.setLineText ("Hypertext Links")
+	«dir = right
+	«for i = 1 to sizeof (extractTable)
+		«if (extractTable [i] > 1)
+			«op.insert (nameOf (extractTable [i]) + " (" + extractTable [i] + ")", dir)
+		«else
+			«op.insert (nameOf (extractTable [i]), dir)
+		«dir = down
+	«target.clear()
+
+

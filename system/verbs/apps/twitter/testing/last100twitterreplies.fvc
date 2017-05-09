@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.testing.last100twitterreplies
+
+«Changes
+	«2/19/09; 4:02:41 PM by DW
+		«Created. 
+local (htmltext = "", indentlevel = 0, replies, sn, i, adr, ct=0);
+on add (s) {
+	htmltext = htmltext + string.filledstring ("\t", indentlevel) + s + "\r"};
+twitter.getReplies (@replies, maxcount:100);
+add ("<html><head><title>The last 100 replies to davewiner on Twitter.</title></head><body>");
+add ("<p>" + clock.now () + "</p>");
+add ("<p>The last 100 replies to <a href=\"http://twitter.com/davewiner\">davewiner</a> on Twitter.</p>");
+add ("<table>"); indentlevel++;
+for i = sizeof (replies) downto 1 {
+	adr = @replies [i];
+	add ("<tr>"); indentlevel++;
+	sn = adr^.userscreenname;
+	add ("<td align=\"right\">" + ++ct + ".&nbsp;</td>");
+	add ("<td valign=\"top\"><a href=\"http://twitter.com/" + sn + "\">" + sn + "</a></td>");
+	add ("<td valign=\"top\" align=\"right\" nowrap>" + string.replaceall (date.timestring (twitter.getTwitterTime (adr^.createdat)), " ", "") + "&nbsp;&nbsp;&nbsp;</td>");
+	add ("<td>" + (adr^.text - "@davewiner " - "@davewiner: ") + "</td>");
+	add ("</tr>"); indentlevel--};
+add ("</table>"); indentlevel--;
+add ("</body></html>");
+workspace.ftptoscripting (htmltext, "/misc/last100replies.html")
+
+

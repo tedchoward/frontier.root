@@ -1,0 +1,27 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.webBrowser.protocols.testing.webtext
+
+<html>
+<head><TITLE>WebTraps Test Page</TITLE></head>
+<body>
+
+<h1><i>Hello!</i></h1>
+
+I used this page to test the traps that WebTraps installs in Netscape. Click on each of the lines below to create an email message in Eudora, to run a UserTalk script and to run an AppleScript script.<P>
+
+Coooool!<P>
+
+<center>
+<a href="mailto:dwiner@well.com">Send mail to Dave</a><P>
+<a href="usrtlk:dialog.alert%20(%22Hello!%22)">Run a UserTalk Script</a><P>
+</center>
+
+That's it! Hope you like it...<P>
+
+Dave Winer<br>
+May 11, 1995<P>
+
+PS: To create the encoded scripts, use toys.urlEncode.
+</body>
+</html>
+
+

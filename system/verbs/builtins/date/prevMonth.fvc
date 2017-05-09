@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.date.prevMonth
+
+on prevMonth (param1) {
+	kernel (date.prevMonth)}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.rgb.set
+
+on set (r, g, b) {
+	kernel (rgb.set)}
+
+

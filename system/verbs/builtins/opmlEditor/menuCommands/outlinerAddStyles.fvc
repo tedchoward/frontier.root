@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.outlinerAddStyles
+
+on outlinerAddStyles () {
+	«Changes
+		«5/24/11; 12:21:36 PM by DW
+			«Created.
+	local (styles);
+	op.attributes.getone ("styles", @styles);
+	if dialog.ask ("Styles attribute for this headline?", @styles) {
+		op.attributes.setone ("styles", styles)}};
+bundle { //test code
+	outlinerAddStyles ()}
+
+

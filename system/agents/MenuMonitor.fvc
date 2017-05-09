@@ -1,0 +1,5 @@
+FrontierVcsFile:3:scpt:system.agents.MenuMonitor
+
+system.menus.agent () //add or remove a menu depending on frontmost window
+
+

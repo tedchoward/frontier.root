@@ -1,0 +1,16 @@
+FrontierVcsFile:3:optx:system.verbs.apps.winShell.data.scripts.createUrlShortcut
+
+Sub Main (filename, url)
+	Dim shell
+	Dim urlLink
+	
+	Set shell = CreateObject ("Wscript.Shell")
+	
+	Set urlLink = shell.CreateShortcut (filename)
+	
+	urlLink.TargetPath = url
+	urlLink.Save 
+End Sub
+
+
+

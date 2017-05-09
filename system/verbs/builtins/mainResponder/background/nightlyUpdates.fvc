@@ -1,0 +1,39 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.background.nightlyUpdates
+
+«Changes:
+	«7/27/08; 2:45:52 PM by DW
+		«Disabled this code if it's the OPML Editor, none of the databases are part of the OPML release.
+	«12/17/03; 1:30:50 AM by JES
+		«Changed to send email notification of new features (if enabled), instead of actually downloading them. Email notification is sent only when new updates are available, of which the user has not yet been notified.
+	«04/27/00; 2:21:07 PM by PBS
+		«Update all the databases that should be updated every night. Uncoupled from mainResponder.background.everyNight -- this script now runs at its own time, since there was the issue of competing updates when doing root updates at 11 or 12 every night.
+if system.environment.isOpmlEditor { //7/27/08 by DW
+	return};
+if config.mainResponder.prefs.flUpdateNightly { //send notification of new updates to the sysadmin
+	local (dbsToUpdate = {"Frontier", "mainResponder", "manila", "prefs"});
+	if not defined (config.mainresponder.stats.whenLastUpdatesNotification) {
+		config.mainresponder.stats.whenLastUpdatesNotification = date (0)};
+	rootUpdates.getPendingUpdatesList (@config.mainResponder.stats, mainResponder.data.featureListRssUrl, dbsToUpdate);
+	
+	if sizeOf (config.mainResponder.stats.pendingUpdates) > 0 { //build and send the email
+		local (mtext = "");
+		on add (s) {
+			mtext = mtext + (s + "\r\n");};
+		
+		local (ctupdates = sizeOf (config.mainResponder.stats.pendingUpdates), i);
+		if date (config.mainresponder.stats.pendingUpdates[ctupdates].data.pubdate) > config.mainresponder.stats.whenLastUpdatesNotification {
+			local (host = tcp.dns.getMyDomainName ());
+			local (port = user.inetd.config.http2.port);
+			host = host + ":" + port;
+			bundle { //HTML version
+				bundle { //header text
+					add ("<p>There are " + ctupdates + " new Manila updates available. To download and install the updates, click <a href=\"http://" + host + mainResponder.adminSite.urls.updates + "\">here</a>, and then click the Update Now button.</p>");
+					add ("<hr size=\"1\" width=\"100%\">")};
+				add (string.replaceAll (rootUpdates.listPendingUpdates (@config.mainResponder.stats), "\r", "\r\n"));
+				tcp.sendMail (user.prefs.mailAddress, ctupdates + " New Manila Updates Available", mtext, user.prefs.mailAddress, mimeType:"text/html");
+				config.mainresponder.stats.whenLastUpdatesNotification = clock.now ()}}};
+	}
+	«bundle //old code
+		«rootUpdates.threadedMultiRootUpdate (config.mainResponder.prefs.updateNightlyList)
+
+

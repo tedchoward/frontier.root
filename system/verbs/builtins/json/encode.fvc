@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.json.encode
+
+on encode (s) {
+	«Changes
+		«1/8/11; 10:40:52 AM by DW
+			«Process special characters in JSON.
+	return (string.multiplereplaceall (s, @json.data.replaceTable))}
+
+

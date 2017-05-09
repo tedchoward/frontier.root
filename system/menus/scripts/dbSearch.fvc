@@ -1,0 +1,54 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.dbSearch
+
+«11/22/97 at 5:34:50 AM by DW
+	«This script helps me find all references to a script or an object in the database.
+	«The root is getting smaller, so this is more useful.
+
+local (adrlist = @scratchpad.databaseSearch);
+local (insertDir = right, searchFor, dontCareList);
+
+on visit (adrtable) {
+	local (i);
+	for i = 1 to sizeOf (adrtable^) {
+		local (adrcell = @adrtable^ [i]);
+		if adrcell == @webBrowser.protocols.safeScripts { //work around wierdness, DW 11/28/97
+			continue};
+		
+		if typeOf (adrcell^) == tableType {
+			if memAvail () < 50 * 1024 { //less than 50K remaining.
+				dialog.alert ("Can't continue the database search because Frontier is running low on memory.");
+				return};
+			msg (adrcell);
+			visit (adrcell)}
+		else {
+			try {
+				if not (dontCareList contains adrcell) {
+					local (s, t); //4/11/98: memory issues fix
+					t = adrcell^;
+					s = string (t);
+					if string.lower (s) contains lowerSearchFor {
+						op.insert (adrcell, insertDir);
+						insertDir = down}}}}}};
+
+if dialog.ask ("String to search database for:", @user.prefs.dialogs.dbSearch) {
+	searchFor = user.prefs.dialogs.dbSearch;
+	lowerSearchFor = string.lower (searchFor);
+	dontCareList = {@user.prefs.dialogs.dbSearch, adrlist};
+	window.about (); //we're going to be calling msg
+	if not defined (adrlist^) {
+		new (outlinetype, adrlist)};
+	target.set (adrlist);
+	op.firstSummit ();
+	bundle { //add the top-level line for this search
+		local (s = "Database search for \"" + searchFor + "\" on ");
+		s = s + date.shortstring (clock.now ()) + " at " + string.timestring ();
+		if op.getLineText () == "" { //new outline
+			op.setLineText (s)}
+		else {
+			op.insert (s, up)}};
+	edit (adrlist);
+	visit (@root);
+	fileMenu.save ();
+	op.firstSummit ()}
+
+

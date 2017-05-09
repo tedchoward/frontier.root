@@ -1,0 +1,104 @@
+FrontierVcsFile:3:wptx:suites.ftpClient.data.["*Release Notes*"]
+
+suites.ftpClient, 18 Aug 1996
+
+Version 1.1
+
+Important Note:
+Userland Software is distributing version 1.1a4 of ftpClient with the public beta of Frontier 4.1. This version was never released publicly by myself. The only difference between a4 and 1.1 is that I cleaned it up some. a4 contains experimental tcpcmd code that doesn't work and is disabled. It also contains a function to change the permissions on a remote file, which I also removed in 1.1, since a bug in Fetch's scripting implementation prevented it from working. If you need to script a file permission change, and are using Anarchie, use: 
+
+anarchie.sendcommand(domain, "SITE CHMOD " + permissions + " " + path, account, password, nil)
+
+where permissions is an octal number representing the desired permissions (check the chmod manpage on a Unix machine for more info) and path is just the absolute or relative pathname to the file (relative to the directory that is current when you log in, that is). Dave also changed the order of parameters in ftpClient.rename. I've reflected that reordering in 1.1, which is available now from this page. I'm sorry if this breaks something, but I'm going to go with Dave on this. I've also included an outline of "one-liners" that he made.
+
+If you have anything to say at all about the suite, you can send them to me or to the list, but please include "ftpClient" in the subject.
+
+suites.ftpClient.hqx
+
+What ftpClient Is
+
+       ftpClient is a suite for Userland's Frontier scripting environment. 
+       ftpClient was originally written by Dave Winer for Frontier v4.0, so you probably have a copy already.
+       I've been improving it since then. Version 1.1a1 was released in May. Then development slowed down.
+       Now it's speeding up again--not as quickly as I'd like it to, but enough to have hierarchical web sites over ftp by Frontier 4.1, I think. 
+       ftpClient is an analogue to suites.webBrowser. 
+       ftpClient is a (semi-)universal scripting interface to Mac OS ftp clients. Actually, it currently only works with Anarchie and Fetch, but they are the most common ones. Eventually, I hope to make it easily extensible. 
+       ftpClient is free (of course)! 
+
+What ftpClient Isn't
+
+       ftpClient isn't an actual ftp client implemented in UserTalk. Some people seem to think that it is. 'Fraid not...at least not yet! Version 2.0 will have (among other enhancements) support for tcpcmd. 
+       ftpClient isn't perfect. Please make comments (email me at tmoore@tembel.org). 
+
+What ftpClient Does
+
+ftpClient.bringToFront () 
+       Pretty much the same thing that this does for most applications. The only difference is that this will bring whichever program you use for your ftp client to the front. 
+
+ftpClient.fetch () 
+       Fetches a file via ftp. This can fetch entire directories now! 
+
+ftpClient.fileExists () 
+       Given a remote machine, login name, password, and path, determines whether the path actually exists on that machine. 
+
+ftpClient.fileFromPath () 
+ftpClient.folderFromPath () 
+       Much like file.fileFromPath and file.folderFromPath, except they operate on Unix-style pathnames. This doesn't actually use the file transfer protocol at all, but I found it useful in writing some of the other scripts in the suite. 
+
+ftpClient.ftpProtocolHandler 
+       A script to copy into webBrowser.protocols.activeHandlers. This uses the ftpClient suite instead of forcing Fetch when installing a protocol handler for ftp into your web browser. Only very useful if you switch from Fetch to Anarchie and back frequently. This has not been tested very much by myself, so I'd appreciate feedback. 
+
+ftpClient.getURL () 
+       A must for all net-friendly programs. 
+
+ftpClient.isFolder () 
+       Given a path on a remote machine, determines whether it refers to a directory or not. Even works for symbolic links to directories! 
+
+ftpClient.launch () 
+       Written by Dave Winer. Sets up the suite to use the currently active ftp program, or else checks Internet Config. 
+
+ftpClient.list () 
+       Given the path to a directory on a remote machine, returns a list of all of the files in that directory. Neither Fetch or Anarchie can really do this through their scripting interfaces. This is an ftpClient exclusive! 
+
+ftpClient.mkdir () 
+       Makes a new directory on the remote machine. 
+
+ftpClient.quit () 
+       Pretty straightforward. Written by Dave Winer. 
+
+ftpClient.remove () 
+       Removes a file on the remote machine. 
+
+ftpClient.rename () 
+       Renames a file on the remote machine. 
+
+ftpClient.sendText () 
+       Pass it a string and a path on a remote machine, it will create a file at that path with the string as its contents. Written by Dave Winer. 
+
+ftpClient.store () 
+       Stores a file on a remote server. Written by Dave Winer, modified a bit by me. This can store entire directories now! 
+
+ftpClient.sureFilePath () 
+       This is used before storing a file, to make sure that all of the containing folders exist. This is analogous to toys.sureFilePath (). For example, if I want to upload a file to /usr/foo/bar/baz.html on the remote machine, and I just call: 
+
+           ftpClient.store ("host.name.com", "/usr/foo/bar/baz.html", "tmoore", "xxxxx")
+
+       It will only work if the folder foo has been put into /usr, and the folder bar has been put into foo. However, if I call: 
+
+           ftpClient.sureFilePath ("host.name.com", "/usr/foo/bar/baz.html", "tmoore", "xxxxx")
+           ftpClient.store ("host.name.com", "/usr/foo/bar/baz.html", "tmoore", "xxxxx")
+
+I can be sure that it will work. 
+
+What ftpClient (hopefully) will do in the future
+
+       tcpcmd support. 
+       Something like file.reconcileFolder for use with the new web site scripting stuff. Note: somebody asked for this when I first took control of this suite. Do people really need this? Since suites.html has been changed to take advantage of ftpClient in Frontier 4.1, this might not be necessary. If you do want to see this in 2.0, send me mail. If I don't get mail, this becomes a low-priority enhancement. 
+       Allow easy expansion. Adding a new supported client won't require changes to ftpClient itself, but just a
+       new table in user.ftp. 
+       Whatever people ask me to do. :-) 
+
+Tim Moore, Tembel's Hedonic Commune 
+<tmoore@tembel.org>
+
+

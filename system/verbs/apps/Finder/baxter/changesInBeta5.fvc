@@ -1,0 +1,21 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Finder.baxter.changesInBeta5
+
+Compared with 1.2b4, version 1.2b5 has been changed as follows:
+It's now called 1.2b5a, due to a brief release of a couple of errors in b5
+make
+	rename the "withData" parameter to the more explicit "aliasTo"
+		unfortunately requires script changes, but the only thing that
+		parameter is used for is to specify the object (or objects) to make
+		the aliasFile(s) for...it is not used in making other objects
+	properly adjust the second ("moveTo") parameter
+	do not coerce the replacing paremeter to boolean (because it can
+		be either a boolean or an enum: false, true, conflicts, or existingItems
+duplicate
+	properly adjust the second (“duplicateTo”) parameter
+	do not coerce the replacing parameter to boolean
+alias
+	change the call to make to use the aliasTo parameter rather then using
+		its former name (withData)
+
+
+

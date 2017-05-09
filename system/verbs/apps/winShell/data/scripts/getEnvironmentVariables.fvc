@@ -1,0 +1,22 @@
+FrontierVcsFile:3:optx:system.verbs.apps.winShell.data.scripts.getEnvironmentVariables
+
+Function Main
+	' Get a tab-delimited list of all environment variables.
+	' Frontier will parse this list and turn it into a table.
+	
+	Dim shell, varName, varText
+	
+	Set shell = CreateObject ("Wscript.Shell")
+	
+	varText = ""
+	
+	' Loop through the list of variables.
+	For Each varName In shell.Environment ("SYSTEM")
+		varText = varText + varName + vbTab
+	Next
+	
+	Main = varText
+End Function
+
+
+

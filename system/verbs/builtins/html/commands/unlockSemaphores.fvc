@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.commands.unlockSemaphores
+
+local (ct = sizeof (system.compiler.semaphores));
+if ct == 0 {
+	dialog.alert ("There are no locked semaphores.");
+	return};
+if not dialog.confirm ("Delete " + ct + " locked semaphores?") {
+	return};
+semaphores.unlockAll ()
+
+

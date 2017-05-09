@@ -1,0 +1,76 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.posterous.init
+
+on init () {
+	«Changes
+		«5/2/09; 12:04:44 PM by DW
+			«Created. 
+	local (adrdata = @config.posterous);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)};
+		if not defined (adrdata^.prefs.username) {
+			adrdata^.prefs.username = ""};
+		if not defined (adrdata^.prefs.password) {
+			adrdata^.prefs.password = ""};
+		bundle { //folderWatcher
+			if not defined (adrdata^.prefs.folderWatcher) {
+				new (tabletype, @adrdata^.prefs.folderWatcher)};
+			if not defined (adrdata^.prefs.folderWatcher.enabled) {
+				adrdata^.prefs.folderWatcher.enabled = false};
+			if not defined (adrdata^.prefs.folderWatcher.folder) {
+				local (folder);
+				if system.environment.isMac {
+					folder = file.getspecialfolderpath ("", "desktop folder", false)}
+				else {
+					folder = file.getspecialfolderpath ("", "desktop", false)};
+				folder = folder + "Posterous" + file.getpathchar ();
+				adrdata^.prefs.folderWatcher.folder = folder};
+			if adrdata^.prefs.folderWatcher.enabled {
+				file.surefilepath (adrdata^.prefs.folderWatcher.folder + "xxx")};
+			if not defined (adrdata^.prefs.folderWatcher.ctSecondsBetwScans) {
+				adrdata^.prefs.folderWatcher.ctSecondsBetwScans = 10};
+			if not defined (adrdata^.prefs.folderWatcher.ctScans) {
+				adrdata^.prefs.folderWatcher.ctScans = 0};
+			if not defined (adrdata^.prefs.folderWatcher.flLocalArchive) {
+				adrdata^.prefs.folderWatcher.flLocalArchive = true};
+			if not defined (adrdata^.prefs.folderWatcher.archiveFolder) {
+				adrdata^.prefs.folderWatcher.archiveFolder = Frontier.pathstring + "Pictures Uploaded" + file.getpathchar () + "Posterous" + file.getpathchar ()};
+			«if not defined (adrdata^.prefs.folderWatcher.flS3Archive)
+				«adrdata^.prefs.folderWatcher.flS3Archive = false
+			«if not defined (adrdata^.prefs.folderWatcher.s3Path)
+				«adrdata^.prefs.folderWatcher.s3Path = ""
+			if not defined (adrdata^.prefs.folderWatcher.flBeepAfterUpload) {
+				adrdata^.prefs.folderWatcher.flBeepAfterUpload = true};
+			if not defined (adrdata^.prefs.folderWatcher.template) {
+				adrdata^.prefs.folderWatcher.template = posterous.folderWatcher.data.virginTemplate};
+			bundle { //callbacks
+				if not defined (adrdata^.prefs.folderWatcher.callbacks) {
+					new (tabletype, @adrdata^.prefs.folderWatcher.callbacks)};
+				if not defined (adrdata^.prefs.folderWatcher.callbacks.afterUpload) {
+					new (tabletype, @adrdata^.prefs.folderWatcher.callbacks.afterUpload)}};
+			bundle { //adrdata^.prefs.folderWatcher.defaults
+				if not defined (adrdata^.prefs.folderWatcher.defaults) {
+					new (tabletype, @adrdata^.prefs.folderWatcher.defaults)};
+				if not defined (adrdata^.prefs.folderWatcher.defaults.description) {
+					adrdata^.prefs.folderWatcher.defaults.description = "Uploaded by <a href=\"http://editor.opml.org/\">OPML Editor</a>."};
+				if not defined (adrdata^.prefs.folderWatcher.defaults.tags) {
+					adrdata^.prefs.folderWatcher.defaults.tags = "FlickrFan"};
+				if not defined (adrdata^.prefs.folderWatcher.defaults.flpublic) {
+					adrdata^.prefs.folderWatcher.defaults.flpublic = true};
+				if not defined (adrdata^.prefs.folderWatcher.defaults.flfriends) {
+					adrdata^.prefs.folderWatcher.defaults.flfriends = true};
+				if not defined (adrdata^.prefs.folderWatcher.defaults.flfamily) {
+					adrdata^.prefs.folderWatcher.defaults.flfamily = true};
+				if not defined (adrdata^.prefs.folderWatcher.defaults.flnothidden) {
+					adrdata^.prefs.folderWatcher.defaults.flnothidden = true};
+				if not defined (adrdata^.prefs.folderWatcher.defaults.safetyLevel) {
+					adrdata^.prefs.folderWatcher.defaults.safetyLevel = 1}; //safe
+				if not defined (adrdata^.prefs.folderWatcher.defaults.contentType) {
+					adrdata^.prefs.folderWatcher.defaults.contentType = 1}}}}; //photo
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

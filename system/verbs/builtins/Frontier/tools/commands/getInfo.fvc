@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.commands.getInfo
+
+on getInfo () {
+	Frontier.tools.nodeTypes.getInfo ()}
+
+

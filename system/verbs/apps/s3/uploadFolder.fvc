@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.uploadFolder
+
+on uploadFolder (folder, s3path, type=nil) {
+	«Changes
+		«5/31/14; 9:59:03 AM by DW
+			«New optional param, type -- if specified, the type of all files uploaded. Useful if the files don't have extensions and you know the type.
+		«3/10/11; 12:06:50 AM by DW
+			«Upload a folder to S3. When we were originally putting together the glue for S3 it was hard to see how simple it could be. This is it.
+	local (f, path, pc = file.getpathchar (), fname);
+	fileloop (f in folder, infinity) {
+		fname = file.filefrompath (f);
+		if fname contains ".DS_Store" {
+			continue};
+		path = string.delete (f, 1, sizeof (folder));
+		path = string.replaceall (path, pc, "/");
+		msg (path);
+		s3.newobject (s3path + path, file.readwholefile (f), type)}}
+«bundle //test code
+	«uploadFolder (user.prefs.dropboxfolder + "r2ly:", "/r2ly.blorkmark.com/", "text/html")
+	«uploadFolder ("Ohio:jeru:", "/scripting.com/jeru/")
+	«uploadFolder ("Ohio:Server Backups:joemontana:30-Oct-11:hosting.opml.org:", "/hosting.opml.org/")
+
+

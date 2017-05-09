@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.sys.setFrontApp
+
+on setFrontApp(appName) {
+	if !sys.bringAppToFront(appName) {
+		return(false)};
+	while sys.frontMostApp() != appName {
+		;}}
+
+

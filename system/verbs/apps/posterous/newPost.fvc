@@ -1,0 +1,48 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.posterous.newPost
+
+on newPost (title=nil, bodytext=nil, username=nil, password=nil, idSite=nil, flPrivate=false, flAutoPost=true, pubDate=clock.now (), sourceApp=nil, sourceAppLink=nil, adrresult=nil) {
+	«Changes
+		«11/20/09; 7:22:49 PM by DW
+			«Created. Create a new post, with lots of optional params. If adrresult is not nil, return a table with information about the post. 
+				«http://posterous.com/api/posting
+	local (adrdata = posterous.init (), apiurl = "http://posterous.com/api/newpost?");
+	if username == nil {
+		username = adrdata^.prefs.username};
+	if password == nil {
+		password = string (adrdata^.prefs.password)};
+	if adrresult != nil {
+		new (tabletype, adrresult)};
+	on pushparam (val, name) {
+		if val != nil {
+			apiurl = apiurl + name + "=" + string.urlencode (val, true) + "&"}};
+	pushparam (title, "title");
+	pushparam (bodytext, "body");
+	pushparam (idSite, "site_id");
+	pushparam (number (flPrivate), "private");
+	pushparam (number (flAutoPost), "autopost");
+	pushparam (date.netstandardstring (date (pubDate)), "date");
+	if apiurl endswith "&" {
+		apiurl = string.mid (apiurl, 1, sizeof (apiurl) - 1)};
+	«scratchpad.apiurl = apiurl
+	local (xmltext = tcp.httpreadurl (apiurl, 5, false, username, password), xstruct);
+	xml.compile (xmltext, @xstruct);
+	scratchpad.xstruct = xstruct;
+	local (adrrsp = xml.getaddress (@xstruct, "rsp"));
+	local (status = xml.getattributevalue (adrrsp, "stat"));
+	case status {
+		"ok" {
+			if adrresult != nil {
+				local (adrpost = xml.getaddress (adrrsp, "post"));
+				adrresult^.id = xml.getvalue (adrpost, "id");
+				adrresult^.url = xml.getvalue (adrpost, "url");
+				adrresult^.longUrl = xml.getvalue (adrpost, "longurl");
+				adrresult^.title = xml.getvalue (adrpost, "title");
+				adrresult^.flCommentsEnabled = boolean (xml.getvalue (adrpost, "commentsenabled"))}};
+		"fail" {
+			local (adrerr = xml.getaddress (adrrsp, "err"));
+			scripterror (xml.getattributevalue (adrerr, "msg"))}}};
+bundle { //test code
+	newpost (states.nthstate (random (1, 50)), "Further, any vendor of a Twitter client would, imho, be well-advised to spread out to achieve independence from the Twitter company. One way to do that, and they should all do it, is to support Facebook on an equal basis with Twitter. But that isn't enough. They should all make an investment in the open distributed way of doing what Twitter does. What that means is to <i>offer the user the option to create a backup of their tweet stream in RSS, as a publicly-accessible feed.</i> And once there's a base of apps doing that, they should add a feature to subscribe to those feeds.", adrresult:@scratchpad.postresult, flprivate:false, pubdate: clock.now (), sourceApp:"OPML Editor", sourceAppLink:"http://editor.opml.org/");
+	edit (@scratchpad.postresult)}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.split
+
+on split (pattern, adrObject, caseSensitive = false, maxChunks = infinity) {
+	return (dll.call (regex.data.getPath (), "regsplitverb", string (pattern), boolean (caseSensitive), true, long (regex.data.adrSyntaxOptions^), string (adrObject^), long (maxChunks)))}
+
+

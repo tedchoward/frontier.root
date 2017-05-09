@@ -1,0 +1,18 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.maxLength
+
+on maxLength (s, ctmax) {
+	«Changes
+		«10/23/12; 4:50:45 PM by DW
+			«Make sure the string doesn't contain more than ctmax characters. If it does, shorten it to the last space and add elipses.
+				«http://worknotes.scripting.com/october2012/102312ByDw/newDescriptionMacro
+	if sizeof (s) > ctmax {
+		s = string.mid (s, 1, ctmax - 3);
+		while s [sizeof (s)] != " " {
+			s = string.delete (s, sizeof (s), 1)};
+		s = string.delete (s, sizeof (s), 1);
+		s = s + "..."};
+	return (s)}
+«bundle //test code
+	«dialog.alert (string.upper (maxLength ("Oh the buzzing of the bees and the sycamore trees", 20)))
+
+

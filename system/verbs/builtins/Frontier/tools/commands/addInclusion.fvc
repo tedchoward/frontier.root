@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.commands.addInclusion
+
+«Changes
+	«3/19/06; 2:42:31 PM by DW
+		«Created.
+if not defined (user.tools.prefs.lastUrlToInclude) {
+	user.tools.prefs.lastUrlToInclude = "http://"};
+local (url = user.tools.prefs.lastUrlToInclude);
+local (clipboardValue = clipboard.getValue (stringType));
+if string.lower (clipboardValue) beginswith "http://" {
+	url = clipboardValue};
+op.attributes.getOne ("url", @url);
+if dialog.ask ("Include outline at what URL?", @url) {
+	user.tools.prefs.lastUrlToInclude = url;
+	local (atts);
+	new (tabletype, @atts);
+	atts.type = "include";
+	atts.url = url;
+	op.setDisplay (false); //this will cause the icon to get drawn when display is turned back on
+	op.attributes.addGroup (@atts);
+	op.setDisplay (true)} //icon gets drawn
+
+

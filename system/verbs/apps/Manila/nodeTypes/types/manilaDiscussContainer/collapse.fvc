@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Manila.nodeTypes.types.manilaDiscussContainer.collapse
+
+«Clean up the outline
+	«This is so dynamically generated nodes aren't saved with the Manila site editorialOutline.
+op.deleteSubs ();
+return (true)
+
+

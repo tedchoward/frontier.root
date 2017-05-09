@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.isFolder
+
+on isFolder (path) {
+	kernel (file.isfolder)}
+
+

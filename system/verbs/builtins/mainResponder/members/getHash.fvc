@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.members.getHash
+
+on getHash (password, groupName) {
+	«Create a hashed string consisting of the password and the membership group name.
+		«04/10/00; 11:52:58 AM by PBS
+	
+	local (s = password + string.lower (groupName)); //make groupName case insensitive
+	s = string.hashMD5 (s);
+	return (s)}
+
+

@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:suites.FilemakerLib.sort
+
+on sort (db, sortBy, theLayout = 0, reportError = false) {
+	on doIt () {
+		with objectModel, filemaker, database [db] {
+			sort (database [db].layout [theLayout], field [sortBy])};
+		return (true)};
+	if reportError {
+		return (doIt ())}
+	else {
+		try {
+			return (doIt ())}
+		else {
+			return (false)}}}
+
+

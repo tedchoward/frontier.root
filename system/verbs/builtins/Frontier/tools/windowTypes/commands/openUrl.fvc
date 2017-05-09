@@ -1,0 +1,368 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.windowTypes.commands.openUrl
+
+on openUrl (url=nil, flOpenInPlace=false, adroutline=nil) {
+	«Changes:
+		«6/20/12; 7:44:04 PM by DW
+			«When opening a window that's already been opened, the title was all screwed up. Fixed.
+		«4/25/12; 7:14:22 PM by DW
+			«Respect the flOpenInPlace parameter.
+		«4/25/12; 6:36:39 PM by DW
+			«If you can't open it as an outline, try opening it in the browser.
+		«4/18/12; 12:28:47 PM by DW
+			«Open URL now just opens it as OPML. This is an OPML Editor. It's insane that that doesn't always work.
+				«http://worknotes.scripting.com/april2012/41812ByDw/openUrlCommand
+		«4/29/10; 5:31:49 PM by DW
+			«If the url ends with /feed/ open it in the editor not the browser. But this whole idea of looking at the URL to decide where to open it is bogus. We should read the content and see if it's a feed or not. But this fix will get past a common problem, for now.
+		«1/8/09; 10:08:44 AM by DW
+			«If the dereferenced url points to feedburner or google, then open it here, even if it doesn't end with the right extension.
+		«9/26/05; 12:35:18 PM by DW
+			«Handle file:/// urls.
+		«2002 and earlier
+			«6/4/02; 3:58:23 PM by JES
+				«When opening an OPML file, save the ownerName and ownerEmail from the head in the cache, and set corresponding windowType attributes.
+			«6/1/02; 7:31:55 PM by JES
+				«Changed the requirement that the URL's extension represents a type that can be opened in the outliner, so that if a key string like rss or opml is present anywhere in the URL, Radio will get a shot at opening the URL in the outliner. Fixes opening of Moreover's RSS feeds in Radio's outliner, for example.
+			«5/15/02; 6:09:24 PM by JES
+				«If an address is passed in for adroutline, and the object specified by url cannot be converted to an outline, throw an error.
+			«4/18/02; 4:27:35 PM by JES
+				«When opening an RSS file, create the new window as read-only.
+			«3/31/02; 7:36:52 PM by JES
+				«Fixed a bug which would cause an error opening an outline: flAcceptOpml has already been given a value.
+			«3/31/02; 6:27:06 PM by JES
+				«Call tcp.httpClient with flAcceptOpml true.
+			«3/26/02; 11:02:59 PM by JES
+				«For opml and rss, if there's a cloud element, add it and the adrCloud attributes to the window.
+			«3/24/02; 5:50:17 PM by JES
+				«If xmltext is defined in the cache table, use that text instead of reading the URL, and then delete the cached text.
+			«3/24/02; 12:58:27 AM by JES
+				«New optional parameter, adroutline, specifies the address of the object to load the outline into.
+			«3/23/02; 3:40:14 PM by JES
+				«Optimization: Cache the type, so we don't have to store xmltext or xstruct in the cache table.
+			«3/23/02; 2:30:20 PM by JES
+				«Implement size-based caching of RSS and OPML outlines. If the file's size is different from the size of the cached copy, we reload it. Size is determined by requesting only the HTTP headers from the server, if possible.
+			«12/1/01; 5:16:14 PM by JES
+				«When inserting sub-outlines, temporarily set outline display to false, so screen updates will be smoother.
+			«11/5/01; 4:37:01 PM by JES
+				«Fixed a bug opening urls like http://www.scripting.com/. They have no extension, so we have to read the url to determine the docType.
+			«10/28/01; 6:12:44 PM by JES
+				«Only read the url if the extension matches one of the extensionsToOpenInRadio: xml, opml, rss and rdf. (More may be added later.)
+			«10/22/01; 5:04:48 PM by JES
+				«Follow redirects when opening the URL.
+			«10/22/01; 4:55:58 PM by JES
+				«Fix bug when adding Manila site node: the port and server attributes were reversed in the call to playlist.manila.commands.addManilaSiteNode.
+			«08/10/01; 8:43:47 PM by JES
+				«New optional parameter, flOpenInPlace. If true, outline type windows are inserted as a sub-heading of the frontmost outline window.
+			«12/31/00; 5:32:12 PM by JES
+				«On Macs, convert opml to Mac text when converting to an outline.
+			«11/30/00; 12:16:04 AM by JES
+				«Dereference callback addresses in a try block in case a tool's odb is not opened
+			«09/30/00; 12:37:16 PM by PBS
+				«Call callbacks at user.pike.commandCallbacks.openUrl.
+			«09/22/00; 4:57:55 PM by PBS
+				«Check offline status.
+			«09/20/00; 2:04:28 PM by PBS
+				«Call playlist.httpClient rather than tcp.httpClient.
+			«09/16/00; 11:20:13 AM by PBS
+				«Open HTML files in the Web browser.
+			«09/16/00; 3:42:06 PM by PBS
+				«Open OPML documents the same way outlineDocuments are opened.
+		«Called when the user chooses Open URL... from the File menu. Handle RSS, outlineDocuments, and .xml. (Have to handle .xml because we can't differentiate it from outlineDocuments based on URL alone.)
+			«Wed, Aug 30, 2000 at 9:15:27 PM by PBS
+	local (flOnline = true);
+	if defined (tcp.isOffline) {
+		flOnline = not (tcp.isOffline ())};
+	if not flOnline { //PBS 09/22/00: check offline status
+		return (false)};
+	if url == nil {
+		if defined (user.tools.prefs.lastOpenedUrl) {
+			url = user.tools.prefs.lastOpenedUrl}
+		else {
+			if defined (user.tools.prefs.lastRssUrl) {
+				url = user.tools.prefs.lastRssUrl}
+			else {
+				if defined (user.tools.prefs.lastOutlineUrl) {
+					url = user.tools.prefs.lastOutlineUrl}}};
+		if not (dialog.ask ("Open URL:", @url)) {
+			return (false)}};
+	
+	bundle { //new way -- 4/18/12 by DW
+		if not flOpenInPlace {
+			try {
+				local (adrtable);
+				op.getnetoutline (url, @adrtable, flKeepXml:true);
+				if not defined (adrtable^.outline) {
+					op.xmltooutline (adrtable^.xmltext, @adrtable^.outline)};
+				edit (@adrtable^.outline, windowTitle: string.lastfield (url, "/")); //6/20/12 by DW
+				return}}};
+	
+	bundle { //clean up the URL
+		if not (string.lower (url) contains "://") {
+			url = "http://" + url};
+		try { //check to see if it needs a trailing slash
+			string.urlSplit (url)}
+		else {
+			url = url + "/"}};
+	
+	if url contains " " {
+		url = string.replaceAll (url, " ", "%20")}; //many outlineDocument URLs have spaces in them
+	
+	local (frontWindow = window.frontmost ());
+	
+	on runCallbacks (adrCallback) { //call callbacks
+		if defined (adrCallback^) {
+			local (adrScript);
+			for adrScript in adrCallback {
+				try { //11/30/00 JES
+					while typeOf (adrScript^) == addressType { //follow addresses
+						adrScript = adrScript^};
+					if adrScript^ (url) {
+						return (true)}}}};
+		return (false)};
+	if runCallbacks (@user.tools.commandCallbacks.openUrl) {
+		return (true)};
+	if system.environment.isRadio {
+		if defined (user.pike.commandCallbacks.openUrl) {
+			if runCallbacks (@user.pike.commandCallbacks.openUrl) {
+				return (true)}}};
+	
+	local (urllist = string.urlsplit (url));
+	«local (extension = string.lower (string.nthField (urllist[3], ".", string.countFields (urllist[3], "."))))
+	local (extensionsToOpenInRadio = {"xml", "opml", "rss", "rdf"});
+	
+	local (flOpenInRadio = false);
+	bundle { //set flOpenInRadio
+		local (ext, lowerUrl = string.lower (url));
+		for ext in extensionsToOpenInRadio {
+			if lowerUrl contains ext {
+				flOpenInRadio = true;
+				break}};
+		bundle {
+			local (u = string.lower (tcp.httpderef (url)));
+			if u beginswith "http://feeds.feedburner.com" { //1/8/09 by DW
+				flOpenInRadio = true};
+			if u beginswith "http://feedproxy.google.com" { //1/8/09 by DW
+				flOpenInRadio = true};
+			if u endswith "/feed/" { //4/29/10 by DW
+				flOpenInRadio = true}}};
+	if flOpenInRadio {
+		local (adrincache);
+		on isDocType (typeName) {
+			if defined (adrincache^.type) {
+				if adrincache^.type == typeName {
+					if defined (adrincache^.xstruct) {
+						delete (@adrincache^.xstruct)};
+					return (true)}};
+			if defined (adrincache^.xstruct) { //get the type, and cache the cloud info if available
+				try {
+					local (adrtopelement = xml.getAddress (@adrincache^.xstruct, typeName));
+					adrincache^.type = typeName;
+					try { //if there's a cloud element, create a cloud table in the cache
+						local (adrcloud);
+						case adrincache^.type {
+							"opml" {
+								local (adrhead = xml.getAddress (adrtopelement, "head"));
+								adrcloud = xml.getAddress (adrhead, "cloud")};
+							"rss" {
+								local (adrchannel = xml.getAddress (adrtopelement, "channel"));
+								adrcloud = xml.getAddress (adrchannel, "cloud")}};
+						if adrcloud != nil {
+							local (adrcloudatts = @adrcloud^.["/atts"]);
+							new (tableType, @adrincache^.cloud);
+							local (nomad);
+							for nomad in adrcloudatts {
+								adrincache^.cloud.[nameOf (nomad^)] = nomad^}}};
+					delete (@adrincache^.xstruct);
+					return (true)}};
+			return (false)};
+		on getTextFromUrl (url) { //get xmltext, set adrincache
+			on tryToCompileCacheText (s, adrincache) {
+				try { //try to compile the text
+					xml.compile (s, @adrincache^.xstruct);
+					local (nomad = @adrincache^.xstruct);
+					nomad = xml.getAddress (nomad, "opml");
+					nomad = xml.getAddress (nomad, "head");
+					try {adrincache^.ownerName = xml.getValue (nomad, "ownerName") };
+					try {adrincache^.ownerEmail = xml.getValue (nomad, "ownerEmail") }}};
+			local (adrcache = @system.temp.frontier.openUrlCache);
+			if not defined (adrcache^) {
+				new (tableType, adrcache)};
+			adrincache = @adrcache^.[url];
+			if not defined (adrincache^) {
+				new (tableType, adrincache)};
+			if not defined (adrincache^.ctXmlBytes) {
+				adrincache^.ctXmlBytes = 0};
+			local (urllist = string.urlsplit (url));
+			bundle { //handle file:/// urls, 9/26/05 by DW
+				if urllist [1] == "file:///" {
+					local (f = string.getfileurl (url));
+					adrincache^.ctXmlBytes = file.size (f);
+					adrincache^.xmltext = string (file.readwholefile (f));
+					tryToCompileCacheText (adrincache^.xmltext, adrincache);
+					return}};
+			local (s = "", headertext, resultheaders, flgotsizefastway = false, sizexmltext);
+			if defined (adrincache^.xmltext) {
+				sizexmltext = sizeOf (adrincache^.xmltext);
+				flgotsizefastway = true}
+			else {
+				headertext = tcp.httpClient (server:urllist [2], path:urllist [3], ctFollowRedirects:5, flMessages:false, flJustHeaders:true, flAcceptOpml:true);
+				new (tabletype, @resultheaders);
+				webserver.util.parseHeaders (headertext, @resultheaders);
+				if defined (resultheaders.["Content-Length"]) {
+					try {
+						sizexmltext = number (resultheaders.["Content-Length"]);
+						flgotsizefastway = true}}};
+			if not flgotsizefastway {
+				s = string.httpResultSplit (tcp.httpClient (server:urllist [2], path:urllist [3], ctFollowRedirects:5, flAcceptOpml:true));
+				sizexmltext = sizeof (s)};
+			if adrincache^.ctXmlBytes != sizexmltext {
+				if s == "" { //we haven't read the xml yet
+					if defined (adrincache^.xmltext) { //but we do have a cached copy someone provided for us -- use that
+						s = adrincache^.xmltext}
+					else { //read the url
+						s = string.httpResultSplit (tcp.httpClient (server:urllist [2], path:urllist [3], flMEssages:false, flAcceptOpml:true, ctFollowRedirects:5))}};
+				if not defined (adrincache^.xmltext) {
+					adrincache^.xmltext = s};
+				tryToCompileCacheText (s, adrincache);
+				if defined (adrincache^.outline) {
+					delete (@adrincache^.outline)};
+				adrincache^.ctXmlBytes = sizexmltext}};
+				«return (s)
+			«else
+				«return (adrincache^.xmltext)
+		on insertInOutline (adr) {
+			local (oldTarget = target.get ());
+			target.set (frontWindow);
+			local (oldDisplay = op.getDisplay ());
+			op.setDisplay (false);
+			op.insertOutline (adr, right);
+			op.setDisplay (oldDisplay);
+			try {target.set (oldTarget)}};
+		on setCloudAttribute () {
+			if not flOpenInPlace {
+				if defined (adrincache^.cloud) {
+					window.attributes.setOne ("cloudInfo", adrincache^.cloud, adr);
+					local (adrcloud, nomad);
+					nomad = parentOf (adr^);
+					nomad = @nomad^.["/atts"];
+					adrcloud = @nomad^.cloudInfo;
+					window.attributes.setOne ("adrCloud", adrcloud, adr)}}};
+		
+		getTextFromUrl (url);
+		
+		if isDocType ("rss") or isDocType ("RDF") { //handle an RSS file
+			local (adr);
+			if adroutline == nil {
+				Frontier.tools.windowTypes.commands.new (true, adradrwindow:@adr)}
+			else {
+				adr = adroutline};
+			if defined (adrincache^.outline) {
+				adr^ = adrincache^.outline}
+			else {
+				op.rsstooutline (adrincache^.xmltext, adr, url);
+				adrincache^.outline = adr^;
+				delete (@adrincache^.xmltext)};
+			
+			local (oldTarget = target.set (adr));
+			local (title = op.getlinetext ());
+			
+			if adroutline == nil { // set window attributes
+				window.attributes.setOne ("lastSaved", timeModified (adr), adr);
+				window.attributes.setOne ("title", title, adr);
+				window.attributes.setOne ("flReadOnly", true, adr)};
+			
+			if flOpenInPlace and typeOf (frontWindow^) == outlineType {
+				insertInOutline (adr);
+				delete (parentOf (adr^))}
+			else { //open the new window
+				if adroutline == nil {
+					edit (adr, title, true)}};
+			
+			bundle { //set attributes
+				setCloudAttribute ()};
+			
+			try {target.set (oldTarget)};
+			
+			if adroutline == nil { //set last read urls
+				user.tools.prefs.lastRssUrl = url;
+				user.tools.prefs.lastOpenedUrl = url};
+			
+			return (true)};
+		if isDocType ("opml") or isDocType ("outlineDocument") {
+			local (urllist = string.urlsplit (url));
+			local (title = string.nthField (urllist[3], '/', string.countFields (urllist[3], '/')));
+			if title == "" {title = nil}; //let Frontier.tools.windowTypes.commands.new set the title
+			local (adr);
+			if adroutline == nil {
+				Frontier.tools.windowTypes.commands.new (true, title, @adr)}
+			else {
+				adr = adroutline};
+			
+			if defined (adrincache^.outline) {
+				adr^ = adrincache^.outline}
+			else {
+				if system.environment.isMac { //12/31/00 JES: convert to Mac text
+					op.xmltooutline (latinToMac.convert (adrincache^.xmltext), adr)}
+				else {
+					op.xmltooutline (adrincache^.xmltext, adr)};
+				adrincache^.outline = adr^;
+				delete (@adrincache^.xmltext)};
+			
+			if adroutline == nil { // set window attributes
+				setCloudAttribute ();
+				window.attributes.setOne ("lastSaved", timeModified (adr), adr);
+				if defined (adrincache^.ownerEmail) {
+					window.attributes.setOne ("ownerEmail", adrincache^.ownerEmail, adr)};
+				if defined (adrincache^.ownerName) {
+					window.attributes.setOne ("ownerName", adrincache^.ownerName, adr)}};
+			
+			if flOpenInPlace and typeOf (frontWindow^) == outlineType {
+				insertInOutline (adr);
+				delete (parentOf (adr^))}
+			else { //open the new window
+				if adroutline == nil {
+					edit (adr, title)}};
+			
+			if adroutline == nil { //set last read urls
+				user.tools.prefs.lastOutlineUrl = url;
+				user.tools.prefs.lastOpenedUrl = url};
+			return (true)};
+		if isDocType ("externalEditorInfo") { //adding a Manila site node
+			local (siteUrl = url);
+			siteUrl = string.popSuffix (siteUrl, '/'); //pop externalEditorInfo.xml
+			siteUrl = string.popSuffix (siteUrl, '/'); //pop /xml/
+			siteUrl = siteUrl + "/"; //add trailing slash
+			
+			local (adrtype);
+			if not Frontier.tools.windowTypes.findWindowType ("manilaSite", @adrtype) {
+				return (false)};
+			adrtype^.openManilaSite (siteUrl);
+			user.tools.prefs.lastOpenedUrl = url;
+			return (true)}};
+	
+	if adroutline == nil {
+		Frontier.tools.commands.openUrl (url); //opens the URL in the browser
+		if defined (system.temp.frontier.openUrlCache.[url] ) { //we don't cache these
+			delete (@system.temp.frontier.openUrlCache.[url] )}}
+	else {
+		scriptError ("Could not open the url, \"" + url + "\", because it could not be converted to an outline.")};
+	
+	user.tools.prefs.lastOpenedUrl = url;
+	
+	return (true)};
+bundle { //testing
+	openurl ("http://dropbox.scripting.com/dave/misc/myTemplates.opml");
+	
+	«openurl ("http://userdocs.worldoutline.org/")
+	
+	}
+	«bundle //testing file:/// urls
+		«openUrl ("file:///D:/Program%20Files/OPML/davenetfiles/2003/02/01/death.opml", true)
+	«bundle //add to existing outline
+		«openUrl ("http://radio.weblogs.com/0001000/rss.xml", true)
+		«openUrl ("http://radio.weblogs.com/0001000/gems/blogroll.opml", true)
+		«openUrl ("http://jake.editthispage.com/xml/externalEditorInfo.xml", true)
+	«bundle //open in new window
+		«openUrl ("http://p.moreover.com/cgi-local/page?c=CRM%20news&o=rss")
+		«openUrl ("http://radio.weblogs.com/0001000/gems/publications.opml")
+
+

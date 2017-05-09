@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.date.longString
+
+on longString (param1) {
+	kernel (date.longString)}
+
+

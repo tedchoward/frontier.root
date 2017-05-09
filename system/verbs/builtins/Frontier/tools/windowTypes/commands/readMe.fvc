@@ -1,0 +1,15 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.Frontier.tools.windowTypes.commands.readMe
+
+// 7/3/01; 1:37:25 AM by JES
+This stuff is in progress
+As it stands, it's somewhere in-between having been copied from builtins.pike.commands, and having been ported to its final (or at least eventual home).
+The idea is that all of these scripts first call user callbacks at user.tools.commandCallbacks. If any returns true, we stop.
+Next, we call scripts at user.pike.commandCallbacks, and if any of those returns true, we stop. This is for legacy support of user apps.
+Last, look to see if a windowType handles the command -- first user windowTypes at user.tools.windowTypes.[type].[command], and then the builtin types at Frontier.tools.data.windowTypes.[type].[command]. If the script for a windowType handles the command, it returns true, and then we stop.
+If we know the windowType, then we find it using Frontier.tools.windowTypes.findWindowType. If we don't know the windowType, say in the case of the File->Open command, then we loop over all the user, and then builtin types, looking for an open script. We call the script, and if it returns true, we stop.
+Finally, if we've gotten to this point, then we do the default behavior for the command, whatever that may be. Most likely we'll call a verb at builtins.fileMenu or builtins.editMenu.
+
+Note that there are still other things at builtins.pike.commands which aren't here. Some of those things will move to elsewhere, and some will disappear completely.
+
+
+

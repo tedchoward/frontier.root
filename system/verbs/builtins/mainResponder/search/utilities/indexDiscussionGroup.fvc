@@ -1,0 +1,31 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.search.utilities.indexDiscussionGroup
+
+«Index the UserLand Discussion Group.
+local (adrMessages);
+local (siteName = "Discussion Group");
+local (siteUrl = "http://discuss.userland.com/");
+local (baseUrl = siteUrl + "msgReader$");
+local (client = tcp.myDottedId ());
+
+adrMessages = @["D:\\discuss.root"].discuss.messages;
+local (i);
+
+for i = 2240 to sizeOf (adrMessages^) {
+	local (adrMessage = @adrMessages^ [i]);
+	
+	if defined (adrMessage^.flDeleted) and adrMessage^.flDeleted {
+		continue};
+	
+	local (text, title, url);
+	
+	title = adrMessage^.subject;
+	text = string (adrMessage^.body);
+	text = text + " " + adrMessage^.member + " " + title;
+	
+	url = baseUrl + adrMessage^.msgNum;
+	
+	mainResponder.search.server.index (title, url, text, siteName, siteUrl, client, false);
+	
+	fileMenu.save (mainResponder.search.utilities.getIndexPath ())}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.nthWord
+
+on nthWord (s, n) {
+	kernel (string.nthword)}
+
+

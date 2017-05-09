@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.getVersion
+
+on getVersion (path) {
+	kernel (file.getversion)}
+
+

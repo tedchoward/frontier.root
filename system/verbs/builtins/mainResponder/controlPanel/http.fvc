@@ -1,0 +1,7 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.controlPanel.http
+
+#title "Most Recent HTTP Requests"
+{mainResponder.log.browser (50, {logAlternateColor, bgcolor})}
+{addLegend ("http")}
+
+

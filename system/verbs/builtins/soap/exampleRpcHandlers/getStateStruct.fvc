@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.exampleRpcHandlers.getStateStruct
+
+on getStateStruct (numstruct) {
+	local (i, namestruct);
+	new (tableType, @namestruct);
+	for i = 1 to sizeof (numstruct) {
+		namestruct.["state" + numstruct[i]] = states.nthState (numstruct [i])};
+	return (namestruct)}
+
+

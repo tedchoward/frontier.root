@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.controlPanel.["#wizard"].structure.["00001000\twizard"].["00001000\tpanel"].["00005000\titem"].["00002000\tpopuptext"]
+
+Set the base domain that new sites are created under when using the New Site command.<p>If sub-sites, type a domain of the form www.server.com. Sites are then created at www.server.com/siteName/.<p>If top-level sites are preferred, type a domain of the form .server.com. Sites are then created at siteName.server.com.<p>Note: for top-level sites, it's necessary to have a * DNS mapping for this domain pointing to this server.
+
+

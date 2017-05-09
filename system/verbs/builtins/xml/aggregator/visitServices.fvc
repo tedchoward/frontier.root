@@ -1,0 +1,26 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.aggregator.visitServices
+
+on visitServices (adrvisit, urlmustcontain=nil) {
+	«Changes
+		«9/11/06; 9:18:48 AM by DW
+			«Created. Loop over all the services in aggregatordata, calling the visit routine. If urlmustcontain is not nil, only visit those whose address contains the substring, case-insensitive.
+	local (adrdata = xml.aggregator.init (), lowerurl, adrservice, flvisit);
+	if urlmustcontain != nil {
+		lowerurl = string.lower (urlmustcontain)};
+	for adrservice in @adrdata^.services {
+		flvisit = true;
+		if urlmustcontain != nil {
+			local (urlservice = string.lower (nameof (adrservice^)));
+			if not (urlservice contains lowerurl) {
+				flvisit = false}};
+		if flvisit {
+			try {
+				adrvisit^ (adrservice)}}}}
+«bundle //test code
+	«local (adrtable = @scratchpad.services)
+	«new (tabletype, adrtable)
+	«on visit (adrservice)
+		«adrtable^.[nameof (adrservice^)] = clock.now ()
+	«visitservices (@visit, "nytimes.com")
+
+

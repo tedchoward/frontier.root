@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.globals.pattern
+
+on pattern (val) {
+	kernel (lang.pattern)}
+
+

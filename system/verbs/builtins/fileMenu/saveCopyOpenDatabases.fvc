@@ -1,0 +1,118 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fileMenu.saveCopyOpenDatabases
+
+on saveCopyOpenDatabases (destfolder=nil, ticksbetweensaves=0, adrfilter=nil, adrerrortable=nil, flsafecopy=false) {
+	«Changes
+		«9/21/10; 7:40:40 PM by DW
+			«Improved the logging messages.
+		«9/21/10; 12:19:35 PM by DW
+			«Instead of calling frontier.getFilePath () to get the path to the root, use Frontier.pathToRoot. 
+		«10/17/09; 12:42:12 PM by DW
+			«Added optional parameter flsafecopy. If true, we savecopy to a temp file and rename it after it was successful. This way we don't lose the last good backup of a file (kind of the point of the exercise). Default false so as not to risk breakage.
+		«9/13/09; 11:43:43 AM by DW
+			«Commented the file.setcreated and file.setmodified calls because they crash the Intel version of the OPML Editor.
+		«7/14/09; 4:36:57 PM by DW
+			«The source of the logging event is fileMenu.saveCopyOpenDatabases.
+		«6/3/09; 9:54:55 AM by DW
+			«Use the new low-level logging facility to log the database copy.
+		«5/11/07; 1:01:35 PM by DW
+			«Instead of saving a series of backup folders, just write to a single mirror folder.
+		«5/11/07; 11:35:42 AM by DW
+			«When adding the program name, use "Frontier" and "Radio" instead of the two-word versions. I think there may be a problem with S3 uploads in this case.
+		«5/9/07; 10:26:22 AM by DW
+			«If there's an error save-copying, don't abort the process. We now optionally return an error table, indexed by relative file path, containing error messages. If there's no error, the file doesn't appear.
+		«10/11/06; 3:16:58 PM by DW
+			«Add another level of nesting, the app name. 
+		«10/10/06; 1:04:56 PM by DW
+			«Preserve file creation and modification dates.
+			«Return the destfolder.
+		«9/4/06; 10:11:23 AM by DW
+			«Add special case for frontier.root/radio.root/opml.root.
+		«9/4/06; 9:59:52 AM by DW
+			«Add filter parameter, if it returns false, don't copy the file.
+		«9/1/06; 12:05:03 PM by DW
+			«Created.
+	local (logsource = "fileMenu.saveCopyOpenDatabases");
+	local (flfirstfile = true);
+	on callfilter (f) {
+		local (flcopy = true);
+		try {
+			if adrfilter != nil {
+				if not adrfilter^ (f) { //filter says don't copy the file
+					flcopy = false}}}
+		else {
+			log2.add (logsource, "Filter error", tryerror)};
+		if flcopy {
+			if not flfirstfile {
+				if ticksbetweensaves > 0 { //pause to take a few hits
+					clock.waitsixtieths (ticksbetweensaves)}};
+			flfirstfile = false};
+		return (flcopy)};
+	local (pc = file.getpathchar ());
+	if adrerrortable != nil {
+		new (tabletype, adrerrortable)};
+	local (sourcefolder = frontier.pathstring + "Guest Databases" + pc);
+	if destfolder == nil {
+		destfolder = frontier.pathstring + "Mirror" + pc};
+	«bundle //add the subfolder, commented 5/11/07 by DW
+		«local (day, month, year, hour, minute, second)
+		«date.get (clock.now (), @day, @month, @year, @hour, @minute, @second)
+		«month = string.padwithzeros (month, 2)
+		«day = string.padwithzeros (day, 2)
+		«destfolder = destfolder + (year + "-" + month + "-" + day) + pc
+	bundle { //add the program name to folder path
+		local (name = "");
+		if defined (system.environment.isOpmlEditor) {
+			if system.environment.isOpmlEditor {
+				name = "OPML"}};
+		if name == "" {
+			if system.environment.isRadio {
+				name = "Radio"}
+			else {
+				name = "Frontier"}};
+		destfolder = destfolder + name + pc};
+	on savecopy (sourcef, destf) { //5/9/07 by DW
+		local (startticks = clock.ticks ());
+		try {
+			local (f = destf); //10/17/09 by DW
+			if flsafecopy {
+				f = file.folderfrompath (destf) + "tmp.root"};
+			filemenu.savecopy (f);
+			if flsafecopy { //10/17/09 by DW
+				try {file.delete (destf)};
+				file.rename (f, file.filefrompath (destf))};
+			«file.setcreated (destf, file.created (sourcef))
+			«file.setmodified (destf, file.modified (sourcef))
+			log2.add (logsource, "Save-copy", "Backed up " + file.filefrompath (sourcef) + ". (" + string.gigabytestring (file.size (destf)) + ")", startticks)}
+		else {
+			local (s = string.delete (destf, 1, sizeof (destfolder)));
+			s = string.replaceall (s, pc, "/");
+			if adrerrortable != nil {
+				if sizeof (s) > 0 {
+					adrerrortable^.[s] = tryerror}};
+			log2.add (logsource, "Save-copy error", tryerror, startticks)}};
+	bundle { //save-copy frontier.root
+		local (oldtarget = target.set (@root));
+		local (f = Frontier.pathToRoot); //9/21/10 by DW
+		local (destf = destfolder + file.filefrompath (f));
+		filemenu.save (f);
+		file.surefilepath (destf);
+		if callfilter (f) {
+			savecopy (f, destf)};
+		target.set (oldtarget)};
+	fileloop (f in sourcefolder, infinity) { //the folder containing the app
+		if f endswith ".root" {
+			if window.isopen (f) {
+				if callfilter (f) {
+					local (adrinroot);
+					filemenu.save (f);
+					adrinroot = @[f];
+					local (destf = destfolder + string.delete (f, 1, sizeof (sourcefolder)));
+					file.surefilepath (destf);
+					local (oldtarget = target.set (adrinroot));
+					savecopy (f, destf);
+					target.set (oldtarget)}}}};
+	return (destfolder)};
+bundle { //test code
+	saveCopyOpenDatabases ()}
+
+

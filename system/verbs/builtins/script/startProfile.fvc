@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.script.startProfile
+
+on startProfile (sliced) {
+	kernel (script.startProfile)}
+
+

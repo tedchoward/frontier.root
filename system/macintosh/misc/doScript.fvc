@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.misc.doScript
+
+on doScript (appID, appScript) { «Execute a script
+	return (appleEvent (appID, 'misc', 'dosc', '----', appScript))}
+
+

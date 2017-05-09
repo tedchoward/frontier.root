@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Netscape.registerUrlEcho
+
+on registerUrlEcho (x) { «Registers the ³echo² application. Each download from now on will be echoed to this application.
+	pack (x, @x);
+	setbinarytype (@x, 'sign');
+	return (appleEvent (Netscape.id, 'WWW!', 'RGUE', '----', x))}
+
+

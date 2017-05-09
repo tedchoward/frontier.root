@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.refuseConnections
+
+on refuseConnections (flag, appID = WebStar.id) { «Toggle incoming connections on or off
+	return (appleEvent (appID, 'WWW‡', 'fcon', '----', boolean (flag)))}
+
+

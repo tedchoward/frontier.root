@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.testing.uploadFolder
+
+local (folder = "Macintosh HD:Images for Testing:");
+dotOpmlSuite.menuCommands.editLogOutline (); //open log outline
+fileloop (f in folder, infinity) {
+	local (startticks = clock.ticks ());
+	if system.environment.isMac { //avoid Macintosh system files
+		if file.filefrompath (f) beginswith "." {
+			continue}};
+	local (path = string.replaceall (f - folder, file.getpathchar (), "/"));
+	local (url = s3.newObject ("/michegas/" + path, file.readwholefile (f)));
+	local (sizestring = string.megabytestring (file.size (f)));
+	log.addtooutline ("Upload: " + path + " (" + sizestring + ")", outlineUrl:url, startticks:startticks)}
+
+

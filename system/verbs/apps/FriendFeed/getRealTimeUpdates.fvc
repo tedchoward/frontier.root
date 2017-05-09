@@ -1,0 +1,74 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FriendFeed.getRealTimeUpdates
+
+on getRealTimeUpdates (username=nil, remotekey=nil, adrcallback=nil, room=nil) {
+	«Changes
+		«2/2/09; 9:31:33 AM by DW
+			«Don't fail if the result from FF is not a feed.
+		«1/24/09; 5:09:51 PM by DW
+			«New optional parameter, room -- if specified we get realtime updates for a room.
+		«10/21/08; 4:25:08 PM by DW
+			«Glue for FriendFeed's new realtime API.
+	local (baseurl = "http://chan.friendfeed.com/api/updates");
+	friendfeed.init ();
+	bundle { //set defaults
+		if username == nil {
+			username = user.friendfeed.prefs.username};
+		if remotekey == nil {
+			remotekey = string (user.friendfeed.prefs.remotekey)}};
+	on httpClient (url, adrparams) {
+		local (urllist = string.urlsplit (url), path = urllist [3], adr);
+		bundle { //add params to the path
+			path = path + "?";
+			for adr in adrparams {
+				path = path + nameof (adr^) + "=" + adr^ + "&"};
+			path = string.delete (path, sizeof (path), 1)};
+		local (tc = clock.ticks (), timeoutticks = 60 * user.FriendFeed.prefs.timeoutsecs);
+		local (s = string.httpResultSplit (tcp.httpClient (server:urllist [2], path:path, username:username, password:remotekey, timeoutticks:timeoutticks, flmessages:false, data:" ")));
+		«wp.newtextobject (s, @scratchpad.friendfeedresult)
+		return (s)};
+	local (params);
+	on gettoken (adrstruct) {
+		local (adrfeed = xml.getaddress (adrstruct, "feed"));
+		local (adrupdate = xml.getaddress (adrfeed, "update"));
+		return (xml.getvalue (adrupdate, "token"))};
+	bundle { //get params
+		local (xstruct);
+		new (tabletype, @params);
+		params.format = "xml";
+		local (s = httpclient (baseurl, @params));
+		xml.compile (s, @xstruct);
+		«scratchpad.xstruct = xstruct
+		params.token = gettoken (@xstruct);
+		«dialog.alert (token)
+		params.timeout = user.FriendFeed.prefs.timeoutsecs / 2};
+	loop {
+		local (url);
+		bundle { //set url, 1/24/09 by DW
+			if room == nil {
+				url = baseurl + "/home"}
+			else {
+				url = baseurl + "/room/" + room}};
+		local (s = httpclient (url, @params), xstruct);
+		xml.compile (s, @xstruct);
+		«scratchpad.xstruct = xstruct
+		params.token = gettoken (@xstruct);
+		try { //2/2/09 by DW -- changed from "bundle"
+			local (adrfeed = xml.getaddress (@xstruct, "feed"), adrentry=nil);
+			try {
+				adrentry = xml.getaddress (adrfeed, "entry")};
+				«scratchpad.entry = adrentry^
+			if (adrcallback != nil) and (adrentry != nil) {
+				adrcallback^ (adrentry)}}}}
+«bundle //test code
+	«local (username = user.friendfeed.prefs.username, remotekey = user.friendfeed.prefs.remotekey)
+	«local (adroutline = @scratchpad.realtimeupdates)
+	«new (outlinetype, adroutline)
+	«edit (adroutline)
+	«on callback (adrentry)
+		«local (title = xml.getvalue (adrentry, "title"))
+		«local (oldtarget = target.set (adroutline))
+		«op.insert (title, down)
+		«target.set (oldtarget)
+	«getRealTimeUpdates (username, remotekey, adrcallback:@callback, room:"instant-outline-beta")
+
+

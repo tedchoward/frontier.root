@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.refreshBuddies
+
+on refreshBuddies () {
+	«Changes
+		«5/9/11; 4:19:59 PM by DW
+			«Wipe the buddies outline. Really get all the outlines. Refresh each of the outlines.
+		«8/8/10; 11:38:32 AM by DW
+			«Call to getAllOutlines was wrong.
+		«7/17/10; 2:13:03 PM by DW
+			«Created. 
+	local (adrdata = io.init (), adropmltext);
+	io.client.openBuddyOutline ();
+	bundle { //clear out the buddy list outline
+		local (oldtarget = target.set (@adrdata^.client.buddies.outline));
+		op.wipe ();
+		target.set (oldtarget)};
+	local (texttable = io.client.getAllOutlines (flReallyGetAll:true));
+	for adropmltext in @texttable {
+		local (update);
+		new (tabletype, @update);
+		update.username = nameof (adropmltext^);
+		update.data = adropmltext^;
+		io.client.updateUser (@update)}};
+bundle { //test code
+	refreshBuddies ()}
+
+

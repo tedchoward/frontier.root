@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.english.strings.security.httpUnsupportedSecurityLevel
+
+Can't perform HTTP authentication because an unsupported security level was specified by the server's administrator.
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.server.archiveWebsite.index
+
+local (pta = html.getpagetableaddress ());
+scratchpad.ioparams = pta^;
+return (clock.now ())
+
+

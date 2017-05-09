@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.clickers.["type????"]
+
+on ["type????"] (path) {
+	«Is this a fat page?
+	if fatPages.fileIsFat (path) {
+		return (Frontier.clickers.typeFATP (path))};
+	«Open as plain text.
+	return (Frontier.clickers.typeTEXT (path))}
+
+

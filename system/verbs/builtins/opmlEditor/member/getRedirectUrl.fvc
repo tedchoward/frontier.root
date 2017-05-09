@@ -1,0 +1,18 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.member.getRedirectUrl
+
+on getRedirectUrl () {
+	«Changes
+		«6/12/12; 9:44:42 AM by DW
+			«Called from a web page script, signing up or signing in, that wants to know where to redirect to. Factors code.
+	local (pta = html.getpagetableaddress (), args);
+	new (tabletype, @args);
+	webserver.parseargs (pta^.searchargs, @args);
+	if defined (args.urlRedirect) {
+		return (args.urlRedirect)};
+	«if defined (pta^.requestHeaders.referer)
+		«return (pta^.requestHeaders.referer)
+	return ("")};
+bundle { //test code
+	getRedirectUrl ()}
+
+

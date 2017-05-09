@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.writeLine
+
+on writeLine (path, linestring) {
+	kernel (file.writeline)}
+
+

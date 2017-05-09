@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.table.gotoName
+
+on gotoName (name) {
+	kernel (table.gotoname)}
+
+

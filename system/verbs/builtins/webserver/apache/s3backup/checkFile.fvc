@@ -1,0 +1,48 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webserver.apache.s3backup.checkFile
+
+on checkFile (f, flstartup, adrdata) {
+	«Changes
+		«6/8/09; 10:29:06 AM by DW
+			«Factored out for easy debugging.
+	if (f endswith ".DS_Store") or file.isfolder (f) {
+		return};
+	local (folder = adrdata^.prefs.folder, pc = file.getpathchar (), i);
+	local (path = string.delete (f, 1, sizeof (folder)));
+	local (nomad = @adrdata^.fileinfo);
+	local (ctsteps = string.countfields (path, pc));
+	for i = 1 to ctsteps {
+		nomad = @nomad^.[string.nthfield (path, pc, i)];
+		if not defined (nomad^) {
+			new (tabletype, nomad)}};
+	webserver.apache.s3backup.initFileTable (nomad, f);
+	try {
+		local (flbackup = false, whencomp);
+		nomad^.whenLastCheck = clock.now ();
+		nomad^.ctChecks++;
+		nomad^.whenFileModified = file.modified (f);
+		bundle { //set whencomp
+			if defined (nomad^.whenLastBackup) {
+				whencomp = nomad^.whenLastBackup}
+			else {
+				whencomp = adrdata^.prefs.whenLastFullBackup}};
+		nomad^.fileSize = file.size (f);
+		if not flstartup {
+			if nomad^.whenFileModified > whencomp {
+				if nomad^.fileSize <= adrdata^.prefs.maxfilesize {
+					flbackup = true}}};
+		if flbackup {
+			local (s3path = adrdata^.prefs.s3path + string.replaceall (path, pc, "/"), startticks = clock.ticks ());
+			s3.newobject (s3path, file.readwholefile (f));
+			nomad^.ctbackups++;
+			nomad^.whenlastbackup = clock.now ();
+			adrdata^.stats.whenLastUpload = nomad^.whenlastbackup;
+			adrdata^.stats.ctUploads++}}
+			«log2.add ("webserver.apache", "s3 backup", s3path, startticks)
+	else {
+		nomad^.lastError = tryerror;
+		nomad^.whenLastError = clock.now ()}};
+bundle { //test code
+	local (adrdata = webserver.apache.s3backup.init ());
+	checkfile ("c:\\www\\wwwscriptingcom\\index.html", false, adrdata)}
+
+

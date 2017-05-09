@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.subst
+
+local (test = "To be or not to be");
+local (pat = "be");
+local (rep = "bebop");
+local (pat2 = "(be)(bop)");
+local (rep2 = "\\2\\1");
+
+regex.subst (pat, rep, @test);
+dialog.notify (test);
+
+regex.subst (pat2, rep2, @test);
+dialog.notify (test)
+
+

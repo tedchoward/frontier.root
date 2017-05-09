@@ -1,0 +1,28 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.loadPartsFromFolder
+
+on loadPartsFromFolder () {
+	«Changes
+		«5/27/12; 1:01:23 PM by DW
+			«Ignore archive folder and ignore errors loading a file.
+		«4/21/11; 2:17:22 PM by DW
+			«Don't try to load from folder if it doesn't exist.
+		«9/21/10; 9:26:54 AM by DW
+			«Use opmlEditor.loadPartFromFile to load the files.
+		«9/18/10; 11:15:09 AM by DW
+			«Init the parts folder here, only if user.opmlEditor.prefs.flLoadPartsFromFolder is true. You don't get the folder (could be confusing) until you turn the feature on.
+		«9/18/10; 8:11:33 AM by DW
+			«Created. 
+	if user.opmlEditor.prefs.flLoadPartsFromFolder {
+		local (f);
+		if not defined (user.opmlEditor.prefs.partsFolder) {
+			user.opmlEditor.prefs.partsFolder = frontier.getsubfolder ("/ops/drop new parts here/")};
+		if file.exists (user.opmlEditor.prefs.partsFolder) { //4/21/11 by DW
+			fileloop (f in user.opmlEditor.prefs.partsFolder) {
+				if not file.isfolder (f) { //ignore archive
+					try {
+						opmlEditor.loadPartFromFile (f)};
+					file.delete (f)}}}}};
+bundle { //test code
+	loadPartsFromFolder ()}
+
+

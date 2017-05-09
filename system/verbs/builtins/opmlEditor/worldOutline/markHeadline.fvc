@@ -1,0 +1,31 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.markHeadline
+
+on markHeadline () {
+	«Changes
+		«2/12/12; 10:19:24 AM by DW
+			«Adapt for multiple worldoutline servers.
+		«1/31/12; 6:46:04 PM by DW
+			«Instead of calling saveWorkspace, call saveArchivedOutline. Added a confirmation that says "You may have to wait up to 40 seconds for the new name to be registered" before creating the new mark.
+		«7/12/11; 12:53:35 PM by DW
+			«Rewrite to use opmleditor.blorkmark.add.
+		«7/11/11; 1:10:59 PM by DW
+			«Switch the default from blorkmark.com to blorkmark.net. Use Route53 glue by default instead of DNS API.
+		«6/7/11; 8:57:59 AM by DW
+			«Created.
+	local (adrdata = opmlEditor.blorkmark.init (), adroutline = window.frontmost (), editorialDomain, domain);
+	window.attributes.getone ("editorialDomain", @editorialDomain, adroutline); //2/12/12 by DW
+	op.attributes.getone ("domain", @domain);
+	if domain == nil {
+		domain = string.getrandompassword (5) + "." + nameof (adrdata^.domains [1])};
+	if dialog.ask ("Blorkmark name?", @domain) {
+		if dialog.confirm ("You may have to wait up to 40 seconds for the new name to be registered.") {
+			op.attributes.setone ("domain", domain);
+			opmleditor.blorkmark.add (domain, editorialDomain); //2/12/12 by DW -- add editorialDomain param
+			opmlEditor.worldOutline.saveArchivedOutline (); //1/31/12 by DW
+			«opmlEditor.worldOutline.saveWorkspace ()
+			if not dialog.twoway ("\"" + domain + "\" has been defined.", "OK", "Go to") {
+				webbrowser.openurl ("http://" + domain + "/")}}}};
+bundle { //test code
+	markHeadline ()}
+
+

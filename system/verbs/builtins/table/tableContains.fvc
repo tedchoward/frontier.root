@@ -1,0 +1,38 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.table.tableContains
+
+on tableContains (adrtable, adrItem) {
+	«Changes
+		«6/30/10; 2:16:44 PM by DW
+			«Added test code in a bundle at the bottom of the script.
+		«5/18/98 PBS
+			«Use parentOf instead of string manipulation.
+			«More reliable, will work with guest databases.
+			«Old code:
+				«if string.lower (adrtable) beginsWith "root."
+					«adrtable = string.mid (adrtable, 6, infinity)
+				«if string.lower (adritem) beginsWith "root."
+					«adrtable = string.mid (adritem, 6, infinity)
+				«return (string.lower (adritem) beginsWith string.lower (adrtable))
+		«4/6/98 PBS
+			«Compare with string.lower.
+		«2/12/98 at 3:14:52 PM by PBS
+			«Sometimes the addresses begin with "root.", sometimes not.
+			«Take that into account.
+		«10/31/97 at 1:25:00 PM by DW
+			«moved from toys.tableContains
+			«return true if adritem points to something contained within the table
+	local (nomad = adritem);
+	adrtable = address (adrtable);
+	if typeof (nomad^) != tabletype {
+		nomad = parentof (nomad^)};
+	loop {
+		if nomad == adrtable {
+			return (true)};
+		nomad = parentof (nomad^);
+		if nomad == nil {
+			return (false)}}}
+«bundle //test code
+	«dialog.alert (tableContains (@system.temp.scripting2.editor.posts, @system.temp.scripting2.editor.posts.["http://scripting.com/stories/2010/06/29/scripting2ChangeNotes.opml"].outline))
+	«dialog.alert (tableContains (@system.temp.scripting2.editor.posts, @scratchpad))
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:websites.samples.UserLand.["#tools"].dropCap
+
+on dropCap (letter) {
+	return (html.data.standardMacros.imageRef (letter, "", align:"left"))}
+
+

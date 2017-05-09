@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.getCardGridUnits
+
+on getCardGridUnits () {
+	local (atts);
+	if not cardEditor.getCardAttributes (@atts) {
+		return (0)};
+	return (atts.grun)}
+
+

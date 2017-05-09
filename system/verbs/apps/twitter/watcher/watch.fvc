@@ -1,0 +1,26 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.watcher.watch
+
+bundle { //delete id's that are more than a week old
+	local (i, adrid, marktime = clock.now () - (7 * 24 * 60 * 60));
+	for i = sizeof (user.twitter.prefs.watcher.ids) downto 1 {
+		adrid = @user.twitter.prefs.watcher.ids [i];
+		if adrid^ < marktime {
+			delete (adrid);
+			filemenu.save ()}}};
+bundle { //check for new messages
+	local (timeline);
+	if twitter.getTimeLine (@timeline) {
+		local (adrstatus);
+		«scratchpad.twittertimeline = timeline
+		for adrstatus in @timeline {
+			local (adrterm, id = nameof (adrstatus^));
+			for adrterm in @user.twitter.prefs.watcher.terms {
+				if adrstatus^.text contains nameof (adrterm^) {
+					if not defined (user.twitter.prefs.watcher.ids.[id]) {
+						local (subject = user.twitter.prefs.watcher.subject);
+						subject = string.replaceall (subject, "<%screenName%>", adrstatus^.userScreenName);
+						tcp.sendmail (adrterm^, subject, adrstatus^.text);
+						user.twitter.prefs.watcher.ids.[id] = clock.now ();
+						filemenu.save ()}}}}}}
+
+

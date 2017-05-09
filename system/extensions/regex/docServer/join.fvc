@@ -1,0 +1,25 @@
+FrontierVcsFile:3:optx:system.extensions.regex.docServer.join
+
+#title "regex.join"
+#renderOutlineWIth "docServerRenderer"
+Syntax
+	regex.join (exprStr, adrList)
+Params
+	exprStr is the item delimiter (string)
+	
+	adrList is the address of a list.
+Action
+	Joins all items in a list, pointed to by adrList, into a delimited string object. exprStr is used as the item delimiter.
+Returns
+	String of concatenated list items
+Examples
+	local (myList = {"a", "b", "c"})
+	regex.join ("|", @myList)
+		// "a|b|c"
+Notes
+	This verb does the opposite of "regex.split".
+See Also
+	"regex.split"
+
+
+

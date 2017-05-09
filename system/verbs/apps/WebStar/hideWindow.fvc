@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.hideWindow
+
+on hideWindow (flag, appID = WebStar.id) { «Toggle hiding status window in the background
+	return (appleEvent (appID, 'WWW‡', 'fwin', '----', boolean (flag)))}
+
+

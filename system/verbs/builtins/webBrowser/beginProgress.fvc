@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.beginProgress
+
+on beginprogress (n, withMessage) { «Initialize a progress indicator.
+	case sys.os () {
+		"MacCn";
+		"MacOS" {
+			return (appleEvent (user.webBrowser.currentid, 'WWW!', 'PRBG', '----', long (n), 'PMSG', string (withMessage)))}}}
+
+

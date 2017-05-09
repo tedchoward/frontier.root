@@ -1,0 +1,22 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.examples.testBlobs.InsertBlobs
+
+on InsertBlobs () {
+	local {
+		dsn = "";
+		uid = "";
+		pwd = "";
+		sql = "";
+		theBlobList = {};
+		theResults = ""};
+	
+	theBlobList[0] = system.extensions.odbc.examples.testBlobs.cover_tn;
+	theBlobList[0] = system.extensions.odbc.examples.testBlobs.cover;
+	
+	sql = "INSERT INTO cd_covers (id, title, cover_tn, cover_data) VALUES (38, 'Scars & Martyrs', ?, ?)";
+	
+	theResult = odbc.execute(dsn, uid, pwd, sql, "insertblobs", blobList:theBlobList);
+	
+	msg (theResult)};
+InsertBlobs ()
+
+

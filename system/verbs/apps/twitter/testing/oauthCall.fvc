@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.testing.oauthCall
+
+«Changes
+	«1/1/10; 11:43:46 AM by DW
+		«Tested with new PIN-based stuff.
+	«3/6/09; 9:31:58 AM by DW
+		«Created. Gets the direct messages for the user using OAuth instead of a username and password.
+local (adruser = @scratchpad.twitteruser);
+twitter.getdirectmessages (@scratchpad.twittermessages, adruser:adruser)
+
+

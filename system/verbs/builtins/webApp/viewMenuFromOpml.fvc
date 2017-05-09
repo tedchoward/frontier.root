@@ -1,0 +1,65 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webApp.viewMenuFromOpml
+
+on viewMenuFromOpml (url, menuname, flEnableDropdown=false, extraItems=nil, flMenuVisible=true) {
+	«Changes
+		«10/2/12; 7:46:05 PM by DW
+			«New optional param, flMenuVisible. Allows the caller to say that the menu is not initially visible. This is the way I want it on the new Scripting News home page. 
+				«http://worknotes.scripting.com/october2012/10212ByDw/newMenuPara
+		«5/9/12; 2:15:13 PM by DW
+			«New optional param, extraItems.
+		«5/9/12; 9:53:40 AM by DW
+			«If there already is a pagetable, don't set one up. This can happen when building the home page of the River2 site.
+		«5/8/12; 9:52:08 AM by DW
+			«Created.
+	local (adrtable, adrxstruct, adrbody, adrmenuname);
+	on findsubof (adrparent, name, adradrmatch) {
+		local (adr, lowername = string.lower (name));
+		for adr in adrparent {
+			if nameof (adr^) endswith "outline" {
+				if string.lower (adr^.["/atts"].text) == lowername {
+					adradrmatch^ = adr;
+					return (true)}}};
+		return (false)};
+	op.getnetoutline (url, @adrtable);
+	xml.thread.accessStruct (@adrtable^.struct, @adrxstruct);
+	adrbody = xml.getaddress (xml.getaddress (adrxstruct, "opml"), "body");
+	if findsubof (adrbody, menuname, @adrmenuname) {
+		local (adrmenu, adritem, menutable, adr, statusmsg = "");
+		on additem (title, pagename) {
+			local (adritem = @menutable.[string.padwithzeros (sizeof (menutable), 5)]);
+			new (tabletype, adritem);
+			adritem^.title = title;
+			adritem^.pagename = pagename};
+		on decode (s) {
+			return (xml.entitydecode (s, flAlphaEntities:true))};
+		on getsub (num, adrbase, adradrsub) {
+			local (adrsub, ct = 0);
+			for adrsub in adrbase {
+				if nameof (adrsub^) endswith "outline" {
+					if ++ct == num {
+						adradrsub^ = adrsub;
+						return (true)}}};
+			return (false)};
+		on gettextatt (adr) {
+			return (decode (adr^.["/atts"].text))};
+		new (tabletype, @menutable);
+		if getsub (1, adrmenuname, @adrmenu) {
+			menutitle = gettextatt (adrmenu)};
+		for adritem in adrmenu {
+			if nameof (adritem^) endswith "outline" {
+				local (adratts = @adritem^.["/atts"]);
+				addItem (adratts^.text, adratts^.url)}};
+		bundle { //if there is no pagetable, set one up then build menu, 5/9/12 by DW
+			local (pt);
+			try {
+				html.getpagetableaddress ()}
+			else {
+				new (tabletype, @pt);
+				pt.client = "127.0.0.1";
+				html.setpagetableaddress (@pt)};
+			return (webApp.viewMenu (menutitle, @menutable, flEnableDropdown:flEnableDropdown, extraItems:extraItems, flMenuVisible:flMenuVisible))}}}
+«bundle //test code
+	«s = viewMenuFromOpml ("http://static.reallysimple.org/worldoutline/dave/2012/05/01/archive102.opml", "scriptingNewsMenu")
+	«webbrowser.displaytext (s)
+
+

@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.data.buildEntitiesTable
+
+local (i, ch, entity, hexKey);
+local (adrTable);
+case sys.os () {
+	"Win95";
+	"WinNT" {
+		adrTable = @html.data.iso8859.win};
+	"MacOS" {
+		adrTable = @html.data.iso8859.mac}};
+on hexEncode(s) {
+	local (r = "", i);
+	for i = 1 to sizeof (s) {
+		r = r + string.mid (string.hex (s [i]), 5, 2)};
+	return (r)};
+new (tableType, @regex.examples.data.entities2ascii);
+for (i = 0 to 255) {
+	ch = string (char(i));
+	entity = string.iso8859encode (ch, adrTable);
+	if (sizeof (entity) > 1) {
+		regex.examples.data.entities2ascii [hexEncode (string (entity))] = ch}}
+
+

@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.table.copyContents
+
+on copyContents (adr1, adr2) {
+	local (i);
+	for i = 1 to sizeof (adr1^) {
+		if not table.copy (@adr1^ [i], adr2) {
+			return (false)}};
+	return (true)}
+
+

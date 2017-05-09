@@ -1,0 +1,23 @@
+FrontierVcsFile:3:optx:suites.navigator.data.outlines.system
+
+Websites;root.websites;Your websites go in this table.
+-
+Workspace;root.workspace;Store your personal scripts in this table.
+Scratchpad;root.scratchpad;A place to hold temporary scripts and data.
+Temp;system.temp;A place for very temporary scripts and data
+Root;root;The top level of the object database. All Frontier objects are contained within this table.
+-
+Agents;system.agents;Any script in this table runs once per second in the background.
+Shared menus;system.menus.sharedMenus;Contains the menu bar objects for apps that support menu sharing.
+Suites;root.suites;Tables that contain collections of scripts, especially ones that you want to share with others.
+-
+Startup scripts;user.callbacks.startup;Any script in this table runs when Frontier starts up.
+Shutdown scripts;user.callbacks.shutdown;Any script in this table runs when Frontier shuts down.
+CGI scripts;user.webserver.cgis;Scripts that run when a CGI request comes in thru web server software.
+Apple Event handlers;system.verbs.traps;Tables that contain scripts that run in response to incoming Apple Events.
+-
+Glue scripts;system.verbs.apps;Tables of scripts that allow your scripts to control Apple Event-aware applications.
+Extensions;system.extensions;Code extensions: UCMDs, XCMDs, or OSAXen that can be called from your scripts.
+
+
+

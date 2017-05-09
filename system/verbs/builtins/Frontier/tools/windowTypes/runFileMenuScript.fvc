@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.windowTypes.runFileMenuScript
+
+on runFileMenuScript (itemname) {
+	thread.callScript (@Frontier.tools.windowTypes.commands.[itemname], {});
+	return (true)}
+
+

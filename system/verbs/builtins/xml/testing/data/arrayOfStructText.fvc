@@ -1,0 +1,227 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.xml.testing.data.arrayOfStructText
+
+<?XML VERSION="1.0"?>
+
+<arrayOfStructTest>
+
+	<array>
+
+		<data>
+
+			<value>
+
+				<struct>
+
+					<member>
+
+						<name>
+
+							<string>day</string>
+
+							</name>
+
+						<value>
+
+							<i4>29</i4>
+
+							</value>
+
+						</member>
+
+					<member>
+
+						<name>
+
+							<string>month</string>
+
+							</name>
+
+						<value>
+
+							<i4>3</i4>
+
+							</value>
+
+						</member>
+
+					<member>
+
+						<name>
+
+							<string>year</string>
+
+							</name>
+
+						<value>
+
+							<i4>1998</i4>
+
+							</value>
+
+						</member>
+
+					<member>
+
+						<name>
+
+							<string>hour</string>
+
+							</name>
+
+						<value>
+
+							<i4>12</i4>
+
+							</value>
+
+						</member>
+
+					<member>
+
+						<name>
+
+							<string>minute</string>
+
+							</name>
+
+						<value>
+
+							<i4>15</i4>
+
+							</value>
+
+						</member>
+
+					<member>
+
+						<name>
+
+							<string>second</string>
+
+							</name>
+
+						<value>
+
+							<i4>27</i4>
+
+							</value>
+
+						</member>
+
+					</struct>
+
+				</value>
+
+			<value>
+
+				<struct>
+
+					<member>
+
+						<name>
+
+							<string>day</string>
+
+							</name>
+
+						<value>
+
+							<i4>10</i4>
+
+							</value>
+
+						</member>
+
+					<member>
+
+						<name>
+
+							<string>month</string>
+
+							</name>
+
+						<value>
+
+							<i4>5</i4>
+
+							</value>
+
+						</member>
+
+					<member>
+
+						<name>
+
+							<string>year</string>
+
+							</name>
+
+						<value>
+
+							<i4>1998</i4>
+
+							</value>
+
+						</member>
+
+					<member>
+
+						<name>
+
+							<string>hour</string>
+
+							</name>
+
+						<value>
+
+							<i4>9</i4>
+
+							</value>
+
+						</member>
+
+					<member>
+
+						<name>
+
+							<string>minute</string>
+
+							</name>
+
+						<value>
+
+							<i4>43</i4>
+
+							</value>
+
+						</member>
+
+					<member>
+
+						<name>
+
+							<string>second</string>
+
+							</name>
+
+						<value>
+
+							<i4>59</i4>
+
+							</value>
+
+						</member>
+
+					</struct>
+
+				</value>
+
+			</data>
+
+		</array>
+
+	</arrayOfStructTest>
+
+
+
+

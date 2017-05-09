@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.rez.countResources
+
+on countResources (path, type) {
+	kernel (rez.countresources)}
+
+

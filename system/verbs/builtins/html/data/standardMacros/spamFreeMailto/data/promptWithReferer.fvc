@@ -1,0 +1,5 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.html.data.standardMacros.spamFreeMailto.data.promptWithReferer
+
+<p>Use this form to send mail to {username} regarding this <a href="{referer}">page</a>.</p>
+
+

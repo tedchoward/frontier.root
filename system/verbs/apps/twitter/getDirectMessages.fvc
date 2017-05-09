@@ -1,0 +1,65 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.getDirectMessages
+
+on getDirectMessages (adrmessages, username=nil, password=nil, msgsurl=nil, adruser=nil) {
+	«Changes
+		«3/6/09; 9:28:55 AM by DW
+			«Add OAuth support. 
+				«New optional param -- adruser, if not nil, points to a table (which we create if it doesn't exist) of information about this user, including an OAuth authorization. If it's nil, we do the username and password thing, as we always have. 
+		«4/3/07; 5:40:50 PM by DW
+			«Created.
+	on extractData (s) { //factored -- 3/6/09 by DW
+		«extract data from the xml in adrmessages^
+		local (xstruct, adrmsg);
+		xml.compile (s, @xstruct);
+		«scratchpad.xstruct = xstruct
+		local (adrmsgs = xml.getaddress (@xstruct, "direct-messages"));
+		for adrmsg in adrmsgs {
+			if nameof (adrmsg^) contains "direct_message" {
+				local (id = xml.getvalue (adrmsg, "id"));
+				local (adrsub = @adrmessages^.[id]);
+				new (tabletype, adrsub);
+				adrsub^.text = xml.getvalue (adrmsg, "text");
+				adrsub^.senderId = xml.getvalue (adrmsg, "sender_id");
+				adrsub^.recipientId = xml.getvalue (adrmsg, "recipient_id");
+				adrsub^.createdAt = xml.getvalue (adrmsg, "created_at");
+				adrsub^.senderScreenName = xml.getvalue (adrmsg, "sender_screen_name");
+				adrsub^.recipientScreenName = xml.getvalue (adrmsg, "recipient_screen_name")}}};
+	twitter.init ();
+	new (tabletype, adrmessages);
+	bundle { //try doing it the OAuth way, 3/6/09 by DW
+		if adruser != nil {
+			if twitter.oAuth.initUser (adruser) {
+				try {
+					local (adrapp = @adruser^.oauth, params, xmltext);
+					new (tabletype, @params);
+					OAuth.authenticatedCall (user.twitter.prefs.directmessagesurl, @params, adrapp^.consumerkey, adrapp^.consumersecret, adrapp^.accesstoken, adrapp^.accesstokensecret, @xmltext);
+					«wp.newtextobject (xmltext, @scratchpad.xmltext)
+					extractdata (xmltext);
+					return (true)}};
+			return (false)}};
+	bundle { //set defaults
+		if username == nil {
+			username = user.twitter.prefs.username};
+		if password == nil {
+			password = string (user.twitter.prefs.password)};
+		if msgsurl == nil {
+			msgsurl = user.twitter.prefs.directmessagesurl}};
+	local (urllist = string.urlsplit (msgsurl));
+	try {
+		local (tc = clock.ticks (), timeoutticks = 60 * user.twitter.prefs.timeOutSecs);
+		local (s = string.httpResultSplit (tcp.httpClient (server:urllist [2], path:urllist [3], username:username, password:password,  method:"GET", timeoutticks:timeoutticks, flMessages:false)));
+		«scratchpad.xmltext = s
+		«local (s = scratchpad.xmltext)
+		user.twitter.stats.whenLastGet = clock.now ();
+		user.twitter.stats.ctGets++;
+		user.twitter.stats.ctSecsLastGet = double (clock.ticks () - tc) / 60;
+		extractData (s);
+		user.twitter.stats.lastGetError = "";
+		return (true)}
+	else {
+		user.twitter.stats.lastGetError = tryerror;
+		return (false)}};
+bundle { //test code
+	getDirectMessages (@scratchpad.messages)}
+
+

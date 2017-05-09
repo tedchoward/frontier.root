@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.window.dbStats
+
+on dbStats () {
+	kernel (window.dbstats)}
+
+

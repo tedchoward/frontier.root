@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.imageGraphic
+
+on imageGraphic (graphic, format, antialiasing = nil, dithering = nil, rotate = nil, scale = nil, translation = nil, flipHorizontal = nil, flipVertical = nil, quality = nil, structuredGraphic = nil) {
+	«Convert a graphic from one format to another
+	return (misc.imageGraphic (BBEdit.id, graphic, format, antialiasing, dithering, rotate, scale, translation, flipHorizontal, flipVertical, quality, structuredGraphic))}
+
+

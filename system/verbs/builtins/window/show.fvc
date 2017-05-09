@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.window.show
+
+on show (adr) {
+	kernel (window.show)}
+
+

@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.extensions.crypto.kernelGlue.SHA1
+
+on SHA1 (s, flTranslate=true) {
+	«Changes
+		«8/31/09; 5:05:07 PM by DW
+			«Created. 
+	kernel (crypt.SHA1)}
+
+

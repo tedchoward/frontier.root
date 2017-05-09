@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webserver.standardMacros.usernameFilter
+
+on usernameFilter (username, matchString, returnString) {
+	username = string.lower (username);
+	matchString = string.lower (matchString);
+	if matchString beginsWith "!" {
+		matchstring = string.popLeading (matchString, "!");
+		if not (username == matchString) {
+			return (returnString)}}
+	else {
+		if username == matchString {
+			return (returnString)}};
+	return ("")} « return empty string if condition is not met.
+
+

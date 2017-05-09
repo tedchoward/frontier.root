@@ -1,0 +1,75 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.adminSite.prefs.themes
+
+on themes () {
+	«Changes
+		«9/5/02; 2:51:46 PM by JES
+			«Instead of putting explanatory text next to each list, display a simple header -- the explanatory text is in the prefs outline.
+		«8/20/02; 10:22:28 PM by JES
+			«Created.
+	local (pta = html.getPageTableAddress ());
+	local (bgcolors = {pta^.trbg2, pta^.trbg1});
+	local (htmltext);
+	on add (s) {
+		htmltext = htmltext + (s + "\r");};
+	
+	if pta^.method == "POST" {
+		local (adrargs = @pta^.postArgs);
+		on enableOrDisableThemes (adrthemes, prefix) {
+			local (adr);
+			for adr in adrthemes {
+				if defined (adrargs^.[prefix + ":" + string.urlEncode (nameOf (adr^)) ] ) { //enabled
+					adr^.flEnabled = true}
+				else { //disabled
+					adr^.flEnabled = false}}};
+		enableOrDisableThemes (@config.manila.themes, "theme");
+		enableOrDisableThemes (@config.manila.discussionGroupThemes, "dgtheme")};
+	
+	bundle { //Manila Themes
+		bundle { //explanatory text
+			add ("<p><b>Themes</b></p>")};
+		
+		add ("<table cellpadding=\"3\" cellspacing=\"0\" border=\"0\">");
+		bundle { //headers
+			add ("<tr><td></td><td><b>Theme</b></td><td><b>Author</b></td></tr>")};
+		
+		local (adrthemes = @config.manila.themes);
+		local (adr, ct = 0);
+		for adr in adrthemes {
+			local (name = nameOf (adr^));
+			local (checkedstring = "");
+			if adr^.flEnabled {
+				checkedstring = " checked"};
+			add ("<tr bgcolor=\"" + bgcolors[ (++ct % 2) + 1] + "\">");
+			add ("<td>&nbsp;&nbsp;<input type=\"checkbox\" name=\"theme:" + string.urlEncode (name) + "\"" + checkedstring + " />&nbsp;</td>");
+			add ("<td class=\"small\"><a href=\"" + adr^.info.siteUrl + "\" title=\"" + searchEngine.stripMarkup (string (adr^.info.description)) + "\">" + adr^.info.displayName + "</a></td>");
+			add ("<td class=\"small\"><a href=\"mailto:" + adr^.info.authorEmail + "\">" + adr^.info.author + "</a></td>");
+			add ("</tr>")};
+		
+		add ("</table>")};
+	
+	bundle { //Manila DG Themes
+		bundle { //explanatory text
+			add ("<p><b>Discussion Group Themes</b></p>")};
+		
+		add ("<table cellpadding=\"3\" cellspacing=\"0\" border=\"0\" width=\"60%\">");
+		bundle { //headers
+			add ("<tr><td></td><td><b>DG Theme</b></td><td><b>Author</b></td></tr>")};
+		
+		local (adrthemes = @config.manila.discussionGroupThemes);
+		local (adr, ct = 0);
+		for adr in adrthemes {
+			local (checkedstring = "");
+			if adr^.flEnabled {
+				checkedstring = " checked"};
+			local (name = nameOf (adr^));
+			add ("<tr bgcolor=\"" + bgcolors[ (++ct % 2) + 1] + "\">");
+			add ("<td>&nbsp;&nbsp;<input type=\"checkbox\" name=\"dgtheme:" + string.urlEncode (name) + "\"" + checkedstring + " />&nbsp;</td>");
+			add ("<td class=\"small\"><a href=\"" + adr^.info.siteUrl + "\" title=\"" + searchEngine.stripMarkup (string (adr^.info.description)) + "\">" + adr^.info.displayName + "</a></td>");
+			add ("<td class=\"small\"><a href=\"mailto:" + adr^.info.authorEmail + "\">" + adr^.info.author + "</a></td>");
+			add ("</tr>")};
+		
+		add ("</table>")};
+	
+	return (htmltext)}
+
+

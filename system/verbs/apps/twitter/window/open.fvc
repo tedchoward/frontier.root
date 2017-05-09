@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.window.open
+
+twitter.init ();
+edit (@user.twitter.outline, adrButtonTable:@twitter.window.buttons)
+
+

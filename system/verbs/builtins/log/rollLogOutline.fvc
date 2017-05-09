@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.log.rollLogOutline
+
+«Changes
+	«4/21/09; 2:30:49 PM by DW
+		«Created. Roll the log outline every night, if it's not empty.
+local (adrlogoutline = @user.log.outlines.default);
+if sizeof (adrlogoutline^) > 1 { //more than 1 headline
+	local (opmltext = op.outlinetoxml (adrlogoutline));
+	local (f = frontier.getsubfolder ("ops/logs/outlines") + file.getdatepath (flLastSeparator:false) + ".opml");
+	file.surefilepath (f);
+	file.writewholefile (f, opmltext);
+	new (outlinetype, adrlogoutline)}
+
+

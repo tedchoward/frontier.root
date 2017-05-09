@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.menuCommands.extractObject
+
+on extractObject () {
+	«Changes
+		«4/23/11; 6:37:23 PM by DW
+			«Give the user a chance to change the address the object is loaded into.
+		«4/23/11; 4:37:56 PM by DW
+			«Extract an object from an outline node.
+	local (atts, pageatts);
+	op.attributes.getall (@atts);
+	if (not defined (atts.type)) or (atts.type != "fatp") {
+		dialog.alert ("Sorry there is no object here that we can extract.")};
+	local (objectaddress = atts.address);
+	if not dialog.ask ("Address for new object?", @objectaddress) {
+		return};
+	if defined (address (objectaddress)^) {
+		if not dialog.confirm ("Replace existing \"" + objectaddress + "\"?") {
+			return}};
+	fatPages.getPageAtts (@atts.bits, @pageatts);
+	fatPages.unpackOdbObject (@pageatts, objectaddress, nil, false, false);
+	edit (objectaddress)};
+bundle { //test code
+	extractObject ()}
+
+

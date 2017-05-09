@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FriendFeed.testing.publishParagraphs
+
+on publishParagraphs (title, s) {
+	«Changes
+		«5/14/09; 8:20:16 AM by DW
+			«Created. An experiment. Create a new post with the indicated title, and add each "paragraph" in the string as a comment. The delimiter is a carriage return.
+	local (t, url = friendfeed.newpost (title, adrdata:@t));
+	local (ctparagraphs = string.countfields (s, "\r"), i);
+	for i = 1 to ctparagraphs {
+		local (pgf = string.nthfield (s, "\r", i));
+		friendfeed.newcomment (t.id, pgf)};
+	return (url)};
+bundle { //test code
+	local (s = string (FriendFeed.testing.paragraphText));
+	s = string.replaceall (s, "</p>", "+++++");
+	s = searchengine.stripmarkup (s);
+	s = string.replaceall (s, "+++++ ", "\r");
+	s = string.replaceall (s, "&nbsp;", " ");
+	s = string.replaceall (s, "\";->\"", ":-)");
+	wp.newtextobject (s, @FriendFeed.testing.s);
+	«publishParagraphs ("This is a test, please ignore", s)
+	publishParagraphs ("Why open formats are so important", s)}
+
+

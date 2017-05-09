@@ -1,0 +1,53 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.testing.outlineFolder
+
+on outlineFolder (s3path, adroutline) {
+	«Changes
+		«3/14/14; 11:40:35 AM by DW
+			«Outline an S3 structure. A nice utility I can't believe we didn't have.
+	local (structuretable, bucketname, pathinbucket, adrobj, localtable, adrtable = @localtable);
+	new (tabletype, adrtable);
+	new (outlinetype, adroutline);
+	edit (adroutline);
+	bundle { //set bucketname, pathinbucket
+		local (s = s3path);
+		if s beginswith "/" {
+			s = string.delete (s, 1, 1)};
+		bucketname = string.nthfield (s, "/", 1);
+		pathinbucket = string.delete (s, 1, sizeof (bucketname) + 1)};
+	s3.getBucket (s3path, @structuretable);
+	«scratchpad.structuretable = structuretable
+	
+	for adrobj in @structuretable {
+		local (path = string.delete (nameof (adrobj^), 1, sizeof (pathinbucket)), nomad = adrtable, i);
+		for i = 1 to string.countfields (path, "/") {
+			step = string.nthfield (path, "/", i);
+			nomad = @nomad^.[step];
+			if not defined (nomad^) {
+				new (tabletype, nomad)}};
+		nomad^ = adrobj^};
+	
+	on visittable (adrtable, url) {
+		local (adr, dir = right);
+		if url endswith "/" {
+			url = string.delete (url, sizeof (url), 1)};
+		for adr in adrtable {
+			local (name = nameof (adr^), myurl = url + "/" + name);
+			op.insert (name, dir); dir = down;
+			if defined (adr^.etag) {
+				op.attributes.setOne ("type", "link");
+				op.attributes.setOne ("url", myurl);
+				op.attributes.setOne ("modified", date.netstandardstring (adr^.modified))}
+			else {
+				visittable (adr, myurl)}};
+		if dir == down {
+			op.go (left, 1);
+			op.collapse ()}};
+	local (oldtarget = target.set (adroutline));
+	op.setlinetext (s3path);
+	visittable (adrtable, "http:/" + s3path);
+	target.set (oldtarget);
+	op.expand (1)};
+bundle { //test code
+	outlineFolder ("/beta.fargo.io/users/scripting/", @scratchpad.myoutline)}
+
+

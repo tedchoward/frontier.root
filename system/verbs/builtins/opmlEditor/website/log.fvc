@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.log
+
+on log () {
+	«Changes
+		«9/18/11; 9:03:11 AM by DW
+			«Created.
+	local (pta = html.getpagetableaddress ());
+	pta^.title = "Log";
+	local (title = "<h3>" + pta^.title + "</h3>");
+	local (intro = string (opmlEditor.data.outlines.logPageIntro));
+	return (title + intro + log2.view (flSingleDay:false, flNestedTable:false, tableClassName:webApp.data.logTableClass))};
+bundle { //test code
+	log ()}
+
+

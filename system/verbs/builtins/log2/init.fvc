@@ -1,0 +1,46 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.log2.init
+
+on init () {
+	«Changes
+		«2/13/12; 11:16:46 PM by DW
+			«Init scrollers table.
+		«9/19/10; 10:17:52 PM by DW
+			«Add a callbacks table.
+		«10/20/09; 10:08:31 AM by DW
+			«Install overnight script.
+		«10/17/09; 4:44:18 PM by DW
+			«Init new pref, ctDaysInLog.
+		«5/17/09; 12:26:35 PM by DW
+			«Created. 
+	local (adrdata = @config.log);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	if not defined (adrdata^.calendar) {
+		new (tabletype, @adrdata^.calendar)};
+	bundle { //callbacks -- 9/19/10 by DW
+		if not defined (adrdata^.callbacks) {
+			new (tabletype, @adrdata^.callbacks)};
+		if not defined (adrdata^.callbacks.afterAdd) {
+			new (tabletype, @adrdata^.callbacks.afterAdd)}};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)};
+		if not defined (adrdata^.prefs.enabled) {
+			adrdata^.prefs.enabled = true};
+		if not defined (adrdata^.prefs.ctDaysInLog) {
+			adrdata^.prefs.ctDaysInLog = 31}};
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)}};
+	bundle { //temp table
+		if not defined (system.temp.log2) {
+			new (tabletype, @system.temp.log2)};
+		if not defined (system.temp.log2.scrollers) { //2/13/12 by DW
+			new (tabletype, @system.temp.log2.scrollers)}};
+	if not defined (user.scheduler2.overnight.log2) { //10/20/09 by DW
+		user.scheduler2.overnight.log2 = @log2.overnight};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.getCardBackColor
+
+on getCardBackColor () {
+	local (atts);
+	if not card.getCardAttributes (@atts) {
+		return ("")};
+	return (atts.bakc)}
+
+

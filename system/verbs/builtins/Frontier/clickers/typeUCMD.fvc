@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.clickers.typeUCMD
+
+on typeUCMD (path) {
+	return (Frontier.clickers.typersrc (path))}
+
+

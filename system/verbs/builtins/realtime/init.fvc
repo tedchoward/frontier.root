@@ -1,0 +1,60 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.init
+
+on init () {
+	«Changes
+		«8/15/10; 7:45:55 PM by DW
+			«Add call to hourly script.
+		«8/14/10; 3:52:40 AM by DW
+			«Init system.temp.realtime.server.longpolls.
+		«7/11/10; 8:53:54 AM by DW
+			«Created. 
+	local (adrdata);
+	bundle { //temp table
+		if not defined (system.temp.realtime) {
+			new (tabletype, @system.temp.realtime)};
+		if not defined (system.temp.realtime.stats) {
+			new (tabletype, @system.temp.realtime.stats)};
+		if not defined (system.temp.realtime.stats.flDataFileOpen) {
+			system.temp.realtime.stats.flDataFileOpen = false};
+		bundle { //client
+			if not defined (system.temp.realtime.client) {
+				new (tabletype, @system.temp.realtime.client)};
+			if not defined (system.temp.realtime.client.servers) { //8/7/10 by DW
+				new (tabletype, @system.temp.realtime.client.servers)}};
+		bundle { //server
+			if not defined (system.temp.realtime.server) {
+				new (tabletype, @system.temp.realtime.server)};
+			if not defined (system.temp.realtime.server.longpolls) { //8/14/10 by DW
+				new (tabletype, @system.temp.realtime.server.longpolls)};
+			if not defined (system.temp.realtime.server.stats) { //8/14/10 by DW
+				new (tabletype, @system.temp.realtime.server.stats)};
+			if not defined (system.temp.realtime.server.stats.longpollSerialnum) {
+				system.temp.realtime.server.stats.longpollSerialnum = 0}}};
+	bundle { //set adrdata
+		local (flcheck = not system.temp.realtime.stats.flDataFileOpen);
+		adrdata = frontier.opendatafile ("realtimeData", flCheckWindowOpen:flcheck);
+		system.temp.realtime.stats.flDataFileOpen = true};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)}};
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)};
+		if not defined (adrdata^.stats.ctInits) {
+			adrdata^.stats.ctInits = 0};
+		adrdata^.stats.ctInits++};
+	bundle { //misc stuff
+		if not defined (user.scheduler2.hourly.realtime) {
+			user.scheduler2.hourly.realtime = @realtime.everyHour};
+		if not defined (user.scheduler2.everyMinute.realtime) {
+			user.scheduler2.everyMinute.realtime = @realtime.everyMinute}};
+	realtime.server.init (adrdata);
+	realtime.client.init (adrdata);
+	return (adrdata)};
+bundle { //test code
+	local (tc = clock.ticks (), i);
+	for i = 1 to 1000 {
+		init ()};
+	dialog.alert (clock.ticks () - tc)}
+
+

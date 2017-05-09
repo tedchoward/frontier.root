@@ -1,0 +1,56 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.commands.updateFrontTool
+
+on updateFrontTool (adr = window.frontmost (), flconfirm = true) {
+	«Changes
+		«9/18/11; 9:17:53 AM by DW
+			«Log the update.
+		«12/17/07; 12:55:59 PM by DW
+			«Maintain system.temp.ctNewParts. Something with a UI that wants to log this number can do so then delete it or zero it. When it's non-zero, log it again, and zero it or delete it. 
+		«5/6/07; 12:50:29 PM by DW
+			«Pass flconfirm to Frontier.tools.data.updateCommandScript so it can disable dialogs if being called from a background script.
+		«4/22/07; 2:32:34 PM by DW
+			«Take an optional param, flconfirm, default true. If false, the update takes place with no dialogs.
+		«4/20/07; 11:59:28 AM by DW
+			«Take an optional parameter, an address in the database you want to update. Allows this script to update tools whose windows aren't open, for example the Get Latest Code command in the NewsRiver menu.
+		«4/13/07; 4:37:44 PM by DW
+			«Created.
+	local (flguestdatabase, startticks = clock.ticks ());
+	try {
+		flguestdatabase = table.inGuestDatabase (adr)}
+	else {
+		scripterror ("Can't update because the front window is not a Tool.")};
+	if flguestdatabase {
+		local (x = string.parseAddress (adr), f = x [1], fname = file.filefrompath (f), flupdate = true);
+		if flconfirm {
+			flupdate = dialog.confirm ("Get the latest \"" + fname + "\" code?")};
+		if flupdate {
+			local (rootname = string.nthfield (fname, ".", 1));
+			local (adrtable = @user.rootUpdates.servers.[rootname]);
+			if not defined (adrtable^) {
+				new (tabletype, adrtable)};
+			if not defined (adrtable^.rssUrl) {
+				adrtable^.rssUrl = "http://bits.codecasting.org/" + fname + "/rss.xml"};
+			if not defined (adrtable^.lastupdate) {
+				adrtable^.lastupdate = date (0)};
+			if not defined (adrtable^.server) { //really shouldn't need to set this
+				adrtable^.server = ""};
+			local (ctparts = 0);
+			rootupdates.update (adr, true, @ctparts);
+			if flconfirm {
+				dialog.alert (ctparts + " new or updated parts.")};
+			bundle { //12/17/07 by DW
+				if not defined (system.temp.ctNewParts) {
+					system.temp.ctNewParts = 0};
+				system.temp.ctNewParts = system.temp.ctNewParts + ctparts};
+			bundle { //log the update, 9/18/11 by DW
+				if ctparts > 0 {
+					local (s);
+					if ctparts == 1 {
+						s = " new part."}
+					else {
+						s = " new parts."};
+					log2.add ("System", "Update", "Updated " + fname + ". " + ctparts + s, startticks)}}}}
+	else {
+		Frontier.tools.data.updateCommandScript (flconfirm)}}
+
+

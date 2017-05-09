@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.editMenu.setOutline
+
+on setOutline (floutline) {
+	kernel (editmenu.setoutline)}
+
+

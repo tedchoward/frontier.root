@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.prefsForRadio2
+
+on prefsForRadio2 () {
+	«Changes
+		«11/23/11; 8:17:37 AM by DW
+			«A special prefs page just for Radio2 setup. It contains the elements Radio2 needs to operate.
+	local (pta = html.getpagetableaddress (), htmltext);
+	htmltext = prefs2.main (@opmlEditor.data.outlines.prefsForRadio2Setup);
+	return (htmltext)};
+bundle { //test code
+	prefsForRadio2 ()}
+
+

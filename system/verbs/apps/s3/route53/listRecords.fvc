@@ -1,0 +1,30 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.listRecords
+
+on listRecords (idHostedZone, adrtable) {
+	«Changes
+		«6/21/11; 6:22:57 PM by DW
+			«Created.
+	local (xmltext, xstruct);
+	new (tabletype, adrtable);
+	xmltext = s3.route53.httpClient ("/2011-05-05/hostedzone/" + idHostedZone + "/rrset/");
+	xml.compile (xmltext, @xstruct);
+	«s3.route53.testing.xstruct = xstruct
+	
+	local (adrresponse = xml.getaddress (@xstruct, "ListResourceRecordSetsResponse"));
+	local (adrsets = xml.getaddress (adrresponse, "ResourceRecordSets"), adrset);
+	for adrset in adrsets {
+		if nameof (adrset^) endswith "ResourceRecordSet" {
+			local (name = xml.getvalue (adrset, "Name"));
+			local (adrsub = @adrtable^.[name]);
+			new (tabletype, adrsub);
+			adrsub^.type = xml.getvalue (adrset, "Type");
+			adrsub^.ttl = xml.getvalue (adrset, "TTL");
+			local (adrrecords = xml.getaddress (adrset, "ResourceRecords"), adrrec);
+			for adrrec in adrrecords {
+				if nameof (adrrec^) endswith "ResourceRecord" {
+					adrsub^.value = xml.getvalue (adrrec, "Value")}}}}};
+bundle { //test code
+	local (id = s3.route53.getZoneId ("blorkmark.net"));
+	listRecords (id, @s3.route53.testing.recordslist)}
+
+

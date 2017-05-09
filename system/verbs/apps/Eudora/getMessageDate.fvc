@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.getMessageDate
+
+on getMessageDate (msgObj) {
+	local (val);
+	with objectModel, Eudora, eventInfo {
+		try {
+			val = core.get (id, msgObj.field ["Date"]) - "Date: "}
+		else {
+			return ("")}}; «out box messages don't have dates
+	return (date (val))}
+
+

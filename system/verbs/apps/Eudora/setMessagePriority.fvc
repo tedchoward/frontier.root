@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.setMessagePriority
+
+on setMessagePriority (msgObj, msgPriority=0) {
+	with objectModel, Eudora, eventInfo {
+		return (core.set (id, msgObj.priority, msgPriority))}}
+
+

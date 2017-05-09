@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.window.visit
+
+on visit (visitproc) {
+	local (wname, wnext);
+	wname = window.frontmost ();
+	while (wname != "") { «loop until window is nil
+		wnext = window.next (wname); «get now in case window is closed
+		if not visitproc^ (wname) {
+			return (false)};
+		wname = wnext};
+	return (true)} «we visited every window
+
+

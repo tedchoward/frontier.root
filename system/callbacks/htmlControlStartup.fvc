@@ -1,0 +1,50 @@
+FrontierVcsFile:3:scpt:system.callbacks.htmlControlStartup
+
+on htmlControlStartup () {
+	«Changes
+		«8/15/08; 5:12:20 AM by DW
+			«Apparently it's possible for this code to run before startup.startupScript, in which case frontier.pathstring hasn't been set yet, and it still points to the place on the disk that I build the editor on. Not good. So instead of depending on this being set, I compute it myself. No big deal. (Thanks to Stephen Edgar for the report.)
+		«7/27/08; 10:02:58 AM by DW
+			«Generalize the "image on background" code so we can change it when major things happen. That way as a support thing you can ask someone if they have a parakeet or... whatever is there now.
+		«4/2/07; 8:06:23 PM by 
+			«Rebuilt. Now there's a parakeet on the Windows MDI window. 
+		«11/2/01; 10:06:32 PM by JES
+			«Get the objects out of radio.data.windowsMdiBackground, instead of playlist.data.html.initialBackground. Return the empty string on MacOS, and don't create the user.callbacks.htmlControlStartup table.
+		«3/2/01; 6:55:59 PM by PBS
+			«Use the new Radio badge, the coffee mug graphic, rather than the Edit With Radio button.
+		«2/20/01; 7:14:08 PM by PBS
+			«Called when the HTML control is starting up. This script returns the URL of a page that is displayed in the HTML control. User scripts in user.callbacks.htmlControl may over-ride the standard behavior.
+	if not system.environment.isWindows { //does nothing if not on Windows
+		return ("")};
+	bundle { //callbacks
+		if not defined (user.callbacks.htmlControlStartup) {
+			new (tableType, @user.callbacks.htmlControlStartup)};
+		local (url = "");
+		local (adrScript);
+		for adrScript in @user.callbacks.htmlControlStartup {
+			try { //don't let scriptErrors stop us from returning a URL
+				if adrScript^ (@url) {
+					return (url)}}}};
+	if system.environment.isRadio {
+		local (appFolder = file.folderFromPath (Frontier.getProgramPath ()));
+		local (pc = file.getPathChar ());
+		local (appearanceFolder = appFolder + "Appearance" + pc);
+		local (htmlFolder = appearanceFolder + "html" + pc);
+		file.sureFolder (htmlFolder);
+		local (f = htmlFolder + "background.html");
+		file.writeWholeFile (f, string (radio.data.windowsMdiBackground.initialBackground));
+		local (badgePath = htmlFolder + "RadioBadge.gif");
+		file.writeWholeFile (badgePath, radio.data.windowsMdiBackground.radioBadge);
+		return (file.fileToUrl (f))}; //URL wanted
+	bundle { //write a file to disk and return a file:/// URL.
+		local (pc = file.getpathchar ());
+		local (folder = file.folderfrompath (frontier.getfilepath ()) + "Appearance" + pc + "html" + pc); //8/15/08 by DW
+		local (fhtml = folder + "background.html", fimg = folder + "mascot.jpg");
+		file.surefilepath (fhtml);
+		file.writeWholeFile (fhtml, string (userland.opmlEditorMascotBackground));
+		file.writeWholeFile (fimg, string (userland.opmlEditorMascotImage));
+		return (file.fileToUrl (fhtml))}} //URL wanted
+«bundle //test code
+	«htmlControlStartup ()
+
+

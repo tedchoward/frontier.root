@@ -1,0 +1,102 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.entityDecode
+
+on entityDecode (s, flAlphaEntities = false, flSkipMalformedEntities = false, flDecodeHexEntities = false, flDecodeNumericEntities = true) {
+	«Changes
+		«8/12/12; 2:30:30 PM by DW
+			«New optional param, flDecodeNumericEntities. If false, we don't convert strings like &#200; -- leave them as-is. 
+				«http://worknotes.scripting.com/august2012/81212ByDw/characterEncodingIssues
+		«2/6/09; 12:09:05 PM by DW
+			«&#8212; is an emdash, convert it to "--".
+		«1/21/09; 8:09:18 AM by DW
+			«Entities with values greater than 255 are showing up in Twitter posts and elsewhere. Time to start dealing with them. Also convert &mdash; to "--".
+		«5/5/07; 11:35:04 AM by DW
+			«Add &apos; as an alpha entity.
+		«8/16/04; 4:07:17 PM by JES
+			«New optional parameter, flDecodeHexEntities. If true, then entities in the form, &x2A; will be decoded to their equivalent character.
+			«Default is false, preserving existing behavior.
+		«12/12/01; 2:47:54 AM by JES
+			«New optional parameter, flSkipMalformedEntities. If true, then malformed numerical entities which either contain non-numeric characters or which lack an ending semicolon character don't cause an error. They're passed through as-is.
+		«11/29/01; 6:56:06 PM by PBS
+			«Skip entities > 255, since they can't be decoded into characters.
+		«11/14/2000; 5:44:31 PM by DW
+			«xml.entityDecode now takes an optional boolean parameter, default value false, that says whether "alpha" entities are decoded. This is necessary to avoid breakage. The four entities are: &lt; &gt; &amp; &quot;
+		«10/22/99; 3:35:56 PM by DW
+			«decode &#xxx; to the equivalent ASCII character.
+	bundle { //start dealing with entities with values greater than 256 -- 1/21/09 by DW
+		local (t);
+		new (tabletype, @t);
+		t.["&#8220;"] = "\"";
+		t.["&#8221;"] = "\"";
+		t.["&#8217;"] = "'";
+		t.["&#8212;"] = "--"; //2/6/09 by DW
+		s = string.multiplereplaceall (s, @t, false)};
+	local (ix, ixremainder, numstring, ixsemi, remainder = s);
+	loop {
+		ixremainder = string.patternMatch ("&#", remainder);
+		if ixremainder == 0 {
+			break};
+		ix = ixremainder + (sizeof (s) - sizeof (remainder));
+		numstring = ""; ixsemi = sizeof (s);
+		for i = ix + 2 to sizeof (s) {
+			if s [i] == ';' {
+				ixsemi = i;
+				break};
+			numstring = numstring + s [i]};
+		local (num, flMalformed = false);
+		try {
+			num = number (numstring)}
+		else { //hex entity or malformed
+			if flDecodeHexEntities { //JES 8/16/04: decode hex entities
+				if numstring[1] == "x" {
+					try {
+						num = number ("0" + numstring)}
+					else {
+						flMalformed = true}}
+				else {
+					if flAlphaEntities { //decode alpha entities inline with numeric entities to prevent double-decoding
+						case numstring {
+							"amp" {
+								s = string.delete (s, ix, ixsemi - ix + 1);
+								s = string.insert ("&", s, ix)};
+							"lt" {
+								s = string.delete (s, ix, ixsemi - ix + 1);
+								s = string.insert ("<", s, ix)};
+							"gt" {
+								s = string.delete (s, ix, ixsemi - ix + 1);
+								s = string.insert (">", s, ix)};
+							"quot" {
+								s = string.delete (s, ix, ixsemi - ix + 1);
+								s = string.insert ("\"", s, ix)}}
+						else {
+							flMalformed = true}}
+					else {
+						flMalformed = true}}}
+			else {
+				flMalformed = true}};
+		if flSkipMalformedEntities and flMalformed {
+			remainder = string.mid (s, ix + 1, infinity);
+			continue};
+		if flDecodeNumericEntities and (num < 256) { //PBS //11/29/01: skip large entities
+			s = string.delete (s, ix, ixsemi - ix + 1);
+			s = string.insert (char (num), s, ix)};
+		remainder = string.mid (s, ix + 1, infinity)};
+	bundle { //decode alpha entities
+		if flAlphaEntities and (not flDecodeHexEntities) {
+			«JES 8/19/04: If flDecodeHexEntities is true, alpha-entities are decoded inline with numeric entities. Prevents double-decoding.
+			s = string.replaceall (s, "&lt;", "<");
+			s = string.replaceall (s, "&gt;", ">");
+			s = string.replaceall (s, "&amp;", "&");
+			s = string.replaceall (s, "&quot;", "\"");
+			s = string.replaceall (s, "&apos;", "'");
+			s = string.replaceall (s, "&mdash;", "--")}}; //1/21/09 by DW
+	return (s)};
+bundle { //test code
+	dialog.alert (entityDecode ("Social Media &#8220;Experts&#8221; are the Cancer of Twitter (and Must Be Stopped)"))}
+	«xml.entityDecode ("Oh the &lt;buzzing&gt; of the bees &amp; the &quot;sycamore&quot; trees.", true)
+	«xml.entityDecode ("A&#8217;&#80;B")
+	«xml.entityDecode (xml.entityEncode ("Olejov·¯ skvrna na \"Labi\"z¯ejmÏ do <NÏmecka> & nedopluje¯Ìjna 1999 13:49"), true)
+	«xml.entityDecode ("&#123Hello&#125;", flSkipMalformedEntities:true)
+		«"&#123Hello}"
+	«xml.entityDecode ("&#123Hello&#125;", flSkipMalformedEntities:false) //should be an error
+
+

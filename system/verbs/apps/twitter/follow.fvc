@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.follow
+
+on follow (userToUnfollow, username=nil, password=nil) {
+	«Changes
+		«5/4/09; 12:43:32 PM by DW
+			«Created. Basic routine, no error checking. Just getting started with following and unfollowing for a little project I'm doing. Might as well create the glue. 
+	local (apiurl = "http://twitter.com/friendships/create/" + userToUnfollow + ".xml");
+	if username == nil {
+		username = user.twitter.prefs.username};
+	if password == nil {
+		password = string (user.twitter.prefs.password)};
+	tcp.httpreadurl (apiurl, 0, false, username, password, "POST")}
+«bundle //test code
+	«follow ("davidgregory", config.godTweets.prefs.username, config.godTweets.prefs.password)
+
+

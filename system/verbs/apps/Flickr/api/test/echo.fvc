@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.api.test.echo
+
+on echo (s) {
+	«Changes
+		«6/10/07; 5:19:32 AM by DW
+			«Created.
+	local (mystruct);
+	flickr.init ();
+	new (tabletype, @mystruct);
+	mystruct.api_key = user.flickr.prefs.apiKey;
+	mystruct.s = s;
+	return ([user.flickr.prefs.server].flickr.test.echo (mystruct))};
+bundle { //test code
+	wp.newtextobject (echo ("Home on the range!"), @scratchpad.xmlFlickr);
+	edit (@scratchpad.xmlFlickr)}
+
+

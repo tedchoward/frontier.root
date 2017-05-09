@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.getEventInfo
+
+on getEventInfo (x, eventInfoIn = nil) { «Get information about the Apple events in a suite
+	return (appleEvent (Filemaker.id, 'core', 'gtei', '----', string4 (x), 'wrcd', eventInfoIn))}
+
+

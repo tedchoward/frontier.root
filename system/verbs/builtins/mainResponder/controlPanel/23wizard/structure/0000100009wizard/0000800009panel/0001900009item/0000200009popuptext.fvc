@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.controlPanel.["#wizard"].structure.["00001000\twizard"].["00008000\tpanel"].["00019000\titem"].["00002000\tpopuptext"]
+
+Set the folder where rendered sites should be written to disk. Manila will create, in this folder, a sub-folder for each site.
+
+

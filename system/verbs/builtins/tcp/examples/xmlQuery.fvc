@@ -1,0 +1,26 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.tcp.examples.xmlQuery
+
+<?XML VERSION="1.0"?>
+
+<remoteProcedureCall>
+
+	<header>
+
+		<rpcVersion>1.0a1</rpcVersion>
+
+		<docs>http://www.scripting.com/frontier5/xml/rpc/</docs>
+
+		</header>
+
+	<procedureName>getStateName</procedureName>
+
+	<param>
+
+		<name>stateNum</name>
+		<value>xxx</value>
+		</param>
+
+	</remoteProcedureCall>
+
+
+

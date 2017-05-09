@@ -1,0 +1,52 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.userland.dwExport
+
+«Changes
+	«4/17/05; 8:34:48 AM by DW
+		«Rewrote for 2005.
+		«Original script below.
+			«bundle //export personal stuff from root
+				«local (folder = "C:\\frontier 5\\DW Saved Stuff\\")
+				«on save (adr)
+					«f = folder + (string (adr) - "[\"" - "\"]")
+					«msg (f)
+					«file.surefilepath (f)
+					«export.sendobject (adr, f)
+				«save (@user)
+				«if sizeof (workspace) > 1
+					«save (@workspace)
+					«new (tabletype, @workspace)
+				«if defined (websites.dw)
+					«save (@websites.dw)
+					«delete (@websites.dw)
+local (fname = string.replaceall (string.replaceall (clock.now (), "/", "-"), ":", "-"));
+local (folder = "C:\\OPML Work\\Snapshots\\" + fname + "\\", f, adr);
+local (lo = system.verbs.builtins.userland.dwExportList);
+local (oldtarget = target.set (@lo));
+op.firstsummit ();
+op.go (down, infinity);
+op.expand (1);
+op.go (right, 1);
+loop {
+	adr = address (op.getlinetext ());
+	f = folder + string (adr);
+	case typeof (adr^) {
+		scriptType {
+			f = f + ".ftsc"};
+		tableType {
+			f = f + ".fttb"};
+		outlineType {
+			f = f + ".ftop"};
+		menubarType {
+			f = f + ".ftmb"}};
+	file.surefilepath (f);
+	export.sendobject (adr, f);
+	msg (adr);
+	if not op.go (down, 1) {
+		break}};
+file.copy (user.folderWatcher.prefs.folder, folder + "OPML files\\");
+file.copy (frontier.pathstring + "opml.root", folder + "opml.root");
+file.openfolder (file.folderfrompath (folder));
+file.copy (folder, "C:\\OPML Work\\Most Recent\\");
+target.set (oldtarget)
+
+

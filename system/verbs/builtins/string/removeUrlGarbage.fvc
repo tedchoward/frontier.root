@@ -1,0 +1,37 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.removeUrlGarbage
+
+on removeUrlGarbage (url) {
+	«Changes
+		«2/20/11; 7:33:23 PM by DW
+			«Give me a URL with utm_source=xxx&utm_medium=yyy in its params, and I'll remove them. Even better, I'll just remove any params that begin with utm_.
+				«http://www.guardian.co.uk/technology/2011/feb/20/wikileaks-baer-tax-avoidance-hbgary?utm_source=twitterfeed&utm_medium=twitter
+	if url contains "?" {
+		local (part1 = string.nthfield (url, "?", 1), part2 = string.nthfield (url, "?", 2), args, i, adrarg);
+		new (tabletype, @args);
+		webserver.parseargs (part2, @args);
+		«scratchpad.args = args
+		for i = sizeof (args) downto 1 {
+			adrarg = @args [i];
+			if string.lower (nameof (adrarg^)) beginswith "utm_" {
+				delete (adrarg)}};
+		if sizeof (args) > 0 {
+			url = part1 + "?";
+			for adrarg in @args {
+				url = url + nameof (adrarg^) + "=" + string.urlencode (adrarg^) + "&"};
+			url = string.delete (url, sizeof (url), 1); //pop the last &
+			return (url)}
+		else {
+			return (part1)}}
+	else {
+		return (url)}}
+«bundle //test code
+	«local (startticks = clock.ticks (), i)
+	«for i = 1 to 1000
+		«removeUrlGarbage ("http://www.guardian.co.uk/technology/2011/feb/20/wikileaks-baer-tax-avoidance-hbgary?utm_source=twitterfeed&utm_medium=twitter&hello=true")
+	«dialog.alert (clock.ticks () - startticks)
+	«return
+	«dialog.alert (removeUrlGarbage ("http://www.guardian.co.uk/technology/2011/feb/20/wikileaks-baer-tax-avoidance-hbgary?utm_source=twitterfeed&utm_medium=twitter&hello=true"))
+	«dialog.alert (removeUrlGarbage ("http://www.guardian.co.uk/technology/2011/feb/20/wikileaks-baer-tax-avoidance-hbgary?utm_source=twitterfeed&utm_medium=twitter&hello=true&goodbye=false"))
+	«dialog.alert (removeUrlGarbage ("http://www.guardian.co.uk/technology/2011/feb/20/wikileaks-baer-tax-avoidance-hbgary?utm_source=twitterfeed&utm_medium=twitter"))
+
+

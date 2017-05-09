@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.pikeRenderer.drivers.html.textface
+
+on textface (fontname, adrprestring, adrpoststring) {
+	adrprestring^ = adrprestring^ + "<font face=\"" + fontname + "\">";
+	adrpoststring^ = adrpoststring^ + "</font>"}
+
+

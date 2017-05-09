@@ -1,0 +1,44 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.trim.init
+
+on init () {
+	«Changes
+		«4/1/09; 3:24:59 PM by DW
+			«Init user.trim.prefs.apiKey.
+		«4/1/09; 11:48:38 AM by DW
+			«Init user.trim.prefs.flHijackBitly true. bitly.create watches for this, and if it's defined and true, it shortens the url with tr.im instead of bitly. This is the quick way of converting my apps to use the superior tracking tools of tr.im, and to spread the love around.
+		«4/1/09; 11:07:46 AM by DW
+			«Created. 
+	if not defined (user.trim) {
+		new (tabletype, @user.trim)};
+	bundle { //prefs
+		if not defined (user.trim.prefs) {
+			new (tabletype, @user.trim.prefs)};
+		if not defined (user.trim.prefs.username) {
+			user.trim.prefs.username = ""};
+		if not defined (user.trim.prefs.password) {
+			user.trim.prefs.password = ""};
+		if not defined (user.trim.prefs.flHijackBitly) {
+			user.trim.prefs.flHijackBitly = true};
+		if not defined (user.trim.prefs.apiKey) {
+			user.trim.prefs.apiKey = ""}};
+	bundle { //stats
+		if not defined (user.trim.stats) {
+			new (tabletype, @user.trim.stats)};
+		if not defined (user.trim.stats.ctCreates) {
+			user.trim.stats.ctCreates = 0};
+		if not defined (user.trim.stats.whenLastCreate) {
+			user.trim.stats.whenLastCreate = date (0)};
+		if not defined (user.trim.stats.calendar) {
+			new (tabletype, @user.trim.stats.calendar)};
+		if not defined (user.trim.stats.ctCreateErrors) {
+			user.trim.stats.ctCreateErrors = 0};
+		if not defined (user.trim.stats.whenLastCreateError) {
+			user.trim.stats.whenLastCreateError = date (0)};
+		if not defined (user.trim.stats.ctGetAccountUrls) {
+			user.trim.stats.ctGetAccountUrls = 0};
+		if not defined (user.trim.stats.whenLastGetAccountUrls) {
+			user.trim.stats.whenLastGetAccountUrls = date (0)}}};
+bundle { //test code 
+	init ()}
+
+

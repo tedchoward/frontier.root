@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.hashMD5
+
+on hashMD5 (s, flTranslate = true) { //6.1
+	kernel (string.hashMD5)}
+
+

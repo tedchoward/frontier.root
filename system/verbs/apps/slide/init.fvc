@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.slide.init
+
+on init () {
+	«Changes
+		«8/21/11; 9:18:50 PM by DW
+			«Created.
+	local (adrdata = @config.slide);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)}};
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)}};
+	bundle { //temp table
+		if not defined (system.temp.slide) {
+			new (tabletype, @system.temp.slide)};
+		if not defined (system.temp.slide.membercache) {
+			new (tabletype, @system.temp.slide.membercache)}};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

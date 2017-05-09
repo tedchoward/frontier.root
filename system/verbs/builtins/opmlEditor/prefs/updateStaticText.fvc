@@ -1,0 +1,28 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.prefs.updateStaticText
+
+on updateStaticText () {
+	«Changes
+		«8/28/12; 3:22:42 PM by DW
+			«Undo this. Have to be more careful when we come back here to be sure that the domain is not the default external name. 
+				«http://worknotes.scripting.com/august2012/82812ByDw/undoConfigmainresponderdomainsFix
+		«8/28/12; 11:08:20 AM by DW
+			«Make sure there's exactly a config.mainresponder.domains entry for the filesystem static text location, if it's enabled. Remove the old one if there was one.
+	«local (pta = html.getpagetableaddress (), adrloc = @user.opmlEditor.staticText.locations.filesystem)
+	«local (urllist = string.urlsplit (adrloc^.prefs.url), domain = urllist [2], lowerpath = string.lower (adrloc^.prefs.path))
+	«if pta^.method == "POST"
+		«if adrloc^.prefs.enabled
+			«local (adrdomain = @config.mainresponder.domains.[domain])
+			«if not defined (adrdomain^)
+				«adrdomain^ = adrloc^.prefs.path
+			«if defined (system.temp.opmleditor.stats.oldDomain)
+				«local (adrdomain = @config.mainresponder.domains.[system.temp.opmleditor.stats.oldDomain])
+				«if defined (adrdomain^)
+					«delete (adrdomain)
+			«system.temp.opmleditor.stats.oldDomain = domain
+	«else
+		«system.temp.opmleditor.stats.oldDomain = domain
+	return ("")}
+«bundle //test code
+	«updateStaticText ()
+
+

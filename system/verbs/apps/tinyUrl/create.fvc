@@ -1,0 +1,46 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.tinyUrl.create
+
+on create (longUrl, flUrlEncode=false) {
+	«Changes
+		«3/7/08; 3:01:18 PM by DW
+			«Major rewrite, using little-known feature of the TinyUrl API.
+			«Got the scoop from Dan MacTough -- you can call tinyurl.com using POST, and it doesn't have a problem with URL-encoding in that case.
+				«http://blogs.opml.org/yabfog/2008/02/06#tinyurlApiBug
+			«The second parameter, flUrlEncode, is still there to maintain backward compatibility, but it is ignored in all cases.
+		«1/28/08; 10:28:55 AM by DW
+			«Make the url-encoding optional, it doesn't (appear to) work with tinyurl.com.
+		«1/8/08; 7:22:10 PM by DW
+			«URL-encode the long url, this makes it work for addresses with a parameter list.
+		«10/26/07; 5:11:26 PM by DW
+			«Remove whitespace.
+		«10/26/07; 12:58:20 PM by DW
+			«Allow configuration in user.tinyUrl table.
+		«6/27/07; 11:08:57 AM by DW
+			«Created. A wonderfully simple API.
+				«http://www.scripting.com/stories/2007/06/27/tinyurlHasAnApi.html
+	bundle { //init
+		if not defined (user.tinyUrl) {
+			new (tabletype, @user.tinyUrl)};
+		if not defined (user.tinyUrl.server) {
+			user.tinyUrl.server = "tinyurl.com"};
+		if defined (user.tinyUrl.path) { //3/7/08 by DW
+			if user.tinyUrl.path == "/create?url=" {
+				«it's the old path, the one that works with GET method, 
+				delete (@user.tinyUrl.path)}};
+		if not defined (user.tinyUrl.path) {
+			user.tinyUrl.path = "/api-create.php"}};
+	«if flUrlEncode
+		«longUrl = string.urlencode (longUrl)
+	local (s);
+	bundle { //make the HTTP request, put result into "s"
+		s = tcp.httpclient ("POST", server:user.tinyUrl.server, path:user.tinyUrl.path, datatype:"application/x-www-form-urlencoded", data:"url="+longUrl, flMessages:false)};
+	return (string.trimwhitespace (string.httpResultSplit (s)))};
+bundle { //test code
+	local (url = "http://www.scripting.com/stories/2007/06/27/tinyurlHasAnApi.html");
+	url = "http://blogs.opml.org/yabfog/2008/02/06#tinyurlApiBug";
+	url = "http://www.scripting.com/2008/02.html#theSimplestPodcastApiEver";
+	url = "http://www.scripting.com/2008/02.html#debatingHealthCareIn2008";
+	url = "http://blogs.zdnet.com/BTL/?p=3115";
+	webbrowser.openurl (create (url))}
+
+

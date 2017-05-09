@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.date.hour
+
+on hour (now = clock.now ()) {
+	«Changes
+		«8/2/08; 11:56:43 AM by DW
+			«Optional parameter allows you to ask for the hour of a time you specify.
+		«1/19/06; 5:34:32 AM by DW
+			«Return the current hour, this should be a simple routine thing to do.
+	local (day, month, year, hour, minute, second);
+	date.get (now, @day, @month, @year, @hour, @minute, @second);
+	return (hour)}
+«bundle //test code
+	«dialog.alert (hour (date.yesterday (clock.now ())))
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.editMenu.setBold
+
+on setBold (flbold) {
+	kernel (editmenu.setbold)}
+
+

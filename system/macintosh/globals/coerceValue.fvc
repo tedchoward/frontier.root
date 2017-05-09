@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.globals.coerceValue
+
+on coerceValue (val, toType) {
+	kernel (lang.coerceAppleItem)}
+
+

@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.finder2Click
+
+on finder2Click (path) {
+	local (filetype);
+	filetype = file.type (path);
+	«msg (filetype)
+	local (adrScript = @Frontier.clickers.["type" + filetype]);
+	if not defined (adrScript^) {
+		adrScript = @Frontier.clickers.["type????"]};
+	
+	if not defined (system.deskscripts) { «make sure the table is there
+		new (tableType, @system.deskscripts)};
+	
+	local (returnedVal);
+	returnedVal = adrScript^ (path);
+	
+	if Frontier.findertofront {
+		Finder.bringToFront ()};
+	
+	Frontier.findertofront = false;
+	return (returnedVal)};
+bundle { //test code
+	finder2Click ("C:\\Documents and Settings\\Dave Winer\\My Documents\\OPML\\www\\nebraska.opml")}
+
+

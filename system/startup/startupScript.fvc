@@ -1,0 +1,313 @@
+FrontierVcsFile:3:scpt:system.startup.startupScript
+
+on startupScript () {
+	«Changes
+		«9/16/11; 8:41:16 AM by DW
+			«Remove call to opmlEditor.startup. What it was doing is now done by opmlEditor.init. 
+				«http://worknotes.scripting.com/september2011/91611ByDw/unwindingOpmlstartup
+		«9/13/11; 8:13:01 AM by DW
+			«Add call to opmlEditor.startup. We're doing too much work in opmlEditor.init. The kinds of things that should be done once when the app starts up.
+		«9/21/10; 12:13:57 PM by DW
+			«Initialize new global, Frontier.pathToRoot, the path to the root database. 
+				«There was a missing global, the file path of the root database. For the OPML Editor it's opml.root, for Frontier, frontier.root, Radio, radio.root. This came up in calling filemenu.savecopyopendatabases. It needed the name of this file because it's going to save-copy it. This wasn't a problem until the script was called from a guest database. At that point, frontier.getfilepath () returns the path to the guest database, not opml.root. 
+		«7/30/08; 11:34:08 AM by DW
+			«Add call to opmlEditor.init.
+		«9/12/06; 6:22:39 AM by DW
+			«If it's the OPML Editor, call mainResponder.startup, so we'll be ready to take mainResponder requests. In Frontier this was called in the #startup script in mainResponder.root, but we weren't calling it in the OPML Editor, which created problems in apps that use mainResponder.
+		«11/13/05; 8:50:16 PM by DW
+			«user.opmlServer.rpcName is the domain name that clients make RPC calls to.
+		«11/13/05; 8:11:39 PM by DW
+			«user.opmlServer.ipAddressPort80 is the IP address our port 80 responder is running on, if it's -1, the machine only has one IP address and that's the address we use. This is really only useful for machines that have multiple addresses, and more than one app running an HTTP server.
+		«11/13/05; 7:15:14 PM by DW
+			«user.opmlServer.blogsname is the domain name for the blogs host. Initialize it here.
+		«11/12/05; 5:06:07 AM by DW
+			«At the end of the startup process, if user.opmlServer.enabled, call opmlServer.startup.
+		«8/12/05; 9:35:38 AM by DW
+			«Create and initialize user.opmlServer before calling the startup script.
+		«8/10/05; 6:48:29 AM by DW
+			«Call export.init.
+		«7/27/05; 8:35:29 AM by DW
+			«Implement opmlStartupCommands.txt.
+		«7/24/05; 4:15:05 PM by DW
+			«Don't set user.webBrowser.winDefaultBrowserApp unless it doesn't exist. 
+				«http://geeks.opml.org/2005/07/24#a167
+				«Also moved the tools initialization code above so that the tools are init'd even if we can't find the browser app. 
+					«On Lisa Williams's machine file.findApplication causes the startup script to die!
+					«It could happen on others...
+		«7/24/05; 3:22:41 PM by DW
+			«Replace hard-coded "opml.exe" with...
+				«file.filefrompath (frontier.getprogrampath ())
+		«6/5/05; 7:25:20 AM by 
+			«Problem: The Main menu came back the next time I launched the OPML editor
+				«A little bit of exploration showed this was being done by menus.buildSuitesSubmenu, which is being called by startup.startupscript.
+				«Solution: Make the call conditional on it not being the OPML editor.
+			«http://groups.yahoo.com/group/opmlsupport/message/24
+		«4/18/05; 4:54:02 AM by DW
+			«Minor mods for OPML editor. Look for references to system.environment.isOpmlEditor. 
+		«8/19/99; 6:44:48 AM by DW
+			«Make sure that taskTimes in user.scheduler.tasks are in the future.
+			«We do this much more quickly than scheduler.monitor would.
+			«http://discuss.userland.com/msgReader$9658
+		«10/6/99; 10:21:35 PM by PBS
+			«Only set the taskTime for the overnight task if it's in the past. This fixes a bug when the taskTime was before midnight, but it was being set for the next day, so the overnight task wouldn't run.
+			«http://frontier.userland.com/stories/storyReader$1761
+		«10/7/99; 4:20:26 PM by PBS
+			«Only run the #startup script in a guest database if runStartupScript exists and is true. Previously, it would be run whether runStartupScript was true or false.
+			«http://frontier.userland.com/stories/storyReader$1760
+		«04/20/01; 4:49:05 PM by JES
+			«Call tools.startup to install Tools at startup.
+		«04/28/01; 7:48:46 PM by JES
+			«Call Frontier.tools.startup in a try block, so that the startup process will finish even if Tools installation fails.
+		«06/02/01; 8:34:20 PM by PBS
+			«Do the web-based install and open the Control Panel if this is the first root run.
+		«06/08/01; 11:24:35 PM by JES
+			«When opening databases defined at user.databases, skip objects which aren't tables. This avoids the condition where startup wouldn't complete, if there's an item #1 in the user.databases table.
+	if system.environment.isOpmlEditor { //4/18/05; 4:54:45 AM by DW
+		«Special startup code for the opml editor.
+		frontier.bringtofront ()}; //the app comes to the front asap.
+	
+	local (flEnableAgents = true, flOpenDatabases = true, flEnableHttpServer = true); //can be set by the external startup script
+	
+	if defined (system.temp.Frontier) { //only run the startup script once
+		return};
+	new (tabletype, @system.temp.Frontier);
+	system.temp.Frontier.startupTime = clock.now ();
+	system.temp.Frontier.startingUp = true;
+	user.scheduler.prefs.startingup = true;
+	
+	Frontier.pathToRoot = frontier.getFilePath (); //9/21/10 by DW
+	Frontier.pathstring = file.folderFromPath (Frontier.pathToRoot);
+	
+	scheduler.init ();
+	scheduler2.init (); //5/29/08 by DW
+	bundle { //6.1, be sure pre-defined scheduler tasks have reasonable times
+		local (day, month, year, hour, minute, second);
+		date.get (clock.now (), @day, @month, @year, @hour, @minute, @second);
+		user.scheduler.tasks.everyMinute.taskTime = date.set (day, month, year, hour, minute + 1, 0);
+		user.scheduler.tasks.hourly.taskTime = date.set (day, month, year, hour + 1, 0, 0);
+		if user.scheduler.tasks.overnight.taskTime < clock.now () { //PBS 10/6/99: if the overnight task time is before now, reschedule
+			local (overnighthour);
+			bundle { //preserve hour for overnight task, some people like to run them at 3AM
+				local (day, month, year, minute, second);
+				date.get (user.scheduler.tasks.overnight.taskTime, @day, @month, @year, @overnighthour, @minute, @second)};
+			user.scheduler.tasks.overnight.taskTime = date.set (day, month, year, overnighthour, 0, 0);
+			if user.scheduler.tasks.overnight.taskTime < clock.now () { //it's still before now, set it for tomorrow
+				user.scheduler.tasks.overnight.taskTime = date.set (day + 1, month, year, overnighthour, 0, 0)}}};
+	system.menus.data.currentsuite = ""; system.menus.data.currentmenu = 0;
+	
+	bundle { //open the about window if the pref says we should
+		«added 12/16/98; 6:47:28 PM by DW
+		if not defined (user.prefs.openAboutWindow) {
+			user.prefs.openAboutWindow = true};
+		if user.prefs.openAboutWindow {
+			window.about ()}};
+	bundle { //initialize the log, next bit of code could add a log item
+		«added 12/16/98; 6:52:40 PM by DW
+		if defined (log.startup) {
+			log.startup ()}};
+	bundle { //create and initialize user.opmlServer, 8/12/05 by DW
+		«Must happen before calling the startup script because it may initialize the elements of this table.
+		if defined (system.environment.isOpmlEditor) {
+			if system.environment.isOpmlEditor {
+				if not defined (user.opmlServer) {
+					new (tabletype, @user.opmlServer)};
+				if not defined (user.opmlServer.enabled) {
+					user.opmlServer.enabled = false};
+				if not defined (user.opmlServer.rpcName) {
+					user.opmlServer.rpcName = ""};
+				if not defined (user.opmlServer.hostname) {
+					user.opmlServer.hostname = ""};
+				if not defined (user.opmlServer.folder) {
+					user.opmlServer.folder = ""};
+				if not defined (user.opmlServer.blogsname) {
+					user.opmlServer.blogsname = ""};
+				if not defined (user.opmlServer.ipAddressPort80) {
+					user.opmlServer.ipAddressPort80 = -1}}}};
+	bundle { //run the external startup script
+		local (fname = "frontierStartupCommands.txt");
+		if system.environment.isRadio {
+			fname = "radioStartupCommands.txt"}
+		else { //7/27/05; 8:35:21 AM by DW
+			if defined (system.environment.isOpmlEditor) {
+				if system.environment.isOpmlEditor {
+					fname = "opmlStartupCommands.txt"}}};
+		local (f = file.folderFromPath (Frontier.getProgramPath ()) + fname);
+		if file.exists (f) {
+			try {
+				evaluate (string (file.readWholeFile (f)))}
+			else {
+				log.add ("Error running " + fname + ": \"" + tryError + "\"", "startupError", flwptext:true)}};
+		Frontier.enableAgents (flEnableAgents);
+		};
+	bundle { //open all the databases that have openOnStartup true
+		«added 12/16/98; 6:23:16 PM by DW
+		if defined (user.databases) {
+			if flOpenDatabases {
+				local (i, flmsg = false);
+				for i = 1 to sizeof (user.databases) {
+					if typeOf (user.databases[i]) == tableType { //06/08/01 JES: avert item #1 errors
+						with user.databases [i] {
+							local (flopened = false);
+							try {
+								if openOnStartup {
+									msg (this + ": Opening " + file.fileFromPath (f));
+									flmsg = true;
+									fileMenu.open (f, hidden:true);
+									flopened = true}}
+							else {
+								log.add ("Startup error opening guest database " + nameof (user.databases [i]) + ": \"" + tryError + "\"", "startupError", flwptext:true)};
+							if flopened {
+								if defined (runStartupScript) {
+									if runStartupScript { //PBS 10/7/99: check the value of runStartupScript: only run the script if the boolean is true
+										local (adrscript = @[filespec (f)].["#startup"]);
+										if defined (adrscript^) {
+											try {
+												adrscript^ ()}
+											else {
+												log.add ("Error running #startup script in guest database " + nameof (user.databases [i]) + ": \"" + tryError + "\"", "startupError", flwptext:true)}}}}}}}};
+				if flmsg {
+					msg ("")}}}
+		else {
+			new (tableType, @user.databases)}};
+	
+	html.init ();
+	webserver.init ();
+	betty.init ();
+	people.init ();
+	custody.init ();
+	soap.init ();
+	export.init (); //8/10/05; 6:48:24 AM by DW
+	if defined (system.environment.isOpmlEditor) { //9/12/06; 6:27:55 AM by DW
+		if system.environment.isOpmlEditor {
+			mainresponder.startup ()}};
+	
+	on proxyInit () { //make sure proxy prefs exist
+		if not defined (user.webBrowser) {
+			new (tableType, @user.webBrowser)};
+		if not defined (user.webBrowser.proxy) {
+			new (tableType, @user.webBrowser.proxy)};
+		if not defined (user.webBrowser.proxy.domain) {
+			user.webBrowser.proxy.domain = ""};
+		if not defined (user.webBrowser.proxy.password) {
+			user.webBrowser.proxy.password = ""};
+		if not defined (user.webBrowser.proxy.port) {
+			user.webBrowser.proxy.port = 80};
+		if not defined (user.webBrowser.proxy.username) {
+			user.webBrowser.proxy.username = ""}};
+	
+	on infoDialog () { //prompt the user for name, org and initials
+		on kernelCall (adrName, adrInitials, adrOrg, adrEmail) {
+			kernel (dialog.getUserInfo)};
+		local (name, initials, organization, email);
+		case sys.os () {
+			"Win95";
+			"WinNT" {
+				if not (kernelCall (@name, @initials, @organization, @email)) {
+					return (false)};
+				if initials == "" {
+					dialog.alert ("You must specify your initials.");
+					infoDialog ()};
+				user.prefs.name = name;
+				user.prefs.initials = initials;
+				user.prefs.organization = organization;
+				user.prefs.mailAddress = email};
+			"MacOS" {
+				bundle { //initialize user.prefs.name etc using info from Internet Config
+					try {
+						name = ic.geticpreference (ic.eventinfo.realName)};
+					try {
+						organization = ic.geticpreference (ic.eventinfo.organization)};
+					try {
+						email = ic.geticpreferece (ic.eventinfo.emailAddress)};
+					
+					user.prefs.name = name;
+					user.prefs.organization = organization;
+					if name != "" {
+						local (i);
+						user.prefs.initials = name [1];
+						for i = 3 to sizeof (name) {
+							if name [i] == ' ' {
+								user.prefs.initials = user.prefs.initials + name [i+1]}}}};
+				card.run (@system.cards.userInfoDialog)}};
+		return (true)};
+	if user.prefs.firstRootRun { //license agreement, finish cleanup on user's machine
+		userland.firstRootRun (); «finish the job started by userland.cleanRoot
+		user.prefs.firstRootRun = false;
+		system.menus.buildMenuBar ();
+		fileMenu.save ();
+		«if not (userland.finishInstall ()) //PBS 06/02/01: web-based install
+			«infoDialog ()
+			«bundle //license agreement
+				«local (editLicense = false)
+				«if sys.os () == "MacOS"
+					«on itemhit (itemnumber)
+						«case (itemnumber)
+							«1 «yes
+								«editLicense = true
+								«return (false) «stop processing the dialog
+							«2 «no
+								«return (false) «stop processing the dialog
+						«return (true) «keep processing the dialog
+					«dialog.run (517, 1, @itemhit)
+				«else
+					«if dialog.yesNo ("Frontier is licensed software. Do you want to read the license agreement now?")
+						«editLicense = true
+				«if editLicense
+					«edit (@system.startup.license)
+			«bundle //get root update
+				«proxyInit ()
+				«if user.prefs.serialNumber != "" and not (string.lower (user.prefs.serialNumber) contains "trial")
+					«rootUpdates.init ()
+					«rootUpdates.getCurrent ("Frontier")
+		if not system.environment.isOpmlEditor { //don't need the dialog for OPML editor
+			infoDialog ()}}; //AR 09/27/04 : personalize install, disabled web-based install for open source release
+	
+	system.menus.buildMenuBar ();
+	if not system.environment.isOpmlEditor { //6/5/05; 7:25:08 AM by 
+		system.menus.buildSuitesSubmenu ()}; //5.0
+	
+	bundle { //check for presence of Psapi.dll
+		if sys.os () == "WinNT" {
+			local (programname = file.filefrompath (frontier.getprogrampath ()));
+			if not (sys.appIsRunning (programname)) {
+				dialog.alert ("You need to run the Psapi Installer for certain verbs to work properly.")}}};
+	
+	proxyInit ();
+	
+	try { //04/28/2001 JES: prevent startup from failing if Tool installation fails.
+		Frontier.tools.startup ()};
+	
+	if system.environment.isWindows {
+		if not defined (user.webBrowser.winDefaultBrowserApp) { //7/24/05; 4:15:05 PM by DW
+			user.webBrowser.winDefaultBrowserApp = file.findApplication ("htm")}};
+	if system.environment.isMac {
+		try {new (tableType, @user.odbEditors.data.openFiles)}}; //Empty out the list of externally-edited files.
+	
+	system.callbacks.startup (); //call user's startup scripts
+	
+	if flEnableHttpServer { //6.0, daemons don't start up until all the startup code has run
+		new (tableType, @user.inetd.listens);
+		inetd.start ()}; //start up all daemons with startup set true
+	
+	bundle { //PBS 06/02/01: open the Control Panel the first time
+		if defined (system.temp.installer.urlToOpen) {
+			window.update ("About Frontier");
+			webBrowser.openUrl (system.temp.installer.urlToOpen);
+			webBrowser.bringToFront ()}
+		else { //JES 4/14/02: do the trial version check
+			userland.trialVersionCheck ()}};
+	
+	bundle { //11/12/05 by DW, startup OPML community server
+		if defined (system.environment.isOpmlEditor) {
+			if system.environment.isOpmlEditor {
+				try {
+					 if user.opmlServer.enabled {
+						opmlServer.startup ()}};
+				try {
+					opmlEditor.init ()}}}}; //7/30/08 by DW
+	
+	system.temp.Frontier.startingUp = false}; //signal to all who care, let the hits begin!
+bundle { //test code
+	startupScript ()}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.saveAs
+
+on saveAs (obj, saveIn, as = nil) { «Save an object
+	return (core.saveAs (Fetch.id, obj, saveIn, as))}
+
+

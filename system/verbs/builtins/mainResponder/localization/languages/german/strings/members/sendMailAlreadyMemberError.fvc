@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.german.strings.members.sendMailAlreadyMemberError
+
+Die gew&uuml;nschte Benutzerkennung konnte nicht angelegt werden, weil die Benutzerkennung [[mailaddress]] bereits vergeben ist.
+
+

@@ -1,0 +1,41 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.betty.examples.farTest.rpcRequest
+
+<?XML VERSION="1.0"?>
+
+<methodCall>
+
+	<methodName>examples.getStateNames</methodName>
+
+	<params>
+
+		<param>
+
+			<value><i4>22</i4></value>
+
+			</param>
+
+		<param>
+
+			<value><i4>23</i4></value>
+
+			</param>
+
+		<param>
+
+			<value><i4>24</i4></value>
+
+			</param>
+
+		<param>
+
+			<value><i4>25</i4></value>
+
+			</param>
+
+		</params>
+
+	</methodCall>
+
+
+
+

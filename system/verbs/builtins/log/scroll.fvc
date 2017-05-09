@@ -1,0 +1,29 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.log.scroll
+
+on scroll (item, scrollname="default") {
+	«Changes
+		«8/31/06; 7:17:08 AM by DW
+			«Created. A form of log that shows the last 20 entries that have been added. Useful for watching the flow of addresses for a web server, for example.
+	local (adrtable = @user.log.scrolls);
+	if not defined (adrtable^) {
+		new (tabletype, adrtable)};
+	local (adroutline = @adrtable^.[scrollname]);
+	if not defined (adroutline^) {
+		new (outlinetype, adroutline)};
+	local (oldtarget = target.set (adroutline));
+	op.setdisplay (false);
+	if op.countsummits () > 20 {
+		op.firstsummit ();
+		op.deleteline ()};
+	op.go (down, infinity);
+	op.insert (item, down);
+	op.setdisplay (true);
+	target.set (oldtarget);
+	if not window.isopen (adroutline) {
+		edit (adroutline)}}
+«bundle //test code
+	«local (i)
+	«for i = 1 to 100
+		«scroll (random (1, 10000))
+
+

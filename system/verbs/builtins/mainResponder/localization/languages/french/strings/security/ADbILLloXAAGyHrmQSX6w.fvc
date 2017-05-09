@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.french.strings.security.httpUnsupportedDigestAlgorithm
+
+La requ&ecirc;te ne peut &ecirc;tre trait&eacute;e par le serveur car un algorithme non support&eacute; a &eacute;t&eacute; sp&eacute;cifi&eacute; dans l'en-t&ecirc;te d'autorisation.
+
+

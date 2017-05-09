@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.duplicate
+
+on duplicate (obj, duplicateTo) { «Make a duplicate object
+	return (appleEvent (Eudora.id, 'core', 'clon', '----', objspec (obj), 'insh', duplicateTo))}
+
+

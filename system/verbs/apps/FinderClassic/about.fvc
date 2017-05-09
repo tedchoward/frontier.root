@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FinderClassic.about
+
+on about () { «bring up the Finder's About window
+	if not finderEvent (Finder.id, 'aevt', 'abou') {
+		return (false)};
+	return (Finder.bringToFront ())}
+
+

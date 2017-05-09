@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.["WWW�"].Rrep
+
+on Rrep (messages, status, id) {
+	try {
+		«Step 1: Locate script based on 'id' into adrscript
+		local (adrscript, paramtable);
+		if defined (suites.webServer.reports.[string (id)]) {
+			adrscript = suites.webServer.reports.[string (id)];
+			«Step 2: Parse status info into table
+			new (tabletype, @paramtable);
+			webServer.parseStatusReport (status, @paramtable);
+			«Step 3: Send parameters to script
+			adrscript^ (messages, @paramtable, id)}
+		else {
+			webStar.requestReporting (false, false, id, frontier.version ())}} «turn off request if Frontier can't handle it
+	else {
+		dialog.alert ("Error handling 'Rrep' event:\r" + tryError)}}
+«bundle «test code
+	«Rrep ("","totalCon 0, maxCon 12, listening 12, current 0, high 0, busy 0, denied 0, \
+	«timeout 0, maxMem 259840, currMem 258336, minMem 258336, bytesSent 0, port 80, \
+	«maxTimeout 60, verboseMessages fales, disableLogging false, hideWindow false, \
+	«refuseConnections false, upSince 06/11/95:12:16, version 1.1(680x0 (CW))",34)
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.AnArchie.quit
+
+on quit () {
+	return (required.quitApplication (AnArchie.id))}
+
+

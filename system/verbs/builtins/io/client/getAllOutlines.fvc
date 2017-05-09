@@ -1,0 +1,35 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.getAllOutlines
+
+on getAllOutlines (flReallyGetAll=false) {
+	«Changes
+		«5/9/11; 4:07:44 PM by DW
+			«New optional param, flReallyGetAll -- if true, we send date (0) as the last updated time for each outline, forcing the server to send them all back to us.
+		«8/18/10; 7:11:24 PM by DW
+			«Offset the times by date.getcurrenttimezone ().
+		«8/8/10; 11:43:49 AM by DW
+			«The remote call was wrong.
+		«7/26/10; 3:36:45 PM by DW
+			«Add parameter, a struct with an entry for each user saying when they last updated (as far as we know).
+		«7/17/10; 2:07:21 PM by DW
+			«Created. 
+	local (adrdata = io.init (), username, password, server, updatestruct);
+	username = adrdata^.client.prefs.username;
+	password = string (adrdata^.client.prefs.password);
+	server = string (adrdata^.client.prefs.server);
+	bundle { //fill updatestruct, 7/26/10 by DW
+		local (adruser);
+		new (tabletype, @updatestruct);
+		for adruser in @adrdata^.client.buddies.users {
+			local (when);
+			if flReallyGetAll {
+				when = date (0)}
+			else {
+				when = adruser^.stats.whenLastUpdate - date.getcurrenttimezone ()};
+			updatestruct.[nameof (adruser^)] = when}};
+	return ([server].io.getoutlines (username, password, updatestruct))};
+bundle { //test code
+	local (tc = clock.ticks ());
+	scratchpad.texttable = getAllOutlines (true);
+	dialog.notify (clock.ticks () - tc)}
+
+

@@ -1,0 +1,12 @@
+FrontierVcsFile:3:wptx:user.webserver.prefs.errorPage
+
+<html>
+<head><title>Dig We Must!!</title></head>
+<body bgcolor="#D0D0FF">
+<h1><i>We're So Sorry!</i></h1>
+Please tell the webmaster that Frontier couldn't process the request because:<P>
+<code><!--#errorMessage--></code>
+</body>
+</html>
+
+

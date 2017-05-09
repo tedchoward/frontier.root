@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.AnArchie.openDocument
+
+on openDocument (file) {
+	return (required.openDocument (AnArchie.id, file))}
+
+

@@ -1,0 +1,18 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.mainResponder.controlPanel.["#navigator"].outline
+
+<navigator>
+	<item name="Hosting" pagename="/controlPanel/settings$1"/>
+	<item name="Mail" pagename="/controlPanel/settings$2"/>
+	<item name="Backups" pagename="/controlPanel/settings$3"/>
+	<item name="Logging" pagename="/controlPanel/settings$4"/>
+	<item name="Security" pagename="/controlPanel/settings$5"/>
+	<item name="Updates" pagename="/controlPanel/settings$6"/>
+	<item name="General" pagename="/controlPanel/settings$7"/>
+	<item name="Tools" pagename="/controlPanel/tools"/>
+	<item name="Manila" pagename="/controlPanel/settings$8"/>
+	<item name="MIME" pagename="/controlPanel/mimeTypes"/>
+	<item name="WebEdit" pagename="/controlPanel/settings$9"/>
+	</navigator>
+
+
+

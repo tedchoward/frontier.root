@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:suites.webEdit.buildServerSubMenu
+
+on buildServerSubMenu () {
+	local (localMenu = webEdit.virginServerMenu);
+	local (oldTarget = target.get ());
+	target.set (@localMenu);
+	
+	local (adrServersTable = @user.webEdit.servers);
+	local (i, ct = sizeOf (adrServersTable^), adrServer, name, logic);
+	for i = 1 to ct {
+		adrServer = @adrServersTable^ [i];
+		if typeOf (adrServer^) != tableType {
+			continue};
+		name = nameOf (adrServer^);
+		local (menuItem = "=webEdit.menuItems.displayServerName (\"" +name + "\")");
+		logic = "webEdit.setCurrentServer (\"" + name + "\")";
+		menu.addMenuCommand (@localMenu, "Set Current Server", menuItem, logic)};
+	
+	menu.addSubMenu (@webEdit.menu, "WebEdit", @localmenu);
+	try {target.set (oldTarget)};
+	
+	return (true)}
+
+

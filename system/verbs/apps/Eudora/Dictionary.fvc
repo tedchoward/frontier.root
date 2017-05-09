@@ -1,0 +1,248 @@
+FrontierVcsFile:3:wptx:system.verbs.apps.Eudora.Dictionary
+
+Required Suite: Events that every application should support
+
+open: Open the specified object(s)
+	open  alias  -- list of objects to open
+
+print: Print the specified object(s)
+	print  alias  -- list of objects to print
+
+quit: Quit application
+	quit
+
+run: Sent to an application when it is double-clicked
+	run
+
+Standard Suite: Common terms for most applications
+
+close: Close an object
+	close  reference  -- the object to close
+
+count: Return the number of elements of a particular class within an object
+	count  reference  -- the object whose elements are to be counted
+		each  type class  -- the class of the elements to be counted. Keyword 'each' is optional in AppleScript
+	Result:   integer  -- the number of elements
+
+delete: Delete an element from an object
+	delete  reference  -- the element to delete
+
+exists: Verify if an object exists
+	exists  reference  -- the object in question
+	Result:   boolean  -- true if it exists, false if not
+
+get: Get the data for an object
+	get  reference  -- the object whose data is to be returned
+	Result:   anything  -- the data from the object
+
+make: Make a new element
+	make
+		new  type class  -- the class of the new element. Keyword 'new' is optional in AppleScript
+		[at  location reference]  -- the location at which to insert the element
+		[with data  anything]  -- the initial data for the element
+	Result:   reference  -- to the new object
+
+move: Move object to a new location
+	move  reference  -- the object to move
+		to  location reference  -- the new location for the object
+	Result:   reference  -- to the object after they have been moved
+
+duplicate: Make a duplicate object
+	duplicate  reference  -- the object to move
+		to  location reference  -- the new location for the object
+	Result:   reference  -- to the object after they have been moved
+
+open: Open the specified object
+	open  reference  -- list of objects to open
+
+print: Print the specified message
+	print  reference  -- the message to print
+
+save: Save an object
+	save  reference  -- the composition message to save
+
+set: Set an object's data
+	set  reference  -- the object to change
+		to  anything  -- the new value
+
+Class application: An application program
+Elements:
+	window by numeric index, by name, by ID
+	mail folder by numeric index, by name
+	setting by numeric index
+	filter by numeric index, by ID
+Properties:
+	version  string  [r/o]  -- the version number
+	selected text  string  -- the text of the user¹s current selection
+
+Class window: A window
+Properties:
+	bounds  bounding rectangle  -- the boundary rectangle for the window
+	closeable  boolean  [r/o]  -- Does the window have a close box?
+	resizeable  boolean  [r/o]  -- Is the window resizeable?
+	zoomable  boolean  [r/o]  -- Does the window have a zoom box?
+	zoomed  boolean  -- Is the window zoomed?
+	name  string  [r/o]  -- the title of the window
+	index  integer  -- the number of the window
+	id  integer  [r/o]  -- the window's id
+	modified  boolean  [r/o]  -- has the window been modified since the last save?
+	position  point  -- upper left coordinates of the window
+	selected text  string  -- the text of the user¹s current selection
+
+Eudora Suite: Terms specific to Eudora
+
+connect: Connect to the mail server and transfer mail
+	connect
+		[sending  boolean]  -- true to make eudora send queued messages
+		[checking  boolean]  -- true to make eudora check for mail
+		[waiting  boolean]  -- true to make eudora wait for idle time before checking
+
+reply: Reply to a message
+	reply  reference  -- the message to reply to
+		[quoting  boolean]  -- true if you want to quote the original text in the reply
+		[everyone  boolean]  -- true if you want the reply to go to everyone who got the original
+		[self  boolean]  -- true if you want the reply to go to yourself, too
+	Result:   reference  -- to the reply message
+
+forward: Forward a message
+	forward  reference  -- the message to forward
+	Result:   reference  -- to the forwarded message
+
+redirect: Redirect a message
+	redirect  reference  -- the message to redirect
+	Result:   reference  -- to the redirected message
+
+send again: Send a message again
+	send again  reference  -- the message to send again
+	Result:   reference  -- to the message sent again
+
+queue: Queue a message to be sent
+	queue  reference  -- the message to queue
+		[for  integer]  -- date to send the message, in seconds since 1904, UTC
+
+unqueue: Remove a message from the queue, so it won¹t be sent
+	unqueue  reference  -- the message to unqueue
+
+attach to: Attach documents to a message
+	attach to  reference  -- the message to attach the documents to
+		documents  alias  -- list of documents to attach
+		[spooling  boolean]  -- True to make Eudora copy the document and attach the copy, and delete the copy when the message is deleted.
+
+start notifying: Notify an application of things that happen
+	start notifying  reference  -- an application to notify
+		[when  mail arrives/mail sent/will connect/has connected/has manually filtered]  -- what to notify the application of
+
+stop notifying: Stop notifying applications of things that are happening
+	stop notifying  reference  -- an application currently being notified, or omit for all
+		[when  mail arrives/mail sent/will connect/has connected/has manually filtered]  -- the things no longer to notify it of
+
+notice: Eudora sends this event to notify an application that something happened
+	notice
+		[occurrence  mail arrives/mail sent/will connect/has connected/has manually filtered]  -- what happened
+		[messages  list]  -- of the messages involved
+
+Class mail folder: A folder containing mailboxes or other mail folders.
+Elements:
+	mailbox by numeric index, by name
+	mail folder by numeric index, by name
+	nickname file by numeric index, by name
+Properties:
+	name  string  [r/o]  -- the name
+
+Class mailbox: A mailbox.
+Elements:
+	message by numeric index, by ID
+Properties:
+	name  string  [r/o]  -- the name of the mail folder
+	space wasted  integer  [r/o]  -- the amount of waste space in the mailbox
+	space required  integer  [r/o]  -- the minimum amount of space required to hold the mailbox
+	location  file specification  [r/o]  -- the file the mailbox is stored in
+	toc location  file specification  [r/o]  -- the file the table of contents is stored in
+	window  reference  [r/o]  -- the mailbox's window, if any
+
+Class message: A message
+Elements:
+	field by name
+Properties:
+	id  integer  [r/o]  -- unique id of the message
+	body  string  -- the body of the message
+	priority  integer  -- the priority
+	label  integer  -- the index of the label
+	status  unread/already read/replied/forwarded/redirected/not sendable/sendable/queued/sent/never sent  -- the message status
+	sender  string  -- the sender as appearing in the message summary
+	date  string  [r/o]  -- the date as appearing in the message summary
+	subject  string  -- the subject as appearing in the message summary
+	size  integer  [r/o]  -- the size of the message
+	outgoing  boolean  [r/o]  -- is the message is outgoing?
+	signature  none/standard/alternate  -- which signature the message should have
+	QP  boolean  -- is Eudora allowed to encode text?
+	return receipt  boolean  -- is a return receipt is requested?
+	wrap  boolean  -- should the text be wrapped when sent?
+	tab expansion  boolean  -- should tabs get expanded to spaces?
+	keep copy  boolean  -- should a copy should be kept after message is sent?
+	preserve macintosh info  boolean  -- should Macintosh information always be sent with attachments?
+	attachment encoding  AppleDouble/AppleSingle/BinHex/uuencode  -- the type of encoding to use for attachments
+	show all headers  boolean  -- should all headers be visible?
+	transliteration table  integer  -- the resource id of the transliteration table
+	will be fetched  boolean  -- will the message be [re]fetched on next check?
+	will be deleted  boolean  -- will the message be deleted from server on next check?
+	destroy attachments  boolean  -- will attachments be trashed after the message is sent?
+	window  reference  [r/o]  -- the message's window, if any
+
+Class nickname file: A file full of nicknames
+Elements:
+	nickname by name, by numeric index
+Properties:
+	file  file specification  [r/o]  -- the filespec of the file
+
+Class nickname: A nickname for a user.
+Elements:
+	field by name
+Properties:
+	nickname  string  -- the nickname itself
+	addresses  string  -- the addresses to which the nickname expands
+	notes  string  -- the notes associated with this nickname, after fields have been removed
+	expansion  string  [r/o]  -- the full expansion of the nickname
+	recipient  boolean  -- is the nickname on the Quick Recipients list?
+	raw notes  string  [r/o]  -- the notes associated with this nickname, including encoded fields
+	nickname file  string  [r/o]  -- the name of the file the nickname comes from
+
+Class field: An RFC 822 header field in a message (field named "" is the body) or a named part of a nickname.
+
+Class filter: One of Eudora¹s filters.
+Elements:
+	match term by numeric index
+Properties:
+	name  string  -- the name
+	id  integer  [r/o]  -- the filter¹s unique id
+	use date  integer  -- the last date & time the filter matched a message
+	incoming  boolean  -- should filter run on incoming messages
+	outgoing  boolean  -- should filter run on outgoing messages
+	manual  boolean  -- should filter run when doing manual filtering
+	conjunction  ignore/and/or/unless  -- the filter¹s conjunction
+	subject  string  -- change the subject to this
+	label  integer  -- change the subject to this
+	priority  integer  -- priority change; -1/0/1
+	destination  string  -- name of mailbox to copy or transfer to
+	copying  boolean  -- copy (true) or transfer (false)?
+
+Class match term: A match term of a filter.
+Properties:
+	header  string  -- the header field to search
+	verb  contains/does not contain/is/is not/starts with/ends with/appears/does not appear/intersects  -- the term¹s verb
+	value  string  -- the header field to search
+
+Class setting: Eudora's settings
+
+URL Suite: Open URL¹s with Eudora; supports ph, finger, mailto, and passes through
+
+geturl: Display the contents of a URL.
+	geturl  string  -- the URL to display (finger/ph/mailto)
+
+fetchurl: Return the contents of a URL.
+	fetchurl  string  -- the URL to fetch (finger/ph/mailto)
+	Result:   string  -- to the contents of the URL
+
+
+
+

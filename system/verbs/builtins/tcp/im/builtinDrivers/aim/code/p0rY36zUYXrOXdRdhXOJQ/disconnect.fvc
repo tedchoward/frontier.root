@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.code.core.disconnect
+
+on disconnect(adrSelf) {
+	if defined(adrSelf^._threadId) {
+		try {
+			thread.kill(adrSelf^._threadId);
+			delete(@adrSelf^._threadId)}};
+	try {
+		tcp.closeStream(adrSelf^._socket);
+		delete(@adrSelf^._socket)};
+	}
+
+

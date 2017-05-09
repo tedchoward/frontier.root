@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.wp.setTab
+
+on setTab (pos, type, fill) {
+	kernel (wp.settab)}
+
+

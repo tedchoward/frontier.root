@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.xml.examples.["!pathological"].tableStructure.["0003\tfoo"].["0003\tbar"].["/contents"]
+
+And so is this; it should be parsed identically to the above element.
+
+

@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.getDomainName
+
+on getDomainName (name) {
+	«Changes
+		«6/22/11; 8:54:59 AM by DW
+			«Take a string like xxx.blorkmark.net and return blorkmark.net.
+	local (i, ctdots = 0);
+	if name endswith "." {
+		name = string.delete (name, sizeof (name), 1)};
+	for i = sizeof (name) downto 1 {
+		if name [i] == "." {
+			ctdots++;
+			if ctdots == 2 {
+				return (string.mid (name, i + 1, sizeof (name) - i))}}};
+	return (name)};
+bundle { //test code
+	dialog.alert (getDomainName ("charles.blorkmark.net"))}
+
+

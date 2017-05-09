@@ -1,0 +1,28 @@
+FrontierVcsFile:3:optx:system.extensions.regex.docServer.compile
+
+#title "regex.compile"
+#renderOutlineWith "docServerRenderer"
+Syntax
+	regex.compile (pattern, caseSenstive, fastmap)
+Params
+	pattern is a string containing the regular expression to be compiled.
+	
+	caseSensitive is an optional boolean flag. Default is false
+	
+	fastmap is an optional boolean flag. Default is true.
+Action
+	Compiles a regular expression and allocates memory for the compiled pattern and additional data structures.
+Returns
+	A reference to a compiled pattern (as a longint). 
+Examples
+	regex.compile ("<([^>]+)>")
+		// 1375960
+Notes
+	Matching this pattern to a target will be case insensitive if  the parameter caseSensitive is false, otherwise, the matching will be case sensitive.
+	After you are done with a pattern, you should call "regex.free" to release the allocated memory.
+	In general, compiling with fastmap set to true results in faster searches and matches. If a fastmap is used, an additional block of 256 bytes is allocated for each pattern.
+See Also
+	"regex.free"
+
+
+

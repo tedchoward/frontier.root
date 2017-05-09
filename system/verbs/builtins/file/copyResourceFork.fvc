@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.copyResourceFork
+
+on copyResourceFork (sourcepath, destpath) {
+	kernel (file.copyresourcefork)}
+
+

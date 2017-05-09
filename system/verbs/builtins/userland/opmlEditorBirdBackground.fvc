@@ -1,0 +1,16 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.userland.opmlEditorBirdBackground
+
+<html>
+	<head>
+		<title>Home</title>		
+		</head>
+	<body bgcolor="white">
+		<p>
+		<span style="position:absolute; left:5px; bottom:5px;">
+			<img src="parakeet.jpg" border="0">
+			</span>
+		</body>
+	</html>
+
+
+

@@ -1,0 +1,66 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.httpLog.viewHttpLog
+
+on viewHttpLog () {
+	«Changes
+		«11/14/11; 11:38:39 AM by DW
+			«Created.
+	local (htmltext = "", indentlevel = 0, maxlog = 50, ctlog = 0, flcache = true);
+	on add (s) {
+		htmltext = htmltext + (string.filledstring ("\t", indentlevel) + s + "\r");};
+	add ("<h3>HTTP Log</h3>");
+	add (string (opmlEditor.data.outlines.httpLogIntro));
+	add ("<div class=\"divHttpLogPage\">"); indentlevel++;
+	add ("<table  class=\"" + webApp.data.tableClass + "\" cellpadding=\"5\">"); indentlevel++;
+	bundle { //column headers
+		add ("<thead>"); indentlevel++;
+		add ("<tr>"); indentlevel++;
+		add ("<th class=\"httpWhen\">When</th>");
+		add ("<th class=\"httpSecs\">Secs</th>");
+		add ("<th class=\"httpCode\">Code</th>");
+		add ("<th class=\"httpMethod\">Method</th>");
+		add ("<th class=\"httpClient\">Client</th>");
+		add ("<th class=\"httpUserAgent\">User-Agent</th>");
+		add ("<th class=\"httpUrl\">URL</th>");
+		add ("</tr>"); indentlevel--;
+		add ("</thead>"); indentlevel--};
+	add ("<tbody>"); indentlevel++;
+	on visit (adritem) {
+		if (not defined (adritem^.rowtext)) or (not flcache) {
+			local (rowtext = "");
+			on addtorow (s) {
+				rowtext = rowtext + s};
+			addtorow ("<tr>"); indentlevel++;
+			addtorow ("<td class=\"httpWhen\">" + string.replace (date.timestring (adritem^.data.when, false), " ", "") + "</td>"); //when
+			addtorow ("<td class=\"httpSecs\">" + string.formatdouble (double (adritem^.data.ctticks) / 60) + "</td>"); //secs
+			bundle { //code
+				local (code = adritem^.data.code);
+				if (code >= 300) and (code <= 399) {
+					code = "<a href=\"" + adritem^.data.urlRedirect + "\">" + code + "</a>"};
+				addtorow ("<td class=\"httpCode\">" + code + "</td>")};
+			addtorow ("<td class=\"httpMethod\">" + adritem^.data.method + "</td>");
+			addtorow ("<td class=\"httpClient\">" + tcp.dns.getdomainname (adritem^.data.client) + "</td>");
+			bundle { //user agent
+				local (fullagent = adritem^.data.userAgent, firstword);
+				on notagenthas (ch) {
+					if fullagent contains ch {
+						firstword = string.nthfield (fullagent, ch, 1);
+						return (false)};
+					return (true)};
+				if notagenthas ("/") {
+					if notagenthas ("-") {
+						notagenthas (" ")}};
+				addtorow ("<td class=\"httpUserAgent\"><a href=\"#\" rel=\"twipsy\" title=\"" + string.replace (fullagent, "\"", "&quot") + "\">" + firstword + "</td>")};
+			addtorow ("<td class=\"httpUrl\"><a href=\"" + adritem^.data.url + "\">" + adritem^.data.url + "</a></td>");
+			addtorow ("</tr>"); indentlevel--;
+			adritem^.rowtext = rowtext};
+		add (adritem^.rowtext);
+		return (++ctlog < maxlog)};
+	log.visitReverseChronologic ("http", @visit);
+	add ("</tbody>"); indentlevel--;
+	add ("</table>"); indentlevel--;
+	add ("</div>"); indentlevel--;
+	return (htmltext)};
+bundle { //test code
+	viewHttpLog ()}
+
+

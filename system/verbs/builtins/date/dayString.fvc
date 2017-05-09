@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.date.dayString
+
+on dayString (theDate) { //4.2.1
+	kernel (date.dayString)}
+
+

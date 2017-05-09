@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.base64.encode
+
+on encode (x, linelength) {
+	kernel (base64.encode)}
+
+

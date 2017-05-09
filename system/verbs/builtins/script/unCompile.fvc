@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.script.unCompile
+
+on uncompile (adrScript) {
+	kernel (script.uncompile)}
+
+

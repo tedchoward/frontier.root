@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.setOutlineTitle
+
+on setOutlineTitle () {
+	«Changes
+		«10/25/12; 6:23:36 PM by DW
+			«If the title is Untitled check if there's anything in the first summit of the window, if so, that becomes the default in the dialog instead of Untitled. 
+				«http://worknotes.scripting.com/october2012/102512ByDw/addTitleForWindow
+		«8/16/12; 1:14:51 PM by DW
+			«Also set the title attribute of the window.
+				«http://worknotes.scripting.com/august2012/81612ByDw/preservingTitleOverSave
+		«8/15/12; 8:34:02 PM by DW
+			«Created.
+	local (adrwindow = window.frontmost (), title = window.gettitle (adrwindow));
+	if title == "Untitled" { //10/25/12 by DW
+		local (lo = adrwindow^, oldtarget = target.set (@lo));
+		op.firstsummit ();
+		s = op.getlinetext ();
+		if sizeof (s) > 0 {
+			title = s};
+		target.set (oldtarget)};
+	if dialog.ask ("New title for outline?", @title) {
+		window.settitle (adrwindow, title);
+		window.attributes.setOne ("title", title, adrwindow)}};
+bundle { //test code
+	setOutlineTitle ()}
+
+

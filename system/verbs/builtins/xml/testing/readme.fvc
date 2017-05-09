@@ -1,0 +1,11 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.xml.testing.readme
+
+3/27/98; 5:35:14 AM by DW
+
+This table contains scripts that regression-test the compiler and decompiler.
+
+After making a change, I re-run the validate script. If it runs fine, it gives me confidence that I haven't broken anything in the compiler.
+
+When I make a change to one of the examples, or add a new one, I re-run the init script. 
+
+

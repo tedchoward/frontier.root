@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FinderClassic.print
+
+on print (path) { «print a document from the Finder
+	return (Finder.folderVerb ('spri', path))}
+
+

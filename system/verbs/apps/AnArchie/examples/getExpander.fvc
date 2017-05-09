@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.AnArchie.examples.getExpander
+
+on getExpander () {
+	if (file.getFolderDialog("Select Destination for StuffIt Expander", @dest)) {
+		with anarchie, eventInfo {
+			ftpRec = {'name': "Expander", path: "/pub/leonardr/Aladdin", host: "netcom.com"};
+			mget(searchPath:ftpRec, destPath:dest)}}}
+
+

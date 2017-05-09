@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.data.logMacroError
+
+on logMacroError (macro, errorString) {
+	«Change notes:
+		«Tue, Jun 16, 1998 at 7:33:16 PM by PBS
+			«Log to file if Frontier is a server.
+		«12/14/98; 7:55:03 PM by DW
+			«Funnel it thru log.add
+	local (s = "");
+	s = s + "Error rendering \"" + html.getPageTableAddress ()^.adrobject + "\".\r";
+	s = s + "\t" + errorString + "\r";
+	s = s + "\tMacro string: {" + macro + "}\r";
+	log.add (s, "htmlMacroErrors", flwptext:true);
+	return (true)}
+
+

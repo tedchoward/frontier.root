@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.getSelection
+
+on getSelection () { //7.0b17 
+	kernel (op.getselection)}
+
+

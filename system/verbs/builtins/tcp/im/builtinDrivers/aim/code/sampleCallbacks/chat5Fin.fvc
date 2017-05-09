@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.code.sampleCallbacks.chat_in
+
+on IM_IN (adrSelf, roomId, screenName, message, flWhisper) {
+	return(msg("on im in"))};
+
+
+

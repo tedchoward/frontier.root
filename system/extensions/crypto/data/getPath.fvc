@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.extensions.crypto.data.getPath
+
+«Make sure the DLL exists on disk and is loaded by Frontier.
+	«Return the path to the DLL.
+
+local (dllPath, adrdata = parentOf (this^));
+if file.exists (adrdata^.dllpath) {
+	dllpath = adrdata^.dllpath}
+else {
+	dllPath = adrdata^.installDLL ()};
+if not (dll.isloaded (dllPath)) {
+	dll.load (dllPath)};
+return (dllPath)
+
+

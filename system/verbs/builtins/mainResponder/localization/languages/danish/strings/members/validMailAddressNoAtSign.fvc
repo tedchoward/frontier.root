@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.danish.strings.members.validMailAddressNoAtSign
+
+Can't send email because the address, [[mailaddress]] does not contain an @.
+
+

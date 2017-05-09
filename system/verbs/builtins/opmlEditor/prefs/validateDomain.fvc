@@ -1,0 +1,33 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.prefs.validateDomain
+
+on validateDomain () {
+	«Changes
+		«8/27/12; 7:39:32 PM by DW
+			«Call opmlEditor.utilities.patchFileSystemUrl after validating the external name.
+		«8/27/12; 5:09:20 PM by DW
+			«Fix error in call to setCookieDomain routine.
+		«8/27/12; 4:05:39 PM by DW
+			«Factored the setCookieDomain code, because we'll have to call it when we set the default external name.
+		«8/27/12; 12:45:16 PM by DW
+			«Created.
+				«http://worknotes.scripting.com/august2012/82712ByDw/validateExternalName
+	local (pta = html.getpagetableaddress (), startticks = clock.ticks (), domain = user.opmlEditor.prefs.server.externalDomainName);
+	«scratchpad.validparams = pta^
+	on errormsg (s) {
+		return ("<font color=\"red\">" + s + "</font>")};
+	if pta^.method == "POST" {
+		local (server = "xmlrpc://" + domain + "/RPC2");
+		system.temp.opmlEditor.stats.randomNumber = random (0, 1000000);
+		try {
+			if [server].getRandomNumber () == system.temp.opmlEditor.stats.randomNumber {
+				opmlEditor.utilities.setCookieDomain (domain);
+				opmlEditor.utilities.patchFileSystemUrl ();
+				return ("<font color=\"green\">Good work, Mr or Ms User. The domain \"" + domain + "\" maps to this server.</font>")}};
+		return (errormsg ("Sad to say, the domain \"" + domain + "\" does not map to this server.</font>"))}
+	else {
+		return ("")}};
+bundle { //test code
+	html.setpagetableaddress (@scratchpad.validparams);
+	validateDomain ()}
+
+

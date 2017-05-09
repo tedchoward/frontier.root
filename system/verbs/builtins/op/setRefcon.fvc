@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.setRefcon
+
+on setRefcon (val) {
+	kernel (op.setRefcon)}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.commercial.newTable.quit
+
+on quit () {
+	return (required.quitApplication (Sample.id))}
+
+

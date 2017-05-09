@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.menu.clearMenubar
+
+on clearMenubar () {
+	on kernelcall () {
+		kernel (menu.clearmenubar)};
+	kernelcall ();
+	system.menus.data.currentSuite = "";
+	system.menus.data.currentmenu = '????'}
+
+

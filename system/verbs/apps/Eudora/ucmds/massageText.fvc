@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.ucmds.massageText
+
+on massageText (indentlen, maxlinelen, text) {
+	return (appleEvent (@Eudora.ucmds.wrappercmd, 'wrap', 'txmg', 'idln', short (indentlen), 'mxln', short (maxlinelen), 'text', string (text)))}
+
+

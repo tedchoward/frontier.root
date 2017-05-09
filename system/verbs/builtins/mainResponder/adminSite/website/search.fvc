@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.adminSite.website.search
+
+on search () {
+	«Changes:
+		«8/7/02; 6:53:42 PM by JES
+			«Created.
+	local (pta = html.getPageTableAddress ());
+	pta^.title = "Search";
+	
+	pta^.responderAttributes.renderOneSearchResult = @mainResponder.search.server.renderResultCallbacks.googleClone;
+	
+	return (mainResponder.search.server.searchPage ())}
+
+

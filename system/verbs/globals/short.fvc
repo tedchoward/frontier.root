@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.globals.short
+
+on short (val) {
+	kernel (lang.short)}
+
+

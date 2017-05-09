@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.export.callImportSubMenu
+
+on callImportSubMenu (path) { «this script is saved with all exported subMenus
+	return (export.importSubMenu (path))}
+
+

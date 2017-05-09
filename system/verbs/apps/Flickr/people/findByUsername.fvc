@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.people.findByUsername
+
+on findByUsername (username) {
+	«Changes
+		«8/8/07; 6:14:28 PM by DW
+			«Add call to flickr.init.
+		«8/8/07; 4:31:37 PM by DW
+			«Return the user's id, script error if it fails to find the user.
+				«http://www.flickr.com/services/api/flickr.people.findByUsername.html
+	flickr.init ();
+	local (mystruct);
+	new (tabletype, @mystruct);
+	mystruct.api_key = user.flickr.prefs.apiKey;
+	mystruct.method = "flickr.people.findByUsername";
+	mystruct.username = username;
+	local (s = [user.flickr.prefs.server].flickr.people.findByUsername (mystruct), xstruct);
+	s = xml.entityDecode (s, true);
+	xml.compile (s, @xstruct);
+	«scratchpad.xstruct = xstruct
+	local (adruser = xml.getaddress (@xstruct, "user"));
+	return (adruser^.["/atts"].id)};
+bundle { //test code
+	dialog.alert (findByUsername ("scriptingnews"))}
+
+

@@ -1,0 +1,48 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.members.setCookie
+
+on setCookie (mailaddress, password, adrMembers=nil, pta=nil, groupName=nil, flExpireAtEndOfSession=false) { //called as a macro from pages that change the cookie
+	«10/7/99; 8:33:53 PM by DW
+		«If cookieExpires is empty, don't add an "expires" attribute to the cookie.
+		«Changes:
+			«04/10/00; 12:08:26 PM by PBS
+				«Support for hashed cookies. groupName is a new optional parameter. It's a good idea to supply it, since the new feature needs the groupName.
+			«9/12/01; 3:45:57 PM by PBS
+				«New parameter: flExpireAtEndOfSession. If true, then any expires setting is over-ridden, and the cookie expires at end of session.
+	
+	if pta == nil {
+		pta = html.getPageTableAddress ()};
+	if adrMembers == nil {
+		local (adrUsers = parentOf (pta^.adrMemberInfo^));
+		adrMembers = parentOf (adrUsers^)};
+	local (flUseHashedCookies = mainResponder.members.useHashedCookies (pta));
+	local (s);
+	
+	if mailAddress == "" and password == "" {
+		flUseHashedCookies = false}; //if clearing a cookie, use the old format
+	
+	if flUseHashedCookies { //PBS 04/10/00: use new format?
+		if groupName == nil { //get the group name if not supplied
+			«Get the group name.
+			if defined (pta^.responderAttributes.defaultMembershipGroup) {
+				groupName = pta^.responderAttributes.defaultMembershipGroup};
+			if defined (pta^.responderAttributes.members) {
+				groupName = pta^.responderAttributes.members};
+			if groupName == nil {
+				scriptError ("Can't set the cookie because the name of the membership group has not been specified.")}};
+		
+		s = mainResponder.members.getHashedCookieString (adrMembers, mailAddress, password, groupName, flExpireAtEndOfSession)} //PBS 09/12/01: send flExpireAtEndOfSession parameter
+	else { //use original format
+		with adrMembers^ {
+			s = string.innerCaseName (cookieName) + "=";
+			s = s + string.urlEncode (mailaddress + "\t" + password) + "; ";
+			if cookieDomain != "" {
+				s = s + "domain=" + cookieDomain + "; "};
+			if (not flExpireAtEndOfSession) and (sizeof (cookieExpires) > 0) { //PBS 09/12/01: check flExpireAtEndOfSession
+				s = s + "expires=" + cookieExpires + "; "};
+			s = s + "path=/"}};
+	
+	pta^.responseHeaders.["Set-Cookie"] = s;
+	
+	return (s)}
+
+

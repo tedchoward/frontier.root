@@ -1,0 +1,15 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.userland.oldstuff.pages.inthefolder
+
+{pageheader ("Docs are on the web...")}
+
+<h2>
+<i>Docs are on the web...</i>
+
+<h2><center><a href="http://www.scripting.com/frontier/">Frontier Home Page</a></center></h2>
+
+<i>Thanks for checking out Frontier!</i>
+</h2>
+
+{pagefooter ()}
+
+

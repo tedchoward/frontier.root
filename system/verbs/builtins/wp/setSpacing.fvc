@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.wp.setSpacing
+
+on setSpacing (n) {
+	kernel (wp.setspacing)}
+
+

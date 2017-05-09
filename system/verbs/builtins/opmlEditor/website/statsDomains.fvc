@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.statsDomains
+
+on statsDomains () {
+	«Changes
+		«2/16/12; 11:48:08 AM by DW
+			«Created.
+	local (pta = html.getpagetableaddress ());
+	pta^.title = "Domains";
+	return (opmlEditor.viewDomains ())};
+bundle { //test code
+	statsDomains ()}
+
+

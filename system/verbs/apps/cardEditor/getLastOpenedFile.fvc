@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.getLastOpenedFile
+
+on getLastOpenedFile () {
+	return (appleEvent (cardEditor.id, 'IOWA', 'glof'))}
+
+

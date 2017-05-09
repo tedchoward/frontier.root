@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.count
+
+on count (obj, class) { «Return the number of elements of a particular class within an object
+	return (core.count (Fetch.id, obj, class))}
+
+

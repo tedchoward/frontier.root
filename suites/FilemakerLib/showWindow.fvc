@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:suites.FilemakerLib.showWindow
+
+on showWindow (db, reportError = false) {
+	on doIt () {
+		filemaker.showWindow (db)};
+	if reportError {
+		return (doIt ())}
+	else {
+		try {
+			return (doIt ())}
+		else {
+			return (false)}}}
+
+

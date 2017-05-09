@@ -1,0 +1,64 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.scheduler2.thread.script
+
+on script () {
+	«Changes
+		«7/11/11; 10:08:49 AM by DW
+			«Support statusMessage callbacks.
+		«8/18/08; 11:09:57 AM by DW
+			«Status message displays only if user.scheduler2.prefs.flMessages is true.
+		«6/11/08; 8:50:33 AM by DW
+			«Status message now displays last URL accessed.
+		«5/29/08; 1:00:20 PM by DW
+			«Call inetd.isDaemonRunning in a try, it can error (Invalid stream) as we're starting up.
+		«5/25/08; 12:11:27 PM by DW
+			«Created.
+	loop {
+		local (day, month, year, hour, minute, second, now = clock.now ());
+		scheduler2.init ();
+		user.scheduler2.stats.ctLoops++;
+		date.get (now, @day, @month, @year, @hour, @minute, @second);
+		if second == 0 {
+			local (adrscript);
+			for adrscript in @user.scheduler2.everyMinute {
+				thread.callscript (@scheduler2.subtaskRunner, {adrscript, "everyMinute"})};
+			if minute == user.scheduler2.prefs.minuteToRunHourlyTasks {
+				local (adrscript);
+				for adrscript in @user.scheduler2.hourly {
+					thread.callscript (@scheduler2.subtaskRunner, {adrscript, "hourly"})}};
+			if hour == user.scheduler2.prefs.hourToRunOvernightTasks {
+				if minute == 0 {
+					for adrscript in @user.scheduler2.overnight {
+						thread.callscript (@scheduler2.subtaskRunner, {adrscript, "overnight"})};
+					local (adrscript)}}};
+		bundle { //status message
+			if user.scheduler2.prefs.flMessages {
+				local (s = "");
+				bundle { //callbacks
+					local (adrscript);
+					for adrscript in @user.scheduler2.callbacks.statusMessage {
+						while typeof (adrscript^) == addresstype {
+							adrscript = adrscript^};
+						bundle {
+							adrscript^ (@s);
+							if sizeof (s) > 0 {
+								break}}}};
+				if sizeof (s) == 0 {
+					s = "scheduler2: " + date.timestring (now, true) + "; ";
+					bundle { //add threads
+						local (ctthreads = Frontier.countThreads ());
+						if ctthreads == 1 {
+							s = s + "1 thread"}
+						else {
+							s = s + ctthreads + " threads"}};
+					bundle { //add hits if web server is turned on
+						try {
+							if inetd.isDaemonRunning (@user.inetd.config.http) { //web server is turned on
+								s = s +"; " +  user.webserver.stats.hits + " hits";
+								if defined (user.scheduler2.stats.webserver.lastUrl) { //6/11/08 by DW
+									s = s + "; " + user.scheduler2.stats.webserver.lastUrl}}}}};
+				msg (s + ".")}};
+		thread.sleepfor (1)}};
+bundle { //test code
+	script ()}
+
+

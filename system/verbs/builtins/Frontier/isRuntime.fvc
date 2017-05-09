@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.isRuntime
+
+on isRuntime () {
+	kernel (Frontier.isRuntime)}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.semaphore.unlock
+
+on unlock (name) {
+	kernel (semaphore.unlock)}
+
+

@@ -1,0 +1,19 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.html.dialog.website.["#css"]
+
+<style type="text/css">
+	html {
+		width: [[width]]px;
+		height: [[height]]px;
+		}
+	body {
+		font-family: MS Sans Serif;
+		font-size: 12;
+		}
+	td {
+		font-size: 12;
+		font-family: MS Sans Serif;
+		}
+	</style>
+
+
+

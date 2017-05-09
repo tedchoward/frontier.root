@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.getDefMimeType
+
+on getDefMimeType (appID = WebStar.id) { «gets default mime-type setting
+	with objectModel, WebStar.eventInfo {
+		return (core.get (appID, defMimeType))}}
+
+

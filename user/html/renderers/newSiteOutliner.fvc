@@ -1,0 +1,56 @@
+FrontierVcsFile:3:scpt:user.html.renderers.newSiteOutliner
+
+on newsiteoutliner (adroutline) {
+	local (totalwidth = 400);
+	op.firstsummit ();
+	op.fullexpand ();
+	local (level = 0);
+	on visit () {
+		loop {
+			local (fllookahead = false);
+			local (ctsubs = op.countSubs (1));
+			local (hassubs = ctsubs > 0);
+			local (indentpixels = (20 * level));
+			local (s = "");
+			s = s + "<table border=0 cellspacing=2>";
+			if level > 0 { «add a dummy cell to do the indentation
+				s = s + "<td height=17 width=" + indentpixels + "></td>"};
+			local (linetext = op.getlinetext ());
+			«linetext = string.replaceAll (linetext, "<", "&lt;")
+			if script.iscomment () {
+				if hassubs {
+					local (i);
+					hassubs = false; «don't go into the subs in code following
+					op.go (right, 1);
+					for i = 1 to ctsubs {
+						linetext = linetext + " " + op.getlinetext ();
+						op.deleteline ()}};
+				linetext = "<code>" + linetext + "</code>"}
+			else {
+				if level == 0 {
+					linetext = "<b>" + linetext + "</b>"}};
+			s = s + "<td height=17 width=" + (totalwidth - indentpixels) + ">" + linetext + "</table>";
+			op.setlinetext (s);
+			window.msg (s);
+			if hassubs {
+				op.go (right, 1);
+				level++;
+				visit ();
+				level--;
+				op.go (left, 1)};
+			if !fllookahead {
+				if not op.go (down, 1) {
+					break}}}};
+	visit ();
+	return (string (adroutline^))}
+«bundle «test code
+	«table.copy (@user.websites.newsite.outline, @scratchpad)
+	«target.set (@scratchpad.outline)
+	«op.firstsummit ()
+	«while op.getlinetext () beginswith "#"
+		«op.deleteline ()
+	«edit (@scratchpad.siteoutline)
+	«webbrowser.displaytext ("<html>" + newsiteoutliner (@scratchpad.outline) + "</html>")
+	«target.clear ()
+
+

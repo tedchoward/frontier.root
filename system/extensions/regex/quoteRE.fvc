@@ -1,0 +1,21 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.quoteRE
+
+on quoteRE (s) {
+	«Escape special chars in s
+	s = string.replaceAll (s, "\\", "\\\\");
+	s = string.replaceAll (s, ".", "\\.");
+	s = string.replaceAll (s, "?", "\\?");
+	s = string.replaceAll (s, "+", "\\+");
+	s = string.replaceAll (s, "*", "\\*");
+	s = string.replaceAll (s, "|", "\\|");
+	s = string.replaceAll (s, "[", "\\[");
+	s = string.replaceAll (s, "]", "\\]");
+	s = string.replaceAll (s, "(", "\\(");
+	s = string.replaceAll (s, ")", "\\)");
+	s = string.replaceAll (s, "{", "\\{");
+	s = string.replaceAll (s, "}", "\\}");
+	s = string.replaceAll (s, "^", "\\^");
+	s = string.replaceAll (s, "$", "\\$");
+	return(s)}
+
+

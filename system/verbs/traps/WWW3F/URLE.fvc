@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.["WWW?"].URLE
+
+on URLE (url, mimetype, windowid, referrer) { «handler for WWW?URLE event
+	webBrowser.tours.handleURL (url, mimetype, windowid, referrer)}
+
+

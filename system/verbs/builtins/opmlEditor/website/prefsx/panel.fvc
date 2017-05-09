@@ -1,0 +1,22 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.prefsx.panel
+
+on panel () {
+	«Changes
+		«8/30/11; 10:27:50 AM by DW
+			«Created.
+	local (pta = html.getpagetableaddress (), adrprefs = @opmlEditor.data.outlines.prefs, catnum, panelnum, titleparam=nil);
+	scratchpad.panelparams = pta^;
+	«scratchpad.xstruct = xstruct
+	new (tabletype, @args);
+	webserver.parseargs (pta^.searchargs, @args);
+	if defined (args.page) {
+		catnum = number (string.nthfield (args.page, ".", 1));
+		panelnum = number (string.nthfield (args.page, ".", 2))};
+	if defined (args.title) {
+		titleparam = args.title};
+	return (prefs2.viewPanel (adrprefs, catnum, panelnum, titleparam))};
+bundle { //test code
+	html.setpagetableaddress (@scratchpad.panelparams);
+	panel ()}
+
+

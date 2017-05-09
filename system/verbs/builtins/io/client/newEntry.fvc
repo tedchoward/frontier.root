@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.newEntry
+
+on newEntry () {
+	«Changes
+		«1/30/09; 11:42:28 AM by DW
+			«Moved from the button script so it can be called in its own thread. Doing all that window manipulation from a button script is not something the kernel can handle.
+		«1/30/09; 11:26:07 AM by DW
+			«Check with instantOutlineSuite.newerOutlineCheck before adding the new entry.
+		«7/21/08; 2:56:12 PM by DW
+			«Instead of putting the user's name in quotes, bold face it, and capitalize the first character.
+	local (adrdata = io.init ());
+	local (s = clock.now () + " by <b>" + adrdata^.client.prefs.username + "</b>");
+	op.firstsummit ();
+	if sizeof (op.getlinetext ()) > 0 {
+		op.insert (s, up)}
+	else {
+		op.setlinetext (s)};
+	op.insert ("", right);
+	wp.settextmode (true)};
+bundle { //test code
+	newEntry ()}
+
+

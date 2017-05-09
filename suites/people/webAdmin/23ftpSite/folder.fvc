@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.people.webAdmin.["#ftpSite"].folder
+
+local (pc = file.getPathChar ());
+return (html.getWebSitesFolder () + "Admin" + pc + "People" + pc)
+
+

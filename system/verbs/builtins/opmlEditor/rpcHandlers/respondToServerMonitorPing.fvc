@@ -1,0 +1,102 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.rpcHandlers.respondToServerMonitorPing
+
+on respondToServerMonitorPing () {
+	«Changes
+		«10/13/13; 11:04:16 AM by DW
+			«Return a table of info about domains.
+		«2/17/12; 9:52:24 AM by DW
+			«Return a table containing the hitcount for each domain today.
+		«1/30/12; 11:58:14 AM by DW
+			«New sub-table returned with info about each of the open files on the server.
+		«11/26/11; 10:24:24 PM by DW
+			«Reorganize. Stop sending back obsolete information. Changed a bunch of names. We should now be tracking hits and hits-per-hour accurately on the serverMonitor readout for all servers.
+		«9/25/11; 7:03:12 PM by DW
+			«Called from user.betty.rpcHandlers.pingServerMonitor. By putting it here, we can easily update the functionality without interfering with user control of their RPC handlers.
+		«4/24/11; 8:24:01 AM by DW
+			«Return serverinfo.sizeConfigRoot.
+		«8/18/10; 8:10:01 AM by DW
+			«A built-in handler that responds to serverMonitor pings. This way you don't have to install serverMonitor.root to be able to monitor a server, every OPML Editor installation comes with this handler installed. However it is disabled by default, you have to set user.opmlEditor.prefs.flRespondToServerMonitor true to enable it.
+			«Adapted from serverMonitorSuite.rpcHandlers.respondToPing.
+	local (serverinfo);
+	bundle { //check if enabled, or errors
+		if not user.opmlEditor.prefs.flRespondToServerMonitor {
+			scripterror ("Can't respond to ping because the service is not enabled on the server.")};
+		local (ip = string.trimwhitespace (user.opmlEditor.prefs.serverMonitorIpAddress));
+		if sizeof (ip) > 0 {
+			if not tcp.equalNames (client, ip) {
+				scripterror ("Can't respond to ping because your server is not authorized to ping this server.")}}};
+	new (tabletype, @serverinfo);
+	serverinfo.diskSpaceAvailable = file.freeSpaceOnVolumeDouble (file.volumefrompath (frontier.getprogrampath ()));
+	bundle { //serverinfo.whenFirstHttpHit
+		if defined (user.opmlEditor.stats.http.whenFirstHit) {
+			serverinfo.whenFirstHit = user.opmlEditor.stats.http.whenFirstHit}
+		else {
+			serverinfo.whenFirstHit = date (0)}};
+	serverinfo.serverUpSince = user.webserver.stats.upSince;
+	serverinfo.versionFrontier = Frontier.version ();
+	bundle { //serverinfo.sizeConfigRoot
+		try {
+			local (alist = string.parseaddress (@config));
+			serverinfo.sizeConfigRoot = file.size (alist [1])}
+		else {
+			serverinfo.sizeConfigRoot = 0}};
+	«bundle //old stats we're no longer transmitting, 11/26/11 by DW
+		«bundle //serverinfo.adminUrl
+			«local (url = "http://" + tcp.dns.getMyDottedId () + "/controlPanel/")
+			«try
+				«if defined (mainResponder.adminSite)
+					«url = "http://" + tcp.dns.getMyDottedId () + ":" + user.inetd.config.http2.port + "/"
+			«serverinfo.adminUrl = url
+		«bundle //serverinfo.ctHttpHitsAllTime
+			«if defined (user.webserver.stats.serverMonitorHitsAllTime)
+				«serverinfo.ctHttpHitsAllTime = user.webserver.stats.serverMonitorHitsAllTime
+			«else
+				«serverinfo.ctHttpHitsAllTime = 0
+		«bundle //serverinfo.sizeQueueOutgoing
+			«if defined (user.betty.queueOutgoing) //PBS 11/5/00: outgoing queue may not exist
+				«serverinfo.sizeQueueOutgoing = sizeof (user.betty.queueoutgoing.table)
+			«else
+				«serverInfo.sizeQueueOutgoing = 0
+		«serverinfo.ctHttpHits = user.webserver.stats.hits
+	bundle { //new stats, 11/26/11 by DW
+		serverinfo.versionOpml = opmlEditor.data.version;
+		serverinfo.ctHitsAllTime = user.opmlEditor.stats.http.ctHitsAlltime;
+		serverinfo.ctHitsToday = user.opmlEditor.stats.http.ctHitsToday;
+		serverinfo.whenLastHit = user.opmlEditor.stats.http.whenLastHit;
+		serverinfo.ctDays = user.opmlEditor.stats.http.ctDays};
+	bundle { //files, 1/30/12 by DW
+		local (adrfile, fname, adrsub, f);
+		new (tabletype, @serverinfo.files);
+		for adrfile in @system.compiler.files {
+			fname = file.filefrompath (nameof (adrfile^));
+			adrsub = @serverinfo.files.[fname];
+			new (tabletype, adrsub);
+			f = nameof (adrfile^);
+			adrsub^.f = f;
+			bundle { //path
+				local (s = string.delete (f, 1, sizeof (frontier.pathstring)));
+				s = string.replaceall (s, file.getpathchar (), "/");
+				adrsub^.path = s};
+			adrsub^.size = file.size (f);
+			adrsub^.whenCreated = file.created (f);
+			adrsub^.whenModified = file.modified (f)}};
+	bundle { //domains, 10/13/13 by DW
+		local (adr);
+		new (tabletype, @serverinfo.domains);
+		for adr in @config.mainresponder.domains {
+			name = nameof (adr^);
+			if name != "default" {
+				if typeof (adr^) == addresstype {
+					serverinfo.domains.[name] = string.popfilefromaddress (adr^)}
+				else {
+					serverinfo.domains.[name] = string (adr^)}}}};
+	bundle { //domainHits, 2/17/12 by DW
+		local (adrdata = frontier.opendatafile ("domainStats"));
+		serverinfo.domainHits = adrdata^.today.rankings};
+	«scratchpad.serverinfo = serverinfo //11/26/11 by DW
+	return (serverinfo)};
+bundle { //test code
+	client = tcp.dns.getmydottedid ();
+	respondToServerMonitorPing ()}
+
+

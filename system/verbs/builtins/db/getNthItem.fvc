@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.db.getNthItem
+
+on getNthItem (f, path, n) {
+	kernel (db.getNthItem)}
+
+

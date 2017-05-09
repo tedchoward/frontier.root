@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:suites.webEdit.menuItems.overrideDirective
+
+if not defined (user.webEdit.prefs.overrideWebEditServerDirective) {
+	user.webEdit.prefs.overrideWebEditServerDirective = false};
+if user.webEdit.prefs.overrideWebEditServerDirective {
+	return ("!Over-ride Server Directive")};
+return ("Over-ride Server Directive")
+
+

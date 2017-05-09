@@ -1,0 +1,75 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.OAuth.appDance
+
+on appDance (adrapp, flPromptForPin=false) {
+	«Changes
+		«3/27/11; 12:52:32 AM by DW
+			«Rewrite to allow for web apps.
+				«Old code
+					«on appDance (adrapp, flPromptForPin=false)
+						«Changes
+							«1/1/10; 11:22:57 AM by DW
+								«New optional param -- flPromptForPin, default false.  See section about Desktop Clients on Authentication page of the Twitter API wiki.
+									«http://apiwiki.twitter.com/Authentication
+							«3/6/09; 9:02:07 AM by DW
+								«Minor code cleanup.
+							«2/12/09; 2:08:33 PM by DW
+								«Created. If successful, the table will have elements named accessToken and accessTokenSecret.
+						«OAuth.getRequestToken (adrapp^.requestTokenUrl, adrapp^.consumerkey, adrapp^.consumersecret, @adrapp^.token, @adrapp^.tokenSecret)
+						«
+						«local (accessurl = adrapp^.authorizeUrl + "?oauth_token=" + adrapp^.token)
+						«webbrowser.openurl (accessurl)
+						«webbrowser.bringtofront ()
+						«
+						«if flPromptForPin //1/1/10 by DW
+							«if not dialog.ask ("Enter the 7-character PIN?", @adrapp^.pin)
+								«return
+							«adrapp^.pin = string.trimwhitespace (adrapp^.pin) //drop any trailing blanks user might have copied by accident
+						«
+						«local (i)
+						«for i = 1 to 60
+							«try
+								«local (verifier = nil) //1/1/10 by DW
+								«if flPromptForPin 
+									«verifier = adrapp^.pin
+								«OAuth.getAccessToken (adrapp^.accessTokenUrl, adrapp^.consumerkey, adrapp^.consumersecret, adrapp^.token, adrapp^.tokensecret, verifier, @adrapp^.accessToken, @adrapp^.accessTokenSecret)
+								«if sizeof (adrapp^.accessToken) > 0
+									«break
+							«clock.waitseconds (2)
+		«1/1/10; 11:22:57 AM by DW
+			«New optional param -- flPromptForPin, default false.  See section about Desktop Clients on Authentication page of the Twitter API wiki.
+				«http://apiwiki.twitter.com/Authentication
+		«3/6/09; 9:02:07 AM by DW
+			«Minor code cleanup.
+		«2/12/09; 2:08:33 PM by DW
+			«Created. If successful, the table will have elements named accessToken and accessTokenSecret.
+	OAuth.getRequestToken (adrapp^.requestTokenUrl, adrapp^.consumerkey, adrapp^.consumersecret, @adrapp^.token, @adrapp^.tokenSecret);
+	
+	local (accessurl = adrapp^.authorizeUrl + "?oauth_token=" + adrapp^.token);
+	if flPromptForPin {
+		webbrowser.openurl (accessurl);
+		webbrowser.bringtofront ();
+		bundle {
+			if not dialog.ask ("Enter the 7-character PIN?", @adrapp^.pin) {
+				return};
+			adrapp^.pin = string.trimwhitespace (adrapp^.pin)}} //drop any trailing blanks user might have copied by accident
+	else {
+		local (pta = html.getpagetableaddress ());
+		webserver.redirect (pta, accessurl)};
+	
+	«scratchpad.adrapp = adrapp; scratchpad.flPromptForPin = flPromptForPin
+	thread.callscript (@OAuth.waitForAuthorization, {adrapp, flPromptForPin});
+	};
+	«local (i)
+	«for i = 1 to 60
+		«try
+			«local (verifier = nil) //1/1/10 by DW
+			«if flPromptForPin 
+				«verifier = adrapp^.pin
+			«OAuth.getAccessToken (adrapp^.accessTokenUrl, adrapp^.consumerkey, adrapp^.consumersecret, adrapp^.token, adrapp^.tokensecret, verifier, @adrapp^.accessToken, @adrapp^.accessTokenSecret)
+			«if sizeof (adrapp^.accessToken) > 0
+				«break
+		«clock.waitseconds (2)
+bundle { //test code
+	appDance (scratchpad.adrapp)}
+
+

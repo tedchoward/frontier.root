@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.outlinerSetAllLevels
+
+on outlinerSetAllLevels () {
+	«Changes
+		«6/18/11; 11:55:31 AM by DW
+			«Created.
+	local (fl);
+	case dialog.yesNoCancel ("Display all levels on the page for this node?") {
+		1 { //Yes
+			fl = true};
+		2 { //No
+			fl = false};
+		3 { //Cancel
+			return}};
+	op.attributes.setone ("allLevels", fl)};
+bundle { //test code
+	outlinerSetAllLevels ()}
+
+

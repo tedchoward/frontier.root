@@ -1,0 +1,46 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.log.getCurrentFile
+
+local (now = clock.now ());
+if date.day (now) == system.temp.log.dayLastLogAdd {
+	if window.isopen (system.temp.log.lastLogFile) {
+		return (system.temp.log.lastLogFile)}};
+
+local (f = system.temp.log.lastLogFile);
+if f != nil {
+	if window.isopen (f) { //close the old log file
+		fileMenu.save (f);
+		fileMenu.close (f)}};
+
+bundle { //set f to the new file
+	local (day, month, year, hour, minute, second);
+	date.get (now, @day, @month, @year, @hour, @minute, @second);
+	local (datefname = year + "-" + string.padwithzeros (month, 2) + "-" + string.padwithzeros (day, 2));
+	
+	«Get the logs folder. It's stored at user.log.prefs.folder.
+		«Make sure the pref exists and it points to an existing folder.
+		«Sun, Feb 28, 1999 at 5:15:05 PM by PBS
+	if not (file.exists (user.log.prefs.folder)) {
+		try {
+			user.log.prefs.folder = Frontier.getSubFolder ("ops/logs/")}
+		else {
+			user.log.prefs.folder = Frontier.pathString + "Logs" + file.getPathChar ()}};
+	
+	f = user.log.prefs.folder + datefname + ".root"};
+
+bundle { //open the file or create it
+	try {
+		fileMenu.open (f, hidden:true)}
+	else {
+		file.sureFilePath (f);
+		fileMenu.new (f, hidden:true);
+		window.setPosition (f, 30, 40);
+		window.setSize (f, 350, 525);
+		new (tabletype, @[f].[date.shortstring (now)]);
+		try {delete (@[f].["item #1"])};
+		fileMenu.save (f); //2/22/99; 5:12:07 PM by DW
+		};
+	system.temp.log.lastLogFile = f;
+	system.temp.log.dayLastLogAdd = date.day (now)};
+return (f)
+
+

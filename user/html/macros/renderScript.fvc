@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:user.html.macros.renderScript
+
+on renderScript (adr) { «this is a macro that gets a script listing
+	local (s);
+	if typeof (adr^) == scripttype {
+		local (localcopy);
+		edit (adr); «work around a bug in Frontier
+		script.scriptToOutline (adr, @localcopy);
+		close (adr); «work around a bug in Frontier
+		target.set (@localcopy);
+		s = user.html.renderers.sampleScriptRenderer (@localcopy);
+		s = string.replaceall (s, "<td height=17>", "<td>");
+		s = "<blockquote>" + s + "</blockquote>"}
+	else {
+		s = string (adr^);
+		s = html.processMacros (s)};
+	return (s)}
+
+

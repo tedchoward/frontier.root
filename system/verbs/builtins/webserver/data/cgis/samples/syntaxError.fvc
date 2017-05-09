@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webserver.data.cgis.samples.syntaxError
+
+on syntaxError (adrParams) {
+	return ("}
+
+

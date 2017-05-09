@@ -1,0 +1,13 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.Frontier.tools.data.virginWebsite.["#template"]
+
+<html>
+	<head>
+		<title><%title%></title>
+		</head>
+	<body>
+		<%bodytext%>
+		</body>
+	</html>
+
+
+

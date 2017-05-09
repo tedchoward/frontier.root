@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.setVisible
+
+on setVisible (path, setting) {
+	kernel (file.setVisible)}
+
+

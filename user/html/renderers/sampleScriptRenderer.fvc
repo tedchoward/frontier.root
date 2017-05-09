@@ -1,0 +1,38 @@
+FrontierVcsFile:3:scpt:user.html.renderers.sampleScriptRenderer
+
+on sampleScriptRenderer (adroutline) {
+	op.setDisplay (false);
+	op.firstsummit ();
+	op.fullexpand ();
+	local (level = 0);
+	on visit () {
+		loop {
+			local (hassubs = op.countSubs (1) > 0);
+			local (s = "");
+			s = s + "<table><tr>";
+			if level > 0 { «add a dummy cell to do the indentation
+				local (indentPixels = 15 * level);
+				try {indentPixels = 17 * level};
+				local (spacer = html.data.standardMacros.spacePixels (indentPixels));
+				s = s + "<td valign=top align=left>" + spacer + "</td>"};
+			local (linetext = op.getlinetext ());
+			linetext = string.replaceAll (linetext, "<", "&lt;");
+			if hassubs {
+				linetext = "" + linetext + ""};
+			s = s + "<td>";
+			s = s + "<code>" + linetext + "</td></tr></table>";
+			op.setlinetext (s);
+			window.msg (s);
+			if hassubs {
+				op.go (right, 1);
+				level++;
+				visit ();
+				level--;
+				op.go (left, 1)};
+			if not op.go (down, 1) {
+				break}}};
+	visit ();
+	op.setDisplay (true);
+	return (string (adroutline^))}
+
+

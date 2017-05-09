@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.bookmarksMenu.openFile
+
+on openFile (f) {
+	Frontier.tools.windowTypes.commands.open (f)}
+
+

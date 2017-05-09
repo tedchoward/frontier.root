@@ -1,0 +1,39 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.simpleDb.query
+
+on query (domain, expression, adrlist, adrerrorstring=nil) {
+	«Changes
+		«1/12/08; 10:14:09 AM by DW
+			«Created.
+			«http://docs.amazonwebservices.com/AmazonSimpleDB/2007-11-07/DeveloperGuide/SDB_API_Query.html
+	local (nexttoken = nil);
+	adrlist^ = {};
+	loop {
+		local (t, xstruct);
+		new (tabletype, @t);
+		t.DomainName = domain;
+		t.MaxNumberOfItems = 250;
+		t.QueryExpression = expression;
+		if nexttoken != nil {
+			t.NextToken = nexttoken};
+		if not s3.simpleDb.httpClient ("Query", @t, adrerrorstring, @xstruct) { //error
+			return (false)};
+		«scratchpad.xstruct = xstruct
+		nexttoken = nil;
+		local (adrresponse = xml.getaddress (@xstruct, "QueryResponse"));
+		local (adrresult = xml.getaddress (adrresponse, "QueryResult"), adr);
+		for adr in adrresult {
+			if nameof (adr^) endswith "ItemName" {
+				adrlist^ = adrlist^ + adr^}
+			else {
+				if nameof (adr^) endswith "NextToken" {
+					nexttoken = adr^}}};
+		if nexttoken == nil { //hit the end of the list
+			return (true)}}};
+bundle { //test code
+	local (es);
+	if query ("flickrFanData", "['flickrUserName' = 'scriptingnews']", @scratchpad.querylist, @es) {
+		edit (@scratchpad.querylist)}
+	else {
+		dialog.alert (es)}}
+
+

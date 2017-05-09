@@ -1,0 +1,16 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.xml.thread.readme
+
+// 6/10/11; 7:58:20 AM by DW
+	What happens when multiple threads need to access the same xstruct, and that xstruct can change?
+	This comes up in the world outline. And it causes crashes when you update any of the outlines, the root outline or an included outline. A brief narrative below...
+		Crashes happen when some bit of code, in service of an HTTP request, is walking an XML structure.
+		Minding its own business.
+		When another thread comes along, also servicing an HTTP request, asks for the same XML structure, only to find that the source has changed!
+		No problem I know what to do. Recompile the XML structure (and in doing so release all the memory associated with the old one).
+		Unfortunately no one told the first guy.
+		So he walks off a data structure and into...
+			OBLIVION!!!
+	So, when an outline updates, call newVersion, and when you want to access an xstruct call accessStruct, and periodically call garbageCollect.
+
+
+

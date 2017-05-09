@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.quit
+
+on quit () {
+	return (required.quitApplication (Eudora.id))}
+
+

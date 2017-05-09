@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.script.subOutlineToScript
+
+on subOutlineToScript (adrnode, adrscript) {
+	«Changes
+		«6/25/11; 10:42:15 AM by DW
+			«adrnode points to a node in an xstruct of an outline that contains text that's to be stored in a script object. This functionality is needed in worldOutline.root, but it's possible it will be needed again in the future. 
+	local (xstruct = script.data.xStructTemplate, adrsub, ct = 1, name);
+	local (adropml = xml.getaddress (@xstruct, "opml"));
+	local (adrbody = xml.getaddress (adropml, "body"));
+	for adrsub in adrnode {
+		if nameof (adrsub^) endswith "outline" {
+			name = string.padwithzeros (ct++, 5);
+			adrbody^.[name + "000\toutline"] = adrsub^}};
+	local (opmltext = xml.decompile (@xstruct));
+	op.xmltooutline (opmltext, adrscript, objtype:scripttype)}
+«bundle //test code
+	«local (adrnode = @workspace.getscriptfromsubs.xstruct.["00003000\topml"].["00003000\tbody"].["00001000\toutline"].["00002000\toutline"])
+	«local (tc = clock.ticks ())
+	«for i = 1 to 60
+		«subOutlineToScript (adrnode, @scratchpad.somescript)
+	«dialog.alert (clock.ticks () - tc)
+
+

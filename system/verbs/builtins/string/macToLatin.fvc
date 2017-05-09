@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.macToLatin
+
+on macToLatin (s) { //new in 7.0
+	kernel (string.macToLatin)}
+
+

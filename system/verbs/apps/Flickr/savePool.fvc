@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.savePool
+
+on savePool (idPool, folder) {
+	«Changes
+		«8/11/10; 11:10:27 AM by DW
+			«Save all the pictures in a pool to a folder on your disk.
+	local (poolphotos, adrphoto);
+	Flickr.groups.pools.getAllPhotos (idPool, @poolphotos);
+	for adrphoto in @poolphotos {
+		try {flickr.savePhoto (adrphoto^.id, folder)}}};
+bundle { //test code
+	savePool ("1447436@N22", "Ohio:testing:HTC Incredible Pool:")}
+
+

@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:suites.FilemakerLib.getCellNames
+
+on getCellNames (db, theLayout = 0, reportError = false) {
+	on doIt () {
+		with objectModel, filemaker {
+			return (get (database [db].layout [theLayout].record[1].cell [all].name))}};
+	if reportError {
+		return (doIt ())}
+	else {
+		try {
+			return (doIt ())}
+		else {
+			return (false)}}}
+
+

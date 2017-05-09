@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.pikeRenderer.drivers.html.indent
+
+on indent (indentpixels, adrprestring, adrpoststring) {
+	adrprestring^ =  "<table><tr><td width=\"" + indentpixels + "\">&nbsp;</td><td>" + adrprestring^;
+	adrpoststring^ = adrpoststring^ + "</td></tr></table>"}
+
+

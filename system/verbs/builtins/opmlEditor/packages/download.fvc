@@ -1,0 +1,40 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.packages.download
+
+on download (packagename=nil, flreport=true) {
+	«Changes
+		«3/15/12; 6:05:14 PM by DW
+			«Change the test code to install the "bootstrap2" package. 
+		«2/23/12; 4:34:17 PM by DW
+			«New optional param, packagename. If non-nil, don't prompt the user for the package, just import the one with that name. If flreport is true, a dialog appears at the end saying how many parts were imported.
+		«2/23/12; 10:58:49 AM by DW
+			«Created.
+	local (adrdata = opmleditor.init (), ct, bits, atts, s3path);
+	bundle { //set s3path
+		if packagename == nil {
+			if not dialog.ask ("Package name?", @adrdata^.stats.lastPackageName) {
+				return};
+			packagename = adrdata^.stats.lastPackageName}
+		else {
+			adrdata^.stats.lastPackageName = packagename};
+		s3path = adrdata^.prefs.packagesPath + packagename + "/"};
+	on readfile (fname) {
+		return (tcp.httpreadurl ("http:/" + s3path + fname, 3, false))};
+	ct = number (readfile ("count.txt"));
+	for i = 1 to ct {
+		bits = readfile ("part" + string.padwithzeros (i, 3));
+		msg (sizeof (bits));
+		fatPages.getPageAtts (@bits, @atts);
+		local (x = atts.objectType, objectType);
+		local (prefix = "application/x-frontier-");
+		objectType = string.delete (x, 1, sizeof (prefix));
+		local (data = binary (base64.decode (atts.pageData)));
+		setBinaryType (@data, objectType);
+		table.surePath (string (atts.adrPageData));
+		«backupPart (address (atts.adrPageData)) //7/26/08 by DW
+		unpack (@data, atts.adrPageData)};
+	if flreport {
+		dialog.notify (ct + " new or update parts installed.")}};
+bundle { //test code
+	download ("bootstrap2")}
+
+

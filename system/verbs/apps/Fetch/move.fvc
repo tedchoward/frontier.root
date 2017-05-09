@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.move
+
+on move (obj, moveTo) { «Move an object
+	return (core.move (Fetch.id, obj, moveTo))}
+
+

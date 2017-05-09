@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:suites.webEdit.fixGuestDbAdr
+
+on fixGuestDbAdr (adr) { //possibly convert for guest database
+	« 9/29/98; 2:43:24 PM by DW
+		«Turn something like: ["C:\\Palm Springs\\Websites\\guest2.root"].["#enhancedState"]
+		«Into: (websites\guest2.root).["#enhancedState"]
+		«The server will understand the request to apply to a 
+			«file in the same location relative to the Frontier app.
+	if not table.inGuestDatabase (adr) {
+		return (adr)};
+	local (alist = string.parseaddress (adr));
+	local (s = string.lower (alist [1])); //file path to the root
+	s = "(" + s - string.lower (frontier.pathString) + ")";
+	ix = string.patternMatch ("].", adr);
+	s = s + string.delete (adr, 1, ix);
+	return (s)}
+«bundle //test code
+	«clipboard.putvalue (fixGuestDbAdr (@["C:\\Palm Springs\\Websites\\guest2.root"].["#enhancedState"]))
+
+

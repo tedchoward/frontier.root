@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.date.dayOfWeek
+
+on dayOfWeek (param1) {
+	kernel (date.dayOfWeek)}
+
+

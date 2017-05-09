@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.server.rpcHandlers.getOneOutline
+
+on getOneOutline (username, password, userWhoseOutlineIWant) {
+	«Changes
+		«9/11/10; 3:32:10 PM by DW
+			«Created. 
+	io.server.validatePassword (username, password);
+	return (io.server.getOneOutline (userWhoseOutlineIWant))}
+
+

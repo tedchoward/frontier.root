@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.thread.sleepTicks
+
+on sleepTicks (ticks) { //6.1
+	kernel (thread.sleepTicks)}
+
+

@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.windowTypes.commands.openNotepad
+
+on openNotepad () {
+	«Open the Notepad for editing. Called from the Edit menu.
+		«10/16/00; 7:37:42 PM by PBS
+	edit (@workspace.notepad, "Notepad")}
+
+

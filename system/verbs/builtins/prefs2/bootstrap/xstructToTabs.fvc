@@ -1,0 +1,87 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.prefs2.bootstrap.xstructToTabs
+
+on xstructToTabs (adrparent, lineStart="", lineEnd="", flFieldSet=false, adratts=nil) {
+	«Changes
+		«8/3/13; 9:58:57 AM by DW
+			«Change the way IDs are generated for panels. 
+				«1. They now begin with "id".
+				«2. We throw a random string at the end of each that's constant across all the elements in this tab set, so as not to conflict with tabs in other sets that have the same name. 
+					«https://groups.google.com/forum/?fromgroups#!topic/smallpicture-user/wy09PaODYEs
+		«8/5/12; 10:39:02 AM by DW
+			«Add \n after \r so tabs are view-sourceable in Chrome. 
+		«3/14/12; 9:28:06 AM by DW
+			«Convert to Bootstrap 2.0 tabs.
+		«1/23/12; 1:32:53 PM by DW
+			«Set flTab attribute true around call to html.directory.viewnodetype. That way callbacks that have templates can omit them when rendering inside a tab.
+		«1/14/12; 11:17:06 AM by DW
+			«New optional param adratts.
+		«1/14/12; 10:56:59 AM by DW
+			«New optional param flFieldSet. If true, we surround each panel with a <fieldset> element.
+		«1/13/12; 7:33:32 PM by DW
+			«Created.
+	local (htmltext = "", indentlevel = 0, panelTemplate, randomnum = random (1, 1000));
+	on add (s) {
+		htmltext = htmltext + (string.filledstring ("\t", indentlevel) + s + "\r\n");};
+	on decode (s) {
+		return (xml.entitydecode (s, true))};
+	on gettext (adrx) {
+		return (string.replaceall (decode (adrx^.["/atts"].text), "<br>", ""))};
+	on alphaOnly (s) {
+		local (i);
+		for i = 1 to sizeof (s) {
+			if not string.isAlpha (s [i]) {
+				s [i] = ' '}};
+		return (s)};
+	paneltemplate = string (prefs2.bootstrap.panelTemplate);
+	add ("<div class=\"divTabsFromOutline\">"); indentlevel++;
+	add ("<div class=\"tabbable\">"); indentlevel++;
+	bundle { //first pass, generate panel list
+		local (adrpanel, flfirst = true);
+		add ("<ul class=\"nav nav-tabs\" data-tabs=\"tabs\">"); indentlevel++;
+		for adrpanel in adrparent {
+			if nameof (adrpanel^) endswith "outline" {
+				local (panelname = gettext (adrpanel), active="");
+				if flfirst {
+					active = " class=\"active\" ";
+					flfirst = false};
+				add ("<li" + active + "><a href=\"#" + string.innercasename ("id " + alphaOnly (panelname) + randomnum) + "\"  data-toggle=\"tab\">" + panelname + "</a></li>")}};
+		add ("</ul>"); indentlevel--};
+	bundle { //second pass, generate contents of panels
+		local (adrpanel, flfirst = true);
+		add ("<div id=\"my-tab-content\" class=\"tab-content\">"); indentlevel++;
+		for adrpanel in adrparent {
+			if nameof (adrpanel^) endswith "outline" {
+				local (panelname = gettext (adrpanel), active = "", t);
+				if flfirst {
+					active = "active ";
+					flfirst = false};
+				add ("<div class=\"" + active + "tab-pane\" id=\"" + string.innercasename ("id " + alphaOnly (panelname) + randomnum) + "\">"); indentlevel++;
+				if flFieldSet {
+					add ("<fieldset>"); indentlevel++};
+				new (tabletype, @t);
+				t.panelTitle = panelname;
+				bundle { //set t.panelText
+					local (flhavepaneltext = false);
+					if adratts != nil {
+						adratts^.flTab = true; //1/23/12 by DW
+						if html.directory.viewnodetype (adrpanel, adratts, @t.panelText) {
+							flhavepaneltext = true};
+						adratts^.flTab = false}; //1/23/12 by DW
+					if not flhavepaneltext {
+						local (adrline);
+						t.panelText = "";
+						for adrline in adrpanel {
+							if nameof (adrline^) endswith "outline" {
+								t.panelText = t.panelText + lineStart + gettext (adrline) + lineEnd}}}};
+				add (string.multiplereplaceall (panelTemplate, @t, false, "<%", "%>"));
+				if flFieldSet {
+					add ("</fieldset>"); indentlevel++};
+				add ("</div>"); indentlevel--}};
+		add ("</div>"); indentlevel--};
+	add ("</div>"); indentlevel--;
+	add ("</div>"); indentlevel--;
+	return (htmltext)}
+«bundle //test code
+	«xstructToTabs ()
+
+

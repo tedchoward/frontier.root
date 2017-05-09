@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.clickers.typeFAT
+
+on typeFAT (path) {
+	return (Frontier.clickers.typeFATP(path))}
+
+

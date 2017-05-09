@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.rpcHandlers.news.setNews
+
+on setNews (username, password, sitename, newstext) {
+	return (mainResponder.news.setTodaysNews (username, password, sitename, newstext))}
+
+

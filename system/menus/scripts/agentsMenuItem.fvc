@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.agentsMenuItem
+
+«Sun, Sep 22, 1996 at 6:21:39 AM by DW
+local (s);
+if defined (system.compiler.threads.agents) {
+	s = "Disable Agents"}
+else {
+	s = "Enable Agents"};
+s = s + "...";
+return (s)
+
+

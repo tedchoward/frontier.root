@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.french.strings.discuss.cantReceiveMsgBadAuthentication
+
+Ce message ne peut &ecirc;tre accept&eacute; car il ne poss&egrave;de pas l'information d'authentification ad hoc; [[explanation]].
+
+

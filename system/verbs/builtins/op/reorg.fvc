@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.reorg
+
+on reorg (dir, count) {
+	kernel (op.reorg)}
+
+

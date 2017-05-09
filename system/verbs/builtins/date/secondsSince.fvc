@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.date.secondsSince
+
+on secondsSince (when) {
+	«Changes
+		«4/12/13; 7:03:32 PM by DW
+			«Created.
+	return (number (clock.now () - when))}
+«bundle //test code
+	«dialog.alert (secondsSince (date.yesterday (clock.now ())))
+
+

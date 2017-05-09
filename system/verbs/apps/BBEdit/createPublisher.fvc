@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.createPublisher
+
+on createPublisher (obj, edition = nil) { «Create a publisher
+	return (misc.createPublisher (BBEdit.id, obj, edition))}
+
+

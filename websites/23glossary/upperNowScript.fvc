@@ -1,0 +1,5 @@
+FrontierVcsFile:3:scpt:websites.["#glossary"].upperNowScript
+
+return (string.upper (clock.now ()))
+
+

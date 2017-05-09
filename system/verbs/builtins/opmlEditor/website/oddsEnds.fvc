@@ -1,0 +1,33 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.opmlEditor.website.oddsEnds
+
+.signInFormTextInput {
+	font-style: bold;
+	font-size: 140%;
+	}
+.signInFormSubmit {
+	width:70px;
+	height:23px;
+	text-align:center;
+	cursor:pointer;
+	border:outset 1px #ccc;
+	background:#999;
+	color:#404048;
+	font: 10px "Lucida Grande", Helvetica, Arial, sans-serif;
+	padding: 1px 2px;
+	background:url(images/buttonBackground.gif) repeat-x left top;
+	}
+table.signIn {
+	width: 60%;
+	}
+.prefsTable th, .prefsTable td {
+	border: 0;
+	font-size: 140%;
+	line-height: 100%;
+	}
+.prefsTable td.input: {
+	height: 100%;
+	padding: 0;
+	border: 0;
+
+
+

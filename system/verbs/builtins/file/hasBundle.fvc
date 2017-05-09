@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.hasBundle
+
+on hasBundle (path) {
+	kernel (file.hasBundle)}
+
+

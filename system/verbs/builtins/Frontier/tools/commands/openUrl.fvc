@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.commands.openUrl
+
+on openUrl (url) {
+	webbrowser.openUrl (url);
+	webbrowser.bringToFront ()}
+
+

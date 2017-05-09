@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.data.virginResponders.manila.condition
+
+on condition (screenname, message) {
+	return (tcp.im.builtinResponders.manila.condition (screenname, message))}
+
+

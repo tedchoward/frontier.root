@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Netscape.examples.randomCoolJump
+
+local (adrtable = @netscape.examples.coolSites, sizetable = sizeof (adrtable^));
+Netscape.openUrl (adrtable^ [random (1, sizetable)])
+
+

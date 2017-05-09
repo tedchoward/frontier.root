@@ -1,0 +1,117 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.mainResponder.data.ieHtmlEditorScript
+
+<SCRIPT>
+	<!--
+	var bLoad=false;
+	var sHeader="<BODY STYLE=\"font:12pt times new roman,times,serif\">";
+	var bMode=true;
+	var sel=null;
+	var strErr="Can't perform formatting action because the editor isn't in WYSIWYG mode.";
+	function format(what,opt) {
+		if (!bMode) {
+			alert(strErr);idEdit.focus();
+			return;
+			}
+		if (opt=="removeFormat") {
+			what=opt;
+			opt=null;
+			}
+		if (bMode) {
+			if (opt==null)
+				idEdit.document.execCommand(what);
+			else
+				idEdit.document.execCommand(what,"",opt);
+			var s=idEdit.document.selection.createRange(),p=s.parentElement()  
+			if ((p.tagName=="FONT") && (p.style.backgroundColor!=""))
+				p.outerHTML=p.innerHTML;
+			idEdit.focus();
+			} 
+		sel=null
+		}
+	function getEl(sTag,start) {
+		while ((start!=null) && (start.tagName!=sTag))
+			start = start.parentElement;
+		return start;
+		}
+	function createLink() {
+		if (!bMode)
+		{
+			alert(strErr);
+			idEdit.focus();
+			return;
+		}
+		var isA = getEl("A",idEdit.document.selection.createRange().parentElement());
+		var str=prompt("Enter a URL to link to:",isA ? isA.href : "http:\/\/");
+		if ((str!=null) && (str!="http://"))
+		{
+			if (idEdit.document.selection.type=="None")
+			{
+				var sel=idEdit.document.selection.createRange();
+				sel.pasteHTML("<A HREF=\""+str+"\">"+str+"</A> ");
+				sel.select();
+			}
+			else
+				format("CreateLink",str);
+		}
+		else
+			idEdit.focus();
+		}
+	function setMode(bNewMode) {
+		if (bNewMode!=bMode) {
+			if (bNewMode) {
+				var sContents=idEdit.document.body.innerText;
+				idEdit.document.open();
+				idEdit.document.write(sHeader);
+				idEdit.document.close();
+				idEdit.document.body.innerHTML=sContents;
+				}
+			else {
+				var fonts=idEdit.document.body.all.tags("FONT");
+				
+				for (var i=0;i<fonts.length;i++)
+					if (fonts[i].style.backgroundColor!="")
+						fonts[i].outerHTML=fonts[i].innerHTML;
+				var sContents=idEdit.document.body.innerHTML;
+				idEdit.document.open();
+				idEdit.document.write("<BODY style=\"font:10pt courier, monospace\">");
+				idEdit.document.close();
+				idEdit.document.body.innerText=sContents;
+				}
+			bMode=bNewMode;
+		\//        for (var i=0;i<htmlOnly.children.length;i++)
+		\//            htmlOnly.children[i].disabled=(!bMode);
+		}
+		modeA.className=bMode?"current":"";
+		modeB.className=bMode?"":"current";
+		idEdit.focus();
+		}
+	\//-->
+	</SCRIPT>
+<script for=window event=onload>
+	<!--
+	idEdit.document.designMode='On';
+	bLoad=true;
+	idBox.style.visibility='';
+	if (messageText.innerText != '') {
+		try {
+			document.frames('idEdit').document.write (messageText.innerText);
+			} catch (e) {}
+		}
+	\//-->
+	</script>
+<script for=window event=onresize>
+	<!--
+	\// Make sure the editor is at least 500 pixels wide.
+	if (messageText.innerText != '') {
+		try {
+			editorTable.style.width="100%";
+			if (editorTable.scrollWidth < 500) {
+				editorTable.style.width = 500;
+				}
+			} catch (e) {}
+		}
+	\//-->
+	</script>
+
+
+

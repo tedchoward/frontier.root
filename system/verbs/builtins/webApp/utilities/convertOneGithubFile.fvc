@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webApp.utilities.convertOneGithubFile
+
+on convertOneGithubFile () {
+	«Changes
+		«10/1/11; 7:42:13 AM by DW
+			«Having converted all the github files, now we're going to need to convert them one at a time as new ones get deployed. This utility script does that.
+	local (s3path = user.prefs.githubMirrorPath);
+	if dialog.ask ("Source url?", @user.prefs.urlgithubsource) {
+		local (fname = string.lastfield (user.prefs.urlgithubsource, "/"), path = s3path + fname);
+		s3.newobject (path, tcp.httpreadurl (user.prefs.urlgithubsource));
+		scratchpad.githuburl = "http:/" + path;
+		if dialog.twoway (scratchpad.githuburl, "Go", "No") {
+			webbrowser.openurl (scratchpad.githuburl)}}};
+bundle { //test code
+	convertOneGithubFile ()}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.AnArchie.undo
+
+on undo () { «undo the last operation
+	return (appleEvent (AnArchie.id, 'core', 'undo'))}
+
+

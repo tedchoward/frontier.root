@@ -1,0 +1,22 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.searchUserLand
+
+on searchUserLand (searchString, site=nil) {
+	local (server = "search.userland.com");
+	local (path = "/default");
+	
+	if site != nil { //set the path
+		path = "/advanced"};
+	
+	local (url = "http://" + server + path + "?");
+	url = url + "s=1&m=25&q=" + string.urlEncode (searchString);
+	
+	if site != nil { //add a site parameter
+		url = url + "&site=" + string.urlEncode (site)};
+	
+	«Run the search in the web browser.
+	webBrowser.openUrl (url);
+	webBrowser.bringToFront ();
+	
+	return (true)}
+
+

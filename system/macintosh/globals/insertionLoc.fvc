@@ -1,0 +1,22 @@
+FrontierVcsFile:3:scpt:system.macintosh.globals.insertionLoc
+
+on insertionLoc (pos, obj) { «create a typeInsertionLoc Apple event record
+	local (loc, x);
+	
+	«bundle «2.0-compatible code
+		«local (loc, x)
+		«
+		«putAppleListItem (objspec (obj), 'kobj', @loc) «keyAEObject
+		«x = enum (pos) «typeEnumeration
+		«putAppleListItem (x, 'kpos', @loc) «keyAEPosition
+		«
+		«loc = binary (string.delete (loc, 1, 16))
+		«setbinarytype (@loc, 'insl')
+		«
+		«return (loc)
+	
+	loc = {'kpos': enum (pos), 'kobj' : objspec (obj)};
+	
+	return (coerceValue (loc, 'insl'))}
+
+

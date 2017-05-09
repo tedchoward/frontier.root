@@ -1,0 +1,22 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.editOutlineButton.show
+
+on show () {
+	«Changes
+		«3/9/12; 2:49:24 PM by DW
+			«Created.
+	local (adrdata = opmleditor.worldoutline.init (), pta = html.getpagetableaddress (), t);
+	new (tabletype, @t);
+	webserver.parseargs (pta^.searchargs, @t);
+	
+	local (adrserver = @adrdata^.servers.[t.editorialDomain]);
+	if t.username == adrserver^.username {
+		«scratchpad.t = t; edit (@scratchpad.t)
+		local (s = string (opmlEditor.data.outlines.editOutlineForm));
+		s = string.multiplereplaceall (s, @t, false, "<%", "%>");
+		return (html.buildJavascriptInclude (s))}
+	else {
+		return ("")}};
+bundle { //test code
+	show ()}
+
+

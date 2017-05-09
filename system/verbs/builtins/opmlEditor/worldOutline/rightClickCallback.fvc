@@ -1,0 +1,32 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.rightClickCallback
+
+on rightClickCallback (adrmenubar, adratts) {
+	«Changes
+		«7/20/12; 10:22:16 AM by DW
+			«Added much more direct way of doing this using menu.addsubmenu.
+		«6/9/12; 5:58:04 PM by DW
+			«Called from Frontier.tools.nodeTypes.callbacks.opRightClick when the user right-clicks on a headline in a worldoutline outline window.
+	op.insert ("-", down);
+	menu.addsubmenu (adrmenubar, "Right-Click Menu", @opmlEditor.data.worldOutline.rightClickMenu);
+	«scratchpad.mymenu = adrmenubar^
+	return;
+	};
+	«on addCommand (itemName, scriptString)
+		«menu.addMenuCommand (adrMenu, menuName, itemName, scriptString)
+	«on addTypeCommand (theCommand, theType)
+		«addCommand (theCommand, "opmlEditor.menuCommands.outlinerSetTypeTo (\"" + theType + "\")")
+	«addTypeCommand ("Blogpost", "blogpost")
+	«addTypeCommand ("Code", "code")
+	«addTypeCommand ("Directory", "directory")
+	«addTypeCommand ("HTML", "html")
+	«addTypeCommand ("Outline", "outline")
+	«addTypeCommand ("Photo", "photo")
+	«addTypeCommand ("Redirect", "redirect")
+	«addTypeCommand ("River", "river")
+	«addTypeCommand ("RSS", "rss")
+	«addTypeCommand ("Tabs", "tabs")
+	«addTypeCommand ("ThumbList", "thumbList")
+bundle { //test code
+	rightClickCallback ()}
+
+

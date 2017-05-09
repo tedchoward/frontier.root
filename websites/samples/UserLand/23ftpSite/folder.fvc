@@ -1,0 +1,5 @@
+FrontierVcsFile:3:scpt:websites.samples.UserLand.["#ftpSite"].folder
+
+return (html.getWebsitesFolder () + "UserLand" + file.getPathChar ())
+
+

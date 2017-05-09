@@ -1,0 +1,65 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.httpPostMultipart
+
+on httpPostMultipart (apiurl, f, username="", password="", adrparams=nil, filePartName="media_file", adrCode=nil) {
+	«Changes
+		«6/10/09; 3:55:16 PM by DW
+			«New optional param, adrCode, returns the HTTP result code, 200, 301, 404, etc. Added so we can check the code from tumblr.newPost.
+		«5/1/09; 12:47:32 PM by DW
+			«Cribbed from pownce.newPost. Once and for all, a multipart file uploader that can be reused.
+	local (server, path, boundary);
+	bundle { //set server, path
+		local (urllist = string.urlsplit (apiurl));
+		server = urllist [2];
+		path = urllist [3]};
+	bundle { //build boundary
+		local (i);
+		boundary = "";
+		for i = 1 to 5 {
+			boundary = boundary + string.innerCaseName (states.nthState (random (1, 50)))};
+		boundary = string.hashmd5 (boundary)};
+	local (type = "multipart/form-data; boundary=" + boundary, body = "");
+	bundle { //build body
+		local (indentlevel = 0);
+		on add (s) {
+			body = body + string.filledstring ("\t", indentlevel) + s + "\r\n"};
+		if adrparams != nil {
+			local (adr);
+			for adr in adrparams {
+				add ("--" + boundary);
+				add ("Content-Disposition: form-data; name=\"" + nameof (adr^) + "\"");
+				add ("");
+				add (adr^)}};
+		bundle { //add the file
+			if f != nil {
+				local (type);
+				add ("--" + boundary);
+				add ("Content-Disposition: form-data; name=\"" + filePartName + "\"; filename=\"" + file.filefrompath (f) + "\"");
+				bundle { //set type
+					local (ext = string.lastfield (f, "."));
+					type = "text/plain";
+					try {type = user.webserver.prefs.ext2MIME.[ext]}};
+				add ("Content-Type: " + type);
+				add ("");
+				add (string (file.readwholefile (f)))};
+			add ("--" + boundary + "--")}};
+	«body = string.delete (body, sizeof (body) - 2, 2)
+	«wp.newtextobject (body, @scratchpad.body)
+	local (result = tcp.httpclient ("POST", server, 80, path, datatype:type, data:body, debug:false, username:username, password:password, timeOutTicks:60*60*60));
+	«wp.newtextobject (result, @scratchpad.posttext)
+	if adrCode != nil { //6/10/09 by DW
+		adrCode^ = tcp.httpGetStatusCode (result)};
+	return (string.httpResultSplit (result))}
+«bundle //test code
+	«local (f, apiurl, username, password, params)
+	«new (tabletype, @params)
+	«f = "ohio:Original.jpg"
+	«username = "davewinertest"
+	«password = system.temp.dwpw
+	«params.username = username
+	«params.password = password
+	«apiurl = "http://posterous.com/api/upload"
+	«httpPostMultipart (apiurl, f, "", "", adrparams:@params, filePartName:"media")
+	«apiurl = "http://twitpic.com/api/upload"
+	«httpPostMultipart (apiurl, f, "", "", adrparams:@params, filePartName:"media")
+
+

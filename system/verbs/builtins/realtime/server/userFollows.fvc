@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.server.userFollows
+
+on userFollows (user1, user2, adrupdate) {
+	«Changes
+		«9/1/10; 5:58:02 PM by DW
+			«Created. If any of the callbacks return true, we return true. 
+	local (adrdata = realtime.init (), adrscript);
+	local (adrcallbacks = @adrdata^.server.callbacks.userFollows);
+	for adrscript in adrcallbacks {
+		while typeof (adrscript^) == addresstype {
+			adrscript = adrscript^};
+		if adrscript^ (user1, user2, adrupdate) {
+			return (true)}};
+	return (false)}
+
+

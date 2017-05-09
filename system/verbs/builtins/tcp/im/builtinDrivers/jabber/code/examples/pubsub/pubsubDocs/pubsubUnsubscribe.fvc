@@ -1,0 +1,24 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.tcp.im.builtinDrivers.jabber.code.examples.pubsub.pubsubDocs.pubsubUnsubscribe
+
+#title "pubsubUnsubscribe"
+jabber.messages.pubsubUnsubscribe
+	Syntax
+		jabber.messages.pubsubUnsubscribe ( dest = "", unsubscribeFrom = nil, nsList = {}, id = nil, connection = default )
+	Params
+		dest is the destination of the presence message. (Despite the name, 'presence' is also used as subscribe requests.)
+		unsubscribeFrom is the name of the publisher to which you are subscribing. (I think that's what this is; at any rate it's the &quot;to&quot; attribute of the &quot;unsubscribe&quot; tag.)
+		nsList is a list of strings, corresponding to the specific subscriptions you wish to request.
+		id is an optional idTable.
+		connection is the address of the connection table corresponding to the connection you wish to send the subscription request on, and thereby receive publish notifications on. It defaults to the framework-maintained connection.
+	Action
+		Sends the pubsub-unsubscription message described to the server or user.
+	Returns
+		Nothing
+	Examples
+		&nbsp;&nbsp;&nbsp;&#187; jabber.messages.pubsubUnsubscribe ( "SomeUser@jabber.aserver.com/resource1", "statusReport", \{&quot;webserver&quot;, &quot;emailserver&quot;\})
+	Notes
+		See <a href='"http://www.jabber.org/jeps/jep-0024.html">JEP 24</a> for more information about the pubsub system.
+		This is currently implemented as an async function, and any return values are ignored. That can be corrected later, but this is not as importent as the pubsubSubscribe case: Unsubscriptions can't really fail (in a detectable manner).
+
+
+

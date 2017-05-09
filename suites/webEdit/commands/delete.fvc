@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:suites.webEdit.commands.delete
+
+local (adrObject);
+
+bundle { //get the currently selected object
+	adrObject = webEdit.getSelectedObject ();
+	if adrObject == false {
+		return (false)}};
+
+webEdit.deleteObject (adrObject);
+
+webEdit.notify (adrObject + " has been deleted.");
+return (true)
+
+

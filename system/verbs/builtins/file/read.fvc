@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.read
+
+on read (path, count) {
+	kernel (file.read)}
+
+

@@ -1,0 +1,40 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.addOutlineToPrefs
+
+on addOutlineToPrefs (adroutline) {
+	«Changes
+		«9/3/09; 12:50:30 PM by DW
+			«The change we made yesterday is a bit more complicated. If we're re-installing River2.root, the old prefs outline will already be there, so first we have to remove it and then do the installation. Otherwise there's an address error when the prefs system rebuilds. 
+		«9/2/09; 1:20:22 PM by DW
+			«Allow the outline to be a string representation of the address of an outline. This allows the prefs outline to be stored within the tool suite for easy updating. Also allows the same prefs outline to be used in the system-wide prefs and in the Prefs command for the tool. Used in river2.root.
+		«3/4/09; 5:08:17 PM by DW
+			«Empty out the two Prefs caches, to force them to recalc.
+		«3/4/09; 5:04:32 PM by DW
+			«Account for the possibility that an increment of user.opmlEditor.prefs.serialNum got lost, and don't overwrite an already-existing entry in the toolsWithPrefs table. This was happening on my development machine, and who knows if it was happening elsewhere.
+		«8/8/08; 2:48:42 PM by DW
+			«Add the outline to the table of Prefs outlines for Tools. Does nothing if it's already there, so you can call it unconditionally from an init script.
+	bundle { //9/2/09 by DW
+		bundle { //if we're re-installing a tool the old prefs outline might already be there, 9/3/09 by DW
+			local (i, adr);
+			for i = sizeof (user.opmlEditor.prefs.toolsWithPrefs) downto 1 {
+				adr = @user.opmlEditor.prefs.toolsWithPrefs [i];
+				if adr^ == adroutline {
+					delete (adr)}}};
+		if typeof (adroutline^) == stringtype {
+			adroutline = address (adroutline^)}};
+	local (adr);
+	for adr in @user.opmlEditor.prefs.toolsWithPrefs {
+		if adr^ == adroutline { //it's already there
+			return}};
+	loop { //3/4/09 by DW
+		local (name = string.padwithzeros (user.opmlEditor.prefs.serialNum++, 5));
+		local (adradr = @user.opmlEditor.prefs.toolsWithPrefs.[name]);
+		if not defined (adradr^) {
+			adradr^ = adroutline;
+			try {new (tabletype, @system.temp.radio.prefsCache)}; //3/4/09 by DW
+			try {new (tabletype, @system.temp.radio.toolsPrefsCache)}; //3/4/09 by DW
+			filemenu.save ();
+			break}}};
+bundle { //test code
+	addOutlineToPrefs (table.getcursoraddress ())}
+
+

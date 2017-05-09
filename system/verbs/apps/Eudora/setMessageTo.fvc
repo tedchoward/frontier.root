@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.setMessageTo
+
+on setMessageTo (msgObj, msgTo) {
+	«msgTo can contain a list of email addresses separated by commas
+		«for example:
+			«bozo@bozo.com, mom@home.com, dad@home.com
+		«or it can just be a single mail address
+			«bozo@bozo.com
+	
+	with objectModel, Eudora, eventInfo {
+		return (core.set (id, msgObj.field ["To"], msgTo))}}
+
+

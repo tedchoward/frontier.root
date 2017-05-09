@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.setMessageStatus
+
+on setMessageStatus (msgObj, msgStatus) {
+	with objectModel, Eudora, eventInfo {
+		return (core.set (id, msgObj.status, msgStatus))}}
+
+

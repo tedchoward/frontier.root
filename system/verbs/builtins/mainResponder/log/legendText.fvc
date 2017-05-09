@@ -1,0 +1,19 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.log.legendText
+
+<table cellspacing="3">
+<tr><td valign="top" width="15">1</td><td valign="top">The time the request was received.</td></tr>
+
+<tr><td valign="top">2</td><td valign="top">The HTTP code for the request. 200 means it was processed without error, 302 means it was a redirect. Note that Nirvana Server will never return an HTTP error, this is because some browsers, notably MSIE 5 on Windows, don't display the error messages, so if we want error reports from users to be meaningful, we have to handle displaying our own messages in a code 200 response.</td></tr>
+
+<tr><td valign="top">3</td><td valign="top">The number of concurrent threads running when the request was received.</td></tr>
+
+<tr><td valign="top">4</td><td valign="top">The number of seconds the request took to process. If it's greater than two seconds it's displayed bold and red. This is helping us find performance bugs in the server, and identifies places where optimization could help performance.</td></tr>
+
+<tr><td valign="top">5</td><td valign="top">The size of the response.</td></tr>
+
+<tr><td valign="top">6</td><td valign="top">The domain name or IP address of the client.</td></tr>
+
+<tr><td valign="top">7</td><td valign="top">The URL that was requested.</td></tr>
+</table>
+
+

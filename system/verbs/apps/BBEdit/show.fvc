@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.show
+
+on show (obj, showIn = nil, at = nil) { «Bring an object into view
+	return (misc.show (BBEdit.id, obj, showIn, at))}
+
+

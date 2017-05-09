@@ -1,0 +1,14 @@
+FrontierVcsFile:3:wptx:websites.samples.testFatPage
+
+#title "Fat Page Test"
+#adrPageData "suites.states"
+#isFatPage true
+This page contains a packed copy of suites.states.
+
+On a Mac: Choose the Get Page Data command from your web browser's Scripts menu to copy the object into your object database. 
+
+On Windows, do it differently. Save the page to a local disk file, and open it in Frontier using File/Open. (This method also works on a Mac.)
+
+Which way is better? Who knows!
+
+

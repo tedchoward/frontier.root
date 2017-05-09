@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.exampleRpcHandlers.getCurrentTime
+
+on getCurrentTime () {
+	return (clock.now ())}
+
+

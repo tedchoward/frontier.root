@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.newClone
+
+on newClone (script) {
+	return (cardEditor.newObject (card.types.cloneType, "", "", script))}
+
+

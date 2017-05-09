@@ -1,0 +1,28 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.untaint
+
+on untaint (s, pta=nil) {
+	«Changes
+		«6/6/11; 2:40:36 PM by DW
+			«Don't untaint if pta^.macroStartCharacters is not defined.
+		«6/6/11; 8:34:54 AM by DW
+			«General-purpose text untainter.
+	local (macrostart , replacewith);
+	if pta == nil {
+		pta = html.getpagetableaddress ()};
+	if defined (pta^.macroStartCharacters) {
+		macrostart = pta^.macroStartCharacters;
+		bundle { //set replacewith
+			replacewith = "&#" + number (macrostart [1]) + ";";
+			if sizeof (macrostart) > 1 {
+				replacewith = replacewith + string.delete (macrostart, 1, 1)}};
+		return (string.replaceAll (s, macrostart, replacewith))}
+	else {
+		return (s)}};
+bundle { //test code
+	local (pt);
+	new (tabletype, @pt);
+	pt.macroStartCharacters = "{";
+	html.setpagetableaddress (@pt);
+	dialog.alert (untaint ("oh the {clock.now ()} of the bees", @pt))}
+
+

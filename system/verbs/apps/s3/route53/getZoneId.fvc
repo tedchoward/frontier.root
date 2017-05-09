@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.getZoneId
+
+on getZoneId (namezone) {
+	«Changes
+		«6/21/11; 10:16:28 AM by DW
+			«Turn a domain name into a zone ID. We use a cache so we don't have to call Amazon every time we want to get an ID.
+	local (zones, adr, lowername = string.lower (namezone));
+	if not (lowername endswith ".") {
+		lowername = lowername + "."};
+	s3.route53.init ();
+	local (adrcache = @system.temp.route53.zoneIdCache.[lowername]);
+	if defined (adrcache^) {
+		return (adrcache^)};
+	s3.route53.listHostedZones (@zones);
+	«s3.route53.testing.zones = zones
+	for adr in @zones {
+		if lowername == string.lower (adr^.name) {
+			local (id = nameof (adr^));
+			adrcache^ = id;
+			return (id)}};
+	return ("")};
+bundle { //test code
+	dialog.alert (getZoneId ("blorkmark.net"))}
+
+

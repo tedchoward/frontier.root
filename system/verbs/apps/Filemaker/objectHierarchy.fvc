@@ -1,0 +1,162 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Filemaker.objectHierarchy
+
+application -- The application
+	Properties:
+		bestType -- The best descriptor type
+		class -- The class
+		defaultType -- The default descriptor type
+		frontmost -- Is this the frontmost application?
+		name -- The name of the application
+		version -- The version of the application
+	Elements:
+		document
+		window
+		menu
+cell -- A field value in a record or request
+	Properties:
+		bestType -- The best descriptor type
+		class -- The class
+		defaultType -- The default descriptor type
+		choices -- The value list for the cell
+		formula -- The cell's calculation formula
+		lock -- The lock status of the cell
+		name -- The cell's name
+		protection -- The protection of this cell
+		cellvalue -- The cell value
+		id -- The unique ID of the cell (the first element is the record ID, the second element is the cell ID)
+		repeatSize -- Number of repetitions of the cell
+		globalvalue -- Is this cell a global cell?
+database -- A FileMaker Pro database
+	Properties:
+		bestType -- The best descriptor type
+		class -- The class
+		defaultType -- The default descriptor type
+		name -- The name of the database
+		lock -- The current session's lock on the database
+		currentLayout -- The current layout
+		currentRecord -- The current record
+		access -- The access privileges
+	Elements:
+		layout
+		filemakerScript
+document -- A FileMaker Pro document
+	Properties:
+		bestType -- The best descriptor type
+		class -- The class
+		defaultType -- The default descriptor type
+		name -- The name of the document
+		modified -- True if the document has been modified
+	Elements:
+		window
+		database
+		filemakerScript
+field -- A FileMaker Pro field
+	Properties:
+		bestType -- The best descriptor type
+		class -- The class
+		defaultType -- The default descriptor type
+		choices -- The value list for the field
+		access -- The access privileges for the field
+		formula -- The field's calculation formula
+		id -- The unique ID of the field
+		lock -- The lock status of the field
+		name -- The name of the field
+		nullsOk -- Is this field allowed to be empty?
+		protection -- The protection of this field
+		repeats -- Is this a repeating field?
+		repeatSize -- Maximum number of repetitions of the field
+		uniqueValue -- Must this field contain unique values?
+		globalvalue -- Is this field a global field?
+	Elements:
+		cell
+filemakerScript -- A FileMaker script
+	Properties:
+		bestType -- The best descriptor type
+		class -- The class
+		defaultType -- The default descriptor type
+		name -- The name of the FileMaker Script
+		id -- The unique ID of the FileMaker Script
+layout -- A FileMaker Pro layout
+	Properties:
+		bestType -- The best descriptor type
+		class -- The class
+		defaultType -- The default descriptor type
+		name -- The name of the layout
+		id -- The unique ID of the layout
+		access -- The access privileges of the layout
+		protection -- Indicates whether the formulas of the cells in the layout can be changed
+		lock -- The lock on the layout
+		kind -- The kind of layout (View = FileMaker Pro layout, table = all fields i.e. layout 0)
+		visible -- Is the layout visible in the layouts menu?
+	Elements:
+		field
+		record
+		cell
+		request
+menu -- A menu
+	Properties:
+		bestType -- The best descriptor type
+		class -- The class
+		defaultType -- The default descriptor type
+		name -- The name of the menu
+		id -- The resource ID of the menu
+		enabled -- Is the menu enabled?
+	Elements:
+		menuItem
+		menu
+menuItem -- A menu item
+	Properties:
+		bestType -- The best descriptor type
+		class -- The class
+		defaultType -- The default descriptor type
+		name -- The name of the menu item
+		id -- The unique ID of the menu item
+		enabled -- Is the menu item enabled?
+		itemNumber -- The menu item number
+		checked -- Is the menu item checked?
+		notifyAddress -- The target ID
+record -- A FileMaker Pro record
+	Properties:
+		bestType -- The best descriptor type
+		class -- The class
+		defaultType -- The default descriptor type
+		name -- The name of the record
+		id -- The unique ID of the record
+		lock -- The lock for the record
+		protection -- Indicates whether the formulas of the cells in the record can be changed
+		access -- Indicates the access privileges for the record
+	Elements:
+		cell
+request -- A FileMaker Pro find request
+	Properties:
+		bestType -- The best descriptor type
+		class -- The class
+		defaultType -- The default descriptor type
+		name -- The name of the find request
+		id -- The unique ID of the find request
+		omitted -- True if the request is to be omitted
+	Elements:
+		cell
+window -- A FileMaker Pro document window
+	Properties:
+		bestType -- The best descriptor type
+		class -- The class
+		defaultType -- The default descriptor type
+		name -- The name of the window
+		bounds -- The bounding rectangle of the window
+		visible -- Is the window visible?
+		index -- The number of the window
+		floating -- Does the window float?
+		zoomable -- Is the window zoomable?
+		zoomed -- Is the window zoomed?
+		modal -- Is the window modal?
+		resizable -- Is the window resizable?
+		hasCloseBox -- Does the window have a close box?
+		hasTitleBar -- Does the window have a title bar?
+	Elements:
+		document
+		filemakerScript
+		database
+
+
+

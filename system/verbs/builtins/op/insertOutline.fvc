@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.insertOutline
+
+on insertOutline (adroutline, dir) { //7.0d5
+	kernel (op.insertOutline)}
+
+

@@ -1,0 +1,103 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.getHeadlineUrl
+
+on getHeadlineUrl () {
+	«Changes
+		«6/23/12; 11:24:03 AM by DW
+			«If we're in a howto, return the url of the howto document, with a # after it pointing to the section the cursor was in. This makes it possible to use the RSS+ button to announce new sections of a FAQ, for example.
+		«5/28/12; 1:58:53 PM by DW
+			«Use the name attribute if it's present.
+				«http://worknotes.scripting.com/may2012/52812ByDw/finishInvariantNames
+		«2/15/12; 10:55:21 AM by DW
+			«If the cursor is contained within a blogpost, position the cursor there before starting to generate the URL
+				«http://worknotes.scripting.com/february2012/21512ByDw/problemWithTheViewButton/
+		«2/12/12; 10:05:41 AM by DW
+			«Pass the address of the outline to getUserPrefs, so we're sure to get the info from the right server.
+		«1/31/12; 7:30:22 PM by DW
+			«When we were getting the attributes of the window we were doing it with the local outline, lo, which doesn't have any window attributes. Instead, we get the address of the outline before setting the target, and get attributes from there.
+				«http://worknotes.scripting.com/january2012/13112ByDw/errorWithViewButton/
+		«1/26/12; 11:45:06 AM by DW
+			«Convert so it works within root outlines. Also, if the cursor is on a headline with a "url" attribute, include it at the end of the path. 
+				«http://worknotes.scripting.com/january2012/12612ByDw/problemInBookmarkedOutlines/
+		«1/6/12; 7:33:05 AM by DW
+			«The cursor points to a headline. Return the URL of that line when displayed on the web. Factored from opmlEditor.worldOutline.viewHeadline.
+			«Changed the way we generate the path. If I'm pointing to the headline of a blog post, for example, I want to see that post, not the level that contains the post. However, if I am looking at a line within the post, and it has no subs, I want to view the post, not the line.
+		«1/6/12; 6:17:57 AM by DW
+			«Adapt to work with archive windows.
+		«9/19/11; 7:58:03 PM by DW
+			«Instead of depending on the domain we're sending RPC messages to, we get the domain that the user has set up from the server. It's one of the prefs they can set. 
+		«6/30/11; 5:18:06 AM by DW
+			«Fixed bug, when the cursor points to a headline that is not within a mapped domain it would place slashes in the wrong places.
+		«6/17/11; 9:59:44 AM by DW
+			«The View button now takes you to the page the bar cursor is pointing to. 
+		«6/14/11; 9:27:17 AM by DW
+			«If you get to the top and don't find a domain attribute, then open the default domain.
+		«6/11/11; 3:29:52 PM by DW
+			«If the cursor headline doesn't have a domain attribute, try the parent, until you hit one with the attribute or hit the summit. This makes it possible to click the View button even when you're on a line nested within a domain.
+		«6/8/11; 8:37:08 AM by DW
+			«Don't try to allocate a domain, if one doesn't exist, for now.
+				«if domain == nil
+					«recordname = string.getrandompassword (5)
+					«hostname = "blorkmark.com"
+					«domain = [user.opmlEditor.prefs.dnsApiServer].dnsapi.addrecord (hostname, recordname, cname, "CNAME")
+					«op.attributes.setone ("domain", domain)
+					«opmlEditor.worldOutline.saveWorkspace ()
+		«6/7/11; 8:57:59 AM by DW
+			«Created.
+	local (adroutline = window.frontmost (), path = "", lo = adroutline^, oldtarget = target.set (@lo), domain);
+	local (cursorlinetext = "", hashadd = "");
+	on hasUrlAtt () { //1/26/12 by DW
+		local (urlval);
+		return (op.attributes.getone ("url", @urlval))};
+	bundle { //pop out to blogpost (or howto) headline, if we're inside one, 2/15/12 by DW
+		local (oldcursor = op.getcursor (), type); //in case we have to go back
+		loop {
+			if op.attributes.getone ("type", @type) {
+				if type == "blogpost" {
+					break};
+				bundle { //howto -- 6/23/12 by DW
+					if type == "howto" { //6/23/12 by DW
+						if sizeof (cursorlinetext) > 0 {
+							hashadd = "#" + html.directory.getcanonicalname (cursorlinetext)};
+						break}}};
+			cursorlinetext = op.getlinetext ();
+			if not op.go (left, 1) { //not contained in a blogpost
+				op.setcursor (oldcursor);
+				break}}};
+	loop {
+		if (op.countsubs (1) > 0) or hasUrlAtt () {
+			local (thisname);
+			if not op.attributes.getone ("name", @thisname) {
+				thisname = html.directory.getcanonicalname (op.getlinetext ())};
+			path = thisname + "/" + path};
+			«path = html.directory.getcanonicalname (op.getlinetext ()) + "/" + path
+		op.attributes.getone ("domain", @domain);
+		if domain != nil {
+			if sizeof (path) > 0 {
+				local (sizefirststep = sizeof (string.nthfield (path, "/", 1)));
+				path = string.delete (path, 1, sizefirststep);
+				if path endswith "/" {
+					path = string.delete (path, sizeof (path), 1)}};
+			return ("http://" + domain + path + "/" + hashadd)};
+		if not op.go (left, 1) {
+			if not (path beginswith "/") { //6/30/11 by DW
+				path = "/" + path};
+			if path endswith "/" { //6/30/11 by DW
+				path = string.delete (path, sizeof (path), 1)};
+			
+			if window.attributes.getone ("domain", @domain, adroutline) and (sizeof (domain) > 0) {
+				return ("http://" + domain + path + "/" + hashadd)}
+			else {
+				local (userprefs, urlroot=nil);
+				window.attributes.getone ("urlOutline", @urlroot, adroutline);
+				opmlEditor.worldOutline.getUserPrefs (@userprefs, urlroot, adroutline);
+				return ("http://" + userprefs.domain + path + "/" + hashadd)};
+			
+			«dialog.alert ("Can't view the site because we didn't find a domain attribute.")
+			break}};
+		«path = html.directory.getcanonicalname (op.getlinetext ()) + "/" + path
+	target.set (oldtarget)};
+bundle { //test code
+	«dialog.alert (getHeadlineUrl ())
+	webbrowser.openurl (getHeadlineUrl ())}
+
+

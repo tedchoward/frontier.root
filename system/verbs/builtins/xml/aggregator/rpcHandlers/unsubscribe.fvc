@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.aggregator.rpcHandlers.unsubscribe
+
+on unsubscribe (url, username, password) {
+	«Changes
+		«11/3/02; 3:38:24 PM by JES
+			«Created.
+	xml.aggregator.securityForRpc (client, username, password);
+	local (adrdata = xml.aggregator.init ());
+	local (adrservices = @adrdata^.services);
+	local (adrservice = @adrservices^.[url]);
+	if not defined (adrservice^) {
+		scriptError ("Can't unsubscribe from service because the aggregator is not subscribed.")};
+	xml.aggregator.unsubscribeService (url, adrdata);
+	return (true)}
+
+

@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.digg.shortUrl.create
+
+on create (longUrl) {
+	«Changes
+		«4/2/09; 2:27:27 PM by DW
+			«Created. 
+	local (apiurl = "http://services.digg.com/url/short/create?type=xml&url=" + string.urlencode (longurl));
+	digg.init ();
+	local (xmltext = tcp.httpreadurl (apiurl), xstruct);
+	xml.compile (xmltext, @xstruct);
+	«scratchpad.xstruct = xstruct
+	local (adrshorturls = xml.getaddress (@xstruct, "shorturls"));
+	local (adrshorturl = xml.getaddress (adrshorturls, "shorturl"));
+	config.digg.stats.ctShortUrlCreates++;
+	config.digg.stats.whenLastShortUrlCreate = clock.now ();
+	return (adrshorturl^.["/atts"].short_url)};
+bundle { //test code
+	webbrowser.openurl (create ("http://www.youtube.com/watch?v=Uwlsd8RAoqI"))}
+
+

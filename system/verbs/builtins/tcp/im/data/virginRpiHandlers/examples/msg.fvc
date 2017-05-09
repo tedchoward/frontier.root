@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.data.virginRpiHandlers.examples.msg
+
+on msg (s) {
+	msg(s);
+	return}
+
+

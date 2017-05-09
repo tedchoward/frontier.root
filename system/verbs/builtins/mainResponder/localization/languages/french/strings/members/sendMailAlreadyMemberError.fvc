@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.french.strings.members.sendMailAlreadyMemberError
+
+Impossible de cr&eacute;er un nouvel usager car il y a d&eacute;j&agrave; un compte correspondant &agrave; [[mailaddress]].
+
+

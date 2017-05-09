@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.uBASE.closeFile
+
+on closeFile (fnum) {
+	return (appleEvent (ubase.id, 'UBAS', 'clsf', 'fref', short (fnum)))}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.setData
+
+on setData (obj, setDataTo) { «Set an object's data
+	return (appleEvent (Filemaker.id, 'core', 'setd', '----', objspec (obj), 'data', setDataTo))}
+
+

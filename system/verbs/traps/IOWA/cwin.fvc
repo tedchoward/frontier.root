@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.IOWA.cwin
+
+on cwin (fsFileBeingClosed) {
+	return (true)}
+
+

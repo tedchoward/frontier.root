@@ -1,0 +1,47 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.adjix.getAccountUrls
+
+on getAccountUrls (adrtable, email="", password="", apikey="") {
+	«Changes
+		«8/25/09; 10:58:32 AM by DW
+			«Url-decode the urls.
+		«8/25/09; 9:16:50 AM by DW
+			«Cribbed from system.verbs.apps.trim.
+			«http://api.adjix.com/account_urls.xml?email=xxxx@xxxx.com&password=xxxxxxxx&apiKey=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&count=50
+		«4/3/09; 9:22:11 AM by DW
+			«Created. Fills the table pointed to by the first param with the 100 most recent URLs shortened by the indicated user. The value for each URL is the number of visits. The table is sorted from lowest to highest count.
+	local (adrdata = adjix.init (), apiurl = "http://api.adjix.com/account_urls.xml", now = clock.now ());
+	apiurl = apiurl + adjix.pushParams (email, password, apikey, "?") + "&count=50";
+	new (tabletype, adrtable);
+	try {
+		local (xmltext = tcp.httpreadurl (apiurl), xstruct);
+		xml.compile (xmltext, @xstruct);
+		«scratchpad.accounturlsstruct = xstruct
+		
+		local (adrvisits = xml.getaddress (@xstruct, "visits"));
+		bundle { //check status
+			local (adrstatus = xml.getaddress (adrvisits, "status"));
+			«edit (adrstatus)
+			if string.lower (xml.getattributevalue (adrstatus, "result")) == "error" {
+				scripterror (xml.getattributevalue (adrstatus, "message"))}};
+		
+		local (adrurls = xml.getaddress (adrvisits, "urls"), adritem);
+		for adritem in adrurls {
+			if nameof (adritem^) endswith "item" {
+				local (urldest = string.urldecode (xml.getvalue (adritem, "destination")));
+				local (visits = number (xml.getvalue (adritem, "visits")));
+				adrtable^.[urldest] = visits}};
+		local (oldtarget = target.set (adrtable));
+		table.sortby ("Value");
+		target.set (oldtarget);
+		adrdata^.stats.ctGetAccountUrls++;
+		adrdata^.stats.whenLastGetAccountUrls = now}
+	else {
+		adrdata^.stats.ctGetAccountUrlsErrors++;
+		adrdata^.stats.whenLastGetAccountUrlsError = now;
+		adrdata^.stats.lastGetAccountUrlsError = tryerror;
+		scripterror (adrdata^.stats.lastGetAccountUrlsError)}};
+bundle { //test code
+	getAccountUrls (@scratchpad.urls);
+	edit (@scratchpad.urls)}
+
+

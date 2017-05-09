@@ -1,0 +1,31 @@
+FrontierVcsFile:3:optx:system.extensions.regex.docServer.easyMatch
+
+#title "regex.easyMatch"
+#renderOutlineWIth "docServerRenderer"
+Syntax
+	regex.easyMatch (pattern, s, adrTable, start)
+Params
+	pattern is a regular expression or pattern (string).
+	
+	s is a string object.
+	
+	adrTable is an optional address to a table that will receive information about the match. Default is nil.
+	
+	start is an optional number, specifying the position in the string where the match will occur. Default is 1.
+Action
+	Tries to match the pattern to the target string, s, at position start.
+Returns
+	True if successful, false otherwise.
+Examples
+	regex.easyMatch ("<[^>]*>", "<font size = \"-2\">", @temp.matchInfo)
+		// true
+	
+Notes
+	This verb is similar to "regex.match" except that it encapsulates all calls to the required lower level verbs "regex.compile" and  "regex.free".
+	
+	The "Matchinfo Table" outlines the information optionally returned in the table pointed to by adrTable.
+See Also
+	"regex.match"
+
+
+

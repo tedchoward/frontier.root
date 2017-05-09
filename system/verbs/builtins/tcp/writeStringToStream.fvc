@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.writeStringToStream
+
+on writeStringToStream (stream, data, chunksize, timeout) { //6.1
+	kernel (tcp.writeStringToStream)}
+
+

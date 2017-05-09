@@ -1,0 +1,53 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.prefs.validateS3prefs
+
+on validateS3prefs (adrresult=nil) {
+	«Changes
+		«4/4/11; 5:12:41 AM by DW
+			«New optional param, adrresult. If not nil, we return a boolean true if it validated, false if it didn't. Used in the EC2 startup user interface.
+		«2/12/11; 3:43:57 PM by DW
+			«Add a couple of linebreaks before the message.
+		«2/11/11; 9:47:02 AM by DW
+			«Changed the method. We create a random bucket and delete it. If it worked, we say the credentials are good. If not, they are not.
+			«Old code
+				«local (pta = html.getpagetableaddress ())
+				«if pta^.method == "POST"
+					«local (bucket = user.s3.accounts.default.defaultBucket)
+					«try
+						«if s3.bucketExists (bucket)
+							«return ("")
+						«s3.newBucket (bucket)
+						«return ("<font color=\"green\">We were able to create the default bucket \"" + bucket + ".\"</font>")
+					«else
+						«return ("<font color=\"red\">" + tryerror + "</font>")
+				«else
+					«return ("")
+		«12/30/09; 10:29:27 AM by DW
+			«Called from the prefs outline, opmlEditor.data.outlines.prefs, we check to be sure the bucket exists, if it doesn't we try to create it. If we are able to, we report that. If not, we throw an error.
+	local (pta = html.getpagetableaddress (), s);
+	if pta^.method == "POST" {
+		local (bucket = string.getrandompassword (12));
+		try {
+			s = "<br><br><font color=\"green\">Amazon likes your security credentials.</font>";
+			bundle { //init adrresult true, 4/4/11 by DW
+				if adrresult != nil {
+					adrresult^ = true}};
+			if s3.bucketExists (bucket) {
+				return (s)};
+			s3.newBucket (bucket);
+			s3.deleteBucket (bucket);
+			return (s)}
+		else {
+			bundle { //false adrresult, 4/4/11 by DW
+				if adrresult != nil {
+					adrresult^ = false}};
+			return ("<br><br><font color=\"red\">Amazon didn't like your security credentials.</font>")}}
+	else {
+		return ("")}}
+«bundle //test code
+	«local (pt)
+	«new (tabletype, @pt)
+	«pt.method = "POST"
+	«html.setpagetableaddress (@pt)
+	«dialog.alert (validateS3prefs ())
+
+

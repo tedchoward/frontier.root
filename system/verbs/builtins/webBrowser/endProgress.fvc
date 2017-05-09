@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.endProgress
+
+on endprogress (n) { «Nortifies the application that the progress indicator associated with TransactionID is no longer needed.
+	case sys.os () {
+		"MacCn";
+		"MacOS" {
+			return (appleEvent (user.webBrowser.currentid, 'WWW!', 'PREN', '----', long (n)))}}}
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.blogger.mailToBlog.install
+
+blogger.init ();
+user.scheduler.threads.mailToBlog = @blogger.mailToBlog.checkMail;
+edit (@user.blogger.mailToBlog)
+
+

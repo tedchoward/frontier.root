@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.thread.getStats
+
+on getStats (adrTable) {
+	kernel (thread.getStats)}
+
+

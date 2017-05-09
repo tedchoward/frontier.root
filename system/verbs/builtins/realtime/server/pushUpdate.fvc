@@ -1,0 +1,92 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.server.pushUpdate
+
+on pushUpdate (htmltext, type="", userWhoCausedUpdate="", data=nil, userToPushTo=nil) {
+	«Changes
+		«9/25/10; 12:13:23 PM by DW
+			«We're waking all the waiting users, but we don't need to. Now we only wake users who are receiving updates as a result of the push.
+		«9/15/10; 11:35:29 AM by DW
+			«Rewrote the logic of to work properly in the case that io.server.follow needs implemented: "push the followed outline to the user doing the following."
+		«9/15/10; 11:01:59 AM by DW
+			«Added a little bit of defensive driving that keeps a non-table inbox from killing the process. This should never happen unless you happen to leave a table open in the outliner, which I seem to be doing a lot. :-(
+		«9/12/10; 8:57:54 AM by DW
+			«Optimization -- when you push an update of type instantOutline from user bullmancuso, you can then delete every other instantOutline update from bullmancuso in each user's inbox. It's like udpating a part in the object dtabase, only the most recent update counts.
+		«9/11/10; 4:37:50 PM by DW
+			«User-level stats.
+		«9/9/10; 12:21:21 PM by DW
+			«Add optional param, userToPushTo. If non-nil, it's the name of the sole user who will receive the update. 
+		«9/1/10; 6:02:16 PM by DW
+			«Only queue the update if a user follows the user who caused the update.
+		«8/13/10; 2:26:56 PM by DW
+			«Store a copy of the update table in the calendar structure.
+		«8/11/10; 3:22:38 PM by DW
+			«Add logging.
+		«7/19/10; 10:06:44 AM by DW
+			«Cribbed from scripting2.root.
+		«7/16/10; 7:43:21 AM by DW
+			«Add another level under each users' realtimeUpdates table, with the IP they're connecting through. 
+		«7/15/10; 8:08:43 AM by DW
+			«Add three optional params, type and userWhoCausedUpdate and data. Type of course can distinguish between classes of updates. I added this so the instant outliner could push its updates out through this channel. userWhoCausedUpdate indicates which user caused the update.
+			«data is any data that should be attached to the update. It's up to the type to determine what data it might want to send.
+		«7/13/10; 7:56:37 AM by DW
+			«Created. 
+	local (adrdata = realtime.init (), adruser, now = clock.now (), t, ctusers=0, ctinboxes=0, startticks = clock.ticks ());
+	bundle { //user-level stats, 9/11/10 by DW
+		if userWhoCausedUpdate != "" {
+			local (adruser = realtime.server.inituser (userWhoCausedUpdate));
+			adruser^.stats.ctPushBy++;
+			adruser^.stats.whenLastPushBy = now}};
+	local (serialnumstring = string.padwithzeros (adrdata^.server.stats.ctMessages++, 7));
+	«local (sem = realtime.server.data.semaphoreName)
+	bundle { //set up table for update
+		new (tabletype, @t);
+		t.htmltext = htmltext;
+		t.type = type;
+		t.username = userWhoCausedUpdate;
+		if data != nil {
+			t.data = data};
+		t.when = now};
+	bundle { //store the table in the calendar structure, 8/13/10 by DW
+		local (adrday = mainresponder.calendar.getdayaddress (@adrdata^.server.calendar, now));
+		adrday^.[serialnumstring] = t};
+	on sendtouser (adruser) {
+		local (adrinbox);
+		for adrinbox in @adruser^.inboxes {
+			if typeof (adrinbox^) == tabletype {
+				bundle { //remove all updates of the same type from the same source, 9/12/10 by DW
+					local (i, adrq);
+					for i = sizeof (adrinbox^.queue) downto 1 {
+						adrq = @adrinbox^.queue [i];
+						if (adrq^.type == type) and (adrq^.username == userWhoCausedUpdate) {
+							delete (adrq)}}};
+				«semaphore.lock (sem, 180)
+				adrinbox^.queue.[serialnumstring] = t;
+				«semaphore.unlock (sem)
+				adrinbox^.stats.ctPushes++;
+				adrinbox^.stats.whenLastPush = now;
+				ctinboxes++}};
+		adruser^.stats.ctPushTo++; //9/11/10 by DW
+		adruser^.stats.whenLastPushTo = now; //9/11/10 by DW
+		ctusers++;
+		realtime.server.wakeWaitingThreads (nameof (adruser^))}; //9/25/10 by DW
+	if userToPushTo != nil {
+		local (adruser = realtime.server.inituser (userToPushTo));
+		sendtouser (adruser)}
+	else {
+		local (adruser, name);
+		for adruser in @adrdata^.server.users {
+			name = nameof (adruser^);
+			realtime.server.inituser (name); //9/11/10 by DW
+			if adruser^.prefs.enabled {
+				if realtime.server.userFollows (name, userWhoCausedUpdate, @t) {
+					sendtouser (adruser)}}}};
+	«bundle //wake up all the waiting threads so they can return
+		«thread.callscript (@realtime.server.wakeWaitingThreads, {})
+	bundle { //logging,  8/11/10 by DW
+		log2.add (realtime.server.data.log.source, "Push", htmltext, startticks);
+		realtime.server.writeLog ()};
+	bundle { //delete obsolete temp tables
+		realtime.server.collectTempTables ()}};
+bundle { //test code
+	pushUpdate ("Hello from Hollywood")}
+
+

@@ -1,0 +1,21 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.maintenence.cleanupGdbFolder
+
+«Changes
+	«8/16/08; 10:33:24 PM by DW
+		«A bug in frontier.getsubfolder caused the app to create guest databases folders inside the guest databases folder. This script cleans up the mess.
+local (gdbfoldername = "Guest Databases");
+local (frontierfolder = file.folderfrompath (frontier.getprogrampath ()));
+local (gdbfolder = frontierfolder + gdbfoldername + file.getpathchar ());
+on dofolder (folder) {
+	local (f);
+	fileloop (f in folder) {
+		if file.isfolder (f) {
+			local (fname = file.filefrompath (f));
+			fname = string.delete (fname, sizeof (fname), 1);
+			if fname == gdbfoldername {
+				try {file.deletefolder (f)}}
+			else {
+				dofolder (f)}}}};
+dofolder (gdbfolder)
+
+

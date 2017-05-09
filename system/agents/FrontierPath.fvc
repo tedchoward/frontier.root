@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.agents.FrontierPath
+
+msg (Frontier.getFilePath ());
+clock.sleepfor (infinity)
+
+

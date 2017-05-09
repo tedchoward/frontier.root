@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.callbacks.resume
+
+on resume () {
+	«Changes:
+		«8/4/08; 10:19:02 AM by DW
+			«The building of the menubar is needed on Windows too.
+		«8/4/08; 8:34:42 AM by DW
+			«Call menus.buildmenubar because any changes to the menu bar won't be reflected if the app is running in the background on the Mac. This is needed so you can turn menus on or off in the prefs system (which runs in the browser).
+		«Thursday, September 28, 2000 at 6:22:54 PM by JES
+			«Allow the callback to be an address or the address of an address.
+	local (i);
+	if not defined (user.callbacks.resume) {
+		new (tabletype, @user.callbacks.resume)};
+	for i = 1 to sizeof (user.callbacks.resume) {
+		try {
+			local (adrScript = @user.callbacks.resume [i]);
+			while typeOf (adrScript^) == addressType {
+				adrScript = adrScript^};
+			adrScript^ ()}};
+	menus.buildmenubar (); //8/4/08 by DW
+	return (true)}
+
+

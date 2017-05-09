@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.prefs2.radioListPref
+
+on radioListPref (radiolist, adrchoice) {
+	«Changes
+		«6/11/12; 9:59:33 AM by DW
+			«radiolist is a comma-separated list of choices. The returned value is a string, the one the user selected. Each item in the list may have a period, followed by explanation text. This is not part of the value of the button, just part of the display.
+	local (pta = html.getpagetableaddress (), ctfields = string.countfields (radiolist, ","), i, s, htmltext = "", indentlevel = 0);
+	on add (s) {
+		htmltext = htmltext + (string.filledstring ("\t", indentlevel) + s + "\r");};
+	if pta^.method == "POST" {
+		«scratchpad.args = pta^.postargs; edit (@scratchpad.args)
+		adrchoice^ = pta^.postargs.radiochoice};
+	for i = 1 to ctfields {
+		local (linetext = string.trimwhitespace (string.nthfield (radiolist, ",", i)), value = string.popsuffix (linetext, "."), checked = "");
+		if defined (adrchoice^) {
+			if string.lower (value) == string.lower (adrchoice^) {
+				checked = " checked=\"checked\" "}};
+		add ("<input type=\"radio\" name=\"radiochoice\" value=\"" + value + "\" " + checked + " /> " + linetext + ".<br />")};
+	return ("<div class=\"divPrefsRadioList\">" + htmltext + "</div>")};
+bundle { //test code
+	radioListPref ()}
+
+

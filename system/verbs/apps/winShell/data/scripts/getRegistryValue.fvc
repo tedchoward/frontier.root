@@ -1,0 +1,12 @@
+FrontierVcsFile:3:optx:system.verbs.apps.winShell.data.scripts.getRegistryValue
+
+Function Main (registryPath)
+	Dim shell
+	
+	Set shell = CreateObject ("Wscript.Shell")
+	
+	Main = shell.RegRead (registryPath)
+End Function
+
+
+

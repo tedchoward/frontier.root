@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.clipboard.getValue
+
+on getValue (type) {
+	local (x);
+	if not clipboard.get (type, @x) {
+		return (false)};
+	unpack (@x, @x);
+	return (x)}
+
+

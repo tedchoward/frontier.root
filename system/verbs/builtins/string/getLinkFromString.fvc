@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.getLinkFromString
+
+on getLinkFromString (s, adrlink) {
+	«Changes
+		«10/11/12; 10:58:39 AM by DW
+			«Return true if the string contains at least one link and with adrlink pointing to the link text. This is used in microliner.root to pull the link out of the text and make the outline node link to it. This was cribbed from twitter.hotuptext. 
+				«http://worknotes.scripting.com/october2012/101112ByDw/viewButtonInMicroliner
+	local (lowers, ix);
+	s = searchengine.stripmarkup (s);
+	lowers = string.lower (s);
+	ix = string.patternmatch ("http://", lowers);
+	if ix == 0 {
+		ix = string.patternmatch ("https://", lowers);
+		if ix == 0 {
+			return (false)}};
+	local (url = "", ch);
+	for i = ix to sizeof (s) {
+		ch = s [i];
+		if ch == ' ' {
+			break};
+		url = url + ch};
+	adrlink^ = url;
+	return (true)};
+bundle { //test code
+	getLinkFromString ("I've got a blog. https://scripting.com/blah okay", @scratchpad.mylink)}
+
+

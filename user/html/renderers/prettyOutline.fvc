@@ -1,0 +1,41 @@
+FrontierVcsFile:3:scpt:user.html.renderers.prettyOutline
+
+on prettyOutline (adroutline) {
+	«by the time we get it, the #directives have been removed
+		«it's also the target outline
+	
+	local (level = 0);
+	op.firstSummit ();
+	op.fullExpand ();
+	on visit () {
+		local (levelcount = 0);
+		loop {
+			local (s = op.getLineText ());
+			case level {
+				0 {
+					s = "<h3><hr>" + string.upper (s) + "</h3>"};
+				1 {
+					s = "<h4>" + ++levelcount + ". " + s + "</h4>"}}
+			else {
+				s = "<blockquote>" + s + "</blockquote>"};
+			op.setLineText (s);
+			if op.go (right, 1) { «cursor has subheads
+				level++;
+				visit ();
+				level--;
+				op.go (left, 1)};
+			if not op.go (down, 1) {
+				break}}};
+	visit ();
+	
+	local (s = html.getOutlineHtml (adroutline, "\r", "\r", "\r", ""));
+	return (s)};
+
+«bundle «test code
+	«table.copy (@people.dw.notepad, @scratchpad)
+	«target.set (@scratchpad.notepad)
+	«edit (@scratchpad.notepad)
+	«webbrowser.displaytext (prettyOutline (@scratchpad.notepad))
+	«target.clear ()
+
+

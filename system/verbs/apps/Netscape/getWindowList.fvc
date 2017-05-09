@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Netscape.getWindowList
+
+on getWindowList () { «Lists the IDs of all the hypertext windows
+	return (appleEvent (Netscape.id, 'WWW!', 'LSTW'))}
+
+

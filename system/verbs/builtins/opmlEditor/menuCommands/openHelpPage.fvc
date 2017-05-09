@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.openHelpPage
+
+on openHelpPage (url) {
+	«Changes
+		«8/5/08; 8:22:53 AM by DW
+			«Called from the commands in system.menus.helpMenu.
+	webbrowser.openurl (url);
+	webbrowser.bringtofront ()}
+
+

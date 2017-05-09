@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.printDocument
+
+on printDocument (file) {
+	return (required.printDocument (Fetch.id, file))}
+
+

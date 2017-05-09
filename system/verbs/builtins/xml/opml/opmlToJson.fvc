@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.opml.opmlToJson
+
+on opmlToJson (opmltext) {
+	«Changes
+		«9/17/12; 12:04:54 PM by DW
+			«http://worknotes.scripting.com/september2012/91712ByDw/river2IsSourceurlaware
+	local (xstruct);
+	xml.compile (opmltext, @xstruct);
+	bundle { //clean up the struct
+		try {delete (xml.getaddress (@xstruct, "?xml"))};
+		try {delete (xml.getaddress (@xstruct, "/comment"))}};
+	local (jsontext = json.decompile (@xstruct));
+	«wp.newtextobject (jsontext, @scratchpad.myjsontext)
+	return (jsontext)};
+bundle { //test code
+	local (url = "http://static.scripting.com/pensacola/comments/opml/2012/09/17/story017/00137.opml");
+	local (opmltext = tcp.httpreadurl (url, 3, false));
+	webbrowser.displaytext ("<pre>" + opmlToJson (opmltext) + "</pre>")}
+
+

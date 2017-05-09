@@ -1,0 +1,15 @@
+FrontierVcsFile:3:optx:system.verbs.apps.cardEditor.specifications.oneliners
+
+delete (@scratchpad.atts)
+	// true
+cardeditor.getobjectattributes ("att1", @scratchpad.atts)
+	// true
+edit (@scratchpad.atts.rcsc)
+	// true
+scratchpad.atts.rcsc = "atts.rcst == 4"
+	// atts.rcst == 4
+cardeditor.setobjectattributes ("att1", @scratchpad.atts)
+	// false
+
+
+

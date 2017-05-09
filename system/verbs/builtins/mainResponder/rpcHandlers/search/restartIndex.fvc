@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.rpcHandlers.search.restartIndex
+
+on restartIndex (siteName) {
+	«Delete all pages that belong to a specified site.
+	
+	thread.easyCall ("mainResponder.search.server.restartIndex", {siteName});
+	
+	return (true)}
+
+

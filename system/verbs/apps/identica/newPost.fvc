@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.identica.newPost
+
+on newPost (s, username=user.identica.prefs.username, password=user.identica.prefs.password, server="identi.ca") {
+	«Changes
+		«3/12/09; 5:17:57 AM by DW
+			«New optional param, server, allows you to post to another instance of Laconica.
+		«7/17/08; 3:46:23 PM by DW
+			«Created.
+	local (posturl = "http://" + server + "/api/statuses/update.xml");
+	return (twitter.newpost (s, username, password, posturl:posturl))}
+«bundle //test code
+	«newpost ("[NYT]: McCain Now Criticizes Obama for Travels http://x.techwheat.com/121", server:"home.smallpicture.com")
+
+

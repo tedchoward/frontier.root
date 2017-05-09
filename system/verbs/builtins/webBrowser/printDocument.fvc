@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.printDocument
+
+on printDocument (f) {
+	case sys.os () {
+		"MacOS" {
+			return (required.printDocument (user.webBrowser.currentid, f))}}}
+
+

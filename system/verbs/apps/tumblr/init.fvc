@@ -1,0 +1,21 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.tumblr.init
+
+on init () {
+	«Changes
+		«5/14/09; 9:55:20 AM by DW
+			«Created. 
+	local (adrdata = @config.tumblr);
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)};
+		if not defined (adrdata^.prefs.email) {
+			adrdata^.prefs.email = ""};
+		if not defined (adrdata^.prefs.password) {
+			adrdata^.prefs.password = ""}};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

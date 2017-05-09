@@ -1,0 +1,31 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.re.docs.DocServer.grep
+
+#title "re.grep"
+#renderOutlineWIth "docServerRenderer"
+Syntax
+	re.grep (cp, s, flIncludeMatches)
+Params
+	cp is a binary param containing the compiled pattern that was returned by a call to "re.compile".
+	s is either a string param or a list param.
+	flIncludeMatches is an optional boolean param determining whether the result list contains matches or non-matches. Defaults to true.
+Action
+	Loop over all lines or elements of s and attempt to match cp against every single one.
+Returns
+	A list representing a filtered copy of s.
+Examples
+	re.grep (re.compile ("a+"), {"aa", "b", "Aa", "Ab"})
+		// {"aa", "Aa"}
+	re.grep (re.compile ("a+"), "aa" + cr + "b" + cr + "Aa" + cr + "Ab" + cr, flIncludeMatches: false)
+		// {"b", "Ab"}
+Notes
+	If s is a list, the verb operates on each element of the list. Otherwise, s is coerced to a string and the verb operates on each line of the string.
+	The verb attempts to match the compiled pattern against each element or line of s.
+	If flIncludeMatches is true, all matching elements or lines are included in the result list. If it is false, only those lines or elements that did not match are included in the result list.
+	The kernel implementation of the re verbs is based on the Perl Compatible Regular Expressions (PCRE) library. This is the same library used by Python, Apache, and PHP. Mandatory excerpt from the PCRE license:
+		Regular expression support is provided by the PCRE library package, which is open source software, written by Philip Hazel, and copyright by the University of Cambridge, England.
+		The source code for the PCRE library is available for download from ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/
+See Also
+	"re.compile"
+
+
+

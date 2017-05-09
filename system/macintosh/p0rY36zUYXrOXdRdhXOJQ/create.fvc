@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.macintosh.core.create
+
+on create (appID, new, withData = nil, withProperties = nil, at = nil) { «Create a new element
+	local (params = record ({}));
+	if (typeOf (withData) != longType) or (withData != 0) {
+		params ['data'] = withData};
+	if (typeOf (withProperties) != longType) or (withProperties != 0) {
+		params ['prdt'] = withProperties};
+	if (typeOf (at) != longType) or (at != 0) {
+		params ['insh'] = at};
+	return (appleEvent (appID, 'core', 'crel', 'kocl', string4 (new), params))}
+
+

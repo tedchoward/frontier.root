@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.getProgramName
+
+on getProgramName () {
+	«Changes
+		«8/14/08; 12:16:50 PM by DW
+			«Instead of getting the version number of the OPML Editor from dotOpml.root (which is no longer part of the distribution) get it from builtins.opmlEditor.data.version.
+		«6/23/05; 5:55:25 AM by DW
+			«Suppor the OPML Editor.
+		«5/19/01; 9:41:59 AM by DW
+			«Created. Returns the program name and version in a string that can be displayed or included in an automatically generated file.
+	local (s);
+	if defined (system.environment.isOpmlEditor) {
+		if system.environment.isOpmlEditor {
+			return ("OPML Editor v" + opmlEditor.data.version)}};
+	if system.environment.isRadio {
+		s = "Radio UserLand"}
+	else {
+		s = "UserLand Frontier"};
+	s = s + " v" + Frontier.version ();
+	return (s)}
+«bundle //test code
+	«dialog.alert (getProgramName ())
+
+

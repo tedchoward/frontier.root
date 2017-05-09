@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.window.close
+
+on close (adr) {
+	kernel (window.close)}
+
+

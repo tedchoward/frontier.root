@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:examples.soundTester
+
+dialog.getInt ("Duration?",@examples.duration);
+dialog.getInt ("Amplitude?",@examples.amplitude);
+dialog.getInt ("Frequency?",@examples.frequency);
+speaker.sound (examples.duration, examples.amplitude, examples.frequency)
+
+

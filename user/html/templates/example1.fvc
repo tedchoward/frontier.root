@@ -1,0 +1,53 @@
+FrontierVcsFile:3:optx:user.html.templates.example1
+
+{pageheader ("<title>")}   
+<table border=0 cellpadding=5>
+	<tr>
+		{"<td  valign=top bgcolor=\"" + sideBarColor () + "\">"}
+			<font face="helvetica,arial" size=-2>
+				<br>
+				[[#glossPatch About<br>this<br>Website|aboutthiswebsite|]]<br><br>
+				[[#glossPatch 1996|1996|]]<br><br>
+				[[#glossPatch 1995|1995|]]<br><br>
+				[[#glossPatch 1994|1994|]]<br><br>
+				[[#glossPatch DaveNet<br>Mail|mail/default|]]<br><br>
+				[[#glossPatch Best<br>of<br>DaveNet|best|]]
+				</font>
+			</td>
+		<td>
+			<table border=1 cellpadding=5>
+				{"<td bgcolor=\"" + mainCellColor () + "\">"}
+					<b>
+						{user.websites.davenet.tools.titleline ()}
+						{user.websites.davenet.tools.getPostTime ()}.
+						<hr size=3>
+						</b>
+					<p>
+					<h1>
+						{html.data.page.iconlink=getIcon ()} <title>
+						</h1>
+					<p>
+					<blockquote>
+						<bodytext>
+						</blockquote>
+					<hr size=3>
+					<center>
+						<table border=0>
+							<td valign=top>{html.data.page.iconlink}</td>
+							<td valign=top>
+								<b>
+									This page was last built on {string.dateString ()} at {string.timeString ()} 
+									with "Frontier" on a "Macintosh". Thanks for checking it out! "Dave"
+									</b>
+								</td>
+							</table></center>
+						</center>
+					</td>
+				</table>
+			</td>
+		</tr>
+	</table>
+{pagefooter ()}
+
+
+

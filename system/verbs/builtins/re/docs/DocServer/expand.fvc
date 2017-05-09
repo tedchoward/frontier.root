@@ -1,0 +1,35 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.re.docs.DocServer.expand
+
+#title "re.expand"
+#renderOutlineWith "docServerRenderer"
+Syntax
+	re.expand (s, adrMatchInfoTable)
+Params
+	s is a string param containing the target string.
+	adrMatchInfoTable is an address param pointing to a match info table as returned by "re.match" or as passed to the callback scripts by "re.replace" and "re.visit".
+Action
+	Replaces any reference to a numbered or named capturing parenthesis with the value specified for it in the match info table.
+Returns
+	A string.
+Examples
+	local (mi, cp = re.compile ("([0-9][0-9][0-9][0-9])-([0-9][0-9])-([0-9][0-9])))
+	re.match (cp, "2003-05-11", adrMatchInfoTable:@mi, flMakeGroups:true)
+	re.expand ("\\2/\\3/\\1", @mi)
+		// "05/11/2003"
+Errors
+	An error will be generated if the s parameter contains a reference to a non-existant numbered or named capturing parenthesis.
+Notes
+	The s parameter can contain the following special character sequences, following the same conventions as those for the repl parameter of "re.replace":
+		\nn where nn is a number, possibly consisting of multiple digits, will be replaced by the nnth element in the groupStrings list of the match info table.
+		\g<nn> where nn is a number, possibly consisting of multiple digits, will be replaced by the nnth element in the groupStrings list of the match info table.
+		\g<cc> where cc is an alpha string, will be replaced by the matchString entry in the sub-table named cc of the namedGroups sub-table of the match info table.
+	The kernel implementation of the re verbs is based on the Perl Compatible Regular Expressions (PCRE) library. This is the same library used by Python, Apache, and PHP. Mandatory excerpt from the PCRE license:
+		Regular expression support is provided by the PCRE library package, which is open source software, written by Philip Hazel, and copyright by the University of Cambridge, England.
+		The source code for the PCRE library is available for download from ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/
+See Also
+	"re.match"
+	"re.replace"
+	"re.visit"
+
+
+

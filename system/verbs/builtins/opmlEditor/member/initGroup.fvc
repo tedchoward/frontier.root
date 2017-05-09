@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.member.initGroup
+
+on initGroup (groupname="default") {
+	«Changes
+		«3/7/11; 7:54:19 AM by DW
+			«Created. 
+	local (f = system.temp.mainResponder.membersRootFile);
+	local (adrgroup = @[f].[groupName]);
+	if not defined (adrgroup^) {
+		new (tabletype, adrgroup)};
+	return (adrgroup)}
+
+

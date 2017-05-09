@@ -1,0 +1,41 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.getListMembers
+
+on getListMembers (listname, adrtable, username=nil, password=nil, whoseList=nil) {
+	«Changes
+		«10/31/09; 7:48:19 PM by DW
+			«Reorganized parameter list so username and password can be optional params.
+		«10/31/09; 7:12:31 PM by DW
+			«Add a parameter, "whoseList" to determine whose list we get. The username and password must be present to authenticate, but I can get other people's lists if I want to.
+		«10/31/09; 6:58:09 AM by DW
+			«Created. Gets the contents of a Twitter list into a Frontier table.
+	local (apiurl, cursor = 0);
+	if username == nil {
+		username = user.twitter.prefs.username};
+	if password == nil {
+		password = user.twitter.prefs.password};
+	if whoseList == nil {
+		whoseList = username};
+	apiurl = "http://twitter.com/" + whoseList + "/" + listname + "/members.xml";
+	new (tabletype, adrtable);
+	loop {
+		local (url = apiurl);
+		if cursor != 0 {
+			url = url + "?cursor=" + cursor};
+		local (xmltext = tcp.httpreadurl (url, 5, false, username, password), xstruct);
+		xml.compile (xmltext, @xstruct);
+		scratchpad.xstruct = xstruct;
+		local (adruserslist = xml.getaddress (@xstruct, "users_list"));
+		local (adrusers = xml.getaddress (adruserslist, "users"));
+		for adruser in adrusers {
+			if nameof (adruser^) endswith "user" {
+				local (adrsub = @adrtable^.[xml.getvalue (adruser, "screen_name")], status);
+				new (tabletype, @status); //*cough* hack *cough*
+				status.[nameof (adruser^)] = adruser^;
+				twitter.extractUserInfo (@status, adrsub)}};
+		cursor = xml.getvalue (adruserslist, "next_cursor");
+		if cursor == 0 { //no more
+			break}}};
+bundle { //test code
+	getListMembers ("tech-bloggers-reporters", @scratchpad.listmembers, whoseList:"atul")}
+
+

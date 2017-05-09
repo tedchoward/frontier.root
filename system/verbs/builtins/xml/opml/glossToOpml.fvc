@@ -1,0 +1,35 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.opml.glossToOpml
+
+on glossToOpml (adrgloss, title=nil) {
+	«Changes
+		«5/29/12; 11:50:55 AM by DW
+			«Created.
+	local (opmltext = "", indentlevel = 0, now = clock.now ());
+	if title == nil {
+		title = string (adrgloss)};
+	on add (s) {
+		opmltext = opmltext + string.filledstring ("\t", indentlevel) + s + "\r"};
+	on encode (s) {
+		if system.environment.isMac {
+			return (xml.entityEncode (latinToMac.macToLatin (s), true))}
+		else {
+			return (xml.entityEncode (s, true))}};
+	add ("<opml version=\"2.0\">"); indentlevel++;
+	bundle { //<head> section
+		add ("<head>"); indentlevel++;
+		add ("<title>" + encode (title) + "</title>");
+		add ("<dateModified>" + date.netstandardstring (now) + "</dateModified>");
+		add ("</head>"); indentlevel--};
+	bundle { //<body> section
+		local (adritem);
+		add ("<body>"); indentlevel++;
+		for adritem in adrgloss {
+			add ("<outline text=\"" + encode (nameof (adritem^)) + "\" value=\"" + encode (adritem^) + "\" />")};
+		add ("</body>"); indentlevel--};
+	add ("</opml>"); indentlevel--;
+	return (opmltext)};
+bundle { //test code
+	local (opmltext = glossToOpml (@default.users.dave.worldOutline.editor.glossary, "My Glossary"));
+	file.writewholefile ("ohio:test.opml", opmltext)}
+
+

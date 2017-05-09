@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.DSExists
+
+on DSExists (dsn) {
+	if ! defined (user.prefs_odbc.datasources.[dsn]) {
+		new (tableType, @user.prefs_odbc.datasources.[dsn]);
+		table.copyContents (@user.prefs_odbc.datasources.Default, @user.prefs_odbc.datasources.[dsn])};
+	if ! defined (system.temp.odbcDSinfo.[dsn]) {
+		table.surepath("system.temp.odbcDSinfo.[\""+dsn+"\"]");
+		if (dll.call (user.prefs_odbc.dllpath, "DSExists", dsn)) {
+			system.temp.odbcDSinfo.[dsn] = user.prefs_odbc.dllpath}
+		else {
+			scriptError ("Invalid Data Source")}};
+	return (true)}
+
+

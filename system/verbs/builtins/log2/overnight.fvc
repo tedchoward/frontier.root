@@ -1,0 +1,50 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.log2.overnight
+
+on overnight () {
+	«Changes
+		«10/20/09; 10:01:13 AM by DW
+			«Vastly simplified using visitReverseChronologic.
+		«10/17/09; 4:42:58 PM by DW
+			«Created. Delete log entries older than those specified by the preference.
+	local (adrdata = log2.init (), adrcal = @adrdata^.calendar);
+	local (when = clock.now () - (adrdata^.prefs.ctDaysInLog * 24 * 60 * 60));
+	on visit (adrday) {
+		local (d = mainResponder.calendar.getAddressDay (adrday));
+		if d < when {
+			delete (adrday)};
+		return (true)};
+	mainresponder.calendar.visitReverseChronologic (adrcal, @visit, true);
+	filemenu.savemyroot (adrcal)}
+	«bundle //old code
+		«local (adrdata = log2.init (), adrcal = @adrdata^.calendar)
+		«local (when = clock.now () - (adrdata^.prefs.ctDaysInLog * 24 * 60 * 60))
+		«local (adrday = mainresponder.calendar.getdayaddress (adrcal, when))
+		«local (adrmonth = parentof (adrday^), adr, fldeleting = false, i)
+		«for i = sizeof (adrmonth^) downto 1
+			«adr = @adrmonth^ [i]
+			«if adr == adrday
+				«fldeleting = true
+			«else
+				«if fldeleting
+					«delete (adr)
+		«local (adryear = parentof (adrmonth^))
+		«fldeleting = false
+		«for i = sizeof (adryear^) downto 1
+			«adr = @adryear^ [i]
+			«if adr == adrmonth
+				«fldeleting = true
+			«else
+				«if fldeleting
+					«delete (adr)
+		«fldeleting = false
+		«for i = sizeof (adrcal^) downto 1
+			«adr = adrcal^ [i]
+			«if adr == adryear
+				«fldeleting = true
+			«else
+				«if fldeleting
+					«delete (adr)
+«bundle //test code
+	«overnight ()
+
+

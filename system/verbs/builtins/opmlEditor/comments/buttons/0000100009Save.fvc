@@ -1,0 +1,31 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.comments.buttons.["00001000\tSave"]
+
+«Changes
+	«9/7/12; 1:02:42 PM by DW
+		«Created. 
+
+thread.callscript (@opmlEditor.comments.save, {});
+return;
+
+
+local (atts, adroutline = address (window.frontmost ()), opmltext);
+bundle { //get subs into opmltext, attributes into atts
+	local (outlinetitle = "Hello World from <%username%>");
+	local ([outlinetitle] = adroutline^, oldtarget = target.set (@[outlinetitle]));
+	op.go (left, infinity);
+	op.attributes.getall (@atts); atts.username = user.prefs.name;; //scratchpad.atts = atts; edit (@scratchpad.atts)
+	op.reorg (up, infinity);
+	if op.go (down, 1) {
+		op.demote ();
+		op.deleteline ()};
+	op.promote ();
+	op.deleteline ();
+	target.set (oldtarget);
+	opmltext = op.outlinetoxml (@[outlinetitle]);
+	opmltext = string.replace (opmltext, "&lt;%username%&gt;", atts.username);
+	wp.newtextobject (opmltext, @scratchpad.myopmltext)};
+local (urllist = string.urlsplit (atts.url), server = "xmlrpc://" + urllist [2] + "/RPC2");
+local (val = [server].comments.post (atts, opmltext));
+dialog.alert (val)
+
+

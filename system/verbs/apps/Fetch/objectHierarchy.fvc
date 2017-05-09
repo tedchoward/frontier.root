@@ -1,0 +1,187 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Fetch.objectHierarchy
+
+application -- A Macintosh application
+	Properties:
+		bestType -- The best descriptor type
+		class -- The class
+		clipboard -- The clipboard
+		defaultType -- The default descriptor type
+		frontmost -- Is this the frontmost application?
+		name -- The name
+		version -- The version number of the application
+		word-wrapMargin
+		textFileCreator
+		defaultCacheTimeout
+		decodeBinhex
+		decodeMacbinaryi
+		decodeMacbinaryii
+		decodeApplesingle
+		decodeMachost
+		decodeStuffit
+		keepConnectionsAlive
+		downloadFolder
+		defaultPassword
+		displayServerMessages
+		useTypeI
+		omitDotFiles
+		defaultTextFont
+		defaultTextFontSize
+		defaultTextTabWidth
+		defaultBinaryFileType
+		defaultBinaryFileCreator
+		translateIso
+		showSignonDialog
+		defaultUploadTextFormat
+		defaultUploadBinaryFormat
+		usePassiveMode
+		miminumDataPort
+		maximumDataPort
+		useSocksGateway
+		socksGateway
+		socksGatewayPort
+		useProxyServer
+		proxyServer
+		automaticDefaultsToText
+		maximumCacheSize
+		overwriteFiles
+		dayMonthDates
+		caseSensitiveSorting
+		defaultBookmarkListFont
+		defaultBookmarkListFontSize
+		addTxtSuffix
+		addHqxSuffix
+		addBinSuffix
+		encodeNames
+		useInternetConfig
+		allowDuplicateConnections
+		info-macMirror
+		umichMirror
+		anarchieEmulation
+		defaultShortcut
+	Elements:
+		window
+		transferWindow
+		helpWindow
+		textWindow
+		bookmarkListWindow
+		shortcutWindow
+		transcriptWindow
+		remoteItem
+		remoteFile
+		remoteDirectory
+		url1
+		bookmark
+bookmark -- a bookmark to a remote file or directory
+	Properties:
+		itemType
+		name
+		url -- Uniform Resource Locator of item
+		hostname
+		userid
+		password
+		path
+		size -- size in bytes, -1 if unknown
+		modificationDate -- date last modified in seconds since 1/1/1904, or 0 if unknown
+bookmarkListWindow -- a bookmark list window
+	Properties:
+		all properties of window -- Inherits properties from cWindow
+		viewOrder -- window sort order
+		filespec -- where this bookmark list is saved
+		modified
+	Elements:
+		all elements of window
+		bookmark
+helpWindow -- the help window
+	Properties:
+		all properties of window -- Inherits properties from cWindow
+		text -- the window’s text
+	Elements:
+		all elements of window
+remoteDirectory -- a remote directory
+	Properties:
+		itemType
+		name
+		url -- Uniform Resource Locator of item
+		modificationDate -- date last modified in seconds since 1/1/1904, or 0 if unknown
+remoteFile -- a remote file
+	Properties:
+		itemType
+		name
+		url -- Uniform Resource Locator of item
+		size -- size in bytes, -1 if unknown
+		modificationDate -- date last modified in seconds since 1/1/1904, or 0 if unknown
+remoteItem -- a remote file or directory
+	Properties:
+		itemType
+		name
+		url -- Uniform Resource Locator of item
+		size -- size in bytes, -1 if unknown
+		modificationDate -- date last modified in seconds since 1/1/1904, or 0 if unknown
+shortcutWindow -- the Fetch Shortcuts window
+	Properties:
+		all properties of window -- Inherits properties from cWindow
+		viewOrder -- window sort order
+		filespec -- where this bookmark list is saved
+		modified
+	Elements:
+		all elements of window
+		bookmark
+textWindow -- a text viewing window
+	Properties:
+		all properties of window -- Inherits properties from cWindow
+		text -- the window’s text
+	Elements:
+		all elements of window
+transcriptWindow -- the Fetch Transcript window
+	Properties:
+		all properties of window -- Inherits properties from cWindow
+		text -- the window’s text
+	Elements:
+		all elements of window
+transferWindow -- a file transfer window
+	Properties:
+		all properties of window -- Inherits properties from cWindow
+		transferMode
+		viewOrder
+		hostname
+		userid
+		password
+		initialDirectory
+		currentDirectory
+		status
+		currentItem
+		approximateItemSize
+		bytesTransfered
+		elapsedTransferTime
+		itemFormat
+		parentDirectory
+	Elements:
+		all elements of window
+		remoteItem
+		remoteFile
+		remoteDirectory
+		url1
+url -- a remote file or directory referenced by URL
+	Properties:
+		itemType
+		name
+		url -- Uniform Resource Locator of item
+window -- A window
+	Properties:
+		bestType -- The best descriptor type
+		class -- The class
+		defaultType -- The default descriptor type
+		bounds -- the boundary rectangle for the window
+		closeable -- Does the window have a close box?
+		titled -- Does the window have a title bar?
+		index -- the number of the window
+		floating -- Does the window float?
+		modal -- Is the window modal?
+		resizable -- Is the window resizable?
+		zoomable -- Is the window zoomable?
+		zoomed -- Is the window zoomed?
+		name -- the title of the window
+		visible -- is the window visible?
+
+
+

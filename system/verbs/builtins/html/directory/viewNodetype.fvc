@@ -1,0 +1,44 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.directory.viewNodetype
+
+on viewNodetype (adrnode, adratts, adrhtmltext) {
+	«Changes
+		«4/30/12; 1:33:09 PM by DW
+			«Allow for callbacks.
+		«1/5/12; 9:38:35 AM by DW
+			«Factors code from walk routine that displays a node based on its type. Return true if we processed the node.
+	local (adrdata = html.directory.init (), adrnodeatts = @adrnode^.["/atts"]);
+	if defined (adrnodeatts^) {
+		bundle { //callbacks, 4/30/12 by DW
+			local (adrscript);
+			for adrscript in @adrdata^.callbacks.viewNodetype {
+				if defined (adrscript^) {
+					while typeof (adrscript^) == addresstype {
+						adrscript = adrscript^};
+					try {
+						if adrscript^ (adrnode, adratts, adrhtmltext) { //one of the callbacks did the rendering
+							return (true)}}}}};
+		if defined (adrnodeatts^.type) {
+			local (nodetype = adrnodeatts^.type, adrscript = @adrdata^.callbacks.getNodeText.[nodetype]);
+			
+			«if nodetype == "howto"
+				«scratchpad.adrnode1 = adrnode
+				«scratchpad.adratts1 = adratts
+				«scratchpad.adrhtmltext1 = adrhtmltext
+				«scratchpad.attscopy1 = adratts^
+			
+			«scratchpad.nodetype = nodetype; scratchpad.adrcallback = adrscript
+			if defined (adrscript^) {
+				while typeof (adrscript^) == addresstype {
+					adrscript = adrscript^};
+				try {
+					adrscript^ (adrnode, adratts, adrhtmltext)}
+				else {
+					adrhtmltext^ = "<div class=\"directoryErrorMessage\">Can't display the node because: \"" + tryerror + "\"</div>";
+					adratts^.flProcessHtmlText = true; //we want all the dressing, cookie-crumb trail, etc
+					scratchpad.lastwalkerror = tryerror};
+				return (true)}}};
+	return (false)}; //didn't display anything
+bundle { //test code
+	viewNodetype (scratchpad.adrnode1, scratchpad.adratts1, scratchpad.adrhtmltext1)}
+
+

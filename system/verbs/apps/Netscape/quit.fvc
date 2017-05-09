@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Netscape.quit
+
+on quit () {
+	return (required.quitApplication (netscape.id))}
+
+

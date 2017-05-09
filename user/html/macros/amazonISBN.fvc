@@ -1,0 +1,41 @@
+FrontierVcsFile:3:scpt:user.html.macros.amazonISBN
+
+on amazonISBN (bookISBN, linetext="") { «dave@scripting.com 
+	«Wed, Oct 22, 1997 at 6:29:08 AM by DW
+		«I downloaded Dave Polaschek's ISBN macro:
+			«http://www.best.com/~davep/frontierbits/isbnpage.html
+		«Then I added a feature and a fix...
+			«optional second param contains the linetext
+				«defaults to the old behavior
+			«added double-quotes around the generated URL
+			«I changed the name of the first paramter to bookISBN
+				«I found it confusing, when I first looked at the script.
+				«I wasn't sure what info was being called for.
+			«I changed the name of the macro so it wouldn't overwrite Dave's macro.
+		«For more docs see:
+			«http://www.scripting.com/fatPages/97/10/amazonISBN.html
+	on striphyphens (s) {
+		local (ns = string.replaceAll (s, "-", ""));
+		return (ns)};
+	on addhyphens (s) {
+		local (ns = string.mid (s, 1, 1));
+		ns = ns + "-";
+		ns = ns + string.mid (s, 2, 5);
+		ns = ns + "-";
+		ns = ns + string.mid (s, 7, 3);
+		ns = ns + "-";
+		ns = ns + string.mid (s, 10, 1);
+		return ( ns )};
+	local (s = "", stripped = striphyphens (bookISBN));
+	s = s + "<a href=\"http://www.amazon.com/exec/obidos/ISBN=";
+	s = s + stripped + "\">";
+	if linetext == "" {
+		linetext = "ISBN " + addhyphens (stripped)};
+	s = s + linetext + "</a>";
+	return (s)}
+«bundle «examples
+	«dialog.notify (amazonISBN ("1-55615-823-8"))
+	«dialog.notify (amazonISBN (1556158238 ))
+	«dialog.notify (amazonISBN ("0060987049", "Microserfs"))
+
+

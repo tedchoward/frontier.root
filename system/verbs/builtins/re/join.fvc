@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.re.join
+
+on join (s, strList) {
+	kernel (re.join)}
+
+

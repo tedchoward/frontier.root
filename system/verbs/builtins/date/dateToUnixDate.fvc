@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.date.dateToUnixDate
+
+on dateToUnixDate (d) {
+	«Changes
+		«8/23/07; 11:43:06 AM by DW
+			«The returned value is a number, not a date.
+		«8/23/07; 11:27:38 AM by DW
+			«Convert a Frontier date to a Unix date. A Unix date is the number of seconds since the beginning of 1970. 
+			«The Flickr API uses Unix dates, to work with them we need to convert them.
+	return (number (number (d) - date.set (1, 1, 1970, 0, 0, 0)))}
+«bundle //test code
+	«dialog.alert (date.unixdatetodate (dateToUnixDate (clock.now ())))
+
+

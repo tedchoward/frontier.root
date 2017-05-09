@@ -1,0 +1,37 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.cleanFilename
+
+on cleanFilename (fname) {
+	«Changes
+		«11/5/07; 9:16:12 AM by DW
+			«On Mac make sure filename is not too long (limit is 31).
+		«8/23/07; 4:43:47 AM by DW
+			«Cribbed from newsRiverSuite.podcatcher.cleanFilename, we needed it the Flickr glue code, probably will need it elsewhere.
+		«9/19/05; 5:45:19 PM by DW
+			«Legal characters for DOS file names include the following:
+			«Upper case letters A-Z 
+			«Numbers 0-9 
+			«Space (though trailing spaces are considered to be padding and not a part of the file name) 
+			«! # $ % & ( ) - @ ^ _ ` { } ~ ' 
+			«Values 128-255 
+	if system.environment.isWindows {
+		local (i, ch, fllegal, s="");
+		for i = 1 to sizeof (fname) {
+			ch = fname [i];
+			fllegal = true;
+			if not string.isalpha (ch) {
+				if not string.isnumeric (ch) {
+					if (number (char (ch)) < 128) {
+						if not ({' ', '!', '#', '%', '.', ',', '&', '(', ')', '-', '@', '_', '`', '{', '}', '~', "'"} contains ch) {
+							fllegal = false}}}};
+			if fllegal {
+				s = s + ch}};
+		return (s)}
+	else {
+		fname = string.replaceall (fname, ":", "-");
+		fname = string.replaceall (fname, "!", "");
+		fname = string.replaceall (fname, "|", "");
+		if sizeof (fname) > 31 { //too long!
+			fname = string.mid (fname, 1, 31)};
+		return (fname)}}
+
+

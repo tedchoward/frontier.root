@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:examples.docs.Basic1
+
+dialog.confirm ("Click OK to continue or Cancel to abort.")
+
+

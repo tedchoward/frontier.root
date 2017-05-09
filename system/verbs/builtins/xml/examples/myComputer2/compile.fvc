@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.examples.myComputer2.compile
+
+with xml.examples.myComputer2 {
+	xml.compile (string (taggedText), @tableStructure)}
+
+

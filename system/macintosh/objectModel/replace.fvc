@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.objectModel.replace
+
+on replace (obj) {
+	return (insertionLoc ('rplc', obj))}
+
+

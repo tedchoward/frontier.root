@@ -1,0 +1,14 @@
+FrontierVcsFile:3:optx:system.verbs.apps.cardEditor.examples.oneLiners
+
+cardEditor.getObjectAttributes ("item1", @scratchpad.atts)
+	// true
+cardEditor.getObjectLanguage ("item1")
+	// LAND
+cardEditor.getCardAttributes (@scratchpad.cardatts)
+	// true
+cardEditor.getCardGridUnits ()
+	// 12
+card.popup.setHasLabel ("item2", false)
+
+
+

@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.signup
+
+on signup () {
+	«Changes
+		«6/12/12; 9:37:29 AM by DW
+			«Created.
+	local (pta = html.getpagetableaddress ());
+	«if pta^.method == "POST"
+		«scratchpad.signupparams = pta^
+	pta^.title = "Sign up";
+	return (opmlEditor.member.signup ("index"))};
+bundle { //test code
+	signup ()}
+
+

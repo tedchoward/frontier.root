@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:user.webEditServer.callbacks.sendToServer.searchEngineClient
+
+on searchEngineClient (adrObject, username=nil, now=nil, description=nil) {
+	return (mainResponder.search.client.webEditCallback (adrObject, username, now, description))}
+
+

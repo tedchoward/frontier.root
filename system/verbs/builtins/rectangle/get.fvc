@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.rectangle.get
+
+on get (r, adrt, adrl, adrb, adrr) {
+	kernel (rectangle.get)}
+
+

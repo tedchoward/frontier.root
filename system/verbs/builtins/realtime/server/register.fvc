@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.server.register
+
+on register (username, ipaddress) {
+	«Changes
+		«7/19/10; 9:49:42 AM by DW
+			«We assume the user is validated through the identity system. We set up an inbox for the user, so he or she can receive the stream of updates.
+	realtime.server.initInbox (username, ipaddress)};
+bundle { //test code
+	register ("davewiner", tcp.dns.getmydottedid ())}
+
+

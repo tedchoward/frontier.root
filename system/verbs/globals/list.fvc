@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.globals.list
+
+on list (val) {
+	kernel (lang.list)}
+
+

@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.aggregator.rpcHandlers.getLastScanInfo
+
+on getLastScanInfo (username, password) {
+	«Changes
+		«11/8/02; 8:26:04 PM by JES
+			«Created.
+	xml.aggregator.securityForRpc (client, username, password);
+	local (adrdata = xml.aggregator.init ());
+	local (adrstats = @adrdata^.stats);
+	local (t); new (tableType, @t); //return struct
+	t.ctNewItems = adrstats^.lastRun.ctNewStories;
+	t.flScanRunningNow = adrstats^.lastRun.flScanRunningNow;
+	t.whenComplete = adrstats^.lastRun.whenComplete;
+	return (t)}
+
+

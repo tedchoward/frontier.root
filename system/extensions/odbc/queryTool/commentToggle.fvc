@@ -1,0 +1,35 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.queryTool.commentToggle
+
+on commentToggle (toggle) {
+	«Author: Henri Asseily, Binary Compass Enterprises
+		«Created: Thu, Jan 22, 1998 at 3:08:26 PM
+	«Comments or uncomments the selected SQL query text
+		«based on the boolean toggle
+	local {
+		selectedText = wp.getSelText();
+		textSize = 0};
+	
+	if sizeOf(selectedText)==0 { «Nothing was selected
+		wp.selectParagraph();
+		selectedText = wp.getSelText(); «Get the whole line!
+		selectedText = string.delete(selectedText, sizeOf(selectedText),1)}; «Remove last cr
+	
+	if toggle==true { «Set comment
+		selectedText = "/* "+selectedText+" */"}
+	else { «unset comment
+		if string.mid(selectedText, 1, 3) == "/* " {
+			selectedText = string.delete(selectedText, 1, 3)}
+		else {
+			if string.mid(selectedText, 1, 2) == "/*" {
+				selectedText = string.delete(selectedText, 1, 2)}};
+		
+		textSize = sizeOf(selectedText);
+		if string.mid(selectedText, textSize-2, 3) == " */" {
+			selectedText = string.delete(selectedText, textSize-2, 3)}
+		else {
+			if string.mid(selectedText, textSize-1, 2) == "*/" {
+				selectedText = string.delete(selectedText, textSize-1, 2)}}};
+	
+	wp.insert(selectedText+cr)}
+
+

@@ -1,0 +1,116 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.bookmarksMenu.init
+
+if not defined (user.bookmarksMenu) {
+	new (tableType, @user.bookmarksMenu)};
+bundle { //init callbacks
+	if not defined (user.callbacks.addBookmark) {
+		new (tableType, @user.callbacks.addBookmark)}};
+	«if system.environment.isRadio
+		«This should really be initted by ported Manila editing code, but since that hasn't happened yet, I'm doing it here.
+		«local (adrScript = @user.callbacks.addBookmark.manilaWindow)
+		«if not defined (adrScript^)
+			«local (s = "on manila (adr, adrLogic, adrTitle)")
+			«s = s + "\r\ttry {return (suites.playlist.manila.addBookmark (adr, adrLogic, adrTitle))}"
+			«s = s + "\r\treturn (false)"
+			«script.newScriptObject (s, adrScript)
+bundle { //init boilerplate
+	if not defined (user.bookmarksMenu.boilerplate) {
+		if defined (user.playlist.boilerplate.outlines) {
+			user.bookmarksMenu.boilerplate = user.playlist.boilerplate.outlines}
+		else {
+			new (tableType, @user.bookmarksMenu.boilerplate)}}};
+bundle { //init menu
+	local (flOpmlEditor = false);
+	if defined (system.environment.isOpmlEditor) {
+		flOpmlEditor = system.environment.isOpmlEditor};
+	if flOpmlEditor {
+		if not defined (user.bookmarksMenu.menu) {
+			user.bookmarksMenu.menu = bookmarksMenu.virginMenu}}
+	else {
+		local (flPatchBookmarkScripts = false, flFreshMenus = false, adrOriginalMenu);
+		bundle { //copy the original menu and set flags for fresh menus and script patching
+			if defined (user.menus.bookmark) {
+				if typeOf (user.menus.bookmark) == menuBarType {
+					adrOriginalMenu = @user.menus.bookmark}};
+			if defined (user.menus.bookmarkMenu) {
+				if typeOf (user.menus.bookmarkMenu) == menuBarType {
+					adrOriginalMenu = @user.menus.bookmarkMenu}};
+			if adrOriginalMenu != nil { //copy original menu to user.bookmarksMenu.menu, and make a backup at scratchpad.backupBookmarksMenu
+				user.bookmarksMenu.menu = adrOriginalMenu^;
+				scratchpad.backupBookmarksMenu = adrOriginalMenu^;
+				delete (adrOriginalMenu);
+				user.menus.bookmark = @user.bookmarksMenu.menu;
+				flPatchBookmarkScripts = true;
+				flFreshMenus = true};
+			if not defined (user.bookmarksMenu.data) {
+				new (tableType, @user.bookmarksMenu.data)};
+			if not defined (user.bookmarksMenu.data.flInstalled) {
+				user.bookmarksMenu.data.flInstalled = false};
+			if not user.bookmarksMenu.data.flInstalled {
+				flPatchBookmarkScripts = true}};
+		if not defined (user.bookmarksMenu.menu) {
+			user.bookmarksMenu.menu = bookmarksMenu.virginMenu;
+			flFreshMenus = true};
+		if not defined (user.menus.bookmark) {
+			user.menus.bookmark = @user.bookmarksMenu.menu;
+			flFreshMenus = true};
+		if flPatchBookmarkScripts {
+			on patchScript (s) {
+				local (call = string.lower (string.trimWhiteSpace (string.nthField (s, '(', 1))));
+				case call {
+					"playlist.bookmark.openobject" {
+						s = string.replace (s, "playlist.bookmark.openObject", "bookmarksMenu.openObject", false)};
+					"playlist.manila.openmessageforediting" {
+						s = string.replace (s, "playlist.manila.openMessageForEditing", "Frontier.tools.windowTypes.commands.openManilaMessage", false)};
+					"playlist.manila.commands.openmanilasite" {
+						s = string.replace (s, "playlist.manila.commands.openManilaSite", "Frontier.tools.windowTypes.commands.openManilaSite", false)};
+					"playlist.manila.opentemplateforediting" {
+						s = string.replace (s, "playlist.manila.openTemplateForEditing", "Frontier.tools.windowTypes.commands.openManilaTemplate", false)};
+					"playlist.bookmark.openfile" {
+						s = string.replace (s, "playlist.bookmark.openFile", "bookmarksMenu.openFile", false)};
+					"playlist.bookmark.insertboilerplateinoutline" {
+						s = string.replace (s, "playlist.bookmark.insertBoilerplateInOutline", "bookmarksMenu.insertBoilerplateInOutline", false)};
+					"playlist.manila.openhomepageforediting" {
+						s = string.replace (s, "playlist.manila.openHomePageForEditing", "Frontier.tools.windowTypes.commands.openManilaSite", false)};
+					"system.menus.scripts.addbookmarkcommand"; //the Frontier version of the add command
+					"playlist.bookmark.add" { //the Radio version of the add command
+						s = "bookmarksMenu.add ()"};
+					"edit" { //edit the menu
+						local (param = string.nthField (string.nthField (s, '(', 2), ')', 1));
+						case string.lower (param) {
+							"@user.menus.bookmarkmenu";
+							"@user.menus.bookmark" {
+								s = "edit (@user.bookmarksMenu.menu)"}}};
+					"playlist.bookmark.addboilerplateitem" { //add bolierplate command
+						s = "bookmarksMenu.addBoilerplateItem ()"}};
+				«bundle //old code
+					«s = string.replace (s, "user.menus.bookmark", "user.bookmarksMenu.menu", false)
+					«s = string.replace (s, "playlist.bookmark", "bookmarksMenu", false)
+				return (s)};
+			local (oldTarget = target.set (@user.bookmarksMenu.menu));
+			op.firstSummit ();
+			op.fullExpand ();
+			loop { //loop over the menu, and patch all the scripts
+				local (localScript);
+				if menu.getScript (@localScript) { //patch the script
+					script.newScriptObject (patchScript (string (localScript)), @localScript);
+					menu.setScript (@localScript)};
+				if not op.go (flatdown, 1) {
+					break}};
+			target.set (oldTarget)};
+		if flFreshMenus {
+			menu.noSuite ()};
+		user.bookmarksMenu.data.flInstalled = true;
+		if defined (user.bookmarksMenu.flInstalled) {
+			delete (@user.bookmarksMenu.flInstalled)}}};
+
+«bundle //copy opRightClickCallback
+	«if not defined (user.bookmarksMenu.flInstalled)
+		«user.bookmarksMenu.flInstalled = true
+	«if not user.bookmarksMenu.flInstalled
+		«Frontier.tools.opRightClickCallback will be released separately once builtins.bookmarksMenu is in distribution. Then this whole bundle should be deleted.
+		«Frontier.tools.opRightClickCallback = bookmarksMenu.data.["for Frontier.tools"].opRightClickCallback
+
+return (@user.bookmarksMenu.menu)
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.objectModel.beginningOf
+
+on beginningOf (obj) {
+	return (insertionLoc ('bgng', obj))}
+
+

@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.getUserProfile
+
+on getUserProfile (username, adrprofile) {
+	«Changes
+		«4/22/09; 9:13:17 AM by DW
+			«Created. Gets profile info for indicated user.
+				«http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-users%C2%A0show
+	local (apiurl = "http://twitter.com/users/show/" + username + ".xml");
+	new (tabletype, adrprofile);
+	local (xmltext = tcp.httpreadurl (apiurl), xstruct);
+	xml.compile (xmltext, @xstruct);
+	«scratchpad.xstruct = xstruct
+	local (adruser = xml.getaddress (@xstruct, "user"));
+	adrprofile^.id = xml.getvalue (adruser, "id");
+	adrprofile^.name = xml.getvalue (adruser, "name");
+	adrprofile^.location = xml.getvalue (adruser, "location");
+	adrprofile^.description = xml.getvalue (adruser, "description");
+	adrprofile^.profileImageUrl = xml.getvalue (adruser, "profile_image_url");
+	adrprofile^.url = xml.getvalue (adruser, "url");
+	adrprofile^.followersCount = xml.getvalue (adruser, "followers_count");
+	adrprofile^.profileCreatedAt = twitter.getTwitterTime (xml.getvalue (adruser, "created_at"))};
+bundle { //test code
+	getUserProfile ("davewiner", @scratchpad.twitteruserprofile)}
+
+

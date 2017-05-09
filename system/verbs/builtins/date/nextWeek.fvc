@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.date.nextWeek
+
+on nextWeek (param1) {
+	kernel (date.nextWeek)}
+
+

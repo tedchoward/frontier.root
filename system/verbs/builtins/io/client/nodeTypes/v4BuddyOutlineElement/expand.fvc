@@ -1,0 +1,26 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.nodeTypes.v4BuddyOutlineElement.expand
+
+«Changes
+	«7/21/08; 5:43:21 AM by DW
+		«Eliminate bold styling no matter what atts.bold says.
+	«7/19/08; 1:47:36 PM by DW
+		«Change string.replace to string.replaceall.
+	«7/19/08; 7:35:20 AM by DW
+		«Created.
+local (atts);
+op.attributes.getall (@atts);
+local (adruser = io.client.initUser (atts.name));
+«dialog.alert (adruser^.outlineurl)
+op.deleteSubs ();
+op.insertOutline (@adruser^.outline, right);
+if atts.bold {
+	atts.bold = false;
+	op.attributes.addgroup (@atts)};
+bundle { //eliminate bold styling
+	local (lt = op.getlinetext ());
+	lt2 = string.replaceall (lt, "<b>", "");
+	lt2 = string.replaceall (lt2, "</b>", "");
+	if lt2 != lt {
+		op.setlinetext (lt2)}}
+
+

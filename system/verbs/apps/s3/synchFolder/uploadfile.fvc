@@ -1,0 +1,56 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.synchFolder.uploadfile
+
+on uploadFile (adrdata, adrfile) {
+	«Changes
+		«6/7/12; 3:18:50 PM by DW
+			«Add a couple more stats. 
+		«6/7/12; 10:06:45 AM by DW
+			«New local, flCheckMod. If true, before uploading we check to be sure we're uploading a newer version. Keep stats on skipped file writes.
+		«4/6/12; 3:28:29 PM by DW
+			«Callbacks.
+		«5/13/11; 6:13:27 PM by DW
+			«AC reported that files with blanks in their names wouldn't be correctly processed by file-synching. Immediately reproducible. Tried encoding the spaces as %20's. You know what -- it worked! :-)
+		«3/6/08; 12:29:55 PM by DW
+			«Replace the file path char with / so that folders on the local file system are reflected in the S3 storage space.
+	local (flCheckMod = true, relpath = string.replaceall (nameof (adrfile^), file.getpathchar (), "/"), now = clock.now ());
+	relpath = string.replaceall (relpath, " ", "%20"); //5/13/11 by DW
+	local (path = adrdata^.prefs.rootPath + relpath);
+	local (f = adrdata^.prefs.folder + nameof (adrfile^));
+	bundle { //init stats, 6/7/12 by DW
+		if not defined (adrfile^.ctSkipped) {
+			adrfile^.ctSkipped = 0};
+		if not defined (adrdata^.stats.ctSkipped) {
+			adrdata^.stats.ctSkipped = 0}};
+	if flCheckMod and defined (adrfile^.url) { //6/7/12 by DW
+		local (metadata);
+		s3.getObjectMetadata (path, @metadata);
+		«scratchpad.metadata = metadata
+		if defined (metadata.["Last-Modified"]) { //it exists
+			if file.modified (f) <= date (metadata.["Last-Modified"]) {
+				bundle { //stats
+					adrfile^.ctSkipped++;
+					adrdata^.stats.ctSkipped++;
+					adrdata^.stats.urlLastSkipped = adrfile^.url;
+					adrdata^.stats.whenLastSkipped = now};
+				return (adrfile^.url)}}};
+	local (filedata = string (file.readwholefile (f)));
+	local (returnedval = s3.newObject (path, filedata));
+	bundle { //callbacks, 4/6/12 by DW
+		local (adrscript);
+		s3.init ();
+		for adrscript in @user.s3.callbacks.afterSynchFolderUpload {
+			while typeof (adrscript^) == addresstype {
+				adrscript = adrscript^};
+			try {
+				adrscript^ (f, path)}}};
+	bundle { //stats, 6/7/12 by DW
+		if defined (adrfile^.url) {
+			adrdata^.stats.urlLastUpload = adrfile^.url};
+		adrdata^.stats.whenLastUpload = now};
+	return (returnedval)}
+«bundle //test code
+	«local (adrdata = @user.fileSynch.synchPoints.["Amazon S3"])
+	«local (adrfile = @user.fileSynch.synchPoints.["Amazon S3"].files.["worldOutline:testing.opml"])
+	«webbrowser.openurl (uploadFile (adrdata, adrfile, true))
+
+

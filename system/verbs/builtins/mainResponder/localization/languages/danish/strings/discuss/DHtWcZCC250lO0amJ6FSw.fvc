@@ -1,0 +1,13 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.localization.languages.danish.strings.discuss.sendRpcEnclosureDidntWorkBody
+
+Sorry, the server couldn't send the contents of message [[msgnum]] to your workstation.<p>
+Here's the message we received from your workstation (it may be cryptic):
+<blockquote><i>[[errorstring]]</i></blockquote>
+<b>Here are some things to check</b>:<ul><p>
+	<li>You must have user.betty.rpcHandlers.userland installed.<p>
+	<li>The Frontier application must be running <i>on your workstation.</i><p>
+	<li>Frontier must be running on port 80. (This will become a preference setting.)<p>
+	<li>If you're sure everything is set up correctly, and you're coming in thru a proxy server or firewall, please check with your system administrator about a possible server configuration error.<p>
+	</ul>
+
+

@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.betty.examples.faultTest.test
+
+«Test the fault reporting facility
+	«3/28/98; 7:00:12 PM by DW
+
+dialog.alert (betty.rpc.client (procedureName:"wildBeatnikPie"))
+
+

@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FinderMenu.getSelectionList
+
+on getSelectionList () {
+	if Finder.isScriptable () {
+		with objectModel, Finder {
+			try {
+				local (x = get (selection, as:filespectype));
+				return (list (x))}
+			else {
+				return {}}}}
+	else {
+		return (appleEvent (@FinderMenu.ucmd.code, 'ŸSel', 'ŸSel'))}};
+bundle { «test code
+	dialog.alert (getSelectionList ())}
+
+

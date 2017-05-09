@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.save
+
+on save (obj, saveTo) { «Save a window¹s contents in text format.
+	return (appleEvent (BBEdit.id, 'core', 'save', '----', objspec (obj), 'kfil', alias (saveTo)))}
+
+

@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.pict.pictureToPICT
+
+on pictureToPICT (adrPicture, adrBinary) {
+	target.set (adrPicture);
+	pict.getPicture (adrBinary);
+	target.clear ();
+	return (true)}
+
+

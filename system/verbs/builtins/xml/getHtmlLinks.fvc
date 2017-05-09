@@ -1,0 +1,47 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.getHtmlLinks
+
+on getHtmlLinks (urlHtml, adrtable, adrtext=nil) {
+	«Changes
+		«12/18/09; 1:11:19 PM by DW
+			«Fix a problem which prevented River2's Quick Sub command from working with Tumblr blogs.
+		«11/5/09; 4:44:18 PM by DW
+			«Add optional parameter, adrtext. If not nil, use that text instead of reading it from the url. This saves multiple readings if we're sniffing at the text to figure out what it is.
+		«11/4/09; 6:53:01 PM by DW
+			«Don't look for link-rel just look for link. The rel attribute doesn't have to be first. Doh.
+		«11/4/09; 5:29:21 PM by DW
+			«Gather all the link-rel's out of the HTML text in a table.
+	local (s);
+	bundle { //get s, 11/5/09 by DW
+		if adrtext == nil {
+			s = tcp.httpreadurl (urlHtml, ctFollowRedirects:5)}
+		else {
+			s = string (adrtext^)}};
+	local (ix, ixright, xmltext, xstruct);
+	new (tabletype, adrtable);
+	loop {
+		ix = string.patternmatch ("<link ", string.lower (s));
+		if ix == 0 {
+			return (false)};
+		s = string.delete (s, 1, ix-1);
+		ixright = string.patternmatch (">", s);
+		xmltext = string.mid (s, 1, ixright);
+		try {
+			local (xstruct);
+			try {
+				xml.compile (xmltext, @xstruct)}
+			else { //12/18/09 by DW, maybe they didn't close the link with "/>"
+				local (len = sizeof (xmltext));
+				«msg (xmltext [len-1])
+				if xmltext [len-1] != "/" {
+					xmltext = string.insert ("/", xmltext, len)};
+				xml.compile (xmltext, @xstruct)};
+			local (adrlink = xml.getaddress (@xstruct, "link"));
+			local (adratts = @adrlink^.["/atts"]);
+			adrtable^.[adratts^.href] = adratts^};
+			«scratchpad.xstruct = xstruct
+		s = string.delete (s, 1, ixright)}};
+bundle { //test code
+	getHtmlLinks ("http://twitter.com/", @scratchpad.links2)}
+	«getHtmlLinks ("http://unberkeley.com", @scratchpad.links2)
+
+

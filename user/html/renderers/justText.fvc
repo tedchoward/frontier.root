@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:user.html.renderers.justText
+
+on justText (adroutline) {
+	return (string (adroutline^))}
+
+

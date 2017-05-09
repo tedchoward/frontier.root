@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.launch
+
+on launch () {
+	return (app.startWithDocument ("WebStar", ""))}
+
+

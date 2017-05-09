@@ -1,0 +1,26 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.readability.shortenUrl
+
+on shortenUrl (url) {
+	«Changes
+		«11/16/11; 8:40:20 AM by DW
+			«http://worknotes.scripting.com/november2011/111611ByDw/supportForReadabilityShortenerApi
+	local (server = "readability.com", path = "/api/shortener/v1/urls");
+	local (data = "url=" + string.urlencode (url, true), datatype = "application/x-www-form-urlencoded");
+	local (s = tcp.httpClient ("POST", server, path:path, ctFollowRedirects:3, flMessages:true, data:data, datatype:datatype));
+	local (code = tcp.httpGetStatusCode (s));
+	if (code >= 200) and (code <= 299) {
+		local (xstruct);
+		s = string.httpresultsplit (s);
+		«wp.newtextobject (s, @scratchpad.readable)
+		json.compile (s, @xstruct);
+		«scratchpad.xstruct = xstruct
+		local (adrmeta = xml.getaddress (@xstruct, "meta"));
+		return (xml.getvalue (adrmeta, "rdd_url"))}
+	else {
+		scripterror ("Can't shorten the URL because " + server + " returned an an HTTP status of " + code + ".")}};
+bundle { //test code
+	clipboard.putvalue (shortenUrl ("http://www.nytexaminer.com/2011/11/a-stoplight-in-jodhpur/"))}
+	«clipboard.putvalue (shortenUrl ("http://worknotes.scripting.com/november2011/111611ByDw/supportForReadabilityShortenerApi"))
+	«clipboard.putvalue (shortenUrl ("http://scripting.com/stories/2011/11/15/ocupying.html"))
+
+

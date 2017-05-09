@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.objectExists
+
+on objectExists (path) {
+	«Changes
+		«5/13/11; 9:25:26 AM by DW
+			«Created. Hard to believe we were missing this function. 
+	local (metadata);
+	s3.getObjectMetadata (path, @metadata);
+	«scratchpad.metadata = metadata
+	return (defined (metadata.["Content-Length"]))};
+bundle { //test code
+	dialog.alert (objectExists ("/static.scripting.com/misc/topdave.js"));
+	dialog.alert (objectExists ("/staticx.scripting.com/misc/topdave.js"));
+	dialog.alert (objectExists ("/static.scripting.com/miscx/topdave.js"));
+	edit (@scratchpad.metadata)}
+
+

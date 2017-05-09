@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.getFileName
+
+on getFileName (name, adrPageTable=@websites.["#data"]) { «new in 4.0.1
+	local (fileExtension = html.getPref ("fileExtension", adrPageTable));
+	return (html.normalizeName (name, adrPageTable, adrPageTable^.adrObject) + fileExtension)}
+
+

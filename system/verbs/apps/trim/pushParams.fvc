@@ -1,0 +1,30 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.trim.pushParams
+
+on pushParams (username="", password="", apikey="", chfirst="&") {
+	«Changes
+		«4/28/09; 10:25:52 AM by DW
+			«Add new optional param, chfirst. You can set it to ? if these are the first params you're pushing on the API url.
+		«4/3/09; 9:25:07 AM by DW
+			«Created. 
+	local (s = "");
+	trim.init ();
+	bundle { //username, password
+		if username == "" {
+			if user.trim.prefs.username != "" {
+				username = user.trim.prefs.username}};
+		if password == "" {
+			if user.trim.prefs.password != "" {
+				password = user.trim.prefs.password}};
+		if (username != "") and (password != "") {
+			s = s + chfirst + "username=" + string.urlencode (username) + "&password=" + string.urlencode (password)}};
+	bundle { //api key
+		if apikey == "" {
+			if user.trim.prefs.apiKey != "" {
+				apikey = user.trim.prefs.apiKey}};
+		if apikey != "" {
+			s = s + "&api_key=" + string.urlencode (apikey)}};
+	return (s)};
+bundle { //test code
+	dialog.alert (pushparams ())}
+
+

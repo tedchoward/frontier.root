@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.setObjectFrame
+
+on setObjectFrame (name, flag) {
+	new (tableType, @atts);
+	atts.fram = boolean (flag);
+	return (card.setObjectAttributes (name, @atts))}
+
+

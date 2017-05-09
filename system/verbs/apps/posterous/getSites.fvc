@@ -1,0 +1,41 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.posterous.getSites
+
+on getSites (adrtable, username=nil, password=nil) {
+	«Changes
+		«11/20/09; 6:43:06 PM by DW
+			«Created. Fills a table with information about the user's Posterous sites.
+				«http://posterous.com/api/posting
+	local (adrdata = posterous.init ());
+	if username == nil {
+		username = adrdata^.prefs.username};
+	if password == nil {
+		password = string (adrdata^.prefs.password)};
+	local (apiurl = "http://posterous.com/api/getsites");
+	new (tabletype, adrtable);
+	local (xmltext = tcp.httpreadurl (apiurl, 5, false, username, password), xstruct);
+	xml.compile (xmltext, @xstruct);
+	scratchpad.xstruct = xstruct;
+	local (adrrsp = xml.getaddress (@xstruct, "rsp"));
+	local (status = xml.getattributevalue (adrrsp, "stat"));
+	case status {
+		"ok" {
+			local (adrsite);
+			for adrsite in adrrsp {
+				if nameof (adrsite^) endswith "site" {
+					local (id = xml.getvalue (adrsite, "id"));
+					local (adrsub = @adrtable^.[id]);
+					new (tabletype, adrsub);
+					adrsub^.name = xml.getvalue (adrsite, "name");
+					adrsub^.hostname = xml.getvalue (adrsite, "hostname");
+					adrsub^.url = xml.getvalue (adrsite, "url");
+					adrsub^.flPrivate = boolean (xml.getvalue (adrsite, "private"));
+					adrsub^.flPrimary = boolean (xml.getvalue (adrsite, "primary"));
+					adrsub^.flCommentsEnabled = boolean (xml.getvalue (adrsite, "commentsenabled"));
+					adrsub^.ctPosts = xml.getvalue (adrsite, "num_posts")}}};
+		"fail" {
+			local (adrerr = xml.getaddress (adrrsp, "err"));
+			scripterror (xml.getattributevalue (adrerr, "msg"))}}};
+bundle { //test code
+	getSites (@scratchpad.mysites)}
+
+

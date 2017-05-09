@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.commentDelete
+
+on commentDelete (s) {
+	kernel (string.commentdelete)}
+
+

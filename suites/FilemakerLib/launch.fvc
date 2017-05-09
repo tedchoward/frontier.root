@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.FilemakerLib.launch
+
+on launch () {
+	return (filemaker.launch ())}
+
+

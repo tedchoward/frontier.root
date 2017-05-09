@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.getUserPrefs
+
+on getUserPrefs (adrprefs, urlRoot=nil, adrwindow=nil) {
+	«Changes
+		«2/12/12; 10:02:59 AM by DW
+			«New optional param, adrwindow.
+		«1/26/12; 11:29:01 AM by DW
+			«Add optional param, urlRoot, pass it to the RPC handler on the server.
+		«9/19/11; 7:54:44 PM by DW
+			«Connects with the RPC handler to get the user's prefs.
+	local (adrdata = opmlEditor.worldOutline.init (), server, username, password);
+	if not opmlEditor.worldOutline.getServerInfo (@server, @username, @password, adrwindow) { //2/11/12 by DW
+		return};
+	if urlRoot == nil {
+		adrprefs^ = [server].worldOutline.getUserPrefs (username, password)}
+	else {
+		adrprefs^ = [server].worldOutline.getUserPrefs (username, password, urlRoot)};
+	return (true)};
+bundle { //test code
+	local (tc = clock.ticks ());
+	getUserPrefs (@scratchpad.myprefs);
+	«getUserPrefs (@scratchpad.myprefs, "http://static.reallysimple.org/worldoutline/dave/2012/01/04/archive037.opml")
+	dialog.alert (clock.ticks () - tc)}
+
+

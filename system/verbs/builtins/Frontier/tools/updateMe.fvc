@@ -1,0 +1,18 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.updateMe
+
+on updateMe (adrInTool) {
+	«Changes
+		«7/25/08; 10:02:45 PM by DW
+			«Created. Call this script with the address of something in a tool (probably "this") and it takes care of updating the tool. The code doing the updating can be updated as well since it launches a thread then returns. 
+	local (adrstring = string.popfilefromaddress (adrInTool));
+	local (scriptstring = "Frontier.tools.commands.updateFrontTool (@" + adrstring + ", false)");
+	loop {
+		local (adrtempscript = @system.temp.["update" + random (1, 100000)]);
+		if not defined (adrtempscript^) {
+			script.newscriptobject (scriptstring, adrtempscript);
+			thread.callscript (adrtempscript, {});
+			break}}}
+«bundle //test code
+	«updateMe (@instantOutlineSuite.updateTool)
+
+

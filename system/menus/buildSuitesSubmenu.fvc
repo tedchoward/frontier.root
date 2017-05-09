@@ -1,0 +1,49 @@
+FrontierVcsFile:3:scpt:system.menus.buildSuitesSubmenu
+
+on buildSuitesSubMenu () {
+	«Build the Suites submenu in the Main menu.
+		«Changes:
+			«9/23/99; 2:58:52 PM by PBS
+				«You can put the address of a suite in the suites table, and it will be added to the menu.
+			«9/24/99; 10:50:48 AM by PBS
+				«If the suite is in a gdb, and the gdb is open, and the suite contains a suiteName item, use that when building the Suites submenu. Otherwise, if the gdb is not open, use the name of the object in the Suites table.
+	
+	local (localMenu = system.menus.virginSuitesMenu);
+	local (oldTarget = target.get ());
+	target.set (@localMenu);
+	
+	local (adrSuitesTable = @root.suites);
+	local (i, ct = sizeOf (adrSuitesTable^), adrSuite, adrMenu, name, logic);
+	for i = 1 to ct {
+		adrSuite = @adrSuitesTable^ [i];
+		
+		local (suiteType = typeOf (adrSuite^));
+		case suiteType { //handle tables and addresses
+			tableType {
+				adrMenu = @adrsuite^.menu;
+				if not defined (adrMenu^) {
+					continue};
+				if typeOf (adrMenu^) != menubarType {
+					continue};
+				try {
+					name = adrSuite^.suiteName}
+				else {
+					name = nameOf (adrSuite^)}};
+			addressType {
+				name = nameOf (adrSuite^);
+				if defined (adrSuite^^.suiteName) { //PBS 9/24/99: if the gdb is open, and the suite contains a suiteName, use it
+					name = adrSuite^^.suiteName}}}
+		else { //if it's not a table or address, continue
+			continue};
+		
+		logic = "system.menus.swapInSuite (@" + adrSuite + ")";
+		menu.addMenuCommand (@localMenu, "Suites", name, logic)};
+	
+	if system.environment.isMac {
+		menu.addSubMenu (@system.menus.menubar, "Main", @localMenu)};
+	if system.environment.isWindows {
+		menu.addSubMenu (@system.menus.menubar, "&Main", @localMenu)};
+	
+	try {target.set (oldTarget)}}
+
+

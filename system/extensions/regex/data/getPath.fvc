@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.data.getPath
+
+«Make sure the DLL exists on disk and is loaded by Frontier.
+	«Return the path to the DLL.
+
+local (dllPath);
+if file.exists (regex.data.dllpath) {
+	dllpath = regex.data.dllpath}
+else {
+	dllPath = regex.data.installDLL ()};
+if not (dll.isloaded (dllPath)) {
+	dll.load (dllPath)};
+return (dllPath)
+
+

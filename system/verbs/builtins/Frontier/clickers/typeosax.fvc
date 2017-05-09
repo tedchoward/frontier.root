@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.clickers.typeosax
+
+on typeosax (path) {
+	if applescripts.loadOSAX (path) != nil {
+		Frontier.findertofront = false};
+	return (true)}
+
+

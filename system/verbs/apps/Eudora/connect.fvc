@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.connect
+
+on connect (sendMail = nil, checkMail = nil, wait = nil) { «Connect to the mail server and transfer mail
+	return (appleEvent (Eudora.id, 'CSOm', 'eCon', 'eSen', boolean (sendMail), 'eChk', boolean (checkMail), 'eIdl', boolean (wait)))}
+
+

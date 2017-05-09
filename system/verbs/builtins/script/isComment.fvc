@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.script.isComment
+
+on isComment () {
+	kernel (script.iscomment)}
+
+

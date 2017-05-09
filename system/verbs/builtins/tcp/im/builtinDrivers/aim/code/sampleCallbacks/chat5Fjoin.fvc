@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.code.sampleCallbacks.chat_join
+
+on CHAT_JOIN(adrSelf, roomID, roomName) {
+	return("on chat join")}
+
+

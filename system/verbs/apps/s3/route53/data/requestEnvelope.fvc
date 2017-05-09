@@ -1,0 +1,14 @@
+FrontierVcsFile:3:optx:system.verbs.apps.s3.route53.data.requestEnvelope
+
+<?xml version="1.0" encoding="UTF-8"?>
+<ChangeResourceRecordSetsRequest xmlns="https://route53.amazonaws.com/doc/2011-05-05/">
+	<ChangeBatch>
+		<Comment><%comment%></Comment>
+		<Changes>
+			<%bodytext%>
+			</Changes>
+		</ChangeBatch>
+	</ChangeResourceRecordSetsRequest>
+
+
+

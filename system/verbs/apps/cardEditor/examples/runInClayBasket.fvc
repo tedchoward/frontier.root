@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.examples.runInClayBasket
+
+clay.launch ();
+clay.bringtofront ();
+clay.card.run (cardEditor.getPackedCard ())
+
+

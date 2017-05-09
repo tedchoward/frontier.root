@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.fileMenu.saveCopy
+
+on saveCopy (path) {
+	kernel (filemenu.savecopy)}
+
+

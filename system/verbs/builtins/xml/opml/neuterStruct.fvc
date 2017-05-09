@@ -1,0 +1,32 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.opml.neuterStruct
+
+on neuterStruct (adrxstruct) {
+	«Changes
+		«9/16/12; 8:38:52 AM by DW
+			«Neuter macros.
+		«9/12/12; 9:45:11 AM by DW
+			«Beginnings of a general-purpose neutering script for opml xstructs. We loop recursively looking for "text" attributes, when we find one, we neuter it according to the contents of xml.opml.data.legalTags.
+				«http://worknotes.scripting.com/september2012/91312ByDw/neuteringTagsInComments
+	on visit (adrx) {
+		local (adratts = @adrx^.["/atts"]);
+		if defined (adratts^) {
+			if defined (adratts^.text) {
+				if adratts^.text contains "&lt;" {
+					local (s = string.replaceall (adratts^.text, "&lt;", "<"), origsize);
+					s = string.replaceall (s, "&gt;", ">");
+					origsize = sizeof (s);
+					s = html.neutertags (s, @xml.opml.data.legalTags);
+					s = string.replaceall (s, "<%", "&lt;%"); //9/16/12 by DW
+					if sizeof (s) != origsize { //something got neutered
+						s = string.replaceall (s, "&", "&amp;");
+						s = string.replaceall (s, ">", "&gt;");
+						s = string.replaceall (s, "<", "&lt;");
+						adratts^.text = s}}}};
+		return (false)}; //keep searching
+	xml.opml.search (adrxstruct, @visit)};
+bundle { //test code
+	«xml.compile (string (scratchpad.myopmltext), @scratchpad.mytestxstruct)
+	scratchpad.mycopystruct = scratchpad.mytestxstruct;
+	neuterStruct (@scratchpad.mycopystruct)}
+
+

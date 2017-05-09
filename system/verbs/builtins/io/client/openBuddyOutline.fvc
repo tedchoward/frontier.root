@@ -1,0 +1,18 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.openBuddyOutline
+
+on openBuddyOutline () {
+	«Changes
+		«4/23/11; 6:17:56 PM by DW
+			«Link in the right-click menu for buddy windows.
+		«7/15/10; 10:37:46 AM by DW
+			«Created. 
+	local (adrdata = io.init ());
+	local (adroutline = @adrdata^.client.buddies.outline);
+	local (adrbuttons = @io.client.buttons.buddies);
+	local (title = "Instant Outliner: Buddies");
+	edit (adroutline, adrButtonTable:adrbuttons, windowtitle:title, flReadOnly:true);
+	window.attributes.setone ("adrRightClickMenu", @io.client.rightClickMenuForBuddies)}; //4/23/11 by DW
+bundle { //test code
+	openBuddyOutline ()}
+
+

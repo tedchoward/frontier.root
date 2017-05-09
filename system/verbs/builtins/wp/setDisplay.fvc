@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.wp.setDisplay
+
+on setDisplay (x) {
+	kernel (wp.setdisplay)}
+
+

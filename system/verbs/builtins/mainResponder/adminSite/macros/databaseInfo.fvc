@@ -1,0 +1,80 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.adminSite.macros.databaseInfo
+
+on databaseInfo () {
+	«Changes
+		«8/14/02; 5:43:24 PM by JES
+			«Created.
+	local (htmltext);
+	on add (s) {
+		htmltext = htmltext + (s + "\r");};
+	local (pta = html.getPageTableAddress ());
+	local (bgcolors = {pta^.trbg1, pta^.trbg2});
+	
+	local (t); new (tableType, @t);
+	bundle { //build sorted table of databases
+		local (adr);
+		for adr in @system.compiler.files {
+			local (f = nameOf (adr^));
+			local (dbname = file.fileFromPath (f));
+			local (dbsize = file.size (f));
+			local (modified = file.modified (f));
+			local (folder = file.folderFromPath (f));
+			local (foldername = file.fileFromPath (folder));
+			local (adrdb = @[f] );
+			local (dbtables = sizeOf (adrdb^));
+			local (adrfolder = @t.[foldername]);
+			if not defined (adrfolder^) {
+				new (tableType, adrfolder)};
+			local (adrdbinfo = @adrfolder^.[dbname]);
+			new (tableType, adrdbinfo);
+			adrdbinfo^.size = dbsize;
+			adrdbinfo^.modified = modified;
+			adrdbinfo^.tables = dbtables};
+		local (rootpath = window.getFile (@root));
+		local (adrrootfolder = @t.[" "]);
+		new (tableType, adrrootfolder);
+		local (rootname = file.fileFromPath (rootpath));
+		local (adrroot = @adrrootfolder^.[rootname] );
+		new (tableType, adrroot);
+		adrroot^.size = file.size (rootpath);
+		adrroot^.modified = file.modified (rootpath);
+		adrroot^.tables = sizeOf (root)};
+	
+	add ("<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"92%\">");
+	bundle { //headers
+		add ("<tr><td><b>Folder</b></td><td><b>Database</b></td><td align=\"right\"><b>Size</b></td><td align=\"right\"><b>Tables</b></td><td align=\"right\"><b>Modified</b></td></tr>")};
+	
+	on datestring (d) {
+		on pad (n) {
+			return (string.padWithZeros (n, 2))};
+		local (day, month, year, hour, minute, second);
+		date.get (d, @day, @month, @year, @hour, @minute, @second);
+		local (meridian);
+		if hour > 12 {
+			hour = hour - 12;
+			meridian = " PM"}
+		else {
+			if hour == 0 {
+				hour = 12};
+			meridian = " AM"};
+		return (pad (month) + "/" + pad (day) + "/" + string.mid (year, 2, 2) + "; " + pad (hour) + ":" + pad (minute) + ":" + pad (second) + meridian)};
+	
+	local (ct = 0, adrfolder, adrdb);
+	for adrfolder in @t {
+		local (folder = nameOf (adrfolder^));
+		for adrdb in adrfolder {
+			add ("<tr bgcolor=\"" + bgcolors[(ct++% 2) + 1] + "\">");
+			add ("<td class=\"small\">" + folder + "</td>");
+			folder = ""; //only display the folder once
+			add ("<td class=\"small\">" + nameOf (adrdb^) + "</td>");
+			add ("<td class=\"small\" align=\"right\">" + string.gigabyteString (adrdb^.size) + "</td>");
+			add ("<td class=\"small\" align=\"right\">" + adrdb^.tables + "</td>");
+			add ("<td class=\"small\" align=\"right\">" + datestring (adrdb^.modified) + "</td>");
+			add ("</tr>")};
+		add ("<tr><td>&nbsp;</td></tr>"); ct = 0};
+	
+	add ("</table>");
+	
+	return (htmltext)}
+
+

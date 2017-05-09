@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.sendAgain
+
+on sendAgain (obj) { «Send a message again
+	return (appleEvent (Eudora.id, 'CSOm', 'eSav', '----', objspec (obj)))}
+
+

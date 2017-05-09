@@ -1,0 +1,69 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.openArchivedOutline
+
+on openArchivedOutline (urlOutline, title, adrbuttons=nil, worldoutlineserver=nil) {
+	«Changes
+		«12/14/12; 12:16:23 PM by DW
+			«Add to history.
+				«http://worknotes.scripting.com/december2012/121412ByDw/historyFunctionInEditor
+		«10/2/12; 7:36:41 PM by DW
+			«New optional param, worldoutlineserver. If nil, we use the default server.
+				«http://worknotes.scripting.com/october2012/10212ByDw/bookmarkingRoots
+		«9/6/12; 11:22:19 AM by DW
+			«If the user-specified buttons table, user.opmlEditor.worldOutline.buttons, is empty, just use the original buttons table.
+		«9/4/12; 6:24:04 PM by DW
+			«User-specified buttons. 
+				«http://worknotes.scripting.com/september2012/9412ByDw/userspecifiedButtons
+		«7/20/12; 10:24:13 AM by DW
+			«Add a window attribute for rightClickCallback pointing to code that adds worldoutline-specific commands to the right-click menu.
+		«4/22/12; 6:15:39 PM by DW
+			«New optional parameter, adrbuttons. Lets the caller provide the buttons for the window.
+		«4/22/12; 5:36:22 PM by DW
+			«Return the address of the outline, in case the caller wants to add attributes to the window. 
+		«2/13/12; 8:50:36 PM by DW
+			«Set the editorialDomain attribute on the window as we open it.
+		«1/11/12; 6:12:20 PM by DW
+			«Don't add World Outline: at the beginning of the window title when you open it.
+		«11/2/11; 10:30:01 AM by DW
+			«Called from an item in the Bookmarks menu. It opens a previously archived outline for editing.
+	local (adrdata = opmleditor.worldoutline.init (), adrtable);
+	bundle { //set up buttons table, 9/4/12 by DW
+		if adrbuttons == nil {
+			if sizeof (user.opmlEditor.worldOutline.buttons) > 0 {
+				local (adr, ct = 0);
+				system.temp.opmlEditor.worldOutline.buttons = opmlEditor.worldOutline.buttons.archive;
+				for adr in @user.opmlEditor.worldOutline.buttons {
+					if typeof (adr^) == scriptType {
+						local (name = nameof (adr^));
+						if not (name contains "\t") {
+							name = "100000" + string.padwithzeros (ct++, 2) + "\t" + name;
+							system.temp.opmlEditor.worldOutline.buttons.[name] = adr^}}};
+				adrbuttons = @system.temp.opmlEditor.worldOutline.buttons}
+			else {
+				adrbuttons = @opmlEditor.worldOutline.buttons.archive}}};
+	bundle { //set worldoutlineserver if it's nil, 10/2/12 by DW
+		if worldoutlineserver == nil {
+			worldoutlineserver = adrdata^.prefs.defaultServer}};
+	«if adrbuttons == nil //4/22/12 by DW
+		«adrbuttons = @opmlEditor.worldOutline.buttons.archive
+	op.getnetoutline (urlOutline, @adrtable, flKeepXml:true);
+	if not defined (adrtable^.outline) {
+		op.xmltooutline (adrtable^.xmltext, @adrtable^.outline)};
+	edit (@adrtable^.outline, title, false, adrbuttons);
+	window.attributes.setone ("urlOutline", urlOutline);
+	window.attributes.setone ("editorialDomain", worldoutlineserver); //2/13/12 by DW
+	window.attributes.setone ("rightClickCallback", @opmlEditor.worldOutline.rightClickCallback); //7/20/12 by DW
+	bundle { //add to history table -- 12/14/12 by DW
+		local (atts);
+		new (tabletype, @atts);
+		atts.editorialDomain = worldoutlineserver;
+		atts.title = title;
+		atts.root = urlOutline;
+		opmlEditor.worldOutline.history.add (atts)};
+	«edit (adrtable)
+	return (@adrtable^.outline)} //4/22/12 by DW
+«bundle //test code
+	«local (url = "http://static.reallysimple.org/worldoutline/dave/2011/11/02/archive003.opml")
+	«local (title = "droidie.com")
+	«openArchivedOutline (url, title)
+
+

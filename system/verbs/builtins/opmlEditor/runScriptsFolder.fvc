@@ -1,0 +1,44 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.runScriptsFolder
+
+on runScriptsFolder () {
+	«Changes
+		«12/28/09; 8:29:31 AM by DW
+			«Implement Scripts folder, a sub-folder of Guest Databases/ops that contains scripts that run every minute, every hour and once every night.
+	local (basepath = "/ops/scripts/");
+	on runFolder (name) {
+		local (folder = frontier.getsubfolder (basepath + name + "/"), f, adrcounter);
+		file.surefilepath (folder + "xxx");
+		bundle { //set adrcounter
+			local (capname = string.upper (name [1]) + string.delete (name, 1, 1));
+			adrcounter = @user.opmlEditor.stats.runScriptsFolder.["ct" + capname + "Scripts"];
+			if not defined (adrcounter^) {
+				adrcounter^ = 0}};
+		fileloop (f in folder) {
+			try {
+				local (s = string (file.readWholeFile (f)));
+				s = string.replaceall (s, "\n", "");
+				evaluate (s);
+				adrcounter^++}
+			else {
+				new (tabletype, @user.opmlEditor.stats.runScriptsFolder.lastScriptError);
+				user.opmlEditor.stats.runScriptsFolder.lastScriptError.s = tryerror;
+				user.opmlEditor.stats.runScriptsFolder.lastScriptError.when = clock.now ();
+				user.opmlEditor.stats.runScriptsFolder.lastScriptError.f = f}}};
+	if user.opmlEditor.prefs.flScriptsFolderEnabled {
+		if file.exists (frontier.getsubfolder ("/ops/scripts/")) {
+			local (now = clock.now (), day, month, year, hour, minute, second);
+			date.get (now, @day, @month, @year, @hour, @minute, @second);
+			
+			runFolder ("everyMinute");
+			
+			if hour != user.opmlEditor.stats.runScriptsFolder.lastHourlyScriptHour {
+				user.opmlEditor.stats.runScriptsFolder.lastHourlyScriptHour = hour;
+				runFolder ("hourly")};
+			
+			if not date.sameday (now, user.opmlEditor.stats.runScriptsFolder.whenLastOverNightScriptRun) {
+				user.opmlEditor.stats.runScriptsFolder.whenLastOverNightScriptRun = now;
+				runFolder ("overnight")}}}};
+bundle { //test code
+	runScriptsFolder ()}
+
+

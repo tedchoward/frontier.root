@@ -1,0 +1,23 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.client.processIncomingUpdates
+
+on processIncomingUpdates (adrserver, updates) {
+	«Changes
+		«8/13/10; 9:39:14 AM by DW
+			«Code pulled out of realtime.client.getUpdates, so the update-getter can more quickly get back to getting updates.
+	local (adrupdate, fldebug = true);
+	«scratchpad.updates = updates
+	if fldebug {
+		if not defined (adrserver^.updates) {
+			new (tabletype, @adrserver^.updates)}};
+	for adrupdate in @updates {
+		bundle { //call the callbacks
+			local (adrscript);
+			for adrscript in @adrserver^.callbacks {
+				while typeof (adrscript^) == addresstype {
+					adrscript = adrscript^};
+				try {adrscript^ (adrupdate)}};
+			adrserver^.stats.ctUpdates++};
+		if fldebug {
+			adrserver^.updates.[nameof (adrupdate^)] = adrupdate^}}}
+
+

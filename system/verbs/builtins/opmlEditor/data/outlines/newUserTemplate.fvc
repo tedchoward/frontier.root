@@ -1,0 +1,29 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.opmlEditor.data.outlines.newUserTemplate
+
+<div class="divNewUserForm">
+	<h3>New User</h3>
+	<div class="divIntroPgf">Enter the username and password for the account you want to create.</div>
+	<form class="form-horizontal"  method="POST">
+		<fieldset>
+			<div class="control-group">
+				<label class="control-label" for="usernameNew">Username:</label>
+				<div class="controls">
+					<input type="text" name="usernameNew" id="usernameNew" value="<%username%>" class="input-xlarge" id="username"/>
+					</div>
+				</div>
+			<div class="control-group">
+				<label class="control-label" for="passwordNew">Password:</label>
+				<div class="controls">
+					<input type="password" name="passwordNew" id="passwordNew" class="input-xlarge" id="password"/>
+					</div>
+				</div>
+			<div class="divButton">
+				<button type="submit" id="submit" name="submit" class="btn btn-primary newUserSubmit">Submit</button>
+				</div>
+			</fieldset>
+		</form>
+	<p><span class="spanSuccessMessage"><%message%></span><span class="spanErrorMessage"><%errormessage%></span></p>
+	</div>
+
+
+

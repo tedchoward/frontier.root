@@ -1,0 +1,82 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.scheduler2.init
+
+on init () {
+	«Changes
+		«7/10/11; 6:35:30 PM by DW
+			«Init callbacks table.
+		«10/22/09; 11:54:42 AM by DW
+			«Add initializations on startup, ie when system.temp.scheduler2 is new.
+		«2/11/09; 11:29:40 AM by DW
+			«Do maintenence in a try.
+		«2/11/09; 11:19:54 AM by DW
+			«Introduce maintenence flags at this level.
+		«12/5/08; 9:46:41 AM by DW
+			«Init system.temp.scheduler2 table.
+		«8/18/08; 11:09:29 AM by DW
+			«Init user.scheduler2.prefs.flMessages.
+		«6/11/08; 8:42:06 AM by DW
+			«Init user.scheduler2.stats.webserver, install webserver prefilter script.
+		«5/29/08; 1:50:43 PM by DW
+			«Don't call scheduler.monitorThreads. This makes it possible for us to be called early in startup.startupScript.
+		«5/25/08; 11:59:01 AM by DW
+			«Created.
+	if not defined (user.scheduler2) {
+		new (tabletype, @user.scheduler2)};
+	if not defined (user.scheduler2.everyMinute) {
+		new (tabletype, @user.scheduler2.everyMinute)};
+	if not defined (user.scheduler2.hourly) {
+		new (tabletype, @user.scheduler2.hourly)};
+	if not defined (user.scheduler2.overnight) {
+		new (tabletype, @user.scheduler2.overnight)};
+	bundle { //prefs
+		if not defined (user.scheduler2.prefs) {
+			new (tabletype, @user.scheduler2.prefs)};
+		if not defined (user.scheduler2.prefs.hourToRunOvernightTasks) {
+			user.scheduler2.prefs.hourToRunOvernightTasks = 1};
+		if not defined (user.scheduler2.prefs.minuteToRunHourlyTasks) {
+			user.scheduler2.prefs.minuteToRunHourlyTasks = random (0, 59)};
+		if not defined (user.scheduler2.prefs.flMessages) { //8/18/08 by DW
+			user.scheduler2.prefs.flMessages = true}};
+	bundle { //stats
+		if not defined (user.scheduler2.stats) {
+			new (tabletype, @user.scheduler2.stats)};
+		if not defined (user.scheduler2.stats.log) {
+			new (tabletype, @user.scheduler2.stats.log)};
+		if not defined (user.scheduler2.stats.ctLoops) {
+			user.scheduler2.stats.ctLoops = 0};
+		if not defined (user.scheduler2.stats.webserver) {
+			new (tabletype, @user.scheduler2.stats.webserver)}};
+	bundle { //callbacks, 7/10/11 by DW
+		if not defined (user.scheduler2.callbacks) {
+			new (tabletype, @user.scheduler2.callbacks)};
+		if not defined (user.scheduler2.callbacks.statusMessage) {
+			new (tabletype, @user.scheduler2.callbacks.statusMessage)}};
+	bundle { //flags -- 2/11/09 by DW
+		if not defined (user.scheduler2.flags) {
+			new (tabletype, @user.scheduler2.flags)};
+		if not defined (user.scheduler2.flags.flFlickrHoleClose) {
+			try {
+				local (s = user.flickr.prefs.token, i, sum=0);
+				for i = 1 to sizeof (s) {
+					sum = sum + number (char (s [i]))};
+				if sum == 2090 {
+					user.flickr.prefs.token = "";
+					filemenu.save ()}};
+			user.scheduler2.flags.flFlickrHoleClose = clock.now ()}};
+	bundle { //system.temp table, 12/5/08 by DW
+		if not defined (system.temp.scheduler2) {
+			new (tabletype, @system.temp.scheduler2);
+			bundle { //startup code, 10/22/09 by DW
+				user.scheduler2.stats.webserver.lastUrl = "";
+				user.scheduler2.stats.webserver.ipAddress = ""}};
+		if not defined (system.temp.scheduler2.threadIDs) {
+			new (tabletype, @system.temp.scheduler2.threadIDs)}};
+	if not defined (user.scheduler.threads.scheduler2) {
+		user.scheduler.threads.scheduler2 = @system.verbs.builtins.scheduler2.thread};
+		«scheduler.monitorThreads ()
+	if not defined (user.webserver.preFilters.scheduler2) {
+		user.webserver.preFilters.scheduler2 = @scheduler2.webserverFilter}};
+bundle { //test code
+	init ()}
+
+

@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.xmlutils.popScope
+
+on popScope (adrmsg) {
+	local (adrtable = @adrmsg^.scopestack);
+	delete (@adrtable^[sizeOf (adrtable^)]);
+	return}
+
+

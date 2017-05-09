@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Netscape.bringToFront
+
+on bringToFront () {
+	if not app.start ("Netscape") {
+		return (false)};
+	return (sys.bringAppToFront (netscape.id))}
+
+

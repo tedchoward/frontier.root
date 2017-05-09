@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.controlPanel.["#wizard"].structure.["00001000\twizard"].["00001000\tpanel"].["00004000\titem"].["00004000\tpopuptext"]
+
+Top-level sites are sites of the form siteName.server.com. For top-level sites, it's necessary to have a * DNS mapping for this domain pointing to this server.<p>Sub-sites are created underneath a top-level site, as at www.server.com/siteName/.<p>If you switch from one type to the other, you must change the base domain for new sites.
+
+

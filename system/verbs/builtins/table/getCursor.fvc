@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.table.getCursor
+
+on getCursor () {
+	kernel (table.getCursor)}
+
+

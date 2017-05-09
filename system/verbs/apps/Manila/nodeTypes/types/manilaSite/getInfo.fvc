@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Manila.nodeTypes.types.manilaSite.getInfo
+
+local (infoText =  "");
+on add (s) {
+	infoText = infoText + s + "\r"};
+local (atts);
+if op.attributes.getAll (@atts) {
+	add ("URL: " + atts.siteUrl);
+	dialog.notify (infoText)}
+
+

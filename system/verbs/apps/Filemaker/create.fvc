@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.create
+
+on create (new, withData = nil, withProperties = nil, at = nil) { «Create a new element
+	«return (appleEvent (FileMaker.id, 'core', 'crel', 'kocl', string4 (new), 'insh', at, 'data', withData, 'prdt', withProperties))
+	return (core.create (FileMaker.id, new, withData, withProperties, at))}
+
+

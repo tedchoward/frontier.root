@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.quitApplication
+
+on quitApplication () {
+	return (required.quitApplication (Fetch.id))}
+
+

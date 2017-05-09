@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.utilities.allocDomainName
+
+on allocDomainName (adrsetting) {
+	«Changes
+		«4/7/12; 11:00:30 AM by DW
+			«Created. Parameter adrsetting points to a location that's to receive a CNAME that points to this machine. 
+				«http://worknotes.scripting.com/april2012/4712ByDw/automaticSettingOfExternaldomainname/
+	local (server = "xmlrpc://blorkmarkserver.scripting.com/RPC2", response, now = clock.now ());
+	if not defined (system.temp.opmlEditor.stats.whenCnameAlloc) {
+		try {
+			system.temp.opmlEditor.stats.whenCnameAlloc = now;
+			response = [server].dnsapi2.allocCname ("mediahackers.org", "");
+			if (not defined (adrsetting^)) or (sizeof (adrsetting^) == 0) or (adrsetting^ == "127.0.0.1") {
+				adrsetting^ = response.allocatedName}};
+		delete (@system.temp.opmlEditor.stats.whenCnameAlloc)}};
+bundle { //test code
+	allocDomainName (@scratchpad.mydomain)}
+
+

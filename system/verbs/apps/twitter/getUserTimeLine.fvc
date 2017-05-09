@@ -1,0 +1,90 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.twitter.getUserTimeLine
+
+on getUserTimeLine (screenname, adrtable, urlparam=nil, since=nil, maxcount=20) {
+	«Changes
+		«5/21/09; 3:31:21 PM by DW
+			«Extract user information from each status record.
+		«3/12/09; 5:53:29 AM by DW
+			«Laconica doesn't support in_reply_to_screen_name; add workaround.
+		«1/5/09; 6:04:51 PM by DW
+			«Add optional "maxcount" parameter, indicates the maximum number of posts to retrieve, defaults to 20.
+		«1/4/09; 4:34:39 PM by DW
+			«Add optional "since" param to get all posts since a certain date-time. Loop over "pages" of results so we aren't limited to 20 at a time. Major upgrade. 
+		«1/4/09; 11:45:39 AM by DW
+			«Add support for inReplyToScreenName and createdAt.
+		«8/16/08; 11:46:58 AM by DW
+			«Add support for inReplyToStatusId and inReplyToUserId in timelines.
+		«7/17/08; 10:08:25 PM by DW
+			«Add optional url parameter so the caller can provide it (so the same code can be used with an app that clones the Twitter API).
+		«4/28/07; 11:05:43 AM by DW
+			«Created. I just need a simple routine that returns the unauthenticated public statuses from a given user, who may have no relationship to me. Trying to do this by adding parameters to getTimeline proved very frustrating. If you just enter the url in a brower, you get exactly what you need. 
+	local (pagenum = 1, cttotalstatuses = 0, flmaxed = false);
+	new (tabletype, adrtable);
+	on decode (s) {
+		s = xml.entitydecode (s, flAlphaEntities:true);
+		return (s)};
+	loop {
+		local (url);
+		if urlparam == nil { //use twitter.com
+			url = "http://twitter.com/statuses/user_timeline/[[screenname]].xml"}
+		else {
+			url = urlparam};
+		url = string.replace (url, "[[screenname]]", screenname);
+		bundle { //add pagenum
+			url = url + "?page=" + pagenum++};
+		bundle { //add optional params
+			if since != nil {
+				url = url + "&since=" + string.urlencode (date.netstandardstring (since))}};
+		local (xmltext = tcp.httpreadurl (url), xstruct, adr, ctstatuses=0);
+		xml.compile (xmltext, @xstruct);
+		scratchpad.xstructusertimeline = xstruct;
+		local (adrstatuses = xml.getaddress (@xstruct, "statuses"));
+		for adr in adrstatuses {
+			if nameof (adr^) contains "status" {
+				local (id = xml.getvalue (adr, "id"));
+				local (adrsub = @adrtable^.[id]);
+				new (tabletype, adrsub);
+				adrsub^.text = decode (xml.getvalue (adr, "text"));
+				adrsub^.inReplyToStatusId = xml.getvalue (adr, "in_reply_to_status_id"); //8/16/08 by DW
+				adrsub^.inReplyToUserId = xml.getvalue (adr, "in_reply_to_user_id"); //8/16/08 by DW
+				bundle { //get inReplyToScreenName -- identica doesn't return this, but twitter does, 3/12/09 by DW
+					try {
+						adrsub^.inReplyToScreenName = xml.getvalue (adr, "in_reply_to_screen_name")} //1/4/09 by DW
+					else {
+						adrsub^.inReplyToScreenName = ""}};
+				adrsub^.createdAt = twitter.getTwitterTime (xml.getvalue (adr, "created_at")); //1/4/09 by DW
+				twitter.extractUserInfo (adr, adrsub, false); //5/21/09 by DW
+				ctstatuses++;
+				if ++cttotalstatuses >= maxcount { //1/5/09 by DW
+					flmaxed = true;
+					break}}};
+		if ctstatuses == 0 { //none were returned, don't ask for another page
+			break};
+		if flmaxed { //1/5/09 by DW
+			break}}};
+	«bundle //old pre-looping code
+		«if url == nil //use twitter.com
+			«url = "http://twitter.com/statuses/user_timeline/[[screenname]].xml"
+		«url = string.replace (url, "[[screenname]]", screenname)
+		«bundle //add optional params
+			«if since != nil
+				«url = url + "?since=" + string.urlencode (date.netstandardstring (since))
+		«local (xmltext = tcp.httpreadurl (url), xstruct, adr)
+		«xml.compile (xmltext, @xstruct)
+		«scratchpad.xuserstruct = xstruct
+		«new (tabletype, adrtable)
+		«for adr in xml.getaddress (@xstruct, "statuses")
+			«if nameof (adr^) contains "status"
+				«local (id = xml.getvalue (adr, "id"))
+				«local (adrsub = @adrtable^.[id])
+				«new (tabletype, adrsub)
+				«adrsub^.text = decode (xml.getvalue (adr, "text"))
+				«adrsub^.inReplyToStatusId = xml.getvalue (adr, "in_reply_to_status_id") //8/16/08 by DW
+				«adrsub^.inReplyToUserId = xml.getvalue (adr, "in_reply_to_user_id") //8/16/08 by DW
+				«adrsub^.inReplyToScreenName = xml.getvalue (adr, "in_reply_to_screen_name") //1/4/09 by DW
+				«adrsub^.createdAt = twitter.getTwitterTime (xml.getvalue (adr, "created_at")) //1/4/09 by DW
+bundle { //test code
+	getUserTimeLine ("arrington", @scratchpad.arrtimeline, maxcount:18)}
+	«getUserTimeLine ("davewiner", @scratchpad.dwtimeline, maxcount:18)
+
+

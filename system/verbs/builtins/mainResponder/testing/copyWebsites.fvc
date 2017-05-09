@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.testing.copyWebsites
+
+local (sourcefolder = "c:\\palm springs\\websites\\");
+local (destfolder = "i:\\websites\\");
+local (f);
+fileloop (f in sourcefolder) {
+	msg (f);
+	file.copy (f, destfolder + file.filefrompath (f))}
+
+

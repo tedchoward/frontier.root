@@ -1,0 +1,35 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.menuCommands.exportObject
+
+on exportObject () {
+	«Changes
+		«6/24/12; 4:07:11 PM by DW
+			«Initialize user.opmlEditor.prefs.exportFolder here instead of in opmlEditor.init.
+				«http://worknotes.scripting.com/june2012/62412ByDw/problemInOpmleditorinit
+		«5/20/09; 1:05:48 PM by DW
+			«Make the folder something you can set in user.prefs, so if you want the objects saved to a different folder, you can have it do that.
+		«2/18/09; 10:38:16 AM by DW
+			«Les Orchard, in a comment, said he couldn't remember how to export an object, which is fair because there is no UI for it in the OPML Editor. That's ridiculous. I added a call to this as a command to the Misc menu.
+	local (folder);
+	opmlEditor.init ();
+	if not defined (user.opmlEditor.prefs.exportFolder) { //6/24/12 by DW
+		user.opmlEditor.prefs.exportFolder = file.getSpecialFolderPath ("", "desktop folder", true) + "Exported Objects" + file.getpathchar ()};
+	folder = user.opmlEditor.prefs.exportFolder;
+	local (adr = table.getcursoraddress (), suffix = Frontier.getFileSuffix (typeOf (adr^), true));
+	if suffix != "" {
+		suffix = "." + suffix};
+	s = nameof (adr^);
+	adrParent = parentOf (adr^);
+	if adrParent != nil {
+		if (not table.inguestdatabase (adr)) or (adrparent != table.getrootaddress (adr)) {
+			local (dottedname = nameOf (adrParent^) + '.' + s);
+			if (sizeof (dottedname) + sizeof (suffix) + 1) < 32 {
+				s = dottedname}}};
+	local (f = folder + s + suffix);
+	if dialog.confirm ("Export \"" + f + "\"?") {
+		file.surefilepath (f);
+		export.sendobject (adr, f);
+		file.openfolder (folder)}};
+bundle { //test code
+	exportObject ()}
+
+

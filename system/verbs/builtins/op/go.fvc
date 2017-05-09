@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.go
+
+on go (dir, count) {
+	kernel (op.go)}
+
+

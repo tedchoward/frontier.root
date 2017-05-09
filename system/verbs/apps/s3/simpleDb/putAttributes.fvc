@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.simpleDb.putAttributes
+
+on putAttributes (domain, itemName, adratts, flReplace=false, adrerrorstring=nil) {
+	«Changes
+		«1/7/08; 11:36:06 AM by DW
+			«Created.
+	local (t, ct=0);
+	new (tabletype, @t);
+	t.DomainName = domain;
+	t.ItemName = itemName;
+	for i = 1 to sizeof (adratts^) {
+		adratt = @adratts^ [i];
+		if typeof (adratt^) != tabletype {
+			ct++;
+			t.["Attribute." + ct + ".Name"] = nameof (adratt^);
+			t.["Attribute." + ct + ".Value"] = string (adratt^);
+			if flReplace {
+				t.["Attribute." + ct + ".Replace"] = flReplace}}};
+	return (s3.simpleDb.httpClient ("PutAttributes", @t, adrerrorstring))};
+bundle { //test code
+	local (errorstring, atts);
+	new (tabletype, @atts);
+	atts.email = "dave.winer@gmail.com";
+	if not putAttributes ("users", "DW", @atts, false, @errorstring) {
+		dialog.alert (errorstring)}}
+
+

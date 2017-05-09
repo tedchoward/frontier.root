@@ -1,0 +1,115 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.windowFormatter
+
+on windowFormatter (adrWindow) {
+	local (oldtarget = target.get ());
+	bundle { //set up user.prefs.fonts -- borrowed from userland.firstRootRun
+		local (defaultfont, defaultsize);
+		case sys.os () {
+			"MacOS" {
+				defaultfont = "Geneva";
+				defaultsize = 12};
+			"WinNT";
+			"Win95" {
+				defaultfont = "Arial";
+				defaultsize = 10}};
+		if not defined (user.prefs.fonts.outlineFont) {
+			user.prefs.fonts.outlineFont = defaultfont};
+		if not defined (user.prefs.fonts.outlineFontSize) {
+			user.prefs.fonts.outlineFontSize = defaultsize};
+		if not defined (user.prefs.fonts.tableFont) {
+			user.prefs.fonts.tableFont = defaultfont};
+		if not defined (user.prefs.fonts.tableFontSize) {
+			user.prefs.fonts.tableFontSize = defaultsize};
+		if not defined (user.prefs.fonts.wptextFont) {
+			user.prefs.fonts.wptextFont = defaultfont};
+		if not defined (user.prefs.fonts.wptextFontSize) {
+			user.prefs.fonts.wptextFontSize = defaultsize};
+		if not defined (user.prefs.fonts.scriptFont) {
+			user.prefs.fonts.scriptFont = defaultfont};
+		if not defined (user.prefs.fonts.scriptFontSize) {
+			user.prefs.fonts.scriptFontSize = defaultsize};
+		if not defined (user.prefs.fonts.menuBarFont) {
+			case sys.os () {
+				"Win95";
+				"WinNT" {
+					user.prefs.fonts.menuBarFont = defaultfont};
+				"MacOS" {
+					«Chicago with System 7, Charcoal with OS 8.
+					if sys.osVersion () beginsWith "8" {
+						user.prefs.fonts.menuBarFont = "Charcoal"}
+					else {
+						user.prefs.fonts.menuBarFont = "Chicago"}}}};
+		if not defined (user.prefs.fonts.menuBarFontSize) {
+			user.prefs.fonts.menuBarFontSize = defaultsize}};
+	on doformat (w) {
+		local (height, width, t, l);
+		msg (w);
+		try {
+			window.open (w);
+			target.set (w);
+			on formatoutline (font, fontsize) {
+				editmenu.setfont (font);
+				editmenu.setfontsize (fontsize);
+				op.firstsummit ();
+				op.fullexpand ();
+				window.zoom (w);
+				op.fullcollapse ();
+				op.expand (1);
+				if typeof (w^) == scripttype { «make glue scripts look more reasonable
+					if op.countSummits () == 1 {
+						op.go (right, 1)}};
+				while true {
+					op.expand (1);
+					if not op.go (down, 1) {
+						break}};
+				op.firstsummit ()};
+			case typeof (w^) {
+				outlinetype {
+					formatoutline (user.prefs.fonts.outlineFont, user.prefs.fonts.outlineFontSize)};
+				scripttype {
+					formatoutline (user.prefs.fonts.scriptFont, user.prefs.fonts.scriptFontSize);
+					script.uncompile (w)};
+				menubartype {
+					formatoutline (user.prefs.fonts.menuBarFont, user.prefs.fonts.menuBarFontSize)};
+				tabletype {
+					table.go (up, infinity);
+					editmenu.setfont (user.prefs.fonts.tableFont);
+					editmenu.setfontsize (user.prefs.fonts.tableFontSize);
+					window.zoom (w)};
+				wptexttype {
+					wp.setSelect (0, 0)}};
+			window.scroll  (down, infinity);
+			«window.getPosition (w, @t, @l)
+			bundle { «center the window
+				local (maxheight = 420, maxwidth = 500);
+				window.getSize (w, @width, @height);
+				if height > maxheight {
+					height = maxheight};
+				if width > maxwidth {
+					width = maxwidth};
+				window.setSize (w, width, height);
+				l = (maxwidth - width) / 2;
+				t = (maxheight - height) / 2;
+				if t < 50 {
+					t = 50};
+				if l < 20 {
+					l = 50};
+				window.setPosition (w, l, t)};
+			window.update (w);
+			if window.getFile (w) == nil {
+				close (w)};
+			target.clear ()};
+		sys.systemTask ();
+		return (true)};
+	on visit (adr) {
+		if timecreated (adr) != 0 { «the object is displayed in its own window
+			doformat (adr)}};
+	case typeof (adrWindow^) {
+		tabletype {
+			table.visit (adrWindow, @visit)}}
+	else {
+		doformat (adrWindow)};
+	target.set (oldtarget);
+	filemenu.save ()}
+
+

@@ -1,0 +1,24 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.api.auth.getFrob
+
+on getFrob (adrstruct=nil) {
+	«Changes
+		«6/12/07; 2:53:02 PM by DW
+			«Disable Flickr.init call to eliminate infinite recursion (init calls us through Flickr.authPage).
+		«6/10/07; 5:32:42 AM by DW
+			«Created.
+			«http://www.flickr.com/services/api/flickr.auth.getFrob.html
+	local (mystruct);
+	«flickr.init ()
+	new (tabletype, @mystruct);
+	mystruct.api_key = user.flickr.prefs.apiKey;
+	mystruct.method = "flickr.auth.getFrob";
+	Flickr.signStruct (@mystruct);
+	local (s = [user.flickr.prefs.server].flickr.auth.getFrob (mystruct));
+	s = s - "<frob>" - "</frob>";
+	if adrstruct != nil {
+		adrstruct^ = mystruct};
+	return (s)};
+bundle { //test code
+	dialog.alert (getFrob (@scratchpad.struct))}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.AnArchie.clear
+
+on clear () { «delete selection
+	return (appleEvent (AnArchie.id, 'core', 'delo'))}
+
+

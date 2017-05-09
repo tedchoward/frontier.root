@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.isRunning
+
+on isRunning () {
+	return (sys.appIsRunning (BBEdit.id))}
+
+

@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.users
+
+on users () {
+	«Changes
+		«9/9/11; 10:53:58 AM by DW
+			«Created.
+	local (pta = html.getpagetableaddress ());
+	pta^.title = "Users";
+	return (opmlEditor.viewUsers ())};
+bundle { //test code
+	users ()}
+
+

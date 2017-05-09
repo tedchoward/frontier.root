@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.testing.uploadMovie
+
+«Changes
+	«4/11/06; 10:19:03 PM by DW
+		«Created.
+local (f = "Macintosh HD:boom.mov");
+local (data = string (file.readwholefile (f)));
+s3.newObject ("/scripting/boom.mov", data, "video/quicktime")
+
+

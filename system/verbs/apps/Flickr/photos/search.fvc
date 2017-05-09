@@ -1,0 +1,45 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.photos.search
+
+on search (userId, text="", minUploadDate=nil, maxUploadDate=nil, adrphotosarray=nil) {
+	«Changes
+		«8/23/07; 11:24:40 AM by DW
+			«Added minUploadDate and maxUploadDate optional parameters.
+		«8/21/07; 5:07:35 PM by DW
+			«Created.
+		«http://www.flickr.com/services/api/flickr.photos.search.html
+	new (tabletype, adrphotosarray);
+	on getpage (pagenum, adratts=nil) {
+		local (mystruct);
+		bundle { //set up mystruct
+			new (tabletype, @mystruct);
+			mystruct.api_key = user.flickr.prefs.apiKey;
+			mystruct.text = string (text);
+			mystruct.user_id = userid;
+			mystruct.page = number (pagenum);
+			if minUploadDate != nil {
+				mystruct.min_upload_date = date.dateToUnixDate (minUploadDate)};
+			if maxUploadDate != nil {
+				mystruct.max_upload_date = date.dateToUnixDate (maxUploadDate)}};
+		local (s = [user.flickr.prefs.server].flickr.photos.search (mystruct), xstruct);
+		s = string.replaceall (s, "&quot;", "\"");
+		xml.compile (s, @xstruct);
+		local (adrphotos = xml.getaddress (@xstruct, "photos"), adrphoto);
+		if adratts != nil {
+			adratts^ = adrphotos^.["/atts"]};
+		«scratchpad.s = s
+		scratchpad.searchstruct = xstruct;
+		for adrphoto in adrphotos {
+			if nameof (adrphoto^) endswith "photo" {
+				if adrphotosarray != nil {
+					local (adrsub = @adrphotosarray^.[string.padwithzeros (sizeof (adrphotosarray^) + 1, 5)]);
+					adrsub^ = adrphoto^.["/atts"]}}}};
+	local (atts, i);
+	getpage (1, @atts);
+	for i = 2 to atts.pages {
+		getpage (i)}};
+bundle { //test code
+	local (d = date.set (1, 8, 2007, 0, 0, 0));
+	window.about ();
+	search ("22221172@N00", minUploadDate:d, adrphotosarray:@scratchpad.photosrecent)}
+
+

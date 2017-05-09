@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.macintosh.globals.countAppleListItems
+
+on countAppleListItems (list) {
+	kernel (lang.countAppleListItems)}
+
+

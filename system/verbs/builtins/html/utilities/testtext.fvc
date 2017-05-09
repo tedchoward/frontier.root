@@ -1,0 +1,67 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.html.utilities.testtext
+
+<html>
+<head><title>Testing the new Macro Processor</title></head>
+<body bgcolor="#CCCCFF" text="#000000" link="#FF0000" vlink="#0000CC">
+
+{Netscape.getFrontWindowURL ()}
+
+This page contains all kinds of wierd cases for the macro processor. 
+
+***Here are some URLS...
+
+http://www.bronxscience.edu/students/~gravydave/
+
+http://www.icecream.com/wavygravy/
+
+Here's a url http://www.family.com/mom/ that isn't followed by a carriage return.
+
+***Here are some mail addresses...
+
+ssilcont@www.unimelb.edu.au
+
+***Here are some macros:
+
+{clock.now ()}
+
+{user.name}
+
+{string.upper (user.name)}<blockquote></blockquote>
+
+***Now let's drive the macro processor reallly hard...
+
+As a reality check, here are 10 macro calls all on one line, with no separation. {scratchpad.ct = 0}{++scratchpad.ct}{++scratchpad.ct}{++scratchpad.ct}{++scratchpad.ct}{++scratchpad.ct}{++scratchpad.ct}{++scratchpad.ct}{++scratchpad.ct}{++scratchpad.ct}. If everything works you should see the numbers 0 thru 9.
+
+Here are 10 macro calls all on one line, each separated by a blank. {scratchpad.ct = 0} {++scratchpad.ct} {++scratchpad.ct} {++scratchpad.ct} {++scratchpad.ct} {++scratchpad.ct} {++scratchpad.ct} {++scratchpad.ct} {++scratchpad.ct} {++scratchpad.ct}. If everything works you should see the numbers 0 thru 9.
+
+***Let's see if comments make it thru without &lt;p>s inserted (View Source to check this)
+
+<!-- 
+one
+
+two
+
+three
+
+four
+ -->
+
+***Sun, May 5, 1996 at 10:47:14 AM by DW
+
+This text should appear indented:
+
+<pre>
+States
+   Northeast
+      New York
+      Connecticut
+   West
+      California
+      Oregon
+</pre>
+
+</body>
+</html>
+
+
+

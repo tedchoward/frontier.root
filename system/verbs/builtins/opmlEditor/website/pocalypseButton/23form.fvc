@@ -1,0 +1,9 @@
+FrontierVcsFile:3:optx:system.verbs.builtins.opmlEditor.website.pocalypseButton.["#form"]
+
+<form action="http://127.0.0.1:5337/opmlEditor/pocalypseButton/open">
+	<%hiddenfields%>
+	<button style="font-family: Arial; padding-left: 10px; padding-right: 10px;" type="submit" class="btn btn-success"><i class="icon-star-empty icon-white" style="margin-right: 7px;"></i>Collab</button>
+	</form>
+
+
+

@@ -1,0 +1,20 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Pownce.httpClient
+
+on httpClient (method, url, data, username, password) {
+	«Changes
+		«3/1/08; 7:58:45 PM by DW
+			«Created.
+	local (urllist = string.urlsplit (url));
+	local (path = urllist [3] + "?app_key=" + user.pownce.prefs.appKey);
+	local (tc = clock.ticks (), timeoutticks = 60 * user.pownce.prefs.timeOutSecs);
+	local (s = string.httpResultSplit (tcp.httpClient (server:urllist [2], path:path, username:username, password:password,  method:method, timeoutticks:timeoutticks, flmessages:false, data:data)));
+	wp.newtextobject (s, @scratchpad.httpclientresult)};
+bundle { //test code
+	apiurl = "http://api.pownce.com/2.0/send/message.xml";
+	apiurl = "http://api.pownce.com/2.0/send/link.xml";
+	pownce.init ();
+	link = "http://flickr.com/photos/scriptingnews/2302459991/";
+	data = "note_to=all&url=" + link + "&note_body=" + "Third try. Here's a link to a picture I took today at the Apple Store in Palo Alto. If you can see this then I am able to post a link through the Pownce API. This is one approach to the payload functionality I've been seeking in Twitter (the other is to send the picture itself to Pownce, which I'll try next).";
+	httpClient ("POST", apiurl, data, user.pownce.prefs.username, user.pownce.prefs.password)}
+
+

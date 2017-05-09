@@ -1,0 +1,38 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FriendFeed.twitterEcho.init
+
+«Changes
+	«7/15/08; 2:31:42 PM by DW
+		«Created
+friendfeed.init ();
+if not defined (user.friendfeed.twitterEcho) {
+	new (tabletype, @user.friendfeed.twitterEcho)};
+if not defined (user.friendfeed.twitterEcho.users) {
+	new (tabletype, @user.friendfeed.twitterEcho.users);
+	local (adruser1 = @user.friendfeed.twitterEcho.users.user1);
+	new (tabletype, adruser1);
+	adruser1^.friendFeedName = "";
+	adruser1^.twitterName = "";
+	adruser1^.twitterPassword = ""};
+bundle { //prefs
+	if not defined (user.friendfeed.twitterEcho.prefs) {
+		new (tabletype, @user.friendfeed.twitterEcho.prefs)};
+	if not defined (user.friendfeed.twitterEcho.prefs.enabled) {
+		user.friendfeed.twitterEcho.prefs.enabled = true};
+	if not defined (user.friendfeed.twitterEcho.prefs.maxMsgChars) {
+		user.friendfeed.twitterEcho.prefs.maxMsgChars = 95};
+	if not defined (user.friendfeed.twitterEcho.prefs.twitPrefix) {
+		user.friendfeed.twitterEcho.prefs.twitPrefix = "[From FriendFeed]: "}};
+bundle { //stats
+	if not defined (user.friendfeed.twitterEcho.stats) {
+		new (tabletype, @user.friendfeed.twitterEcho.stats)};
+	if not defined (user.friendfeed.twitterEcho.stats.ctChecks) {
+		user.friendfeed.twitterEcho.stats.ctChecks = 0};
+	if not defined (user.friendfeed.twitterEcho.stats.ctEchoes) {
+		user.friendfeed.twitterEcho.stats.ctEchoes = 0};
+	if not defined (user.friendfeed.twitterEcho.stats.whenLastEcho) {
+		user.friendfeed.twitterEcho.stats.whenLastEcho = date (0)}};
+bundle { //misc
+	if not defined (user.scheduler2.everyMinute.twitterEcho) {
+		user.scheduler2.everyMinute.twitterEcho = @FriendFeed.twitterEcho.everyMinute}}
+
+

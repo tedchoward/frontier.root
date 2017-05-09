@@ -1,0 +1,22 @@
+FrontierVcsFile:3:optx:system.extensions.regex.docServer.free
+
+#title "regex.free"
+#renderOutlineWIth "docServerRenderer"
+Syntax
+	regex.free (patRef)
+Params
+	patternRef is the pattern reference returned from "regex.compile".
+Action
+	Frees memory allocated for the pattern referenced by patRef.
+Returns
+	True if successful. If patRef is not a valid pattern reference, you will get a script error.
+Examples
+	regex.free (24856736)
+		// true
+Notes
+	Each call to regex.compile must be balanced with a call to regex.free.
+See Also
+	"regex.compile"
+
+
+

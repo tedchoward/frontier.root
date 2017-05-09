@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.netEvents.addressToName
+
+on addressToName (adr) { «Turn a four-byte number into a domain name
+	return (appleEvent (netEvents.id, 'WAPI', 'AD2N', '----', long (adr)))}
+«bundle «test code
+	«dialog.alert (addressToName (-839093064))
+
+

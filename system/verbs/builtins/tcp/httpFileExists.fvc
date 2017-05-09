@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.httpFileExists
+
+on httpFileExists (url) {
+	«Changes
+		«11/25/11; 9:48:57 AM by DW
+			«Returns true if the URL points to something that exists, according to the server. Should have had this verb a long time ago.
+	try {
+		local (ul = string.urlsplit (url), s, code);
+		s = tcp.httpClient (server:ul [2], path:ul [3], flJustHeaders:true, ctFollowRedirects:3, flMessages: false);
+		code = tcp.httpGetStatusCode (s);
+		return ((code >= 200) and (code <= 299))}
+	else {
+		return (false)}};
+bundle { //test code
+	«dialog.alert (httpFileExists ("http://scripting.com/rss.xml"))
+	dialog.alert (httpFileExists ("http://scripting.com/helloDollyWellHello"))}
+	«dialog.alert (httpFileExists ("h/scripting.com/helloDollyWellHello"))
+
+

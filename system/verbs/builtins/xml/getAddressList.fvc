@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.getAddressList
+
+on getAddressList (adrtable, commonname, justone=false) { //return a list of all objects with this name in the table
+	kernel (xml.getAddressList)}
+
+

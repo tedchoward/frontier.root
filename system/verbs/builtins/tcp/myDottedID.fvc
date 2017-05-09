@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.myDottedID
+
+on myDottedID () {
+	return (tcp.addressDecode (tcp.myAddress ()))}
+«bundle //test code
+	«local (i)
+	«window.about ()
+	«for i = 1 to 1000
+		«msg (myDottedID () + ", " + i)
+
+

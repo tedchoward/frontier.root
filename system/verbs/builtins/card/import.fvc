@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.import
+
+on import (adr, path) {
+	file.open (path);
+	adr^ = file.read (path, infinity);
+	file.close (path);
+	setbinarytype (adr, 'CARD');
+	return (true)}
+
+

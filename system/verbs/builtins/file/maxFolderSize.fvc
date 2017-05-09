@@ -1,0 +1,31 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.maxFolderSize
+
+on maxFolderSize (folder, maxmegs) {
+	«Changes
+		«8/10/08; 2:14:04 PM by DW
+			«Scan the folder, adding up the sizes of all the files. If it uses more space than is allowed by "maxmegs" then delete files until its within range. Files are deleted based on age, keep the newest, delete the oldest.
+				«We do math with floating point numbers because the folders can easily overflow 31 bits in size.
+	local (f, array, filesize, ctmegs = 0.0, onemeg = 1024.0 * 1024.0);
+	new (tabletype, @array);
+	fileloop (f in folder, infinity) {
+		filesize = file.size (f);
+		ctmegs = ctmegs + (double (filesize) / onemeg);
+		«msg (ctmegs)
+		array.[f] = file.modified (f)}; //this array will be sorted by mod date, if needed
+	if ctmegs > maxmegs { //we have to delete some files
+		local (oldtarget = target.set (@array), adr, f);
+		table.sortby ("Value");
+		target.set (oldtarget);
+		«scratchpad.array = array
+		«return
+		for adr in @array {
+			f = nameof (adr^);
+			ctmegs = ctmegs - (double (file.size (f)) / onemeg);
+			file.delete (f);
+			«msg (ctmegs)
+			if ctmegs <= maxmegs {
+				break}}}}
+«bundle //test code
+	«maxfoldersize ("Ohio:testfolder:", 250) //250MB
+
+

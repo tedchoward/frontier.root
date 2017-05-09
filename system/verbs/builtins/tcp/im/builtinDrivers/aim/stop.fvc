@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinDrivers.aim.stop
+
+on stop() {
+	if not defined(temp.im.aim) {
+		return(false)};
+	
+	tcp.im.builtinDrivers.aim.code.core.disconnect(@temp.im.aim)};
+stop()
+
+

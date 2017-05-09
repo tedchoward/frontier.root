@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.verboseMessages
+
+on verboseMessages (flag, appID = WebStar.id) { «Toggle Verbose Messages on or off 
+	return (appleEvent (appID, 'WWW‡', 'fvrb', '----', boolean (flag)))}
+
+

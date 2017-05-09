@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.posterous.folderWatcher.script
+
+«Changes
+	«5/2/09; 1:34:10 PM by DW
+		«Created.
+loop {
+	local (adrdata = posterous.init ());
+	try {
+		if adrdata^.prefs.folderWatcher.enabled {
+			posterous.folderWatcher.scan ()};
+		adrdata^.prefs.folderWatcher.ctScans++};
+	thread.sleepFor (adrdata^.prefs.folderWatcher.ctSecondsBetwScans)}
+
+

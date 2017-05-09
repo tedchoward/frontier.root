@@ -1,0 +1,36 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.worldOutline.validatePrefs
+
+on validatePrefs () {
+	«Changes
+		«2/12/12; 3:36:57 PM by DW
+			«Works in a world with multiple servers.
+		«6/13/11; 9:37:38 PM by DW
+			«Created.
+	local (adrdata = opmlEditor.worldOutline.init (), pta = html.getpagetableaddress ());
+	«scratchpad.vparams = pta^
+	if pta^.method == "POST" {
+		try {
+			local (domain = system.temp.worldoutline.serverPrefs.domain, xstruct);
+			local (server = "xmlrpc://" + domain + "/RPC2");
+			local (username = system.temp.worldoutline.serverPrefs.username);
+			local (password = string (system.temp.worldoutline.serverPrefs.password));
+			local (atts = [server].worldOutline.getUserPrefs (username, password));
+			«scratchpad.validateatts = atts
+			
+			local (adrserver = @adrdata^.servers.[domain]);
+			if not defined (adrserver^) {
+				new (tabletype, adrserver)};
+			adrserver^.server = server;
+			adrserver^.username = username;
+			adrserver^.password = binary (password);
+			adrdata^.prefs.defaultServer = domain;
+			return ("<font color=\"green\">These are good settings.</font>")}
+		else {
+			return ("<font color=\"red\">It didn't work, because: " + tryerror + ".</font>")}}
+	else {
+		return ("")}};
+bundle { //test code
+	html.setpagetableaddress (@scratchpad.vparams);
+	validatePrefs ()}
+
+

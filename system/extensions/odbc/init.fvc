@@ -1,0 +1,115 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.init
+
+on init () {
+	«Thu, Mar 19, 1998 at 12:28:10 PM by HA
+		«Modified Fri, Mar 27, 1998 at 12:26:44 PM by HA
+			«getPath now deletes the old DLL automatically.
+		«Modified Tue, Apr 14, 1998 at 5:42:41 PM by HA
+			«added dll.load and dll.unload
+			«Added version check
+		«Modified Thu, Apr 16, 1998 at 4:42:49 PM by HA
+			«the startup and shutdown scripts
+		«Modified Wed, Apr 29, 1998 at 11:57:19 AM by HA
+			«put the prefs in user.prefs_odbc
+	on getPath () {
+		«Original getPath() by Arnold Lesikar, in importDLL suite.
+		local (errMsg = "Can't call ODBC DLL because it is not implemented on ");
+		on putResources (f, rs) {
+			if typeOf(rs) != listType {
+				scriptError("Do not have a list of resources!")};
+			local (i, nt = sizeOf(rs));
+			for i = 1 to nt {
+				local (typeRec = rs[i]);
+				local (itemList = typeRec['itms']);
+				local (j, nr = sizeOf(itemList), ty = typeRec['type']);
+				for j = 1 to nr {
+					local (rNm, rID, itemRec = typeRec['itms'][j], rData);
+					rNm = itemRec['name'];
+					rID = itemRec['itID'];
+					rData = itemRec['data'];
+					if rNm != "" {
+						rez.putNamedResource (f, ty, rNm, @rData)}
+					else {
+						rez.putResource (f, ty, rID, @rData)}}}};
+		local (folder,f, sep);
+		local (pAdr = @extensions.odbc);
+		local (nm = nameOf(pAdr^));
+		if (sys.os() == "MacOS") {
+			sep = ":"}
+		else {
+			sep = "\\"};
+		folder = file.folderFromPath (frontier.getProgramPath());
+		folder = folder + "DLLs" + sep;
+		file.sureFolder(folder);
+		f = folder + nm + ".dll";
+		local (dAdr);
+		if file.exists(f) {
+			try {dll.unload (f)};
+			file.delete(f)};
+		if sys.os() == "MacOS" {
+			if Number(string.nthField(sys.osVersion(), ".",1)) < 10 {
+				local (errTail);
+				dAdr = @padr^["data"]["dll"]["macFat"];
+				if not defined(dAdr^) {
+					if Frontier.isPowerPC() {
+						dAdr = @padr^["data"]["dll"]["macPPC"];
+						errTail = " PowerPC Macs!"}
+					else {
+						dAdr = @padr^["data"]["dll"]["mac68K"];
+						errTail = " 68K Macs!"}};
+				if not defined(dAdr^) {
+					scriptError (errMsg + " the Mac Power PC!")}}
+			else {
+				dAdr = @padr^["data"]["dll"]["macCarbon"]};
+			file.writeWholeFile(f, dAdr^["dFork"], 'shlb', '????');
+			putResources(f, dAdr^["rFork"])}
+		else {
+			dAdr = @padr^["data"]["dll"]["windows"];
+			if not defined (dAdr^) {
+				scriptError (errMsg + " Windows machines!")};
+			file.writeWholeFile(f, pAdr^["data"]["dll"]["windows"])};
+		return (f)};
+	
+	on updatePrefs() {
+		«updates the user prefs with any new prefs that we created
+		local (currRow, oldtarget);
+		oldtarget = target.get();
+		target.set (@odbc.preferences);
+		if not defined(user.prefs_odbc) {
+			new (tabletype, @user.prefs_odbc)};
+		for i=1 to sizeOf (odbc.preferences) {
+			table.goto(i);
+			currRow = table.getCursor();
+			if nameof(currRow^)  == "#NOTE:" {
+				continue};
+			if not defined(user.prefs_odbc.[nameof(currRow^)]) {
+				user.prefs_odbc.[nameof(currRow^)] = currRow^}};
+		target.set (oldtarget)};
+	
+	try {
+		dll.unload(user.prefs_odbc.dllpath)};
+	
+	updatePrefs();
+	
+	user.prefs_odbc.dllpath = getPath (); //Writes the DLL to disk and gets its path
+	if not system.environment.isCarbon { //JES 5/1/04: commented out -- version check apparently doesn't work on OS X
+		if file.getVersion(user.prefs_odbc.dllpath) != string.nthField(odbc.version, "r", 1) {
+			dialog.alert("Initialization problem: The version of the DLL in your file system is not consistent with the ODBC extension version.");
+			return (false)}};
+	
+	table.copy (@extensions.odbc.data.odbc_startup, @user.callbacks.startup);
+	table.copy (@extensions.odbc.data.odbc_shutdown, @user.callbacks.shutdown);
+	
+	bundle { //Create a minimal suites table, so that we can have the query tool as a suite
+		table.surePath("suites.odbcQueryTool.xxx");
+		table.emptyTable(@suites.odbcQueryTool);
+		table.copyContents(@odbc.data.suite, @suites.odbcQueryTool);
+		system.menus.buildSuitesSubMenu ()};
+	
+	try {
+		dll.load(user.prefs_odbc.dllpath)}
+	else {
+		scriptError ("The ODBC DLL could not be loaded. You most likely don't have the ODBC control panel installed on your machine. Please install it and try again.")}};
+init ()
+
+

@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.tools.data.nodeTypes.thumbList.collapse
+
+on collapse () {
+	«Changes
+		«12/20/11; 11:35:53 AM by DW
+			«Created.
+	return (Frontier.tools.data.nodeTypes.include.collapse ())};
+bundle { //test code
+	collapse ()}
+
+

@@ -1,0 +1,34 @@
+FrontierVcsFile:3:wptx:suites.people.webAdmin.default
+
+#title "Users"
+<table border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td valign=top align=left>
+			{displayUsers ()}
+		</td>
+		<td valign=top align=left width=60>
+			{spacePixels (60)}&nbsp;
+		</td>
+		<td valign=top align=left>
+			<form method=get action="newUser.wsf">
+***Create new user:
+
+<input name="userName" size=30>
+
+***Password:
+
+<input name="Password" size=30>
+
+***Email address:
+
+<input name="emailAddress" size=30>
+
+<input type="submit" value="Create User">
+			</form>
+		</td>
+	</tr>
+</table>
+
+
+
+

@@ -1,0 +1,38 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webserver.apache.s3backup.init
+
+on init () {
+	«Changes
+		«6/7/09; 6:40:16 AM by DW
+			«Created. 
+	local (adrdata = frontier.opendatafile ("apacheS3backup"));
+	if not defined (adrdata^) {
+		new (tabletype, adrdata)};
+	if not defined (adrdata^.fileInfo) {
+		new (tabletype, @adrdata^.fileInfo)};
+	bundle { //prefs
+		if not defined (adrdata^.prefs) {
+			new (tabletype, @adrdata^.prefs)};
+		if not defined (adrdata^.prefs.folder) {
+			adrdata^.prefs.folder = ""};
+		if not defined (adrdata^.prefs.s3path) {
+			adrdata^.prefs.s3path = ""};
+		if not defined (adrdata^.prefs.maxfilesize) {
+			adrdata^.prefs.maxfilesize = 10 * 1024 * 1024};
+		if not defined (adrdata^.prefs.whenLastFullBackup) {
+			adrdata^.prefs.whenLastFullBackup = date ("June 5, 2009")}};
+	bundle { //stats
+		if not defined (adrdata^.stats) {
+			new (tabletype, @adrdata^.stats)};
+		if not defined (adrdata^.stats.ctChecks) {
+			adrdata^.stats.ctChecks = 0};
+		if not defined (adrdata^.stats.whenLastCheck) {
+			adrdata^.stats.whenLastCheck = date (0)};
+		if not defined (adrdata^.stats.ctUploads) {
+			adrdata^.stats.ctUploads = 0};
+		if not defined (adrdata^.stats.whenLastUpload) {
+			adrdata^.stats.whenLastUpload = date (0)}};
+	return (adrdata)};
+bundle { //test code
+	init ()}
+
+

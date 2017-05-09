@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.apps.OAuth.testing.sigbasestringGoogle
+
+GET&http%3A%2F%2Fhost.net%2Fresource&name1%3Dvalue%26name2%3Dvalue%26oauth_consumer_key%3Dabcd%26oauth_nonce%3DAa4eP1wS99T%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1234634770%26oauth_token%3Dijkl%26oauth_version%3D1.0
+
+

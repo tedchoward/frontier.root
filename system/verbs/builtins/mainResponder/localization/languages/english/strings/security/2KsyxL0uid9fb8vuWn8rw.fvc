@@ -1,0 +1,5 @@
+FrontierVcsFile:3:TEXT:system.verbs.builtins.mainResponder.localization.languages.english.strings.security.httpUnspecifiedSecurityLevel
+
+Can't perform HTTP authentication because an invalid security level was specified by the server's administrator.
+
+

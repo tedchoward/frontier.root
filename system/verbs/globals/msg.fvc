@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.globals.msg
+
+on msg (s) {
+	kernel (lang.msg)}
+
+

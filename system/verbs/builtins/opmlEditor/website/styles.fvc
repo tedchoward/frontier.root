@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.styles
+
+on styles () {
+	«Changes
+		«9/1/11; 6:22:04 PM by DW
+			«Created.
+	return (webApp.viewStyles ())};
+bundle { //test code
+	styles ()}
+
+

@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webserver.apache.start
+
+on start () {
+	«Changes
+		«11/23/08; 4:42:41 AM by DW
+			«Created. Start Apache after rolling the log files or whatever. I only have code for this on Windows at this time.
+	if system.environment.isWindows {
+		sys.dosBatchCommand ("net start apache2.2")}}
+«bundle //test code
+	«start ()
+
+

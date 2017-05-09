@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:suites.people.visitAllGroups
+
+on visitAllGroups (adrCallback) {
+	local (i, groupName);
+	for i = 1 to sizeOf (user.people.groups) {
+		groupName = nameOf (user.people.groups [i]);
+		if people.groupExists (groupName) {
+			try {
+				adrCallback^ (groupName)}}};
+	return (true)}
+
+

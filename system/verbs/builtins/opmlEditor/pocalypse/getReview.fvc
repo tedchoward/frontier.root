@@ -1,0 +1,19 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.pocalypse.getReview
+
+on getReview (responder, urlstory, username, adroutline) {
+	«Changes
+		«4/4/12; 9:25:29 PM by DW
+			«Created.
+	local (adrdata = opmlEditor.pocalypse.init ());
+	try {
+		local (server = "xmlrpc://" + responder + ":5337/RPC2", t);
+		t = [server].pocalypse.getReview (urlstory, username);
+		op.xmltooutline (t.opmltext, adroutline);
+		return (true)}
+	else {
+		adrdata^.stats.lastGetReviewError = tryerror;
+		return (false)}}
+«bundle //test code
+	«getReview ("wo2.scripting.com", "http://dave.pocalypse.org/stories/7003", "dave", @scratchpad.myreviewoutline)
+
+

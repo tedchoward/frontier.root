@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.getCurrentMessageObject
+
+on getCurrentMessageObject () {
+	with objectModel, Eudora, eventInfo {
+		return (message [""])}}
+
+

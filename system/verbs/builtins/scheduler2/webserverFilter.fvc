@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.scheduler2.webserverFilter
+
+on webserverFilter (pta) {
+	«Changes
+		«6/11/08; 8:30:35 AM by DW
+			«Created. The status message can provide info about the last server request, this is where we gather the info.
+	user.scheduler2.stats.webserver.lastUrl = "http://" + pta^.host + pta^.uri;
+	user.scheduler2.stats.webserver.ipAddress = pta^.client;
+	return (true)}
+
+

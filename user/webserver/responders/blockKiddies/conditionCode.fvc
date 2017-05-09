@@ -1,0 +1,22 @@
+FrontierVcsFile:3:scpt:user.webserver.responders.blockKiddies.conditionCode
+
+local (adr = @user.webserver.responders.blockKiddies.data.blockedDomains.[client]);
+if defined (adr^) {
+	adr^++;
+	return (true)}
+else {
+	bundle { //for debugging, count hits from all clients, 10/30/05; 4:15:36 PM by DW
+		if not defined (system.temp.blockKiddiesAllDomains) {
+			new (tabletype, @system.temp.blockKiddiesAllDomains)};
+		local (adrct = @system.temp.blockKiddiesAllDomains.[client]);
+		if defined (adrct^) {
+			adrct^++}
+		else {
+			adrct^ = 1}};
+	return (false)};
+local (flblock = defined (user.webserver.responders.blockKiddies.data.blockedDomains.[client]));
+«scratchpad.clientcheck = client
+«scratchpad.clientcheckblock = flblock
+return (flblock)
+
+

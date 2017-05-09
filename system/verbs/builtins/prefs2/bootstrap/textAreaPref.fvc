@@ -1,0 +1,26 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.prefs2.bootstrap.textAreaPref
+
+on textAreaPref (prompt, adrstring, cols=70, rows=5) {
+	«Changes
+		«1/13/12; 9:52:41 AM by DW
+			«Created.
+	local (t);
+	on demunge (s) {
+		if typeOf (s) != stringType {
+			table.assign (@s, string (s))};
+		s = string.replaceall (s, "\t", "  ");
+		s = html.translateToEntities (s);
+		s = string.replaceall (s, "\r\n", "\r");
+		s = string.replaceall (s, "\r", "&#013;");
+		return (s)};
+	new (tabletype, @t);
+	t.itemName = nameof (adrstring^);
+	t.itemPrompt = prompt;
+	if sizeof (t.itemPrompt) > 0 {
+		t.itemPrompt = t.itemPrompt + ":"};
+	t.itemCode = "<textarea class=\"xxlarge\" id=\"" + t.itemName + "\" name=\"" + t.itemName + "\" cols=\"" + cols + "\" rows=\"" + rows + "\">" + demunge (adrstring^) + "</textarea>";
+	return (string.multiplereplaceall (string (prefs2.bootstrap.panelItemTemplate), @t, false, "<%", "%>"))};
+bundle { //test code
+	textAreaPref ()}
+
+

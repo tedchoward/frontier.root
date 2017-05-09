@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.showWindow
+
+on showWindow (db) {
+	try {
+		with objectModel, Filemaker {
+			return (set (database[db].window[1].visible, true))}}
+	else {
+		return (false)}}
+
+

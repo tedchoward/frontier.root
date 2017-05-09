@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.modified
+
+on modified (path) {
+	kernel (file.modified)}
+
+

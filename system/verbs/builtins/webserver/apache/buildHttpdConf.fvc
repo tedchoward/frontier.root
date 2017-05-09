@@ -1,0 +1,74 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webserver.apache.buildHttpdConf
+
+on buildHttpdConf (adrdomains, mydottedid=nil, dynamicport=5337) {
+	«Changes
+		«8/25/10; 2:14:33 PM by DW
+			«Pass redirects through Frontier.
+		«11/22/08; 11:08:13 AM by DW
+			«Don't output redirects, we'll keep handling them here.
+		«11/21/08; 8:09:58 AM by DW
+			«If mydottedid is nil, just use * -- according to the Apache docs this means we don't care what the IP address is. On EC2 the machine has a different idea what its IP address, it's the local one, not the "elastic" one -- which is how the outside world refers to it. Confusing? Yes! 
+		«11/21/08; 6:40:58 AM by 
+			«Add comment/code at beginning.
+		«11/20/08; 10:29:45 AM by DW
+			«Created.  Given a table formatted like config.mainresponder.domains, generate text that can be included in an httpd.conf file that allows Apache to serve as a front-end for the dynamic domains, and directly serve the static ones.
+	local (xmltext = "", indentlevel = 0, adrd, pc = file.getpathchar ());
+	if mydottedid == nil {
+		mydottedid = "*"};
+	on add (s) {
+		xmltext = xmltext + string.filledstring ("   ", indentlevel) + s + "\r\n"};
+	on frontierHosted (domainname) {
+		add ("<VirtualHost " + mydottedid + ">"); indentlevel++;
+		add ("ServerName " + domainname);
+		add ("ProxyPass / http://" + domainname + ":" + dynamicport + "/");
+		add ("ProxyPassReverse / http://" + domainname + ":" + dynamicport + "/"); indentlevel--;
+		add ("</VirtualHost>");
+		add ("")};
+	bundle { //add comment/code at the beginning
+		add ("#");
+		add ("# Virtual Hosts -- created by the OPML Editor on " + clock.now ());
+		add ("#");
+		add ("# " + this);
+		add ("#");
+		add ("");
+		add ("");
+		add ("ProxyPreserveHost On");
+		add ("");
+		add ("NameVirtualHost " + mydottedid);
+		add ("");
+		add ("")};
+	for adrd in adrdomains {
+		local (domainname = nameof (adrd^));
+		if domainname == "default" {
+			continue};
+		if typeof (adrd^) == addresstype {
+			frontierHosted (domainname)};
+			«add ("<VirtualHost " + mydottedid + ">"); indentlevel++
+			«add ("ServerName " + domainname)
+			«add ("ProxyPass / http://" + domainname + ":" + dynamicport + "/")
+			«add ("ProxyPassReverse / http://" + domainname + ":" + dynamicport + "/"); indentlevel--
+			«add ("</VirtualHost>")
+			«add ("")
+		if typeof (adrd^) == stringtype {
+			if string.lower (adrd^) beginswith "http://" { //redirect
+				frontierHosted (domainname)}
+			else {
+				add ("<VirtualHost " + mydottedid + ">"); indentlevel++;
+				add ("ServerName " + domainname);
+				local (folder = adrd^);
+				if folder endswith pc {
+					folder = string.delete (folder, sizeof (folder), 1)};
+				if folder contains " " {
+					add ("DocumentRoot \"" + folder + "\""); indentlevel--}
+				else {
+					add ("DocumentRoot " + folder); indentlevel--};
+				add ("</VirtualHost>");
+				add ("")}}};
+	return (xmltext)};
+bundle { //test code
+	local (f = "C:\\Program Files\\Apache Software Foundation\\Apache2.2\\conf\\extra\\httpd-vhosts.conf");
+	local (s = buildHttpdConf (@config.mainresponder.domains));
+	wp.newtextobject (s, @webserver.apache.text);
+	file.writewholefile (f, s)}
+
+

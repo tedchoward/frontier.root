@@ -1,0 +1,66 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.mainResponder.members.linkToMember
+
+on linkToMember (groupName, memberKey, hideEmail=false, adrMembers=nil, pta=nil, urlprefix="", useMap=false) {
+	«Changes
+		«4/18/03; 4:18:44 PM by JES
+			«Member links are now numeric -- this prevents spammers from mining Manila sites for the email addresses of their members.
+			«We store a number associated with each member in the usersMap sub-table of the #membershipGroup table, and look up the member's email address using the number.
+		«8/14/02; 8:25:54 PM by JES
+			«New optional parameter, urlPrefix.
+		«9/26/01; 6:17:50 PM by PBS
+			«New optional parameter: adrMembers is the address of the membership group.
+			«pta is now an optional parameter for performance reasons.
+		«10/08/00; 4:08:26 AM by JES
+			«Added optional parameter, hideEmail, which causes email addresses to be obscured with elipses.
+		«11/14/99; 5:55:31 PM by PBS
+			«adrMember^.personalInfo.name may exist yet be blank: if so, just return the member key (the email address).
+		«3/4/99; 02:56:16 GMT by AR
+			«Removed reference to config.mainResponder.urls
+	on getUsersMapKey (adrmember) {
+		if not defined (adrMembers^.usersMap) {
+			new (tableType, @adrMembers^.usersMap)};
+		if not defined (adrmember^.usersMapKey) {
+			local (ix = sizeOf (adrMembers^.usersMap) + 1);
+			adrmember^.usersMapKey = ix;
+			adrMembers^.usersMap.[ix] = nameOf (adrmember^)};
+		return (adrmember^.usersMapKey)};
+	on obscureEmail (key, link=true) {
+		if hideEmail {
+			if key contains '@' {
+				local (part1 = string.nthField (key, '@', 1));
+				local (part2 = string.nthField (key, '@', 2));
+				if link {
+					return ("<a href=\"mailto:" + key + "\">" + part1 + "&#64;" + part2[1] + "...</a>")}
+				else {
+					return (part1 + "&#64;" + part2[1] + "...")}}};
+		return (key)};
+	try {
+		if adrMembers == nil {
+			adrMembers = mainResponder.members.getMembershipTable (groupName)};
+		local (adrmember = mainresponder.members.getmembertable (groupname, memberkey, adrMembers));
+		local (name = "");
+		if defined (adrmember^.personalInfo.name) {
+			name = adrmember^.personalInfo.name};
+		if string.trimWhiteSpace (name) == "" {
+			name = obscureEmail (memberKey)};
+		if pta == nil {
+			pta = html.getpagetableaddress ()};
+		local (url = urlprefix);
+		if url == "" {
+			url = pta^.responderAttributes.urls^.profilesHome + "$"};
+		url = string.replace (url, "[[group]]", groupName);
+		if useMap {
+			local (usersMapKey = getUsersMapKey (adrmember));
+			return ("<a href=\"" + url + usersMapKey + "\">" + name + "</a>")}
+		else {
+			return ("<a href=\"" + url + memberKey + "\">" + name + "</a>")}}
+	else {
+		return (obscureEmail (memberKey))}}
+«bundle //test code
+	«local (adrsite = @jaketest2ManilaWebsite)
+	«local (adrmembers = jaketest2Members)
+	«local (groupName = "jaketest2Members")
+	«local (memberKey = "jake@userland.com")
+	«dialog.notify (linkToMember (groupName, memberKey, adrmembers:adrmembers))
+
+

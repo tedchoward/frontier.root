@@ -1,0 +1,27 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.extractTaggedText
+
+on extractTaggedText (adrstring, tagname, adrextractedtext=nil) {
+	«Changes
+		«2/24/12; 1:16:24 PM by DW
+			«Used to pull a section marked by <rules> .. </rules> from a chunk of text. But you can use it for <style> or <script> or <whatever>. It is case-sensitive, as XML is.
+	local (openstring = "<" + tagname + ">", closestring = "</" + tagname + ">");
+	local (ixopen = string.patternmatch (openstring, adrstring^));
+	if adrextractedtext != nil {
+		adrextractedtext^ = ""};
+	if ixopen > 0 {
+		local (ixclose = string.patternmatch (closestring, adrstring^));
+		if ixclose > ixopen {
+			local (ct = ixclose - ixopen + 8);
+			if adrextractedtext != nil {
+				adrextractedtext^ = string.mid (adrstring^, ixopen, ct)};
+			adrstring^ = string.delete (adrstring^, ixopen, ct);
+			return (true)}};
+	return (false)};
+bundle { //test code
+	local (tc = clock.ticks (), i);
+	for i = 1 to 100 {
+		scratchpad.mytext = "I'm dreaming <rules>hello</rules> of a white Christmas.";
+		extractTaggedText (@scratchpad.mytext, "rules", @scratchpad.myrules)};
+	dialog.alert (clock.ticks () - tc)}
+
+

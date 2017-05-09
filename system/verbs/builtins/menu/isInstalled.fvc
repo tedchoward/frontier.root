@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.menu.isInstalled
+
+on isInstalled (adr) {
+	kernel (menu.isinstalled)}
+
+

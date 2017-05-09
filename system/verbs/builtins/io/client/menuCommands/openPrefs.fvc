@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.menuCommands.openPrefs
+
+on openPrefs () {
+	«Changes
+		«8/8/10; 11:31:14 AM by DW
+			«Called from system.menubar.menu.
+	opmlEditor.init ();
+	webbrowser.openurl ("http://127.0.0.1:5337/opmlEditor/prefs?title=Instant%20Outliner");
+	webbrowser.bringtofront ()};
+bundle { //test code
+	openPrefs ()}
+
+

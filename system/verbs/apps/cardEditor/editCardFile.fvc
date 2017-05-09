@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.cardEditor.editCardFile
+
+on editCardFile (f) {
+	return (appleEvent (cardEditor.id, 'IOWA', 'edit', '----', filespec (f)))}
+
+

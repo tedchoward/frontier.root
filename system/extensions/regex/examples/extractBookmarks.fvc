@@ -1,0 +1,37 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.examples.extractBookmarks
+
+on extractBookmarks (s) {
+	«Parses a Netscape Navigator or MS Internet Explorer bookmarks file.
+		«Returns a list of title/URL pairs.
+	
+	local {
+		complexLinkPat = "<a[ \t\r\n]*[^>]*href[ \t\r\n]*=[ \t\r\n]*\"?([-_~%@:/\\.A-Za-z0-9]+)\"?[^>]*>([^<]*)";
+		simpleLinkPat = "<a[ \t\r\n]+[^>]*href[ \t\r\n]*=[ \t\r\n]*\"([^\"]*)\"[^>]*>([^<]*)";
+		theList};
+	
+	regex.extract (simpleLinkPat, @s, @theList, {2, 1});
+	
+	return (theList)};
+
+«bundle //test code
+	«local
+		«extractList
+		«extractTable
+		«dir
+		«i
+	«
+	«extractList = extractBookmarks (string (regex.examples.data.bookmarks))
+	«
+	«new (outlineType, @temp.urls)
+	«edit (@temp.urls)
+	«target.set (@temp.urls)
+	«op.setLineText ("Hypertext Links")
+	«dir = right
+	«for i = 1 to sizeof (extractList)
+		«op.insert (extractList [i] [1], dir)
+		«op.insert( extractList [i] [2], right)
+		«op.go (left, 1)
+		«dir = down
+	«target.clear ()
+
+

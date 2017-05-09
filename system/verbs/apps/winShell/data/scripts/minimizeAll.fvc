@@ -1,0 +1,10 @@
+FrontierVcsFile:3:optx:system.verbs.apps.winShell.data.scripts.minimizeAll
+
+Sub Main
+	Dim shell
+	Set shell = CreateObject ("Shell.Application")
+	shell.MinimizeAll
+End Sub
+
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.rectangle.set
+
+on set (t, l, b, r) {
+	kernel (rectangle.set)}
+
+

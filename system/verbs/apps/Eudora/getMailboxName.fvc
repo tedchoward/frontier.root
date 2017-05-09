@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.getMailboxName
+
+on getMailboxName (mailboxObj) {
+	with objectModel, Eudora, eventInfo {
+		return (core.get (id, mailboxObj.name))}}
+
+

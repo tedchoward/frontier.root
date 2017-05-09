@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.db.get
+
+on get (celladdress) {
+	return (celladdress^)}
+
+

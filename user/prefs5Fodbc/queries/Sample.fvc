@@ -1,0 +1,9 @@
+FrontierVcsFile:3:TEXT:user.prefs_odbc.queries.Sample
+
+SET ANSI_WARNINGS OFF
+
+SELECT * from guest
+
+SET ANSI_WARNINGS ON
+
+

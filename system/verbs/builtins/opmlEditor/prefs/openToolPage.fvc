@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.prefs.openToolPage
+
+on openToolPage (toolname) {
+	«Changes
+		«8/9/08; 7:18:14 AM by DW
+			«Opens the prefs page for a tool.
+	webbrowser.bringtofront ();
+	webbrowser.openurl (opmlEditor.data.urls.toolPrefsPage + toolname)}
+«bundle //test code
+	«openToolPage ("WordPress")
+
+

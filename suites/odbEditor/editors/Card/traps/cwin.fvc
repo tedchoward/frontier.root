@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.odbEditor.editors.Card.traps.cwin
+
+on cwin (fsFileBeingClosed) {
+	return (true)}
+
+

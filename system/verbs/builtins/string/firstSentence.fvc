@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.firstSentence
+
+on firstSentence (s) {
+	kernel (string.firstsentence)}
+
+

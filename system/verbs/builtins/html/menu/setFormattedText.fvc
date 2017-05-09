@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.menu.setFormattedText
+
+on setFormattedText (fl) {
+	user.html.menu.formatText = fl}
+
+

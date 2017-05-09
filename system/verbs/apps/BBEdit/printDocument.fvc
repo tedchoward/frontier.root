@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.printDocument
+
+on printDocument (file) {
+	return (required.printDocument (BBEdit.id, file))}
+
+

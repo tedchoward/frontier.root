@@ -1,0 +1,18 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.deleteObject
+
+on deleteObject (relpath) {
+	«Changes
+		«6/6/09; 5:25:36 PM by DW
+			«Make sure the path begins with a /.
+		«4/11/06; 3:12:27 PM by DW
+			«Created.
+	s3.init ();
+	if not (relpath beginswith "/") {
+		relpath = "/" + relpath};
+	s3.httpClient ("DELETE", relpath)}
+«bundle //test code
+	«local (i)
+	«for i = 1 to 100
+		«deleteObject ("/scriptingImages/test" + i + ".txt")
+
+

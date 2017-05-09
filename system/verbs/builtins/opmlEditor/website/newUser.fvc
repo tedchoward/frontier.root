@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.newUser
+
+on newUser () {
+	«Changes
+		«9/9/11; 9:39:41 AM by DW
+			«Moved from beautWebsite.
+		«3/15/11; 11:05:09 AM by DW
+			«Created. 
+	local (pta = html.getpagetableaddress ());
+	pta^.title = "New User";
+	«scratchpad.newuserparams = pta^
+	return (opmlEditor.viewNewUser ())};
+bundle { //test code
+	html.setpagetableaddress (@scratchpad.newuserparams);
+	newUser ()}
+
+

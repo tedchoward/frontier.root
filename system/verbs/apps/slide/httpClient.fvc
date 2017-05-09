@@ -1,0 +1,115 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.slide.httpClient
+
+on httpClient (serverdomain, username, password, method="GET", jsondata="", dataserialnum=nil) {
+	«Changes
+		«8/21/11; 9:17:23 PM by DW
+			«Factored from opmlEditor.member.validateRemote.
+		«8/10/11; 2:31:59 PM by DW
+			«Timestamp is expressed in GMT.
+		«8/10/11; 11:41:35 AM by DW
+			«Lots of changes as explained on the worknotes site. http://worknotes.scripting.com/august2011/81011ByDw/changesToSlide
+		«8/10/11; 1:46:44 PM by DW
+			«No longer base64-encode the signature. Not needed since it is url-encoded.
+		«8/10/11; 11:38:53 AM by DW
+			«Add a version parameter, set to 0. I'll change it to 1 when I'm ready to announce it on Scripting News.
+		«8/10/11; 10:05:21 AM by DW
+			«Timestamp is a Unix date, not RFC822. Remember the number of ticks (60ths of second) the last remote call took.
+		«7/26/11; 2:25:57 PM by DW
+			«Factored from opmlEditor.member.validate.
+	local (adrdata = slide.init (), flcache = true, version = 0);
+	local (adrcache = @system.temp.slide.membercache.[username], now = clock.now ());
+	local (timestamp = date.dateToUnixDate (now - date.getcurrenttimezone ()), signature, apiUrl, jsontext, jstruct, cttickslastcall);
+	
+	if flcache {
+		if method == "GET" {
+			if defined (adrcache^) {
+				if number (now - adrcache^.whenLastRemoteCall) < (3 * 60) {
+					if password == adrcache^.password {
+						adrcache^.ctAccesses++;
+						return (true)}}}}};
+	
+	on getSignature (password, timestamp) {
+		«Changes
+			«7/24/11; 12:38:33 PM by DW
+				«Created.
+		on hmac (data, key) {
+			«Changes
+				«7/24/11; 11:19:35 AM by DW
+					«Cribbed from s3.route53.httpclient.
+				«3/27/06; 5:57:47 PM by LMO
+					«Initial implementation, stolen from Digest::HMAC in Perl
+			local (BLOCK_SIZE=64);
+			on sha1 (data) {
+				«See: http://www.spicynoodles.net/projects/crypto.html
+				return (crypto.hashSHA1(data, false))};
+			local(k_ipad, k_opad, i);
+			if string.length (key) > BLOCK_SIZE {
+				key = sha1 (key)};
+			for i = 0 to BLOCK_SIZE-1 {
+				if i < string.length(key) {
+					«XOR characters of the key
+					k_char = string.nthChar(key, i+1);
+					k_ipad = k_ipad + char(bit.logicalXor(k_char, char(0x36)));
+					k_opad = k_opad + char(bit.logicalXor(k_char, char(0x5c)))}
+				else {
+					«Pad out the rest of the block size length
+					k_ipad = k_ipad + char(0x36);
+					k_opad = k_opad + char(0x5c)}};
+			return (sha1 (k_opad + sha1 (k_ipad + data)))};
+		return (hmac (timestamp, password))};
+	signature = getSignature (password, timestamp);
+	bundle { //set apiUrl
+		on pushparam (name, val) {
+			apiurl = apiurl + name + "=" + string.urlencode (val, true) + "&"};
+		apiUrl = "http://" + user.opmlEditor.prefs.identity.serverDomain + "/?";
+		pushparam ("username", username);
+		pushparam ("signature", signature);
+		pushparam ("timestamp", timestamp);
+		pushparam ("version", version); //8/10/11 by DW
+		if (method == "POST") and (dataserialnum != nil) { //8/22/11 by DW
+			pushparam ("dataSerialnum", dataserialnum)};
+		apiurl = string.delete (apiurl, sizeof (apiurl), 1);
+		scratchpad.apiurl = apiurl};
+		«scratchpad.timestamp = timestamp
+	bundle { //make the call
+		local (tc = clock.ticks (), urllist, jsontype = "application/json", type);
+		bundle { //set urllist
+			try {
+				urllist = string.urlsplit (apiurl)}
+			else {
+				urllist = string.urlsplit (apiurl + "/")}};
+		bundle { //set type
+			if sizeof (jsondata) > 0 {
+				type = jsontype}
+			else {
+				type = ""}};
+		s = tcp.httpClient (method, server:urllist [2], path:urllist [3], ctFollowRedirects:3, flMessages:false, data:jsondata, datatype:type);
+		jsontext = string.httpResultSplit (s);
+		«jsontext = tcp.httpreadurl (apiurl, method:method)
+		cttickslastcall = clock.ticks () - tc};
+	json.compile (jsontext, @jstruct);
+	wp.newtextobject (jsontext, @scratchpad.jsontext);
+	scratchpad.jstruct = jstruct;
+	if string.lower (xml.getvalue (@jstruct, "response")) == "yes" {
+		if flcache {
+			if not defined (adrcache^) {
+				new (tabletype, adrcache);
+				adrcache^.ctAccesses = 0;
+				adrcache^.ctRemoteCalls = 0};
+			adrcache^.password = password;
+			adrcache^.whenLastRemoteCall = now;
+			adrcache^.ctRemoteCalls++;
+			adrcache^.ctTicksLastCall = cttickslastcall};
+		return (true)}
+	else {
+		adrdata^.stats.lastRemoteValidateError = xml.getvalue (@jstruct, "message");
+		adrdata^.stats.whenLastRemoteValidateError = now;
+		return (false)}};
+bundle { //test code
+	local (domain = user.opmlEditor.prefs.identity.serverDomain);
+	local (username = "dave", password = system.temp.davepass);
+	«httpClient (domain, username, password)
+	«httpClient (domain, username, password, "OPTIONS") //bad method
+	httpClient (domain, username, password, "POST", json.decompile (@scratchpad.xstruct), dataserialnum:7)}
+
+

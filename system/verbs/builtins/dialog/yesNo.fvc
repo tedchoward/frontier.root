@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.dialog.yesNo
+
+on yesNo (prompt) {
+	return (dialog.twoWay (prompt, "Yes", "No"))}
+
+

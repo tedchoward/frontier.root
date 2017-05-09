@@ -1,0 +1,5 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.mainResponder.localization.languages.french.strings.security.httpBadQopField
+
+La requ&ecirc;te ne peut &ecirc;tre trait&eacute;e par le serveur car le champ qop de l'en-t&ecirc;te d'autorisation contient une valeur non reconnue.
+
+

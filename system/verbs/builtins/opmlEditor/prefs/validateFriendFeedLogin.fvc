@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.prefs.validateFriendFeedLogin
+
+on validateFriendFeedLogin () {
+	«Changes
+		«8/6/08; 8:39:33 AM by DW
+			«Created. 
+	local (pta = html.getpagetableaddress ());
+	if pta^.method == "POST" {
+		if friendfeed.authenticate (user.friendfeed.prefs.username, user.friendfeed.prefs.remotekey) {
+			s = "<font color=\"green\">The username/remotekey combination checks out with FriendFeed.</font>"}
+		else {
+			s = "<font color=\"red\">FriendFeed rejected the username/remotekey combination.</font>"};
+		return (s)}
+	else {
+		return ("")}}
+
+

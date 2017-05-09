@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.goToLine
+
+on goToLine (n, selectLine = nil) { «Place the insertion point at the start of the selected line.
+	return (appleEvent (BBEdit.id, 'R*ch', 'Goto', '----', long (n), 'Slin', boolean (selectLine)))}
+
+

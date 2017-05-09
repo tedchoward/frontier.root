@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:user.html.macros.imageTag
+
+on imageTag (gifname, alt = gifname, hspace = "", align = "", usemap = "", height = -1, width = -1) {
+	return (bbSite.tools.imageTag (gifname, alt, hspace, align, usemap, height, width))}
+
+

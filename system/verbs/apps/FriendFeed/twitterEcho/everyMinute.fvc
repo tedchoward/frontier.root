@@ -1,0 +1,28 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FriendFeed.twitterEcho.everyMinute
+
+«Changes
+	«7/23/08; 8:03:19 PM by DW
+		«Add support for identi.ca. If the user table has an element named identicaName and identicaPassword, then shoot the status message through identica.newPost.
+	«7/15/08; 2:46:15 PM by DW
+		«Created.
+FriendFeed.twitterEcho.init ();
+if user.friendfeed.twitterEcho.prefs.enabled {
+	local (adruser, updates, adrupdate);
+	user.friendfeed.twitterEcho.stats.ctChecks++;
+	for adruser in @user.friendfeed.twitterEcho.users {
+		FriendFeed.getUserUpdates (adruser^.friendFeedName, @updates, true, "twitterEcho");
+		«scratchpad.updates = updates
+		for adrupdate in @updates {
+			if adrupdate^.serviceId == "internal" {
+				local (link = bitly.create (adrupdate^.link));
+				local (s = adrupdate^.title);
+				if sizeof (s) > user.friendfeed.twitterEcho.prefs.maxMsgChars {
+					s = string.mid (s, 1, user.friendfeed.twitterEcho.prefs.maxMsgChars) + "..."};
+				s = user.friendfeed.twitterEcho.prefs.twitPrefix + s + " " + link;
+				twitter.newpost (s, adruser^.twitterName, adruser^.twitterPassword);
+				try { //7/23/08 by DW
+					identica.newpost (s, adruser^.identicaName, adruser^.identicaPassword)};
+				user.friendfeed.twitterEcho.stats.ctEchoes++;
+				user.friendfeed.twitterEcho.stats.whenLastEcho = clock.now ()}}}}
+
+

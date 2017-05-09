@@ -1,0 +1,26 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.initUser
+
+on initUser (username, flcreate=false) {
+	«Changes
+		«8/28/11; 10:07:58 AM by DW
+			«Created.
+	local (adrmember = opmlEditor.member.initMember (username, flcreate:flcreate));
+	local (adruser = @adrmember^.opmlEditor);
+	if not defined (adruser^) {
+		new (tabletype, adruser)};
+	bundle { //prefs
+		if not defined (adruser^.prefs) {
+			new (tabletype, @adruser^.prefs)};
+		if not defined (adruser^.prefs.enabled) {
+			adruser^.prefs.enabled = true}};
+	bundle { //stats
+		if not defined (adruser^.stats) {
+			new (tabletype, @adruser^.stats)};
+		if not defined (adruser^.stats.ctInits) {
+			adruser^.stats.ctInits = 0};
+		adruser^.stats.ctInits++};
+	return (adruser)};
+bundle { //test code
+	initUser ()}
+
+

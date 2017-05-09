@@ -1,0 +1,15 @@
+FrontierVcsFile:3:optx:system.verbs.apps.Netscape.examples.oneLiners
+
+netscape.launch ()
+netscape.openUrl ("http://www.ccnet.com/SF_Free_Press/")
+netscape.openUrl ("http://home.mcom.com/home/faq_docs/faq_client.html")
+netscape.reload ()
+netscape.goBack ()
+netscape.goForward ()
+netscape.get.windowTitle ()
+netscape.get.html () ÇDoesn't work -- see comment at head of script
+netscape.examples.testopen () Çruns until you press cmd-period
+netscape.examples.randomCoolSites () Çruns until you press cmd-period
+
+
+

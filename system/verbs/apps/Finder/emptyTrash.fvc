@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Finder.emptyTrash
+
+on emptyTrash () { «empties the Finder's trashcan, no confirmation
+	«Only for compatibility with old Finder verbs
+	return (finderEvent (Finder.id, Finder.class, 'empt'))}
+
+

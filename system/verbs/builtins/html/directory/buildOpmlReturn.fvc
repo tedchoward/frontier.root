@@ -1,0 +1,72 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.directory.buildOpmlReturn
+
+on buildOpmlReturn (adrreturnitem, ownername, owneremail) {
+	«Changes
+		«6/13/13; 9:57:08 AM by DW
+			«When we generate the OPML text, the <?xml> element has encoding and version in the wrong order because the table is sorted lexically by name. We fix that on the way out so that it's valid XML.
+		«9/23/12; 4:12:00 PM by DW
+			«Experiment. If the node has a url attribute, return the contents of the file it points to.
+				«http://worknotes.scripting.com/september2012/92312ByDw/gettingOpmlForComments
+		«9/23/12; 3:52:43 PM by DW
+			«Special case for comment nodetype.
+				«http://worknotes.scripting.com/september2012/92312ByDw/gettingOpmlForComments
+		«5/10/12; 10:31:28 AM by DW
+			«Return the XML for a photo. It's not OPML, but it's better than nothing. :-)
+		«5/9/12; 9:32:18 AM by DW
+			«Sometimes we get an error when trying to access the opmltext for a thumblist type. So I decided rather than trace down the problem, to just read the URL every time. The error is Can't evaluate the expression because the name "xmltext" hasn't been defined.
+		«5/8/12; 9:17:18 AM by DW
+			«Special case for thumblist type.
+				«http://worknotes.scripting.com/may2012/5812ByDw/problemsWithOpmlReturns
+		«6/12/11; 6:12:20 PM by DW
+			«If the client asks for OPML instead of HTML, this is what we return.
+	local (xtemplate = html.directory.data.opmlReturnXstruct);
+	«scratchpad.adrreturnitem = adrreturnitem; scratchpad.ownername = ownername; scratchpad.owneremail = owneremail
+	bundle { //experiment -- 9/23/12 by DW
+		local (adratts = @adrreturnitem^.["/atts"]);
+		if defined (adratts^.url) {
+			return (tcp.httpreadurl (adratts^.url, 3, false))}};
+	bundle { //special cases, based on type
+		local (adratts = @adrreturnitem^.["/atts"]);
+		if defined (adratts^.type) {
+			case string.lower (adratts^.type) {
+				"comment" { //9/23/12 by DW
+					if defined (adratts^.url) {
+						return (tcp.httpreadurl (adratts^.url, 3, false))}};
+				"thumblist" {
+					if defined (adratts^.url) {
+						return (tcp.httpreadurl (adratts^.url, 3, false)); //5/9/12 by DW
+						
+						local (adrtable, adrxstruct);
+						op.getnetoutline (adratts^.url, @adrtable, flKeepXml:true);
+						xml.thread.accessStruct (@adrtable^.struct, @adrxstruct);
+						return (adrtable^.xmltext)}};
+				"photo" {
+					if defined (adratts^.xmlurl) {
+						return (tcp.httpreadurl (adratts^.xmlurl, 3, false))}}}}}; //5/10/12 by DW
+	bundle { //copy the subs of the return item into the body section of the template
+		local (adropml = xml.getaddress (@xtemplate, "opml"), adrsourceitem);
+		local (adrbody = xml.getaddress (adropml, "body"));
+		for adrsourceitem in adrreturnitem {
+			if nameof (adrsourceitem^) endswith "outline" {
+				adrbody^.[nameof (adrsourceitem^)] = adrsourceitem^}}};
+	
+	local (t);
+	new (tabletype, @t);
+	t.title = adrreturnitem^.["/atts"].text;
+	t.programName = frontier.getprogramname ();
+	t.now = clock.now ();
+	t.ownerName = ownername;
+	t.ownerEmail = owneremail;
+	
+	local (s = xml.decompile (@xtemplate));
+	s = string.replace (s, "&lt;%title%>", "<%title%>");
+	s = string.replace (s, "&lt;%ownerName%>", "<%ownerName%>");
+	s = string.replace (s, "&lt;%ownerEmail%>", "<%ownerEmail%>");
+	
+	s = string.replace (s, "<?xml encoding=\"ISO-8859-1\" version=\"1.0\"?>", "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"); //6/13/13 by DW
+	
+	return (string.multiplereplaceall (s, @t, false, "<%", "%>"))};
+bundle { //test code
+	buildOpmlReturn (scratchpad.adrreturnitem, scratchpad.ownername, scratchpad.owneremail)}
+
+

@@ -1,0 +1,110 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.photos.getInfo
+
+on getInfo (id, secret=nil, adrinfo=nil) {
+	«Changes
+		«8/22/07; 9:03:27 PM by DW
+			«Minor tweaks & fixes.
+		«8/22/07; 6:58:22 PM by DW
+			«Improve organization of code, add date coercion.
+				«http://www.flickr.com/services/api/misc.dates.html
+		«8/22/07; 2:20:48 PM by DW
+			«Created.
+			«http://www.flickr.com/services/api/flickr.photos.getInfo.html
+			«file.writewholefile ("macintosh hd:table.html", html.data.standardMacros.nestedTableDisplayer (@scratchpad.pictureinfo))
+				«true
+	on getTakenDate (s) {
+		«2004-11-29 16:01:26
+		local (year = 1970, month = 1, day = 1, hour = 0, minute = 0, second = 0);
+		on popto (ch) {
+			local (ix = string.patternmatch (ch, s));
+			if ix == 0 {
+				scripterror ("xxx")};
+			num = number (string.mid (s, 1, ix-1));
+			s = string.delete (s, 1, ix);
+			return (num)};
+		try {
+			year = popto ("-");
+			month = popto ("-");
+			day = popto (" ");
+			hour = popto (":");
+			minute = popto (":");
+			second = number (s)};
+		return (date.set (day, month, year, hour, minute, second))};
+	local (mystruct);
+	new (tabletype, @mystruct);
+	mystruct.api_key = user.flickr.prefs.apiKey;
+	mystruct.photo_id = id;
+	if secret != nil {
+		mystruct.secret = secret};
+	local (s = [user.flickr.prefs.server].flickr.photos.getInfo (mystruct), xstruct);
+	s = string.replaceall (s, "&quot;", "\"");
+	xml.compile (s, @xstruct);
+	«scratchpad.infostruct = xstruct
+	if adrinfo != nil {
+		local (adrphoto = xml.getaddress (@xstruct, "photo"));
+		adrinfo^ = adrphoto^.["/atts"];
+		adrinfo^.title = xml.getvalue (adrphoto, "title");
+		adrinfo^.description = xml.getvalue (adrphoto, "description");
+		adrinfo^.comments = xml.getvalue (adrphoto, "comments");
+		
+		local (adrowner = xml.getaddress (adrphoto, "owner"));
+		adrinfo^.owner = adrowner^.["/atts"];
+		
+		local (adrvisibility = xml.getaddress (adrphoto, "visibility"));
+		adrinfo^.visibility = adrvisibility^.["/atts"];
+		
+		bundle { //dates
+			local (adrdates = xml.getaddress (adrphoto, "dates"));
+			adrinfo^.dates = adrdates^.["/atts"];
+			adrinfo^.dates.lastupdate = date.unixDateToDate (adrinfo^.dateuploaded);
+			adrinfo^.dates.posted = date.unixDateToDate (adrinfo^.dates.posted);
+			adrinfo^.dates.taken = getTakenDate (adrinfo^.dates.taken);
+			adrinfo^.dates.dateuploaded = date.unixDateToDate (adrinfo^.dateuploaded);
+			delete (@adrinfo^.dateuploaded)};
+		
+		local (adreditability = xml.getaddress (adrphoto, "editability"));
+		adrinfo^.editability = adreditability^.["/atts"];
+		
+		bundle { //geoperms
+			try {
+				local (adrgeoperms = xml.getaddress (adrphoto, "geoperms"));
+				adrinfo^.geoperms = adrgeoperms^.["/atts"]}
+			else {
+				new (tabletype, @adrinfo^.geoperms)}};
+		bundle { //notes
+			local (adrnotes = xml.getaddress (adrphoto, "notes"), adrnote);
+			new (tabletype, @adrinfo^.notes);
+			for adrnote in adrnotes {
+				if nameof (adrnote^) endswith "note" {
+					local (adrsub = @adrinfo^.notes.[adrnote^.["/atts"].id]);
+					adrsub^ = adrnote^.["/atts"];
+					adrsub^.title = adrnote^.["/pcdata"]}}};
+		bundle { //tags
+			local (adrtags = xml.getaddress (adrphoto, "tags"), adrtag);
+			new (tabletype, @adrinfo^.tags);
+			for adrtag in adrtags {
+				if nameof (adrtag^) endswith "tag" {
+					local (adrsub = @adrinfo^.tags.[adrtag^.["/pcdata"]]);
+					adrsub^ = adrtag^.["/atts"]}}};
+		bundle { //location
+			try {
+				local (adrlocation = xml.getaddress (adrphoto, "location"));
+				adrinfo^.location = adrlocation^.["/atts"];
+				adrinfo^.location.locality = xml.getvalue (adrlocation, "locality");
+				adrinfo^.location.county = xml.getvalue (adrlocation, "county");
+				adrinfo^.location.region = xml.getvalue (adrlocation, "region");
+				adrinfo^.location.country = xml.getvalue (adrlocation, "country")}
+			else {
+				if not defined (adrinfo^.location) {
+					new (tabletype, @adrinfo^.location)}}};
+		bundle { //urls
+			local (adrurls = xml.getaddress (adrphoto, "urls"), adrurl);
+			new (tabletype, @adrinfo^.urls);
+			for adrurl in adrurls {
+				if nameof (adrurl^) endswith "url" {
+					adrinfo^.urls.[adrurl^.["/atts"].type] = adrurl^.["/pcdata"]}}}}}
+«bundle //test code
+	«getinfo ("1166257196", adrinfo:@scratchpad.pictureinfo)
+	«edit (@scratchpad.pictureinfo)
+
+

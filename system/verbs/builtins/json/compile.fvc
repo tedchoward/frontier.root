@@ -1,0 +1,197 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.json.compile
+
+on compile (s, adrtable, flParseAtts=false) {
+	«Changes
+		«10/24/10; 10:10:40 PM by DW
+			«Handle backslashes in string constants to escape double-quote characters and itself.
+		«10/24/10; 7:50:53 PM by DW
+			«If we're passed a scalar, then instead of adrtable pointing to a table when we return, it points to a scalar. Handle empty lists.
+		«10/21/10; 7:14:33 AM by DW
+			«The equivalent of xml.compile for JSON. Turns some JSON text into the exact same structure that xml.compile creates, so all the techniques we use for dealing with XML should apply to JSON.
+			«Examples used to test are in workspace.userlandSamples.jsonTesting
+				«http://www.ietf.org/rfc/rfc4627.txt
+				«http://labs.adobe.com/technologies/spry/samples/data_region/JSONDataSetSample.html
+				«http://www.json.org/example.html
+				«http://api.hunch.com/api/v1/get-recommendations/?topic_ids=all_544&limit=10&auth_basic=1
+			«Optional param, flParseAtts. If true, we look for special syntax for XML attributes that are put there by (for example) xml.tableToJson. If a struct has an element named #value, then assume that the other elements are actually attributes.
+				«For example:
+					«"guid": {
+						«"isPermaLink": "false",
+						«"#value": "http://www.hello.com/article22.html"
+						«}
+				«Becomes
+					«<guid isPermaLink="false">http://www.hello.com/article22.html</guid>
+	local (tyPunctuation, tyStringConst, tyBooleanValue, tyNullValue, tyNumberValue);
+	local (flLookahead = false, lookaheadToken, lookaheadType);
+	bundle { //set type constants
+		tyPunctuation = "punctuation";
+		tyStringConst = "stringConst";
+		tyBooleanValue = "boolean";
+		tyNullValue = "null";
+		tyNumberValue = "number"};
+	on isWhitespaceChar (ch) {
+		if (ch != ' ') and (ch != '\t') and (ch != '\r') and (ch != '\n') {
+			return (false)};
+		return (true)};
+	on isPunctuationChar (ch) {
+		return ((ch == '[') or (ch == ']') or (ch == '{') or (ch == '}') or (ch == ',') or (ch == ':'))};
+	on skipWhitespace () {
+		local (ch);
+		while sizeof (s) > 0 {
+			ch = s [1];
+			if (ch != ' ') and (ch != '\t') and (ch != '\r') and (ch != '\n') {
+				return};
+			s = string.delete (s, 1, 1)}};
+	on popChar () {
+		local (ch = s [1]);
+		s = string.delete (s, 1, 1);
+		return (ch)};
+	on scan (adrtype) {
+		if flLookahead {
+			adrtype^ = lookaheadType;
+			flLookahead = false;
+			return (lookaheadToken)};
+		local (ch);
+		skipWhitespace ();
+		ch = popchar ();
+		if isPunctuationChar (ch) {
+			adrtype^ = tyPunctuation;
+			return (ch)};
+		case ch {
+			'"' {
+				local (stringconst = "", chprev = ' ', fladd);
+				loop {
+					ch = popchar ();
+					if (ch == '"') and (chprev != '\\') {
+						adrtype^ = tyStringConst;
+						return (stringconst)};
+					fladd = true;
+					if ch == '\\' {
+						if chprev != '\\' {
+							fladd = false}};
+					if fladd {
+						stringconst = stringconst + ch};
+					chprev = ch}}}
+		else {
+			local (token = string (ch)); //it's got to be something like a number, true, false or null
+			on coerceValue () {
+				case string.lower (token) {
+					"true" {
+						adrtype^ = tyBooleanValue;
+						token = true};
+					"false" {
+						adrtype^ = tyBooleanValue;
+						token = false};
+					"null" {
+						adrtype^ = tyNullValue;
+						token = nil}}
+				else {
+					if token contains '.' {
+						token = double (token)}
+					else {
+						token = number (token)};
+					adrtype^ = tyNumberValue}};
+			loop {
+				if isPunctuationChar (s [1]) { //lookahead
+					coerceValue ();
+					return (token)};
+				ch = popchar ();
+				if isWhitespaceChar (ch) {
+					coerceValue ();
+					return (token)};
+				token = token + ch;
+				if sizeof (s) == 0 {
+					coerceValue ();
+					return (token)}}}};
+	on dovalue (name, adrtable) {
+		local (type, token = scan (@type));
+		case type {
+			tyNumberValue;
+			tyStringConst;
+			tyBooleanValue {
+				xml.addvalue (adrtable, name, token)};
+			tyNullValue {
+				xml.addvalue (adrtable, name, nil)}}
+		else {
+			if token == '[' {
+				dolist (name, adrtable)}
+			else {
+				if token == '{' {
+					dostruct (xml.addtable (adrtable, name))}
+				else {
+					if token == ']' { //empty list -- put back the closing token
+						lookaheadType = type;
+						lookaheadToken =  token;
+						flLookahead = true;
+						adrtable^.[name] = {}}}}}}; //an empty list
+	on dolist (name, adrtable) {
+		local (token, type);
+		loop {
+			dovalue (name, adrtable);
+			token = scan (@type);
+			if token == ']' {
+				return};
+			if token == ',' {
+				continue}}};
+	on dostruct (adrtable) {
+		on fixStruct (adrstruct) {
+			local (adr);
+			for adr in adrstruct {
+				if nameof (adr^) endswith "#value" {
+					local (value = adr^, adrinstruct, tablecopy);
+					new (tabletype, @tablecopy);
+					for adrinstruct in adrstruct {
+						tablecopy.[string.nthfield (nameof (adrinstruct^), "\t", 2)] = adrinstruct^};
+					delete (@tablecopy.["#value"]);
+					table.emptytable (adrstruct);
+					adrstruct^.["/atts"] = tablecopy;
+					adrstruct^.["/pcdata"] = value}}};
+		local (name, type, token);
+		loop {
+			name = scan (@type);
+			if name == '}' { //empty struct
+				return};
+			if type == tyStringConst {
+				if scan (@type) == ':' {
+					dovalue (name, adrtable)}};
+			token = scan (@type);
+			if token == '}' {
+				if flParseAtts {
+					fixstruct (adrtable)};
+				return};
+			if token == ',' {
+				continue}}};
+	new (tabletype, adrtable);
+	while sizeof (s) > 0 {
+		local (type, token);
+		token = scan (@type);
+		if token == '{' {
+			dostruct (adrtable)}
+		else {
+			if token == '[' {
+				dolist ("", adrtable)}
+			else {
+				flLookahead = true;
+				lookaheadToken = token;
+				lookaheadType = type;
+				dovalue ("", adrtable);
+				local (val = adrtable^ [1]);
+				delete (adrtable);
+				adrtable^ = val}};
+		skipWhitespace ()}};
+	«bundle //test code
+		«local (type)
+		«new (outlinetype, @scratchpad.tokens); target.set (@scratchpad.tokens); edit (@scratchpad.tokens)
+		«while sizeof (s) > 0
+			«op.insert (scan (@type) + " (" + type + ")", down)
+			«skipWhitespace ()
+«bundle //test code
+	«local (tc = clock.ticks (), i)
+	«for i = 1 to 100
+		«compile (string (xml.examples.json.source.feedhose), @xml.examples.json.tables.feedhose)
+	«dialog.alert (clock.ticks () - tc)
+bundle { //test code
+	compile (string (scratchpad.foolishjack), @scratchpad.foolishshit)}
+	«compile (string (workspace.userlandSamples.jsonTesting.source.andrewTunnellJonesExample), @scratchpad.foolishshit)
+
+

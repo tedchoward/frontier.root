@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Eudora.countMessages
+
+on countMessages (mailboxObj) { « returns the number of message in a given mailbox
+	with objectModel, Eudora, eventInfo {
+		return (core.count (id, mailboxObj, message))}}
+
+

@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.builtinResponders.metaWeblog.methods.post
+
+on post (driverName, screenname, message) {
+	«Changes
+		«8/12/02; 11:32:06 PM by JES
+			«Created.
+	local (retVal);
+	message = string.trimWhiteSpace (string.delete (message, 1, sizeof ("metaweblog post")));
+	with user.im.responders.metaWeblog.prefs {
+		retVal = metaWeblog.newPost ("", "", message, nil, username, string (password), blogId, flPublish, @siteInfo)};
+	return ("Posted successfully. PostID: " + retVal)}
+
+

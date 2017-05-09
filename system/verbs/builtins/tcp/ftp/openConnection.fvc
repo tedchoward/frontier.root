@@ -1,0 +1,50 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.ftp.openConnection
+
+on openConnection (host, username, password, flmessages=true) {
+	«Changes
+		«5/17/03; 8:41:44 PM by JES
+			«Fixed a bug which could mask the real error message from the server, if the server drops the connection after a failed login.
+	local (adrconnectiontable);
+	bundle { //allocate a table to store information for this connection
+		local (adrtable = @system.temp.ftp);
+		if not defined (adrtable^) {
+			new (tabletype, adrtable)};
+		loop {
+			adrconnectiontable = @adrtable^.[string (random (1, 10000))];
+			semaphore.lock (this, 3600);
+			if not defined (adrconnectiontable^) {
+				new (tabletype, adrconnectiontable);
+				semaphore.unlock (this);
+				break};
+			semaphore.unlock (this)};
+		adrconnectiontable^.flmessages = flmessages;
+		adrconnectiontable^.timeCreated = clock.now ();
+		adrconnectiontable^.host = host;
+		adrconnectiontable^.username = username};
+	on fatal (errmsg) {
+		«tcp.ftp.quit ()
+		«delete (adrconnectiontable)
+		try { //should not be fatal
+			tcp.closeStream (adrconnectiontable^.commandStream)};
+		try { //should also not be fatal
+			delete (adrconnectiontable)};
+		scriptError (errmsg)};
+	try {
+		adrconnectiontable^.commandStream = tcp.openStream (host, 21);
+		local (response = tcp.ftp.readResponse (adrconnectiontable));
+		if response beginsWith "5" { // there's some other kinda error
+			fatal ("Error " + response + " logging on to " + host)};
+		response = tcp.ftp.sendCommand (adrconnectiontable, "USER " + username);
+		if response beginsWith "5" {
+			fatal (response + " Bad Username")};
+		response = tcp.ftp.sendCommand (adrconnectiontable, "PASS " + string (password));
+		if response beginsWith "5" {
+			fatal (response + " Bad Username or Password")};
+		response = tcp.ftp.sendCommand (adrconnectiontable, "PWD"); // get our default directory
+		adrconnectiontable^.currentHostDirectory = string.nthField (response, '"', 2);
+		adrconnectiontable^.rootDirectory = adrconnectiontable^.currentHostDirectory}
+	else {
+		fatal (tryError)}; //deallocate the connection table
+	return (adrconnectiontable)}
+
+

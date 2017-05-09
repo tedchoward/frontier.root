@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.date.set
+
+on set (day, month, year, hour, minute, second) {
+	kernel (date.set)}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FinderClassic.close
+
+on close (windowpath) {
+	return (Finder.windowVerb ('clos', windowpath))}
+
+

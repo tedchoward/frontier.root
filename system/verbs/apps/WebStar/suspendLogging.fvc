@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.WebStar.suspendLogging
+
+on suspendLogging (flag, appID = WebStar.id) { «Turn logging on or off
+	return (appleEvent (appID, 'WWW‡', 'flog', '----', boolean (flag)))}
+
+

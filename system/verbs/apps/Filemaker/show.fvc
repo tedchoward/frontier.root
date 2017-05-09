@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.show
+
+on show (obj) { «Bring an object into view
+	return (appleEvent (Filemaker.id, 'misc', 'mvis', '----', objspec (obj)))}
+
+

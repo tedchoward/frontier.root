@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.utf16ToAnsi
+
+on utf16ToAnsi (s) {
+	kernel (string.utf16ToAnsi)}
+
+

@@ -1,0 +1,28 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.initUser
+
+on initUser (username) {
+	«Changes
+		«7/15/10; 10:52:05 AM by DW
+			«Created. 
+	local (adrdata = io.init ());
+	local (adruser = @adrdata^.client.buddies.users.[username]);
+	if not defined (adruser^) {
+		new (tabletype, adruser)};
+	bundle { //stats
+		if not defined (adruser^.stats) {
+			new (tabletype, @adruser^.stats)};
+		if not defined (adruser^.stats.flDirty) {
+			adruser^.stats.flDirty = true};
+		if not defined (adruser^.stats.ctUpdates) {
+			adruser^.stats.ctUpdates = 0};
+		if not defined (adruser^.stats.whenLastUpdate) {
+			adruser^.stats.whenLastUpdate = date (0)};
+		if not defined (adruser^.stats.whenCreated) {
+			adruser^.stats.whenCreated = clock.now ()};
+		if not defined (adrUser^.stats.ctTicksOutlineCompile) {
+			adrUser^.stats.ctTicksOutlineCompile = 0}};
+	return (adruser)};
+bundle { //test code
+	initUser ("davewiner")}
+
+

@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.bucketExists
+
+on bucketExists (bucketname) {
+	«Changes
+		«12/30/09; 10:06:34 AM by DW
+			«Return true if the bucket exists, false otherwise.
+	s3.init ();
+	try {
+		s3.httpClient ("GET", "/" + bucketname);
+		return (true)}
+	else {
+		return (false)}};
+bundle { //test code
+	dialog.alert (bucketExists ("myDefaultBucket"))}
+
+

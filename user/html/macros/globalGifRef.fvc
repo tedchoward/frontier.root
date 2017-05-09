@@ -1,0 +1,36 @@
+FrontierVcsFile:3:scpt:user.html.macros.globalGifRef
+
+on globalGifRef (gifname, explanation = "", hspace = "", align = "", usemap = "") { «a macro that generates an IMG tag to a GIF file
+	«we generate a pointer to a gif that's not relative to the current site, it's hardcoded
+		«use this for gifs that are pointed to from many sites, and you don't want to replicate the graphic
+	local (folder = "internal:apps:webstar:gifs:");
+	local (url = "http://206.204.24.4/gifs/");
+	if explanation == "" {
+		explanation = gifname + " Picture"};
+	local (htmltext = "");
+	on add (s) {
+		htmltext = htmltext + s};
+	
+	add ("<img src=\"" + url + gifname + ".gif\" border=0 alt=\"" + explanation + "\"");
+	try {
+		local (f = folder + gifname + ".gif");
+		if not file.exists (f) { «try to copy it from www.scripting.com's gifs folder
+			local (otherfolder = "Internal:Apps:WebStar:gifs:");
+			local (otherf = otherfolder + gifname + ".gif");
+			if file.exists (otherf) {
+				file.copy (otherf, f)}};
+		local (hwlist = string.getGifHeightWidth (f));
+		add (" height=" + hwlist [1] + " width=" + hwlist [2])};
+		«file.setmodified (f, clock.now ()) «so we can tell which ones we are using
+	if hspace != "" {
+		add (" hspace=" + hspace)};
+	if align != "" {
+		add (" align=" + align)};
+	if usemap != "" {
+		add (" usemap=\"#" + usemap + "\"")};
+	add (">");
+	return (htmltext)};
+bundle { «test code
+	clipboard.putvalue (globalGifRef ("conxion"))}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.select
+
+on select (obj) { «Select the specified object
+	return (appleEvent (BBEdit.id, 'misc', 'slct', '----', objspec (obj)))}
+
+

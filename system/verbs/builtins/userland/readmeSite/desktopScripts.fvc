@@ -1,0 +1,229 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.userland.readmeSite.desktopScripts
+
+#title "Desktop Scripts"
+#realFile "Macintosh HD:New Releases:Frontier 4.2:Desktop Scripts: Read Me"
+Here's what you need to know if you're beginning your exploration of Frontier through the Desktop Scripts folder: 
+
+€ To cancel a script, press cmd-period. Be sure Frontier is the frontmost application when you press cmd-period.
+
+€ When Frontier runs a desktop script, it provides a single piece of information to the script -- the full path of the folder it was launched from. Therefore desktop scripts can be written generally to operate on the folder that the user has dragged it into. Many of the samples in this folder operate on the folders they were launched from.
+
+€ To view the source code of a desktop script, hold down the cmd-key as you double-click on the file. Be sure to hold down the cmd-key until the window opens in Frontier.
+
+€ If you modify a script and want to save the changes back to the file, press cmd-3 with the script¹s window in front.
+
+More information is in <a href="http://www.scripting.com/frontier/manual/chapter02.html">Chapter 2</a> of the manual.
+
+Following is a brief description of each of the scripts in the Desktop Scripts folder:
+
+***Backup Folder
+
+Copy this script into a folder on your hard disk and double-click on it to create a backup sub-folder.
+First it scans the folder, looking for folders with names like ³backup #xxx². What¹s the highest number? Suppose it¹s 4.
+
+The script creates a new sub-folder named ³backup #5² and copies all files and sub-folders in the folder into the new folder. It does not copy other backup folders into the new backup folder.
+
+
+***Big Folders Chart
+
+Copy this script into a folder and double-click on it to get a visual display of the relative sizes of its sub-folders.
+
+The script launches the BarChart application (bundled with Frontier, in the UserLand Utilities folder).
+
+As it travels thru the folder, the script sends IAC messages to BarChart to display the folder sizes.
+
+BarChart remains the frontmost application so the user can view the resulting chart.
+
+
+***Count Files
+
+This very simple script counts the files in the current folder and displays the result in a dialog box.
+
+
+***Count Word Files
+
+This script travels thru the folder it was launched from searching for text files created by Microsoft Word.
+
+The result is reported in a dialog box.
+
+The script only counts files whose creator ID is ŒMSWD¹.
+
+This script is explained in detail on pages 31-35 in the Frontier User Guide.
+
+***Delete Packages
+
+This script traverses the whole folder it was launched from, looking for AppleLink ³package² files. If you¹re an active AppleLink user, we bet that you have a couple of megabytes of disk space tied up storing random AppleLink downloads. This script saves you the trouble of manually opening and closing folders to delete files that you may not need.
+
+When it finds a package file, the script displays a dialog asking if you want to delete it. Click on Yes to delete it, No to not delete it, or Cancel to halt the traversal. 
+
+Special feature: Hold down the option key while clicking on Yes to delete all subsequent AppleLink package files without confirmation.
+
+Note: AppleLink package files are identified by their file type ('HBSF') and creator ('GEOL').
+
+Note: This script could be extended to delete all kinds of nuisance files that take up disk space unnecessarily.
+
+
+***Find In FileŠ
+
+This script searches all the files in the folder it was launched from for a string you type into its dialog box.
+
+It remembers the last string you typed, you¹re offered that string as a default in the dialog.
+
+The script uses Frontier¹s built-in ³file.findInFile² verb. It searches all files in the folder, and in all sub-folders for the string you entered. 
+It looks in files of all types -- the script could easily be modified to only look in text files, or picture files. Or files modified since January 1, 1992Š
+
+When a match is found, the script offers you a chance to open the file, continue the search, or stop searching. If you choose to open the file, the application that created it is launched, and it is instructed to open the file you selected.
+
+If you hold down the Control key while launching the script, it presents a standard file dialog allowing you to select the folder to search in. You could modify the script to always display the dialog, allowing you to launch this script from the Finder desktop level or from the Apple menu.
+
+Note: file.findInFile only looks in the data forks of files, therefore this script can¹t find a match in the resource fork. That means you can¹t use this script to search Frontier desktop scripts, which store the text of the script in the resource fork. Ouch!
+
+***Find Locked Files
+
+This script traverses the whole folder it was launched from, looking for locked files.
+
+When it finds one, it displays a dialog asking if you want to unlock a specific file. Click on Yes to unlock it, No to not unlock it, or Cancel to halt the traversal. 
+Special feature: Hold down the option key while clicking on Yes to unlock all subsequent files without confirmation.
+
+
+***Folder Structure
+
+This script creates an indented outline that exactly mirrors the hierarchic structure of the folder it was launched from.
+
+The outline is created in your Frontier ³people² table. If your initials are XX, the outline is called people.XX.list. The script automatically creates and opens the outline. You can watch it being built as the script runs.
+
+The main head of the outline is the full path to the folder being traversed. Each first-level headline is a file or folder in that folder. Indented under each folder is a full traversal of all its files and folders.
+
+Of course you can copy this outline, or a portion of it, and paste it into a word processor, outliner or page layout program.
+
+Note: this script overwrites any existing list without confirmation. If you want to save a list, rename it in the object database before continuing. To open the table containing the list, double-click in the title-bar of people.XX.list.
+
+
+***Free Space Chart
+
+This script shows you how much space is free on all mounted disk volumes. 
+It doesn¹t matter what folder you launch this script from, it ignores the ³path² argument that Frontier provides. 
+
+Suggestion: put an alias of this script into your Apple Menu Items folder in your System Folder.
+
+The script launches the BarChart application and sends it IAC messages to display the amount of free space on each volume.
+
+BarChart remains the frontmost application so the user can view the resulting chart.
+
+
+***Gather App AliasesŠ
+
+This script creates a new folder full of aliases to application files.
+
+When it starts up, the script asks you to select a folder to search. If you click on Cancel, the script exits.
+
+It then creates a new folder named ³App Aliases² in the folder that the script was launched from.  If the folder already exists it is deleted without confirmation. The newly created folder is opened.
+
+The script traverses the folder you selected and creates an alias of every application it finds. An application is identified by it¹s file type -- ŒAPPL¹.
+
+This script can be modified to create aliases of any kind of file, based on any of the criteria that Frontier has verbs to handle.
+
+It may make sense to put this script on your desktop (the App Aliases folder will be created at the desktop level), or in the Apple Menu Items folder.
+Use this script to do research on CD¹s you receive from Apple and others, modify it to search for the kinds of files you¹re interested in. You¹ll be surprised what you find!
+
+
+***Icon Sorter
+
+This script cleans up the icons of all the files and folders in the folder it was launched from.
+
+First it ³visits² all the files in alphabetic order, then all the folders in alphabetic order. The icons are arranged three to a line, spaced fairly far apart, allowing space for long names.
+
+It then treats all sub-folders and sub-sub-folders in the same way.
+
+Note: you will not see the new icon positions until the folder is closed and re-opened. This is a feature of the System 7.0 Finder, we¹re not aware of any way to work around this limitation.
+
+Note: you cannot change the icon position of a busy file. Quit from all applications in the folder before running the script. This means that the only way to use this script to clean up the Frontier folder is to make a copy of Frontier and run this script using the copy.
+
+Note: This script is easily customized to space icons differently, and to allocate more or less than three icons per line.
+
+***Open FolderŠ
+This is a very simple, but very useful script. It opens a standard file dialog, asking you to select a folder to open.
+
+Select a folder and click on the Folder button. An IAC message is sent to the Finder telling it to open the folder.
+
+It doesn¹t matter what folder you launch this script from, it ignores the ³path² argument that Frontier provides. Suggestion: place this script at the desktop level.
+
+This script is especially useful in conjunction with Boomerang, part of the Now Utilities, from Now Software.
+
+***Recently Changed FilesŠ
+
+This script creates a folder full of aliases of files that have changed recently. What¹s recent? That¹s up to youŠ
+
+It displays a dialog asking you to enter a date, suggesting October 1, 1991 as a default. Enter a date in the same format you see, and click on OK to proceed, Cancel to exit the script.
+
+The script traverses the folder it was launched from, and creates aliases of all the files changed since the date you entered. The aliases are created in a folder named ³Recently Changed Files,² which is overwritten without confirmation.
+
+When it¹s finished, the script opens the Recently Changed Files folder.
+This script is explained in detail on pages 35-38 in the Frontier User Guide.
+
+***Why Frontier
+
+This script brings Frontier to the front, and opens the object database window at helptext.whyfrontier.
+
+This window contains an outline of features/benefits for Frontier. We like to have this file readily available at trade shows. We thought you might find it useful if you¹re giving a demo of Frontier to someone else.
+
+
+***ŒPowerful¹ Scripts:App Cleaner
+
+This script searches a disk for duplicates of an application.
+
+It first prompts you for a creator ID of the application you want to search for. Then it asks you to select a folder to search in, suggesting the folder that the script was launched from.
+
+It searches for applications that have the creator ID that you entered. When it finds one, it asks whether you want to change the application ID. If you click on Yes, the ID is changed to Œ----¹. If you click on No, the file¹s ID isn¹t changed. Click on Cancel to exit the script.
+
+This script is useful when you receive a new version of an application and want to be sure that you can double-click on data files and have the correct version launch. Make sure not to change the ID of the real copy of the program.
+This is a very powerful script, but it can be hard to undo its effects. Be sure you know what you¹re doing before you run the script.
+
+We wrote this script for Frontier beta sites, who may want to keep old Frontiers around, but want to be sure the current one is the one the Finder recognizes. Frontier's creator ID is ŒLAND¹ .
+
+
+***ŒPowerful¹ Scripts:Icon Stealer
+
+This script searches the folder it was launched from, copying icon resources from all the files it encounters.
+
+It copies resources of type ŒICON¹, ŒICN#¹ and Œicl8¹.
+
+The icons are copied into a file it creates named ³Stolen Icons² in the folder the script was launched from, if it doesn¹t exist. If it does exist, the icons are added to the existing file. 
+
+When it¹s finished searching, it either displays a dialog if no icons were found, or it opens the output file if icons were found.
+
+This script can easily be modified to grab resources of different types.
+
+
+***ŒPowerful¹ Scripts:Set Mod Dates
+
+This script visits all the files in the folder it was launched from, setting the modification dates to a specific time.
+
+You are prompted for the date and time, the current date and time is suggested as a default. Enter the date/time in the same format as it appears in the dialog box.
+Some commercial software developers like to have the modification dates of all files in their shipping folder be identical. This script makes it easy for you to do it too.
+
+The script could easily be extended to change the creation date also.
+
+***Word Scripts:Delete Word Backups
+
+This script traverses the whole folder it was launched from, looking for Microsoft Word backup files. This script saves you the trouble of manually opening and closing folders to delete files that you may not need.
+
+When it finds a Word backup file, the script displays a dialog asking if you want to delete it. Click on Yes to delete it, No to not delete it, or Cancel to halt the traversal. 
+
+Special feature: Hold down the option key while clicking on Yes to delete all subsequent Word backup files without confirmation.
+
+Note: Word backup files are identified by their file type (ŒWDBN¹) and creator (ŒMSWD¹), and the fact that the file name begins with ³Backup of².
+
+***Word Scripts:New Press ReleaseŠ
+
+We use this script whenever we need to write a new press release.
+
+First, the user is prompted for the title of the press release. The last title entered into the dialog is offered as a default response.
+A new folder with the title you entered is created. A copy of the ³Press Release Template² file is copied into the folder, and given the name ³press release.1². Subsequent revisions to the file should be saved as ³press release.2² and so on.
+
+The script launches Microsoft Word, instructing it to open the  press release.1 file.
+
+This script shows how you can use Frontier to establish a standard procedure for writing new documents, simplifying a complex set of operations.
+
+
+

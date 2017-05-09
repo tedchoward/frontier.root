@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.setObjectFlag
+
+on setObjectFlag (name, flag) {
+	new (tableType, @atts);
+	atts.flag = boolean (flag);
+	return (card.setObjectAttributes (name, @atts))}
+
+

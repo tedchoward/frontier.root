@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.traps.["DDE "].Term
+
+on Term (rInfo, sInfo) {
+	«msg ("Received Term: " + rinfo + ", " + sInfo)
+	
+	if DDE.transactionID == 0 { «no conversation has been initiated
+		return (false)};
+	
+	if (DDE.senderInfo != rInfo) || (DDE.receiverInfo != sInfo) {
+		return (false)};
+	
+	DDE.terminate (); «terminate conversation
+	
+	return (true)}
+
+

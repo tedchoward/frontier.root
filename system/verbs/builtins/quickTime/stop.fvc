@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.quickTime.stop
+
+on stop () {
+	kernel (quicktime.stop)}
+
+

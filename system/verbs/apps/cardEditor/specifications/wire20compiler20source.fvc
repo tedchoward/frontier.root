@@ -1,0 +1,226 @@
+FrontierVcsFile:3:optx:system.verbs.apps.cardEditor.specifications.["wire compiler source"]
+
+options
+	copyright
+		/*© copyright 1992-1993, UserLand Software, Inc. All rights reserved.*/
+	ucmd
+		false
+	file
+		UserLand:Programming:Iowa:iowawires.c
+	preamble
+		#include <applet.h>
+		#include "iowacore.h"
+		#include "iowapack.h"
+		#include "iowaobject.h"
+		#include "iowarunmode.h"
+		#include "iowaiac.h"
+	apptable
+		system.verbs.apps.cardEditor
+	appid
+		IOWA
+	binary data type
+		CARD
+	applet toolkit
+		true
+messages
+	cleanObject
+		token
+			clob
+		params
+			textType
+		code
+			returnedValue = IACcleanobject (param1);
+		returns
+			booleanType
+		sysevent
+			false
+	countObjects
+		token
+			ctob
+		code
+			returnedValue = IACcountobjects ();
+		returns
+			longType
+		sysevent
+			false
+	countSelectedObjects
+		token
+			ctso
+		code
+			returnedValue = IACcountselectedobjects ();
+		returns
+			longType
+		sysevent
+			false
+	deleteObject
+		token
+			deob
+		params
+			textType
+		code
+			returnedValue = IACdeleteobject (param1);
+		returns
+			booleanType
+		sysevent
+			false
+	editSpecialAttributes
+		token
+			esat
+		params
+			textType
+		code
+			returnedValue = IACeditspecialattributes (param1);
+		returns
+			booleanType
+		sysevent
+			false
+	getCardAttributes
+		token
+			gacd
+		code
+			returnedValue = IACgetcardattributes ();
+		returns
+			booleanType
+		sysevent
+			false
+		custom glue script
+			true
+	getNthObject
+		token
+			gnob
+		params
+			longType
+		code
+			copyhandle (IACgetnthobject (param1), &returnedValue);
+		returns
+			textType
+		sysevent
+			false
+	getNthSelectedObject
+		token
+			gnso
+		params
+			longType
+		code
+			copyhandle (IACgetnthselectedobject (param1), &returnedValue);
+		returns
+			textType
+		sysevent
+			false
+	getObjectAttributes
+		token
+			gaob
+		params
+			textType
+		code
+			returnedValue = IACgetobjectattributes (param1);
+		returns
+			booleanType
+		sysevent
+			false
+		custom glue script
+			true
+	getPackedCard
+		token
+			gpcd
+		code
+			iowapack (&returnedValue);
+		returns
+			binaryType
+		sysevent
+			false
+	getPackedObject
+		token
+			gpob
+		params
+			textType
+		code
+			IACpackobject (param1, &returnedValue);
+		returns
+			binaryType
+		sysevent
+			false
+	getPackedTable
+		token
+			gptb
+		code
+			copyhandle ((**app.appwindow).embeddedtable, &returnedValue);
+		returns
+			binaryType
+		sysevent
+			false
+		custom glue script
+			true
+	memAvail
+		token
+			mema
+		code
+			returnedValue = FreeMem ();
+		returns
+			longType
+		sysevent
+			false
+	newObject
+		token
+			newo
+		params
+			longType Çobject type
+			textType Çobject name
+			textType Çobject text
+			textType Çobject script
+		code
+			returnedValue = IACnewobject (param1, param2, param3, param4);
+		returns
+			booleanType
+		sysevent
+			false
+	renameObject
+		token
+			rnob
+		params
+			textType
+			textType
+		code
+			returnedValue = IACrenameobject (param1, param2);
+		returns
+			booleanType
+		sysevent
+			false
+	setCardAttributes
+		token
+			sacd
+		code
+			returnedValue = IACsetcardattributes ();
+		returns
+			booleanType
+		sysevent
+			false
+		custom glue script
+			true
+	setObjectAttributes
+		token
+			saob
+		params
+			textType
+		code
+			returnedValue = IACsetobjectattributes (param1);
+		returns
+			booleanType
+		sysevent
+			false
+		custom glue script
+			true
+	updateObject
+		token
+			upob
+		params
+			textType
+		code
+			returnedValue = IACupdateobject (param1);
+		returns
+			booleanType
+		sysevent
+			false
+
+
+

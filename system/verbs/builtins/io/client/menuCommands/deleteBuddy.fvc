@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.client.menuCommands.deleteBuddy
+
+on deleteBuddy () {
+	«Changes
+		«9/15/10; 3:13:16 PM by DW
+			«Called from io.client.nodeTypes.v4BuddyOutlineElement.rightClickMenu.
+	local (username);
+	op.attributes.getone ("name", @username);
+	if dialog.confirm ("Delete the sub-outline for user \"" + username + "?\"") {
+		op.deleteline ()}}
+
+

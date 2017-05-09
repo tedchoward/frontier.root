@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.wordPress.getRpcData
+
+on getRpcData (siteurl, adrrpcdata) {
+	local (adrsite = wordPress.getSiteData (siteurl));
+	local (ul = string.urlsplit (adrsite^.url));
+	new (tabletype, adrrpcdata);
+	adrrpcdata^.server = ul [2];
+	adrrpcdata^.port = 80;
+	adrrpcdata^.rpcPath = "/" + ul [3]};
+bundle { //test code
+	getrpcdata ("http://rebootnews.wordpress.com/", @scratchpad.rpcdata)}
+
+

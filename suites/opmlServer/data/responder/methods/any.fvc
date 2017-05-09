@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.opmlServer.data.responder.methods.any
+
+on any (pta) {
+	return (mainResponder.respond (pta))}
+
+

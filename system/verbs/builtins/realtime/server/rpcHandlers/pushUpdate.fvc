@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.server.rpcHandlers.pushUpdate
+
+on pushUpdate (username, password, htmltext, type, data) {
+	«Changes
+		«7/20/10; 8:42:56 AM by DW
+			«Now users can push updates too. This is really fun! :-)
+	realtime.server.validatePassword (username, password);
+	return (realtime.server.pushUpdate (htmltext, type, username, data))}
+
+

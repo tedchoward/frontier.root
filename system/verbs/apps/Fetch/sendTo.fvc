@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Fetch.sendTo
+
+on sendTo (obj, ftpCommand) { «send custom FTP protocol commands
+	return (appleEvent (Fetch.id, 'FTCh', 'SndC', '----', objspec (obj), 'Cmds', string (ftpCommand)))}
+
+

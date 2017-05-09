@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.im.utilities.cleanError
+
+on cleanError (s) {
+	«Changes
+		«8/12/02; 2:17:33 AM by JES
+			«Created. Strip out smart quotes.
+	if system.environment.isMac {
+		s = string.replaceAll (s, "³", "\"");
+		s = string.replaceAll (s, "²", "\"");
+		s = string.replaceAll (s, "Œ", "\'");
+		s = string.replaceAll (s, "¹", "\'")};
+	return (s)}
+
+

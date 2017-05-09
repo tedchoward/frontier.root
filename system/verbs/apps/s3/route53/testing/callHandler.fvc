@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.s3.route53.testing.callHandler
+
+on callHandler () {
+	«Changes
+		«6/21/11; 8:14:53 AM by DW
+			«Created.
+	local (server = "xmlrpc://dnsapi.scripting.com:5337/RPC2");
+	scratchpad.atts = [server].dnsapi2.addrecord ("blorkmark.net", "nicco", "twitter.com", "CNAME");
+	edit (@scratchpad.atts)};
+bundle { //test code
+	callHandler ()}
+
+

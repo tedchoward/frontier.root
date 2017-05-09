@@ -1,0 +1,31 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.log.visitReverseChronologic
+
+on visitReverseChronologic (logname, adrvisit, flHourly=true) {
+	«Changes
+		«11/14/11; 11:44:42 AM by DW
+			«Created. Visit each of the items in the log table.
+	local (adrlog = log.getGuestSubTable (logname));
+	if flhourly {
+		local (cthours = sizeof (adrlog^), i);
+		for i = cthours downto 1 {
+			local (adrhourlytable = @adrlog^ [i], ctitems = sizeof (adrhourlytable^), j, adritem);
+			for j = ctitems downto 1 {
+				adritem = @adrhourlytable^ [j];
+				if not adrvisit^ (adritem) {
+					return (false)}}}}
+				«msg (nameof (adritem^))
+	else {
+		local (ctitems = sizeof (adrlog^), j, adritem);
+		for j = ctitems downto 1 {
+			adritem = @adrlog^ [j];
+			if not adrvisit^ (adritem) {
+				return (false)}}}};
+			«msg (nameof (adritem^))
+bundle { //test code
+	on visit (adrlogitem) {
+		msg (adrlogitem^.data.url);
+		clock.waitsixtieths (1);
+		return (true)};
+	visitReverseChronologic ("http", @visit)}
+
+

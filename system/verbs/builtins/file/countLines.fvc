@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.countLines
+
+on countLines (path) {
+	kernel (file.countlines)}
+
+

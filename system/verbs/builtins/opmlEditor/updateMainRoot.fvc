@@ -1,0 +1,12 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.updateMainRoot
+
+on updateMainRoot () {
+	«Changes
+		«9/17/09; 7:23:37 AM by DW
+			«Finally one script to update opml.root.
+	system.temp.opmlEditor.updateCommandScript = Frontier.tools.data.updateCommandScript;
+	thread.callScript (@system.temp.opmlEditor.updateCommandScript, {false})};
+bundle { //test code
+	updateMainRoot ()}
+
+

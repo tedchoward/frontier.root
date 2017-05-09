@@ -1,0 +1,15 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.export.addToLog
+
+on addToLog (adrImportedObject, url = "", notes = "") {
+	export.init ();
+	if user.export.importLogEnabled {
+		local (item = {adrImportedObject});
+		if url != "" {
+			item = item + {url}};
+		if notes != "" {
+			item = item + {notes}};
+		try { //work around rootUpdates logging error
+			log.add (item, "exportAddToLog")}};
+	return (true)}
+
+

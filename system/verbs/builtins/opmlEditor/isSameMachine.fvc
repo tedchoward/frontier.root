@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.isSameMachine
+
+on isSameMachine (client) {
+	«Changes
+		«3/1/11; 10:20:58 AM by DW
+			«Is the request coming from a user on the same machine. Different security applies if so.
+	if (string.lower (client) == "localhost") or (client == "127.0.0.1") {
+		return (true)};
+	try {
+		return (tcp.equalnames (client, tcp.myDottedID ()))}
+	else {
+		return (false)}}
+
+

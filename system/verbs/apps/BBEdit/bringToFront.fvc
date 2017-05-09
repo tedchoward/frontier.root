@@ -1,0 +1,8 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.BBEdit.bringToFront
+
+on bringToFront () {
+	if not app.start ("BBEdit") {
+		return (false)};
+	return (sys.bringAppToFront (BBEdit.id))}
+
+

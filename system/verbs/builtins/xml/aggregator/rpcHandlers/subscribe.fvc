@@ -1,0 +1,14 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.xml.aggregator.rpcHandlers.subscribe
+
+on subscribe (url, username, password) {
+	«Changes
+		«11/3/02; 3:19:55 PM by JES
+			«Created.
+	xml.aggregator.securityForRpc (client, username, password);
+	local (error, adrservice);
+	if xml.aggregator.subscribeService (url, @error, @adrservice) {
+		return (xml.aggregator.rpcHandlers.getSubInfo (url, username, password))}
+	else { //error
+		scriptError (error)}}
+
+

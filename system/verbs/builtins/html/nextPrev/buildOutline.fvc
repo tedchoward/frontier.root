@@ -1,0 +1,38 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.html.nextPrev.buildOutline
+
+on buildOutline (adrtable, adroutline) {
+	local (oldtarget = target.get ());
+	new (outlinetype, adroutline);
+	target.set (adroutline);
+	edit (adroutline);
+	local (dir = down);
+	on traverse (adrtable) {
+		local (s);
+		s = string (adrtable) + "." + html.getPref ("defaultFileName");
+		if firstline {
+			op.setLineText (s);
+			firstline = false}
+		else {
+			op.insert (s, dir)};
+		local (adrsubitem, i);
+		for i = 1 to sizeof (adrtable^) {
+			adrsubitem = @adrtable^ [i];
+			msg (adrsubitem);
+			if html.traversalSkip (adrsubitem) {
+				continue};
+			if nameOf (adrsubitem^) == html.getPref ("defaultFileName") {
+				continue};
+			if typeOf (adrsubitem^) == tableType {
+				traverse (adrsubitem)} «recurse
+			else {
+				op.insert (adrsubitem, dir)};
+			rollBeachBall ()}};
+	local (firstline = true);
+	traverse (adrtable);
+	op.firstSummit ();
+	target.set (oldtarget);
+	return (true)};
+bundle { «test code
+	buildOutline (@user.websites.midas, @user.websites.midas.["#nextPrevs"])}
+
+

@@ -1,0 +1,25 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.realtime.server.collectTempTables
+
+on collectTempTables () {
+	«Changes
+		«9/25/10; 12:31:21 PM by DW
+			«Also delete longpoll tables that have their enabled booleans set false.
+		«8/15/10; 9:40:15 PM by DW
+			«Created. 
+	local (adrlongpolls = @system.temp.realtime.server.longpolls);
+	if defined (adrlongpolls^) {
+		local (i, adrtable, fldelete);
+		for i = sizeof (adrlongpolls^) downto 1 {
+			fldelete = false;
+			adrtable = @adrlongpolls^ [i];
+			if not adrtable^.enabled {
+				fldelete = true}
+			else {
+				if not thread.exists (adrtable^.idthread) {
+					fldelete = true}};
+			if fldelete {
+				delete (adrtable)}}}};
+bundle { //test code
+	collectTempTables ()}
+
+

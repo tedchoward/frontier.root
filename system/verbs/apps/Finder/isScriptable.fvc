@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Finder.isScriptable
+
+on isScriptable () { « return true if the Scriptable Finder is present
+	local (x);
+	x = gestalt ('fndr');
+	if x == -1 {
+		return (false)};
+	return (bit.get (x, 3) != 0)}
+
+

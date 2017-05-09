@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.rgb.get
+
+on get (rgb, adrr, adrg, adrb) {
+	kernel (rgb.get)}
+
+

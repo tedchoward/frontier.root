@@ -1,0 +1,17 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.website.editOutlineButton.open
+
+on open () {
+	«Changes
+		«3/9/12; 3:00:54 PM by DW
+			«Created.
+	local (pta = html.getpagetableaddress (), t);
+	new (tabletype, @t);
+	webserver.parseargs (pta^.searchargs, @t);
+	«scratchpad.t = t; edit (@scratchpad.t)
+	opmlEditor.worldOutline.openArchivedOutline (t.root, t.title);
+	frontier.bringtofront ();
+	webserver.redirect (pta, pta^.requestHeaders.Referer)};
+bundle { //test code
+	open ()}
+
+

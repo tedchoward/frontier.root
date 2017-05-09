@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.extensions.crypto.hashSHA
+
+on hashSHA (s, flTranslate = true) {
+	return (string (dll.call (crypto.data.getPath (), "SHA_verb", string (s), boolean (flTranslate))))}
+
+

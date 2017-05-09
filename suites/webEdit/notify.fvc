@@ -1,0 +1,11 @@
+FrontierVcsFile:3:scpt:suites.webEdit.notify
+
+on notify (s) {
+	«Present a message -- either in a dialog box or the About Window.
+	if user.webEdit.prefs.flDialogs {
+		dialog.notify (s)}
+	else {
+		msg (s)};
+	return (true)}
+
+

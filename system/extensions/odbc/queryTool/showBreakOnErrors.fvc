@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:system.extensions.odbc.queryTool.showBreakOnErrors
+
+on showBreakOnErrors () {
+	«Author: Henri Asseily, Binary Compass Enterprises
+		«Created: Wed, Apr 29, 1998 at 2:06:06 PM by HA
+	«Script to display the right menu item for breaking on errors
+	
+	if (user.prefs_odbc.breakOnErrors == false) {
+		return("Break on errors")}
+	else {
+		return("!Break on errors")}}
+
+

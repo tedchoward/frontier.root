@@ -1,0 +1,16 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Flickr.folderWatcher.script
+
+«Changes
+	«1/3/08; 3:33:23 AM by DW
+		«Only check user.flickr.folderWatcher.enabled, not user.flickr.prefs.enabled. One boolean to enable this feature is enough. Not sure what user.flickr.prefs.enabled was supposed to do, but it's not needed here.
+	«12/2/07; 9:14:33 PM by DW
+		«Respect user.flickr.prefs.enabled and user.flickr.folderWatcher.enabled here instead of the scan script. Makes it possible to debug the feature without enabling it.
+loop {
+	Flickr.folderWatcher.init ();
+	try {
+		if user.flickr.folderWatcher.enabled { //1/3/08 by DW
+			Flickr.folderWatcher.scan ()};
+		user.flickr.folderWatcher.ctScans++};
+	thread.sleepFor (user.flickr.folderWatcher.ctSecondsBetwScans)}
+
+

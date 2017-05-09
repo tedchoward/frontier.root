@@ -1,0 +1,16 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.tcp.im.builtinDrivers.jabber.code.examples.rpc.readme
+
+This is a substantial example that fully and correctly (to the best of my knowlege) implements the Jabber-RPC standard. See http://www.pipetree.com/jabber/jrpc.html .
+
+To use it, execute the following line of code. (It may be out of date and require some tweaking with the addresses):
+
+tcp.im.builtinDrivers.jabber.code.registerHandler("iq", @tcp.im.builtinDrivers.jabber.code.examples.rpc.handler, namespace = "jabber:iq:rpc")
+
+You can then use Jabber rpc. An scns driver is included in the script "SCNS"... copy this into your Frontier.protocols table with the name "jabber", and you can make RPC calls like this:
+
+["jabber://jabberId"].examples.getStateName(22)
+
+Direct use of the rpc script is documented in the rpcDocs outline, in the style of a DocServer document. It fully supports async and synch usage, extraInfo, and basically everything you'd want an RPC system to support. It is well-tested synchronously, and somewhat tested asynchronously.
+
+
+

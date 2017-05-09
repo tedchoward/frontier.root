@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.card.update
+
+on update () {
+	card.details.notsupported ("update")}
+
+

@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.extensions.regex.extract
+
+on extract (pattern, adrObject, adrList, groups={}, caseSensitive=false) {
+	local (theList);
+	theList = list (dll.call (regex.data.getPath (), "regextractverb", string (pattern), boolean (caseSensitive), true, long (regex.data.adrSyntaxOptions^), string (adrObject^), list(groups)));
+	adrList^ = theList;
+	return (sizeof (theList))}
+
+

@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.Filemaker.sort
+
+on sort (obj, by = nil, inOrder = nil) { «Sort the records in a layout
+	return (appleEvent (Filemaker.id, 'DATA', 'SORT', '----', objspec (obj), 'SRTE', by, 'SRTT', inOrder))}
+
+

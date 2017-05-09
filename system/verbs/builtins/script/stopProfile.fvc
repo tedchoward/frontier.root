@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.script.stopProfile
+
+on stopProfile (adrTable) {
+	kernel (script.stopProfile)}
+
+

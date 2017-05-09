@@ -1,0 +1,9 @@
+FrontierVcsFile:3:wptx:system.verbs.apps.Filemaker.examples.oldExamples.menuInfo
+
+FileMaker Pro permits menu commands to be added to its Scripts menu using Apple events.  The menu commands appear in the Scripts menu, in a submenu named "External".  You can even go deeper into the menu hierarchy, because you can add a menu, which becomes an item in External, and you can add commands to that menu.
+
+When one of these items is chosen later by the user, FileMaker sends an Apple event to the application which caused the menu item to be added.  The event class is 'kMEN', the event ID is 'kMIS'.  A handler has been installed in Frontier to catch these events.  The handler receives two parameters:  the text of the selected item, and a record giving more information about the item.  For most purposes, the record can be ignored.  The handler looks in FileMaker.menuScripts for an item whose name is the same as the selected item (with spaces removed), and calls that script, passing along the item record in case it is needed.
+
+You can delete your added menu items.  You can also enable or disable them, and check and uncheck them, and change their text.  With the handler as written, changing the text will change what script is called.
+
+

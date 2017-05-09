@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.webBrowser.unregisterProtocol
+
+on unregisterProtocol (x, forProtocol = nil) { «reverses the effects of ³register protocol²
+	case sys.os () {
+		"MacOS" {
+			pack (x, @x);
+			setbinarytype (@x, 'sign');
+			return (appleEvent (user.webBrowser.currentid, 'WWW!', 'UNRP', '----', x, 'PROT', string (forProtocol)))}}}
+
+

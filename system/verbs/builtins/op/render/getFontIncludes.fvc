@@ -1,0 +1,38 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.op.render.getFontIncludes
+
+on getFontIncludes (adrfonts) {
+	«Changes
+		«2/27/12; 10:28:46 AM by DW
+			«adrfonts points to a table with the names of some fonts as the name of the items. For each of them that is a google web font, we generate a link element that you can include in your generated text that loads the fonts.
+	local (urlGoogleFontList = "http://static.scripting.com/google/webFontNames.opml", includes = "");
+	if not defined (system.temp.google) {
+		new (tabletype, @system.temp.google)};
+	if not defined (system.temp.google.fontnames) {
+		local (adrtable, adrxstruct);
+		new (tabletype, @system.temp.google.fontnames);
+		op.getnetoutline (urlGoogleFontList, @adrtable);
+		xml.thread.accessStruct (@adrtable^.struct, @adrxstruct);
+		local (adropml = xml.getaddress (adrxstruct, "opml"));
+		local (adrbody = xml.getaddress (adropml, "body"));
+		for adr in adrbody {
+			if nameof (adr^) endswith "outline" {
+				system.temp.google.fontnames.[adr^.["/atts"].text] = true}}};
+	bundle { //generate the includes
+		local (adr);
+		for adr in adrfonts {
+			if defined (system.temp.google.fontnames.[nameof (adr^)]) {
+				local (name = string.replaceall (nameof (adr^), " ", "+"));
+				includes = includes + "<link href=\"http://fonts.googleapis.com/css?family=" + name + "\" rel=\"stylesheet\" type=\"text/css\">\r"}}};
+	return (includes)};
+bundle { //test code
+	local (fonts, s);
+	new (tabletype, @fonts);
+	fonts.Allan = true;
+	fonts.["Almendra SC"] = true;
+	fonts.Antic = true;
+	fonts.Julee = true;
+	for i = 1 to 1000 {
+		s = getFontIncludes (@fonts)};
+	wp.newtextobject (s, @scratchpad.myincludetext)}
+
+

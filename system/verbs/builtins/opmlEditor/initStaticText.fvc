@@ -1,0 +1,59 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.opmlEditor.initStaticText
+
+on initStaticText () {
+	«Changes
+		«9/28/11; 1:57:05 AM by DW
+			«If we're not running the server on port 80, we must add port 5337 to the filesystem URL.
+		«9/16/11; 8:36:29 AM by DW
+			«This used to be called opmlEditor.startup. 
+				«http://worknotes.scripting.com/september2011/91611ByDw/unwindingOpmlstartup
+		«9/13/11; 8:46:25 PM by DW
+			«If the filesystem path is the empty string, set it to the top level of the www folder.
+		«9/13/11; 8:15:55 AM by DW
+			«Created. Code that runs when the OPML Editor starts up. Things that would otherwise have to be called in opmlEditor.init.
+	local (pc = file.getpathchar (), now = clock.now ());
+	bundle { //init statictext
+		local (adrdata = @user.opmleditor.staticText, flnew = not defined (adrdata^));
+		«opmleditor.init ()
+		statictext.init (adrdata);
+		if flnew {
+			adrdata^.prefs.enabled = true;
+			adrdata^.prefs.flFileNaturalFilesystemPaths = true};
+		bundle { //init filesystem location
+			local (adrfilesystem = @adrdata^.locations.filesystem);
+			if not defined (adrfilesystem^) {
+				statictext.initlocation (adrdata, nameof (adrfilesystem^));
+				adrfilesystem^.prefs.enabled = true;
+				adrfilesystem^.prefs.flDefault = true;
+				bundle { //set path, try to get from River2, fall back to www folder
+					try {
+						local (adrriverdata = river2suite.init ());
+						adrfilesystem^.prefs.path = file.folderfrompath (adrriverdata^.prefs.static.folder)}
+					else {
+						adrfilesystem^.prefs.path = frontier.getsubfolder ("/www/")}};
+				bundle { //set url for filesystem
+					local (port);
+					if user.opmlEditor.prefs.flServerOnPort80 {
+						port = ""}
+					else {
+						port = ":5337"};
+					adrfilesystem^.prefs.url = "http://" + user.opmlEditor.prefs.server.externalDomainName + port + "/"};
+				adrfilesystem^.prefs.driver = "filesystem"};
+			if adrfilesystem^.prefs.path == "" {
+				adrfilesystem^.prefs.path =  frontier.getsubfolder ("/www/")}};
+		bundle { //init s3 location
+			local (adrs3 = @adrdata^.locations.s3);
+			if not defined (adrs3^) {
+				statictext.initlocation (adrdata, nameof (adrs3^));
+				adrs3^.prefs.enabled = false;
+				adrs3^.prefs.flDefault = false;
+				adrs3^.prefs.path = "";
+				adrs3^.prefs.url = "";
+				adrs3^.prefs.driver = "s3"}}}};
+bundle { //test code
+	local (tc = clock.ticks ());
+	for i = 1 to 1000 {
+		initStaticText ()};
+	dialog.alert (clock.ticks () - tc)}
+
+

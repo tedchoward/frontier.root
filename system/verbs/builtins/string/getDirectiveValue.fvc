@@ -1,0 +1,22 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.string.getDirectiveValue
+
+on getDirectiveValue (s, adrname, adrvalue) {
+	«Changes
+		«9/26/12; 4:54:58 PM by DW
+			«Created.
+				«http://worknotes.scripting.com/september2012/92612ByDw/directivesInOutlines
+	local (name, value);
+	s = string.trimwhitespace (string.commentdelete (string.delete (s, 1, 1)));
+	name = string.nthfield (s, " ", 1);
+	value = string.trimwhitespace (string.delete (s, 1, sizeof (name)));
+	if (sizeof (value) >= 2) and (value beginswith '"') and (value endswith '"') { //must begin and end with double-quote
+		value = string.delete (value, 1, 1);
+		value = string.delete (value, sizeof (value), 1);
+		adrvalue^ = value;
+		adrname^ = string.trimwhitespace (name);
+		return (true)};
+	return (false)};
+bundle { //test code
+	getDirectiveValue ("#title \"hello world\"", @scratchpad.name, @scratchpad.value)}
+
+

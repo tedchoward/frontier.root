@@ -1,0 +1,13 @@
+FrontierVcsFile:3:scpt:examples.countTables
+
+«Example script for table.visit doc
+	«Written by Dan Shafer 10/8/91
+local {
+	count = 0};
+on countTables (entryName) {
+	if typeOf (entryName^) == tableType {
+		count++};
+	msg ("I found " + count + " tables.")};
+table.visit (@examples, @countTables)
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.Frontier.clickers.typeFTmb
+
+on typeFTmb (path) {
+	«open or run a file of type FTmb, containing "fat page" data
+	return (Frontier.clickers.typeFATP (path))}
+
+

@@ -1,0 +1,10 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.io.server.rpcHandlers.unfollow
+
+on unfollow (username, password, userToUnfollow) {
+	«Changes
+		«9/1/10; 2:55:42 PM by DW
+			«Created. 
+	io.server.validatePassword (username, password);
+	return (io.server.unfollow (username, userToUnfollow))}
+
+

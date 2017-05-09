@@ -1,0 +1,13 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.html.ucmds.testtext
+
+This text is used to test html.processMacros.
+
+{12+99}
+
+"Arno Schmidt"
+
+{adrSiteRootTable}
+
+Hello!
+
+

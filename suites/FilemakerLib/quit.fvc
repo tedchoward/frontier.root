@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:suites.FilemakerLib.quit
+
+on quit () {
+	return (filemaker.quit ())}
+
+

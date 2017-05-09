@@ -1,0 +1,29 @@
+FrontierVcsFile:3:wptx:system.verbs.builtins.xml.examples.namespaces.xText
+
+<?XML VERSION="1.0"?>
+
+<DAV:lockinfo>
+
+	<DAV:lockscope>
+
+		<DAV:exclusive></DAV:exclusive>
+
+		</DAV:lockscope>
+
+	<DAV:locktype>
+
+		<DAV:write></DAV:write>
+
+		</DAV:locktype>
+
+	<DAV:owner>
+
+		<DAV:href>http://www.ics.uci.edu/~ejw/contact.html</DAV:href>
+
+		</DAV:owner>
+
+	</DAV:lockinfo>
+
+
+
+

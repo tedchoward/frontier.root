@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.soap.xmlutils.addElement
+
+on addElement (adrparent, localname) {
+	return (xml.addTable (adrparent, localname))}
+
+

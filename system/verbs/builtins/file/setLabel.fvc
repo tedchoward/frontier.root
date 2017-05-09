@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.file.setLabel
+
+on setLabel (path, label) {
+	kernel (file.setLabel)}
+
+

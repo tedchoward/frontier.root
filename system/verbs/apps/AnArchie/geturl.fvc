@@ -1,0 +1,6 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.AnArchie.geturl
+
+on geturl (s, geturlTo = nil) { «fetch the url and display or save it
+	return (appleEvent (AnArchie.id, 'GURL', 'GURL', '----', string (s), 'dest', filespec (geturlTo)))}
+
+

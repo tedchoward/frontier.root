@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.verbs.builtins.tcp.examples.testListen
+
+local (stream, s);
+stream = tcp.listenStream (90, 1, @system.verbs.builtins.tcp.examples.listenCallback, 2);
+system.verbs.builtins.tcp.examples.listenStream = stream
+
+

@@ -1,0 +1,7 @@
+FrontierVcsFile:3:scpt:system.menus.scripts.replaceAndFindNextCommand
+
+search.replace ();
+if not search.findNext () {
+	speaker.beep ()}
+
+

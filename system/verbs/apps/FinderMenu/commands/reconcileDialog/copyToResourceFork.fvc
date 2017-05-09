@@ -1,0 +1,9 @@
+FrontierVcsFile:3:scpt:system.verbs.apps.FinderMenu.commands.reconcileDialog.copyToResourceFork
+
+on copyToResourceFork () {
+	local (f = Frontier.getFilePath ());
+	rez.putResource (f, 'DLOG', 25000, @findermenu.commands.reconcileDialog.DLOG);
+	rez.putResource (f, 'DITL', 25000, @findermenu.commands.reconcileDialog.DITL);
+	return (25000)}
+
+
